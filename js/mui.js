@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.0 (https://github.com/dcloudio/mui)
+ * Mui v0.5.1 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -950,9 +950,13 @@ window.mui = mui;
 	 * 窗口显示配置
 	 */
 	$.showOptions = function(options) {
+		var duration = 100;
+		if($.os.ios){
+			duration = 200;
+		}
 		return $.extend({
 			aniShow: 'slide-in-right',
-			duration: 100
+			duration: duration
 		}, options);
 	};
 	/**
