@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<script src="js/mui.min.js"></script>
+		<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a id="info" class="mui-icon mui-icon-info mui-pull-right" style="color: #999;"></a>
+			<h1 class="mui-title">Hello mui</h1>
+		</header>
+		<script>
+			mui.init({
+				swipeBack : false,
+				subpages : [{
+					id : 'list',
+					url : 'list.html',
+					styles : {
+						top : '48px',
+						bottom : 0,
+						bounce :'vertical'
+						//scrollIndicator : "none"
+					}
+				}]
+			});
+			document.getElementById('info').addEventListener('tap', function() {
+				$.openWindow('examples/info.html', 'info');
+			});
+		</script>
+	</body>
+</html>
+

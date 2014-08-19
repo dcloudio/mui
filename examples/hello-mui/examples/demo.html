@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html, body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">预加载(模板)</h1>
+</header>
+<div class="mui-content">
+	<div id="demo" class="mui-content-padded">
+		<button class="mui-btn mui-btn-block" data-webview-id="demo1" data-webview-url="toggles.html">
+			Block button
+		</button>
+		<button class="mui-btn mui-btn-primary mui-btn-block" data-webview-id="demo2" data-webview-url="typography.html">
+			Block button
+		</button>
+		<button class="mui-btn mui-btn-success mui-btn-block" data-webview-id="demo3" data-webview-url="tableviews.html">
+			Block button
+		</button>
+		<button class="mui-btn mui-btn-warning mui-btn-block">
+			Block button
+		</button>
+		<button class="mui-btn mui-btn-danger mui-btn-block">
+			Block button
+		</button>
+		<button class="mui-btn mui-btn-royal mui-btn-block">
+			Block button
+		</button>
+	</div>
+</div>
+<script>
+	(function($) {
+		var templates = {};
+		var show = {
+			aniShow : 'slide-in-right',
+			duration : 400
+		};
+		$.ready(function() {
+			$('#demo').on('tap', 'button', function() {
+				var id = this.getAttribute('data-webview-id');
+				var url = this.getAttribute('data-webview-url');
+				var webview = templates[id];
+				if (webview) {
+					if (webview.showed) {
+						webview.clear();
+					}
+					webview.show(show.aniShow, show.duration);
+					webview.loadURL(url);
+					var waiting = null;
+					var timeout = setTimeout(function() {
+						console.log(timeout);
+						waiting = plus.nativeUI.showWaiting();
+					}, show.duration);
+					webview.addEventListener("loaded", function() {
+						console.log(waiting);
+						if (waiting) {
+							waiting.close();
+						} else {
+							clearTimeout(timeout);
+						}
+						webview.showed = true;
+					}, false);
+				}
+			});
+		});
+		$.plusReady(function() {
+			templates = {
+				demo1 : createTemplate('DEMO1'),
+				demo2 : createTemplate('DEMO2'),
+				demo3 : createTemplate('DEMO3')
+			}
+		});
+	})(mui);
+
+	var createTemplate = function(title) {
+		title = title || '';
+		var template = plus.webview.create('titlebar.html');
+		template.addEventListener('loaded', function() {
+			template.evalJS('document.querySelector(".mui-title").innerHTML="' + title + '"');
+		});
+		return template;
+	}; 
+</script>
+</body>
+</html>
