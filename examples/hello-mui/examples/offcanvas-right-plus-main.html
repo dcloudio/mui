@@ -27,40 +27,15 @@
 <div class="mui-off-canvas-wrap mui-draggable">
 	<div class="mui-inner-wrap">
 		<header class="mui-bar mui-bar-nav">
-			<a href="#offCanvas" class="mui-icon mui-icon-bars mui-pull-left"></a>
-			<a class="mui-action-back mui-icon mui-icon-close mui-pull-right"></a>
-			<h1 class="mui-title">Container with slide menu</h1>
+			<a class="mui-action-menu mui-icon mui-icon-bars mui-pull-right"></a>
+			<a class="mui-action-back mui-icon mui-icon-close mui-pull-left"></a>
+			<h1 class="mui-title">off canvas（侧滑导航）</h1>
 		</header>
-		<aside id="offCanvas" class="mui-off-canvas-left">
-			<button id="offCanvasHide" class="mui-btn mui-btn-primary mui-btn-block">
-				关闭侧滑菜单(js call)
-			</button>
-			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						Item 1
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						Item 2
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						Item 3
-					</a>
-				</li>
-			</ul>
-		</aside>
 		<div class="mui-content">
-			<button id="offCanvasShow" class="mui-btn mui-btn-primary mui-btn-block">
-				显示侧滑菜单(js call)
-			</button>
 			<ul class="mui-table-view mui-table-view-chevron">
 				<li id="switch" class="mui-table-view-cell">
 					整体滑动
-					<div class="mui-switch mui-active">
+					<div class="mui-switch">
 						<div class="mui-switch-handle"></div>
 					</div>
 				</li>
@@ -133,72 +108,76 @@
 					</a>
 				</li>
 			</ul>
-			<div class="mui-slider">
-				<div class="mui-slider-group mui-slider-loop">
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/yuantiao.jpg">
-						</a>
-					</div>
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/shuijiao.jpg">
-						</a>
-					</div>
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/muwu.jpg">
-						</a>
-					</div>
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/cbd.jpg">
-						</a>
-					</div>
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/yuantiao.jpg">
-						</a>
-					</div>
-					<div class="mui-slider-item">
-						<a href="#">
-							<img src="../images/shuijiao.jpg">
-						</a>
-					</div>
-				</div>
-				<div class="mui-slider-indicator">
-					<div class="mui-indicator mui-active"></div>
-					<div class="mui-indicator"></div>
-					<div class="mui-indicator"></div>
-					<div class="mui-indicator"></div>
-				</div>
-			</div>
 		</div>
-		<!-- off-canvas backdrop -->
-		<div class="mui-off-canvas-backdrop"></div>
 	</div>
 </div>
 <script>
 	mui.init({
-		swipeBack: false,
+		swipeBack: false
 	});
-	var offCanvasContainer = document.querySelector('.mui-off-canvas-wrap');
-	var offCanvasInnerContainer = offCanvasContainer.querySelector('.mui-inner-wrap');
-	var offCanvas = mui('#offCanvas');
-	document.getElementById('switch').addEventListener('toggle', function(event) {
-		if (event.detail.isActive) { //整体滑动时，侧滑菜单在inner-wrap内
-			offCanvasInnerContainer.insertBefore(offCanvas[0], offCanvasInnerContainer.firstElementChild);
-		} else { //仅主内容滑动时，侧滑菜单在off-canvas-wrap内
-			offCanvasContainer.insertBefore(offCanvas[0], offCanvasContainer.firstElementChild)
+	//整体滑动暂不支持android手机，因为两个页面的移动动画，无法保证同步性；
+	mui.plusReady(function(){
+		if(mui.os.android){
+			document.getElementById("switch").style.display = 'none';
 		}
 	});
-	document.getElementById('offCanvasShow').addEventListener('tap', function() {
-		//offCanvas.offCanvas('toggle')//toggle or show;
-		offCanvas.offCanvas('show');
+	var menu, showMenu = false,slideTogether = false;
+	window.addEventListener('pagebeforeshow', function() {
+		var left = '30%';
+		if(slideTogether){
+			left = '100%';
+		}
+		menu = mui.createWindow({
+			id: 'offcanvas-plus-menu',
+			url: 'offcanvas-plus-menu.html',
+			styles: {
+				left: '30%',
+				width:'70%',
+				zindex: 9998
+			}
+		});
+		menu.show('none');
+		mui.currentWebview.setStyle({left:0});
 	});
-	document.getElementById('offCanvasHide').addEventListener('tap', function() {
-		//offCanvas.offCanvas('toggle')//toggle or hide;
-		offCanvas.offCanvas('hide');
+	//点击侧滑按钮
+	document.querySelector('.mui-action-menu').addEventListener('tap', function() {
+		mui.currentWebview.setStyle({
+			left: showMenu ? '0' : '-70%',
+			transition: {
+				duration: 200
+			}
+		});
+		if(slideTogether){
+			menu.setStyle({
+				left: showMenu ? '100%' : '30%',
+				transition: {
+					duration: 200
+				}
+			});
+		}
+		showMenu = !showMenu;
+	});
+	function closeMenu(){
+		menu.close('none');
+	}
+	//按返回图标时，关闭菜单webview
+	document.querySelector('.mui-action-back').addEventListener('tap',closeMenu);
+	mui.plusReady(function(){
+		//按返回键时，关闭菜单webview
+		plus.key.addEventListener('backbutton', closeMenu, false);
+	});
+	//整体切换开关事件，按下时，需变换menu界面的初始化位置；
+	document.getElementById("switch").addEventListener('toggle',function(event){
+		if(event.detail.isActive){
+			//切换为整体移动
+			//首先改变移动标志
+			slideTogether = true;
+			//变换menu界面初始化位置，整体移动时，Menu界面left需要在100%的地方；
+			menu.setStyle({left:'100%'});
+		}else{
+			slideTogether = false;
+			menu.setStyle({left:'30%'});
+		}
 	});
 </script>
 

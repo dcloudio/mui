@@ -21,22 +21,27 @@
 	$.ready(function() {
 		$('body').on('tap', 'a', function(e) {
 			var id = this.getAttribute('href');
-			if(id){
+			if (id) {
 				if (~id.indexOf('.html')) {
 					if (window.plus) {
 						$.openWindow({
 							id: id,
 							url: this.href,
+							styles:{
+								zindex:9999,
+							},
 							preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
 						});
 					} else {
 						document.location.href = this.href;
 					}
-				}else{
-					plus.runtime.openURL(id);
+				} else {
+					if (typeof plus !== 'undefined') {
+						plus.runtime.openURL(id);
+					}
 				}
 			}
-			
+
 		});
 	});
 })(mui);
