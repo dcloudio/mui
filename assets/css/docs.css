@@ -62,7 +62,7 @@ body {
 }
 .docs-header {
 	height: 100vh;
-	min-height: 750px;
+	min-height: 550px;
 }
 .docs-header .carbonad {
 	position: relative !important;
@@ -86,9 +86,9 @@ body {
 	left: 0;
 }
 @media screen and (min-width: 768px) {
-	.docs-header {
+	/*.docs-header {
 		min-height: 870px;
-	}
+	}*/
 	.docs-header .carbonad {
 		left: 50% !important;
 		width: 330px !important;
@@ -479,11 +479,11 @@ body {
 }
 .docs-header .docs-footer .docs-footer-text,
 .docs-header .docs-footer .docs-footer-links {
-	color: rgba(255, 255, 255, .5);
+	color: rgba(0, 0, 0, .8);
 }
 .docs-header .docs-footer .docs-footer-text a,
 .docs-header .docs-footer .docs-footer-links a {
-	color: rgba(255, 255, 255, .8);
+	color: #D75331;
 }
 .github-btn {
 	overflow: hidden;
