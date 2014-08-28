@@ -9,7 +9,7 @@
  */
 /* ========================================================================
  * Ratchet: modals.js v2.0.2
- * http://goratchet.com/components#modals
+ * http://dcloudio.github.io/mui/components#modals
  * ========================================================================
  * Copyright 2014 Connor Sears
  * Licensed under MIT (https://github.com/twbs/ratchet/blob/master/LICENSE)
@@ -51,7 +51,7 @@
 
 /* ========================================================================
  * Ratchet: popovers.js v2.0.2
- * http://goratchet.com/components#popovers
+ * http://dcloudio.github.io/mui/components#popovers
  * ========================================================================
  * Copyright 2014 Connor Sears
  * Licensed under MIT (https://github.com/twbs/ratchet/blob/master/LICENSE)
@@ -139,7 +139,7 @@
 
 /* ========================================================================
  * Ratchet: push.js v2.0.2
- * http://goratchet.com/components#push
+ * http://dcloudio.github.io/mui/components#push
  * ========================================================================
  * inspired by @defunkt's jquery.pjax.js
  * Copyright 2014 Connor Sears
@@ -623,7 +623,7 @@
 
 /* ========================================================================
  * Ratchet: segmented-controllers.js v2.0.2
- * http://goratchet.com/components#segmentedControls
+ * http://dcloudio.github.io/mui/components#segmentedControls
  * ========================================================================
  * Copyright 2014 Connor Sears
  * Licensed under MIT (https://github.com/twbs/ratchet/blob/master/LICENSE)
@@ -689,7 +689,7 @@
 
 /* ========================================================================
  * Ratchet: sliders.js v2.0.2
- * http://goratchet.com/components#sliders
+ * http://dcloudio.github.io/mui/components#sliders
  * ========================================================================
    Adapted from Brad Birdsall's swipe
  * Copyright 2014 Connor Sears
@@ -826,7 +826,7 @@
 
 /* ========================================================================
  * Ratchet: toggles.js v2.0.2
- * http://goratchet.com/components#toggles
+ * http://dcloudio.github.io/mui/components#toggles
  * ========================================================================
    Adapted from Brad Birdsall's swipe
  * Copyright 2014 Connor Sears

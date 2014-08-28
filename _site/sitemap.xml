@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://goratchet.com/</loc>
+    <loc>http://dcloudio.github.io/mui/</loc>
     <lastmod>2014-04-02T08:50:45-07:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -9,7 +9,7 @@
   
   
   <url>
-    <loc>http://goratchet.com/about/</loc>
+    <loc>http://dcloudio.github.io/mui/about/</loc>
     <lastmod>2014-04-02T08:50:45-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -18,7 +18,7 @@
   
   
   <url>
-    <loc>http://goratchet.com/components/</loc>
+    <loc>http://dcloudio.github.io/mui/components/</loc>
     <lastmod>2014-04-02T08:50:45-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -27,7 +27,7 @@
   
   
   <url>
-    <loc>http://goratchet.com/examples/</loc>
+    <loc>http://dcloudio.github.io/mui/examples/</loc>
     <lastmod>2014-04-02T08:50:45-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -36,7 +36,7 @@
   
   
   <url>
-    <loc>http://goratchet.com/getting-started/</loc>
+    <loc>http://dcloudio.github.io/mui/getting-started/</loc>
     <lastmod>2014-04-02T08:50:45-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

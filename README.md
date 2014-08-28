@@ -17,7 +17,7 @@ Build mobile apps with simple HTML, CSS, and JS components.
 
 - Clone the repo with `git clone https://github.com/twbs/ratchet.git` or just [download](http://github.com/twbs/ratchet/archive/v2.0.2.zip) the bundled CSS and JS
 - [Read the docs](http://goratchet.com) to learn about the components and how to get a prototype on your phone
-- [Check out examples](http://goratchet.com/examples/)
+- [Check out examples](http://dcloudio.github.io/mui/examples/)
 
 Take note that our master branch is our active, unstable development branch and that if you're looking to download a stable copy of the repo, check the [tagged downloads](https://github.com/twbs/ratchet/tags).
 
@@ -61,7 +61,7 @@ Learn more about using Jekyll by reading its [documentation](http://jekyllrb.com
 
 ### Documentation for previous releases
 
-Documentation for v1.0.2 has been made available for the time being at <http://goratchet.com/1.0.2/> while folks transition to Ratchet 2.
+Documentation for v1.0.2 has been made available for the time being at <http://dcloudio.github.io/mui/1.0.2/> while folks transition to Ratchet 2.
 
 [Previous releases](https://github.com/twbs/ratchet/releases) and their documentation are also available for download.
 
