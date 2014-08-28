@@ -1229,6 +1229,7 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 
 .mui-bar .mui-segmented-control {
   top: 7px;
+  width: auto;
   margin: 0 auto;
 }
 
@@ -2225,6 +2226,7 @@ select {
   max-height: 300px;
   margin-bottom: 0;
   overflow: auto;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: rgba(247, 247, 247, .98);
   background-image: none;
