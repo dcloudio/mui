@@ -2226,7 +2226,6 @@ select {
   max-height: 300px;
   margin-bottom: 0;
   overflow: auto;
-  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: rgba(247, 247, 247, .98);
   background-image: none;
