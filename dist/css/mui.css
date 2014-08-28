@@ -1728,7 +1728,7 @@ select {
 .mui-input-row label {
   float: left;
   width: 35%;
-  padding: 8px 20px;
+  padding: 8px 15px;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.1;
 }
