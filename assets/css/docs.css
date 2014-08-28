@@ -375,7 +375,7 @@ body {
 	position: relative;
 	padding: 55px 15px 65px;
 	overflow: hidden;
-	color: #fff;
+	color: #000;
 	text-align: center;
 }
 .docs-sub-content .page-title,
@@ -390,7 +390,7 @@ body {
 }
 .docs-sub-content .page-description {
 	font-size: 24px;
-	color: #fff;
+	color: #000;
 	opacity: .7;
 }
 @media screen and (min-width: 768px) {
