@@ -593,13 +593,13 @@ code {
 .component-example > .mui-switch {
 	margin-bottom: 10px;
 }
-.component-example .slider {
+.component-example .mui-slider {
 	height: 300px;
 }
-.component-example .slider .slide {
+.component-example .mui-slider .mui-slider-item {
 	height: 300px;
 }
-.component-example .slide img {
+.component-example .mui-slider-item img {
 	width: 100%;
 }
 .component-example .slide-text {
