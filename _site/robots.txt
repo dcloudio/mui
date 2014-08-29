@@ -1,6 +1,0 @@
-# www.robotstxt.org/
-
-# Allow crawling of all content
-User-agent: *
-Disallow:
-Sitemap: http://dcloudio.github.io/mui/sitemap.xml

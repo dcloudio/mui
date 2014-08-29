@@ -70,40 +70,20 @@ $(function() {
       var nav     = $('.docs-nav-group');
       var trigger = $('.js-docs-nav-trigger');
 
-      trigger.toggleClass('active');
-      nav.toggleClass('active');
+      trigger.toggleClass('mui-active');
+      nav.toggleClass('mui-active');
     });
 
     navComponentLinks.click(function(e) {
       e.stopPropagation();
       e.preventDefault();
-      componentsList.toggleClass('active');
+      componentsList.toggleClass('mui-active');
     });
 
     doc.on('click', function () {
-      componentsList.removeClass('active');
+      componentsList.removeClass('mui-active');
     });
 
-    // Platform switcher
-    $('.platform-switch').on('click', function () {
-      var components = $('.docs-components');
-      var platform   = $(this).attr('data-platform');
-
-      // Set platform
-      if (components.hasClass('platform-ios')) {
-        components.removeClass('platform-ios');
-        components.addClass(platform);
-      } else if (components.hasClass('platform-android')) {
-        components.removeClass('platform-android');
-        components.addClass(platform);
-      } else {
-        components.addClass(platform);
-      }
-
-      // Deal with active states
-      $(this).siblings('.active').removeClass('active');
-      $(this).addClass('active');
-    });
 
     win.on('scroll', calculateScroll);
     win.on('scroll', calculateToggle);
@@ -153,16 +133,16 @@ $(function() {
           return;
         }
         currentActive = l;
-        bod.find('.component.active').removeClass('active');
+        bod.find('.component.mui-active').removeClass('mui-active');
         contentSectionItem = $(contentSection[l]);
-        contentSectionItem.addClass('active');
+        contentSectionItem.addClass('mui-active');
         if (contentSectionItem.attr('id')) {
           device.attr('id', contentSectionItem.attr('id') + 'InDevice');
         } else {
           device.attr('id', '');
         }
         if (!contentSectionItem.hasClass('informational')) {
-          updateContent(contentSectionItem.find('.highlight .html').text());
+          updateContent(contentSectionItem.find('.highlight .language-html').text());
         }
         break;
       }
@@ -179,7 +159,7 @@ $(function() {
       toolbarToggle.addClass('visible');
     } else if (currentTop <= headerHeight) {
       toolbarToggle.removeClass('visible');
-      componentsList.removeClass('active');
+      componentsList.removeClass('mui-active');
     }
   };
 
