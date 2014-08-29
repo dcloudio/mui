@@ -742,17 +742,17 @@ code {
 	margin: 10px;
 }
 @media screen and (min-width: 768px) {
-	.slider .slide {
+	.mui-slider .mui-slider-item {
 		cursor: -webkit-grab;
 		cursor: -moz-grab;
 		cursor: grab;
 	}
-	.slider .slide img {
+	.mui-slider .mui-slider-item img {
 		display: block;
 		width: 100%;
 		height: 570px;
 	}
-	.slider .slide-group .slide-text {
+	.mui-slider .mui-slide-group .slide-text {
 		position: absolute;
 		top: 45%;
 		left: 0;
