@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>CSS组件 &middot; MUI</title>
+<title></title>
 <meta name="description" content="MUI: 最接近原生APP体验的高性能前端框架">
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 <link rel="shortcut icon" href="http://dcloudio.github.io/mui/favicon.ico">
@@ -29,7 +29,7 @@
 <![endif]-->
 
     <div class="docs-sub-header">
-	<header class="docs-masthead mui-clearfix">
+  <header class="docs-masthead mui-clearfix">
   <div class="container">
     <div class="column">
       <h1 class="docs-title">
@@ -50,13 +50,13 @@
   </div>
 </header>
 
-	<div class="container">
-		<div class="docs-sub-content">
-			<h2 class="page-title">CSS组件</h2>
-			<p class="page-description">Design patterns that serve as basic building blocks.</p>
-		</div>
-	</div>
-	<div class="docs-component-toolbar js-docs-component-toolbar">
+  <div class="container">
+    <div class="docs-sub-content">
+      <h2 class="page-title">CSS组件</h2>
+      <p class="page-description">Design patterns that serve as basic building blocks.</p>
+    </div>
+  </div>
+  <div class="docs-component-toolbar js-docs-component-toolbar">
   <div class="container">
     <div class="column units-2">
       <span class="docs-jump-menu mui-pull-left js-jump-menu">
@@ -87,1250 +87,1228 @@
 </div>
 
 <div class="container">
-	<!-- Components -->
-	<div class="docs-components column-group">
-		<div class="device-column column lg-units-5 mui-pull-right">
-			<!-- In phone examples -->
-			<div class="device js-device">
-				<div class="device-content">
-					<div id="iwindow">
-						<header class="mui-bar mui-bar-nav">
-							<h1 class="mui-title">Title</h1>
-						</header>
-					</div>
-				</div>
-			</div>
-		</div>
+  <!-- Components -->
+  <div class="docs-components column-group">
+    <div class="device-column column lg-units-5 mui-pull-right">
+      <!-- In phone examples -->
+      <div class="device js-device">
+        <div class="device-content">
+          <div id="iwindow">
+            <header class="mui-bar mui-bar-nav">
+              <h1 class="mui-title">Title</h1>
+            </header>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div class="column lg-units-7 docs-content">
-			<!-- Bars -->
-			<article class="component mui-active" id="bars">
-				<h3 class="component-title">Title mui-bar</h3>
-				<p class="component-description">Title bars are full width and docked to the top of the viewport.</p>
+    <div class="column lg-units-7 docs-content">
+      <!-- Bars -->
+      <article class="component mui-active" id="bars">
+        <h3 class="component-title">Title mui-bar</h3>
+        <p class="component-description">Title bars are full width and docked to the top of the viewport.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<header class="mui-bar mui-bar-nav">
-						<h1 class="mui-title">Title</h1>
-					</header>
-				</div>
+        <div class="component-example component-example-fullbleed">
+          <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">Title</h1>
+          </header>
+        </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<article class="component">
-				<h3 class="component-title">Title mui-bar with buttons</h3>
-				<p class="component-description">Buttons in a mui-title mui-bar are left or right aligned and should be used for actions. Use the <code>.mui-pull-right</code> or <code>.mui-pull-left</code> utility classes to float the buttons. Also, be sure to place any floated elements before the mui-title.</p>
+    <article class="component">
+      <h3 class="component-title">Title mui-bar with buttons</h3>
+      <p class="component-description">Buttons in a mui-title mui-bar are left or right aligned and should be used for actions. Use the <code>.mui-pull-right</code> or <code>.mui-pull-left</code> utility classes to float the buttons. Also, be sure to place any floated elements before the mui-title.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<header class="mui-bar mui-bar-nav">
-						<button class="mui-btn mui-pull-left">
-							Left
-						</button>
-						<button class="mui-btn mui-pull-right">
-							Right
-						</button>
-						<h1 class="mui-title">Title</h1>
-					</header>
-				</div>
+      <div class="component-example component-example-fullbleed">
+        <header class="mui-bar mui-bar-nav">
+          <button class="mui-btn mui-pull-left">
+            Left
+          </button>
+          <button class="mui-btn mui-pull-right">
+            Right
+          </button>
+          <h1 class="mui-title">Title</h1>
+        </header>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-left&quot;</span><span class="nt">&gt;</span>
-						Left
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-right&quot;</span><span class="nt">&gt;</span>
-						Right
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-left&quot;</span><span class="nt">&gt;</span>
+    Left
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-right&quot;</span><span class="nt">&gt;</span>
+    Right
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<article class="component">
-				<h3 class="component-title">Title mui-bar with icons</h3>
-				<p class="component-description">Icons can also be used for actions in toolbars. Again, be sure to use utility classes to float the icons into position.</p>
+    <article class="component">
+      <h3 class="component-title">Title mui-bar with icons</h3>
+      <p class="component-description">Icons can also be used for actions in toolbars. Again, be sure to use utility classes to float the icons into position.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<header class="mui-bar mui-bar-nav">
-						<a class="mui-icon mui-icon-left-nav mui-pull-left"></a>
-						<a class="mui-icon mui-icon-compose mui-pull-right"></a>
-						<h1 class="mui-title">Title</h1>
-					</header>
-				</div>
+      <div class="component-example component-example-fullbleed">
+        <header class="mui-bar mui-bar-nav">
+          <a class="mui-icon mui-icon-left-nav mui-pull-left"></a>
+          <a class="mui-icon mui-icon-compose mui-pull-right"></a>
+          <h1 class="mui-title">Title</h1>
+        </header>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-compose mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
-					<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-compose mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<article class="component">
-				<h3 class="component-title">Title mui-bar with link buttons and icons</h3>
-				<p class="component-description">Link buttons can be used in tool bars to remove the outline. Use these in conjuction with icons to recreate the nav feel from iOS7. Note the use of <code>.mui-btn-nav</code> to bring the buttons a little bit closer to the edge of the viewport.</p>
+    <article class="component">
+      <h3 class="component-title">Title mui-bar with link buttons and icons</h3>
+      <p class="component-description">Link buttons can be used in tool bars to remove the outline. Use these in conjuction with icons to recreate the nav feel from iOS7. Note the use of <code>.mui-btn-nav</code> to bring the buttons a little bit closer to the edge of the viewport.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<header class="mui-bar mui-bar-nav">
-						<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
-							<span class="mui-icon mui-icon-left-nav"></span>
-							Left
-						</button>
-						<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
-							Right
-							<span class="mui-icon mui-icon-right-nav"></span>
-						</button>
-						<h1 class="mui-title">Title</h1>
-					</header>
-				</div>
+      <div class="component-example component-example-fullbleed">
+        <header class="mui-bar mui-bar-nav">
+          <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+            Left
+          </button>
+          <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            Right
+            <span class="mui-icon mui-icon-right-nav"></span>
+          </button>
+          <h1 class="mui-title">Title</h1>
+        </header>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link mui-btn-nav mui-pull-left&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-						Left
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link mui-btn-nav mui-pull-right&quot;</span><span class="nt">&gt;</span>
-						Right
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-right-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link mui-btn-nav mui-pull-left&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+    Left
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link mui-btn-nav mui-pull-right&quot;</span><span class="nt">&gt;</span>
+    Right
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-right-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<article class="component">
-				<h3 class="component-title">Title mui-bar with segmented control</h3>
-				<p class="component-description">Title bars can also house segmented controls. Feel free to add accompanying buttons too. The control will automatically layout itself out correctly.</p>
+    <article class="component">
+      <h3 class="component-title">Title mui-bar with segmented control</h3>
+      <p class="component-description">Title bars can also house segmented controls. Feel free to add accompanying buttons too. The control will automatically layout itself out correctly.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<header class="mui-bar mui-bar-nav">
-						<button class="mui-btn mui-pull-left">
-							Left
-						</button>
-						<button class="mui-btn mui-pull-right">
-							Right
-						</button>
-						<div class="mui-segmented-control">
-							<a class="mui-control-item mui-active">One</a>
-							<a class="mui-control-item">Two</a>
-							<a class="mui-control-item">Three</a>
-						</div>
-					</header>
-				</div>
+      <div class="component-example component-example-fullbleed">
+        <header class="mui-bar mui-bar-nav">
+          <button class="mui-btn mui-pull-left">
+            Left
+          </button>
+          <button class="mui-btn mui-pull-right">
+            Right
+          </button>
+          <div class="mui-segmented-control">
+            <a class="mui-control-item mui-active">One</a>
+            <a class="mui-control-item">Two</a>
+            <a class="mui-control-item">Three</a>
+          </div>
+        </header>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-left&quot;</span><span class="nt">&gt;</span>
-						Left
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-right&quot;</span><span class="nt">&gt;</span>
-						Right
-					<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span><span class="nt">&gt;</span>One<span class="nt">&lt;/a&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Two<span class="nt">&lt;/a&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Three<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-left&quot;</span><span class="nt">&gt;</span>
+    Left
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-pull-right&quot;</span><span class="nt">&gt;</span>
+    Right
+  <span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span><span class="nt">&gt;</span>One<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Two<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Three<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<article class="component">
-				<h3 class="component-title">Tab mui-bar</h3>
-				<p class="component-description">Use Muiicons in the <code>.mui-tab-mui-bar</code> to represent different sections of your app.</p>
+    <article class="component">
+      <h3 class="component-title">Tab mui-bar</h3>
+      <p class="component-description">Use Muiicons in the <code>.mui-tab-mui-bar</code> to represent different sections of your app.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<nav class="mui-bar mui-bar-tab">
-						<a class="mui-tab-item mui-active" href="#tabbar">
-							<span class="mui-icon mui-icon-phone"></span>
-							<span class="mui-tab-label">电话咨询</span>
-						</a>
-						<a class="mui-tab-item" href="#tabbar-with-chat">
-							<span class="mui-icon mui-icon-chat"></span>
-							<span class="mui-tab-label">在线咨询</span>
-						</a>
-						<a class="mui-tab-item" href="#tabbar-with-sms">
-							<span class="mui-icon mui-icon-sms"></span>
-							<span class="mui-tab-label">短信咨询</span>
-						</a>
-						<a class="mui-tab-item" href="#tabbar-with-map">
-							<span class="mui-icon mui-icon-map"></span>
-							<span class="mui-tab-label">查看地图</span>
-						</a>
-					</nav>
-				</div>
+      <div class="component-example component-example-fullbleed">
+        <nav class="mui-bar mui-bar-tab">
+          <a class="mui-tab-item mui-active" href="#tabbar">
+		<span class="mui-icon mui-icon-phone"></span>
+		<span class="mui-tab-label">电话咨询</span>
+	</a>
+	<a class="mui-tab-item" href="#tabbar-with-chat">
+		<span class="mui-icon mui-icon-chat"></span>
+		<span class="mui-tab-label">在线咨询</span>
+	</a>
+	<a class="mui-tab-item" href="#tabbar-with-sms">
+		<span class="mui-icon mui-icon-sms"></span>
+		<span class="mui-tab-label">短信咨询</span>
+	</a>
+	<a class="mui-tab-item" href="#tabbar-with-map">
+		<span class="mui-icon mui-icon-map"></span>
+		<span class="mui-tab-label">查看地图</span>
+	</a>
+        </nav>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-tab&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>电话咨询<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-chat&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-chat&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>在线咨询<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-sms&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-sms&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>短信咨询<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-map&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-map&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-						<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>查看地图<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/a&gt;</span>
-				<span class="nt">&lt;/nav&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-tab&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>电话咨询<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;/a&gt;</span>
+	<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-chat&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-chat&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>在线咨询<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;/a&gt;</span>
+	<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-sms&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-sms&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>短信咨询<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;/a&gt;</span>
+	<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#tabbar-with-map&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-map&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+		<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-tab-label&quot;</span><span class="nt">&gt;</span>查看地图<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/nav&gt;</span></code></pre></div>
 
-			</article>
+    <p class="component-note touch-only"><strong>Note:</strong> Use push.js to actually change content.</p>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Tab mui-bar (labels only)</h3>
-				<p class="component-description">If you don't want to use icons, that's okay too. The text will appear larger to use the additional space.</p>
+  <article class="component">
+      <h3 class="component-title">Tab mui-bar (labels only)</h3>
+      <p class="component-description">If you don't want to use icons, that's okay too. The text will appear larger to use the additional space.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<nav class="mui-bar mui-bar-tab">
-						<a class="mui-tab-item mui-active" href="#">
+      <div class="component-example component-example-fullbleed">
+        <nav class="mui-bar mui-bar-tab">
+          <a class="mui-tab-item mui-active" href="#">
             Label
           </a>
-						<a class="mui-tab-item" href="#">
+          <a class="mui-tab-item" href="#">
             Label
           </a>
-						<a class="mui-tab-item" href="#">
+          <a class="mui-tab-item" href="#">
             Label
           </a>
-					</nav>
-				</div>
+        </nav>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-tab&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-tab&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
     Label
   <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
     Label
   <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-tab-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
     Label
   <span class="nt">&lt;/a&gt;</span>
-				<span class="nt">&lt;/nav&gt;</span></code></pre></div>
+<span class="nt">&lt;/nav&gt;</span></code></pre></div>
 
-				<p class="component-note touch-only"><strong>Note:</strong> Use push.js to actually change content.</p>
-			</article>
+    <p class="component-note touch-only"><strong>Note:</strong> Use push.js to actually change content.</p>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Standard bars</h3>
-				<p class="component-description">Standard bars are basic fixed elements that can be positioned in four places. These can be used to house buttons, icons, or segmented controls (see following examples).</p>
+  <article class="component">
+      <h3 class="component-title">Standard bars</h3>
+      <p class="component-description">Standard bars are basic fixed elements that can be positioned in four places. These can be used to house buttons, icons, or segmented controls (see following examples).</p>
 
-				<div class="component-example component-example-fullbleed">
-					<!-- Segmented control in standard mui-bar fixed to top -->
-					<nav class="mui-bar mui-bar-standard">
-						<div class="mui-segmented-control">
-							<a class="mui-control-item mui-active">Thing one</a>
-							<a class="mui-control-item">Thing two</a>
-							<a class="mui-control-item">Thing three</a>
-						</div>
-					</nav>
+      <div class="component-example component-example-fullbleed">
+        <!-- Segmented control in standard mui-bar fixed to top -->
+        <nav class="mui-bar mui-bar-standard">
+          <div class="mui-segmented-control">
+            <a class="mui-control-item mui-active">Thing one</a>
+            <a class="mui-control-item">Thing two</a>
+            <a class="mui-control-item">Thing three</a>
+          </div>
+        </nav>
 
-					<!-- Block button in standard mui-bar fixed below top mui-bar -->
-					<div class="mui-bar mui-bar-standard mui-bar-header-secondary">
-						<button class="mui-btn mui-btn-block">Block level button</button>
-					</div>
-				</div>
+        <!-- Block button in standard mui-bar fixed below top mui-bar -->
+        <div class="mui-bar mui-bar-standard mui-bar-header-secondary">
+          <button class="mui-btn mui-btn-block">Block level button</button>
+        </div>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- Segmented control in standard mui-bar fixed to top --&gt;</span>
-				<span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span><span class="nt">&gt;</span>Thing one<span class="nt">&lt;/a&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Thing two<span class="nt">&lt;/a&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Thing three<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;/nav&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- Segmented control in standard mui-bar fixed to top --&gt;</span>
+<span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span><span class="nt">&gt;</span>Thing one<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Thing two<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span><span class="nt">&gt;</span>Thing three<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/nav&gt;</span>
 
-				<span class="c">&lt;!-- Block button in standard mui-bar fixed below top mui-bar --&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-header-secondary&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block level button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;/div&gt;</span>
+<span class="c">&lt;!-- Block button in standard mui-bar fixed below top mui-bar --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-header-secondary&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block level button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
 
-				<span class="c">&lt;!-- Block button in standard mui-bar fixed above the footer --&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-footer-secondary&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block level button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;/div&gt;</span>
+<span class="c">&lt;!-- Block button in standard mui-bar fixed above the footer --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-footer-secondary&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block level button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
 
-				<span class="c">&lt;!-- Icons in standard mui-bar fixed to the bottom of the screen --&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-footer&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-compose mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-gear mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<span class="c">&lt;!-- Icons in standard mui-bar fixed to the bottom of the screen --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-standard mui-bar-footer&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-compose mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-gear mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Typography -->
-			<article class="component" id="typography">
-				<h3 class="component-title">Typography</h3>
-				<p class="component-description">Use headings and paragraphs to mui-title and describe sections of your app. Apply or wrap elements with <code>.mui-content-padded</code> to give the content space around the screen.</p>
+  <!-- Typography -->
+  <article class="component" id="typography">
+    <h3 class="component-title">Typography</h3>
+    <p class="component-description">Use headings and paragraphs to mui-title and describe sections of your app. Apply or wrap elements with <code>.mui-content-padded</code> to give the content space around the screen.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<div class="mui-content-padded">
-						<h1>h1. Heading</h1>
-						<h2>h2. Heading</h2>
-						<h3>h3. Heading</h3>
-						<h4>h4. Heading</h4>
-						<h5>h5. Heading</h5>
-						<h6>h6. Heading</h6>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-					</div>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <div class="mui-content-padded">
+        <h1>h1. Heading</h1>
+        <h2>h2. Heading</h2>
+        <h3>h3. Heading</h3>
+        <h4>h4. Heading</h4>
+        <h5>h5. Heading</h5>
+        <h6>h6. Heading</h6>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco.</p>
+      </div>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;h1&gt;</span>h1. Heading<span class="nt">&lt;/h1&gt;</span>
-					<span class="nt">&lt;h2&gt;</span>h2. Heading<span class="nt">&lt;/h2&gt;</span>
-					<span class="nt">&lt;h3&gt;</span>h3. Heading<span class="nt">&lt;/h3&gt;</span>
-					<span class="nt">&lt;h4&gt;</span>h4. Heading<span class="nt">&lt;/h4&gt;</span>
-					<span class="nt">&lt;h5&gt;</span>h5. Heading<span class="nt">&lt;/h5&gt;</span>
-					<span class="nt">&lt;h6&gt;</span>h6. Heading<span class="nt">&lt;/h6&gt;</span>
-					<span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.<span class="nt">&lt;/p&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>h1. Heading<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;h2&gt;</span>h2. Heading<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;h3&gt;</span>h3. Heading<span class="nt">&lt;/h3&gt;</span>
+  <span class="nt">&lt;h4&gt;</span>h4. Heading<span class="nt">&lt;/h4&gt;</span>
+  <span class="nt">&lt;h5&gt;</span>h5. Heading<span class="nt">&lt;/h5&gt;</span>
+  <span class="nt">&lt;h6&gt;</span>h6. Heading<span class="nt">&lt;/h6&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+  quis nostrud exercitation ullamco.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Table views -->
-			<article class="component" id="mui-table-views">
-				<h3 class="component-title">Table views</h3>
-				<p class="component-description">Table views can be used for organizing data, showing collections of links, or a series of controls.</p>
+  <!-- Table views -->
+  <article class="component" id="mui-table-views">
+    <h3 class="component-title">Table views</h3>
+    <p class="component-description">Table views can be used for organizing data, showing collections of links, or a series of controls.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">Item 1</li>
-						<li class="mui-table-view-cell">Item 2</li>
-						<li class="mui-table-view-cell mui-table-view-divider">Divider</li>
-						<li class="mui-table-view-cell">Item 3</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">Item 1</li>
+        <li class="mui-table-view-cell">Item 2</li>
+        <li class="mui-table-view-cell mui-table-view-divider">Divider</li>
+        <li class="mui-table-view-cell">Item 3</li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-table-view-divider&quot;</span><span class="nt">&gt;</span>Divider<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-table-view-divider&quot;</span><span class="nt">&gt;</span>Divider<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with chevrons</h3>
-				<p class="component-description">Chevrons should be used to indicate that the item is linked. Just apply the classes <code>.mui-navigate-right</code> or <code>.mui-navigate-left</code> to use a chevron.</p>
+  <article class="component">
+    <h3 class="component-title">Table view with chevrons</h3>
+    <p class="component-description">Chevrons should be used to indicate that the item is linked. Just apply the classes <code>.mui-navigate-right</code> or <code>.mui-navigate-left</code> to use a chevron.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
             Item 1
           </a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
             Item 2
           </a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
             Item 3
           </a>
-						</li>
-					</ul>
-				</div>
+        </li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
       Item 1
     <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
       Item 2
     <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
       Item 3
     <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
-				<p class="component-note touch-only"><strong>Note:</strong> Table views with the Android theme don't have chevrons to comply with Android Design guidelines. More information can be found <a href="http://developer.android.com/design/patterns/pure-android.html">here</a>.</p>
-			</article>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+    <p class="component-note touch-only"><strong>Note:</strong> Table views with the Android theme don't have chevrons to comply with Android Design guidelines. More information can be found <a href="http://developer.android.com/design/patterns/pure-android.html">here</a>.</p>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with badges</h3>
-				<p class="component-description">Badges are a great way of showing data.</p>
+  <article class="component">
+    <h3 class="component-title">Table view with badges</h3>
+    <p class="component-description">Badges are a great way of showing data.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">Item 1 <span class="mui-badge">4</span>
-						</li>
-						<li class="mui-table-view-cell">Item 2 <span class="mui-badge">1</span>
-						</li>
-						<li class="mui-table-view-cell">Item 3 <span class="mui-badge">5</span>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">Item 1 <span class="mui-badge">4</span></li>
+        <li class="mui-table-view-cell">Item 2 <span class="mui-badge">1</span></li>
+        <li class="mui-table-view-cell">Item 3 <span class="mui-badge">5</span></li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3 <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with badges and chevrons</h3>
-				<p class="component-description">Feel free to use chevrons and badges together. They'll automatically positon themselves correctly.</p>
+  <article class="component">
+    <h3 class="component-title">Table view with badges and chevrons</h3>
+    <p class="component-description">Feel free to use chevrons and badges together. They'll automatically positon themselves correctly.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
-								<span class="mui-badge">5</span>
-								Item 1
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
-								<span class="mui-badge">5</span>
-								Item 2
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right">
-								<span class="mui-badge">5</span>
-								Item 3
-							</a>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            <span class="mui-badge">5</span>
+            Item 1
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            <span class="mui-badge">5</span>
+            Item 2
+          </a>
+        </li>
+        <li class="mui-table-view-cell">
+          <a class="mui-navigate-right">
+            <span class="mui-badge">5</span>
+            Item 3
+          </a>
+        </li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
-							Item 1
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
-							Item 2
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
-							Item 3
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
+      Item 1
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
+      Item 2
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/span&gt;</span>
+      Item 3
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with mui-media (images)</h3>
-				<p class="component-description">Showing mui-media inside table views is easy. This component to perfect for images and text.</p>
+  <article class="component">
+    <h3 class="component-title">Table view with mui-media (images)</h3>
+    <p class="component-description">Showing mui-media inside table views is easy. This component to perfect for images and text.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
-								<div class="mui-media-body">
-									Item 1
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
-								<div class="mui-media-body">
-									Item 1
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
-								<div class="mui-media-body">
-									Item 1
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
-								</div>
-							</a>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
+            <div class="mui-media-body">
+              Item 1
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+            </div>
+          </a>
+        </li>
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
+            <div class="mui-media-body">
+              Item 1
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+            </div>
+          </a>
+        </li>
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <img class="mui-media-object mui-pull-left" src="http://placehold.it/42x42" alt="Placeholder image">
+            <div class="mui-media-body">
+              Item 1
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 1
-								<span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 1
-								<span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 1
-								<span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 1
+        <span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 1
+        <span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left&quot;</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/42x42&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 1
+        <span class="nt">&lt;p&gt;</span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.<span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with mui-media (icons)</h3>
-				<p class="component-description">Muiicons can also used instead of images.</p>
+  <article class="component">
+    <h3 class="component-title">Table view with mui-media (icons)</h3>
+    <p class="component-description">Muiicons can also used instead of images.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<span class="mui-media-object mui-pull-left mui-icon mui-icon-trash"></span>
-								<div class="mui-media-body">
-									Item 1
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<span class="mui-media-object mui-pull-left mui-icon mui-icon-gear"></span>
-								<div class="mui-media-body">
-									Item 2
-								</div>
-							</a>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<a class="mui-navigate-right">
-								<span class="mui-media-object mui-pull-left mui-icon mui-icon-pages"></span>
-								<div class="mui-media-body">
-									Item 3
-								</div>
-							</a>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <span class="mui-media-object mui-pull-left mui-icon mui-icon-trash"></span>
+            <div class="mui-media-body">
+              Item 1
+            </div>
+          </a>
+        </li>
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <span class="mui-media-object mui-pull-left mui-icon mui-icon-gear"></span>
+            <div class="mui-media-body">
+              Item 2
+            </div>
+          </a>
+        </li>
+        <li class="mui-table-view-cell mui-media">
+          <a class="mui-navigate-right">
+            <span class="mui-media-object mui-pull-left mui-icon mui-icon-pages"></span>
+            <div class="mui-media-body">
+              Item 3
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-trash&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 1
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-gear&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 2
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-pages&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
-								Item 3
-							<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-trash&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 1
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-gear&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 2
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-media&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-media-object mui-pull-left mui-icon mui-icon-pages&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-media-body&quot;</span><span class="nt">&gt;</span>
+        Item 3
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with buttons</h3>
+  <article class="component">
+    <h3 class="component-title">Table view with buttons</h3>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">Item 1
-							<button class="mui-btn">Button</button>
-						</li>
-						<li class="mui-table-view-cell">Item 2
-							<button class="mui-btn mui-btn-primary">Button</button>
-						</li>
-						<li class="mui-table-view-cell">Item 3
-							<button class="mui-btn mui-btn-positive">Button</button>
-						</li>
-						<li class="mui-table-view-cell">Item 4
-							<button class="mui-btn mui-btn-negative">Button</button>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">Item 1 <button class="mui-btn">Button</button></li>
+        <li class="mui-table-view-cell">Item 2 <button class="mui-btn mui-btn-primary">Button</button></li>
+        <li class="mui-table-view-cell">Item 3 <button class="mui-btn mui-btn-positive">Button</button></li>
+        <li class="mui-table-view-cell">Item 4 <button class="mui-btn mui-btn-negative">Button</button></li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1
-						<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2
-						<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3
-						<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 4
-						<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1 <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2 <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3 <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 4 <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Table view with switches</h3>
+  <article class="component">
+    <h3 class="component-title">Table view with switches</h3>
 
-				<div class="component-example component-example-fullbleed">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							Item 1
-							<div class="mui-switch">
-								<div class="mui-switch-handle"></div>
-							</div>
-						</li>
-						<li class="mui-table-view-cell">
-							Item 2
-							<div class="mui-switch mui-active">
-								<div class="mui-switch-handle"></div>
-							</div>
-						</li>
-						<li class="mui-table-view-cell">
-							Item 3
-							<div class="mui-switch">
-								<div class="mui-switch-handle"></div>
-							</div>
-						</li>
-					</ul>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+          Item 1
+          <div class="mui-switch">
+            <div class="mui-switch-handle"></div>
+          </div>
+        </li>
+        <li class="mui-table-view-cell">
+          Item 2
+          <div class="mui-switch mui-active">
+            <div class="mui-switch-handle"></div>
+          </div>
+        </li>
+        <li class="mui-table-view-cell">
+          Item 3
+          <div class="mui-switch">
+            <div class="mui-switch-handle"></div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						Item 1
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						Item 2
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
-						Item 3
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;/li&gt;</span>
-				<span class="nt">&lt;/ul&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    Item 1
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    Item 2
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+    Item 3
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component">
-				<h3 class="component-title">Carded table views</h3>
-				<p class="component-description">Use <code>.card</code> to wrap any content in a padded element.</p>
+  <article class="component">
+    <h3 class="component-title">Carded table views</h3>
+    <p class="component-description">Use <code>.card</code> to wrap any content in a padded element.</p>
 
-				<div class="component-example">
-					<div class="mui-card">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">Item 1</li>
-							<li class="mui-table-view-cell">Item 2</li>
-							<li class="mui-table-view-cell mui-table-view-divider">Divider</li>
-							<li class="mui-table-view-cell">Item 3</li>
-							<li class="mui-table-view-cell">Item 4</li>
-						</ul>
-					</div>
-				</div>
+    <div class="component-example">
+      <div class="mui-card">
+        <ul class="mui-table-view">
+          <li class="mui-table-view-cell">Item 1</li>
+          <li class="mui-table-view-cell">Item 2</li>
+          <li class="mui-table-view-cell mui-table-view-divider">Divider</li>
+          <li class="mui-table-view-cell">Item 3</li>
+          <li class="mui-table-view-cell">Item 4</li>
+        </ul>
+      </div>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-card&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-table-view-divider&quot;</span><span class="nt">&gt;</span>Divider<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 4<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;/ul&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-card&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell mui-table-view-divider&quot;</span><span class="nt">&gt;</span>Divider<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item 4<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Buttons -->
-			<article class="component" id="buttons">
-				<h3 class="component-title">Buttons</h3>
-				<p class="component-description">Buttons come in many flavors and should be used for user actions.</p>
+  <!-- Buttons -->
+  <article class="component" id="buttons">
+    <h3 class="component-title">Buttons</h3>
+    <p class="component-description">Buttons come in many flavors and should be used for user actions.</p>
 
-				<div class="component-example">
-					<button class="mui-btn">Button</button>
-					<button class="mui-btn mui-btn-primary">Button</button>
-					<button class="mui-btn mui-btn-positive">Button</button>
-					<button class="mui-btn mui-btn-negative">Button</button>
-					<button class="mui-btn mui-btn-link">Button</button>
+    <div class="component-example">
+      <button class="mui-btn">Button</button>
+      <button class="mui-btn mui-btn-primary">Button</button>
+      <button class="mui-btn mui-btn-positive">Button</button>
+      <button class="mui-btn mui-btn-negative">Button</button>
+      <button class="mui-btn mui-btn-link">Button</button>
 
-					<button class="mui-btn mui-btn-outlined">Button</button>
-					<button class="mui-btn mui-btn-primary mui-btn-outlined">Button</button>
-					<button class="mui-btn mui-btn-positive mui-btn-outlined">Button</button>
-					<button class="mui-btn mui-btn-negative mui-btn-outlined">Button</button>
-				</div>
+      <button class="mui-btn mui-btn-outlined">Button</button>
+      <button class="mui-btn mui-btn-primary mui-btn-outlined">Button</button>
+      <button class="mui-btn mui-btn-positive mui-btn-outlined">Button</button>
+      <button class="mui-btn mui-btn-negative mui-btn-outlined">Button</button>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
 
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Button<span class="nt">&lt;/button&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Buttons -->
-			<article class="component" id="buttonsWithIcons">
-				<h3 class="component-title">Buttons with icons</h3>
-				<p class="component-description">Muiicons work inside buttons too.</p>
+  <!-- Buttons -->
+  <article class="component" id="buttonsWithIcons">
+    <h3 class="component-title">Buttons with icons</h3>
+    <p class="component-description">Muiicons work inside buttons too.</p>
 
-				<div class="component-example">
-					<button class="mui-btn">
-						<span class="mui-icon mui-icon-search"></span>
-						Button
-					</button>
-					<button class="mui-btn mui-btn-primary">
-						<span class="mui-icon mui-icon-search"></span>
-						Button
-					</button>
-					<button class="mui-btn mui-btn-positive">
-						<span class="mui-icon mui-icon-search"></span>
-						Button
-					</button>
-					<button class="mui-btn mui-btn-negative">
-						<span class="mui-icon mui-icon-search"></span>
-						Button
-					</button>
-					<button class="mui-btn mui-btn-link">
-						<span class="mui-icon mui-icon-left"></span>
-						Button
-					</button>
-				</div>
+    <div class="component-example">
+      <button class="mui-btn">
+        <span class="mui-icon mui-icon-search"></span>
+        Button
+      </button>
+      <button class="mui-btn mui-btn-primary">
+        <span class="mui-icon mui-icon-search"></span>
+        Button
+      </button>
+      <button class="mui-btn mui-btn-positive">
+        <span class="mui-icon mui-icon-search"></span>
+        Button
+      </button>
+      <button class="mui-btn mui-btn-negative">
+        <span class="mui-icon mui-icon-search"></span>
+        Button
+      </button>
+      <button class="mui-btn mui-btn-link">
+        <span class="mui-icon mui-icon-left"></span>
+        Button
+      </button>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					Button
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					Button
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					Button
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					Button
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					Button
-				<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  Button
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  Button
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  Button
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  Button
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-link&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  Button
+<span class="nt">&lt;/button&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component" id="buttonsBadges">
-				<h3 class="component-title">Buttons with badges</h3>
+  <article class="component" id="buttonsBadges">
+    <h3 class="component-title">Buttons with badges</h3>
 
-				<div class="component-example">
-					<button class="mui-btn">Badge button <span class="mui-badge">1</span>
-					</button>
-					<button class="mui-btn mui-btn-primary">Badge button <span class="mui-badge mui-badge-primary">1</span>
-					</button>
-					<button class="mui-btn mui-btn-positive">Badge button <span class="mui-badge mui-badge-positive">1</span>
-					</button>
-					<button class="mui-btn mui-btn-negative">Badge button <span class="mui-badge mui-badge-negative">1</span>
-					</button>
-				</div>
+    <div class="component-example">
+      <button class="mui-btn">Badge button <span class="mui-badge">1</span></button>
+      <button class="mui-btn mui-btn-primary">Badge button <span class="mui-badge mui-badge-primary">1</span></button>
+      <button class="mui-btn mui-btn-positive">Badge button <span class="mui-badge mui-badge-positive">1</span></button>
+      <button class="mui-btn mui-btn-negative">Badge button <span class="mui-badge mui-badge-negative">1</span></button>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
 
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-primary&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-positive&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-negative&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-primary&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-positive&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-outlined mui-btn-negative&quot;</span><span class="nt">&gt;</span>Badge button <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;&lt;/button&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<article class="component" id="blockButtons">
-				<h3 class="component-title">Block buttons</h3>
+  <article class="component" id="blockButtons">
+    <h3 class="component-title">Block buttons</h3>
 
-				<div class="component-example">
-					<button class="mui-btn mui-btn-block">Block button</button>
-					<button class="mui-btn mui-btn-primary mui-btn-block">Block button</button>
-					<button class="mui-btn mui-btn-positive mui-btn-block">Block button</button>
-					<button class="mui-btn mui-btn-negative mui-btn-block">Block button</button>
+    <div class="component-example">
+      <button class="mui-btn mui-btn-block">Block button</button>
+      <button class="mui-btn mui-btn-primary mui-btn-block">Block button</button>
+      <button class="mui-btn mui-btn-positive mui-btn-block">Block button</button>
+      <button class="mui-btn mui-btn-negative mui-btn-block">Block button</button>
 
-					<button class="mui-btn mui-btn-block mui-btn-outlined">Block button</button>
-					<button class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined">Block button</button>
-					<button class="mui-btn mui-btn-positive mui-btn-block mui-btn-outlined">Block button</button>
-					<button class="mui-btn mui-btn-negative mui-btn-block mui-btn-outlined">Block button</button>
-				</div>
+      <button class="mui-btn mui-btn-block mui-btn-outlined">Block button</button>
+      <button class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined">Block button</button>
+      <button class="mui-btn mui-btn-positive mui-btn-block mui-btn-outlined">Block button</button>
+      <button class="mui-btn mui-btn-negative mui-btn-block mui-btn-outlined">Block button</button>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-block&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
 
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-primary mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-negative mui-btn-block mui-btn-outlined&quot;</span><span class="nt">&gt;</span>Block button<span class="nt">&lt;/button&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Segmented Control -->
-			<article class="component" id="segmentedControls">
-				<h3 class="component-title">Segmented control</h3>
-				<p class="component-description">Content sections that are to be swapped in and out by the controller should all be siblings and have the class <code>.mui-control-content</code>. Then, just give each content section an id and point the link in the segmented control to that id.</p>
+  <!-- Segmented Control -->
+  <article class="component" id="segmentedControls">
+    <h3 class="component-title">Segmented control</h3>
+    <p class="component-description">Content sections that are to be swapped in and out by the controller should all be siblings and have the class <code>.mui-control-content</code>. Then, just give each content section an id and point the link in the segmented control to that id.</p>
 
-				<div class="component-example">
-					<div class="mui-segmented-control">
-						<a class="mui-control-item mui-active" href="#item1mobile">
+    <div class="component-example">
+      <div class="mui-segmented-control">
+        <a class="mui-control-item mui-active" href="#item1mobile">
           Thing one
         </a>
-						<a class="mui-control-item" href="#item2mobile">
+        <a class="mui-control-item" href="#item2mobile">
           Thing two
         </a>
-						<a class="mui-control-item" href="#item3mobile">
+        <a class="mui-control-item" href="#item3mobile">
           Thing three
         </a>
-					</div>
-					<div class="mui-card">
-						<span id="item1mobile" class="mui-control-content mui-active">Item 1</span>
-						<span id="item2mobile" class="mui-control-content">Item 2</span>
-						<span id="item3mobile" class="mui-control-content">Item 3</span>
-					</div>
-				</div>
+      </div>
+      <div class="mui-card">
+        <span id="item1mobile" class="mui-control-content mui-active">Item 1</span>
+        <span id="item2mobile" class="mui-control-content">Item 2</span>
+        <span id="item3mobile" class="mui-control-content">Item 3</span>
+      </div>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#item1mobile&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-segmented-control&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item mui-active&quot;</span> <span class="na">href=</span><span class="s">&quot;#item1mobile&quot;</span><span class="nt">&gt;</span>
     Thing one
   <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item2mobile&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item2mobile&quot;</span><span class="nt">&gt;</span>
     Thing two
   <span class="nt">&lt;/a&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item3mobile&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item3mobile&quot;</span><span class="nt">&gt;</span>
     Thing three
   <span class="nt">&lt;/a&gt;</span>
-				<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-card&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item1mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content mui-active&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item2mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item3mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-card&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item1mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content mui-active&quot;</span><span class="nt">&gt;</span>Item 1<span class="nt">&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item2mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content&quot;</span><span class="nt">&gt;</span>Item 2<span class="nt">&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;item3mobile&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-control-content&quot;</span><span class="nt">&gt;</span>Item 3<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Badges -->
-			<article class="component" id="badges">
-				<h3 class="component-title">Badges</h3>
-				<p class="component-description">Badges come in four flavors and should be used to indicate "how many" of something there are. Adding the a class of <code>.mui-badge-inverted</code> will remove the badges background color.</p>
+  <!-- Badges -->
+  <article class="component" id="badges">
+    <h3 class="component-title">Badges</h3>
+    <p class="component-description">Badges come in four flavors and should be used to indicate "how many" of something there are. Adding the a class of <code>.mui-badge-inverted</code> will remove the badges background color.</p>
 
-				<div class="component-example">
-					<span class="mui-badge">1</span>
-					<span class="mui-badge mui-badge-primary">2</span>
-					<span class="mui-badge mui-badge-positive">3</span>
-					<span class="mui-badge mui-badge-negative">4</span>
-					<span class="mui-badge mui-badge-inverted">1</span>
-					<span class="mui-badge mui-badge-primary mui-badge-inverted">2</span>
-					<span class="mui-badge mui-badge-positive mui-badge-inverted">3</span>
-					<span class="mui-badge mui-badge-negative mui-badge-inverted">4</span>
-				</div>
+    <div class="component-example">
+      <span class="mui-badge">1</span>
+      <span class="mui-badge mui-badge-primary">2</span>
+      <span class="mui-badge mui-badge-positive">3</span>
+      <span class="mui-badge mui-badge-negative">4</span>
+      <span class="mui-badge mui-badge-inverted">1</span>
+      <span class="mui-badge mui-badge-primary mui-badge-inverted">2</span>
+      <span class="mui-badge mui-badge-positive mui-badge-inverted">3</span>
+      <span class="mui-badge mui-badge-negative mui-badge-inverted">4</span>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary&quot;</span><span class="nt">&gt;</span>2<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary&quot;</span><span class="nt">&gt;</span>2<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;</span>
 
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary mui-badge-inverted&quot;</span><span class="nt">&gt;</span>2<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive mui-badge-inverted&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/span&gt;</span>
-				<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative mui-badge-inverted&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;</span></code></pre></div>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-inverted&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-primary mui-badge-inverted&quot;</span><span class="nt">&gt;</span>2<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-positive mui-badge-inverted&quot;</span><span class="nt">&gt;</span>3<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-badge mui-badge-negative mui-badge-inverted&quot;</span><span class="nt">&gt;</span>4<span class="nt">&lt;/span&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Forms -->
-			<article class="component" id="forms">
-				<h3 class="component-title">Forms</h3>
+  <!-- Forms -->
+  <article class="component" id="forms">
+    <h3 class="component-title">Forms</h3>
 
-				<div class="component-example">
-					<form>
-						<input type="text" placeholder="Full name">
-						<input type="search" placeholder="Search">
-						<textarea rows="5"></textarea>
-						<button class="mui-btn mui-btn-positive mui-btn-block">Choose existing</button>
-					</form>
-				</div>
+    <div class="component-example">
+      <form>
+        <input type="text" placeholder="Full name">
+        <input type="search" placeholder="Search">
+        <textarea rows="5"></textarea>
+        <button class="mui-btn mui-btn-positive mui-btn-block">Choose existing</button>
+      </form>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form&gt;</span>
-					<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Full name&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;search&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;&lt;/textarea&gt;</span>
-					<span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block&quot;</span><span class="nt">&gt;</span>Choose existing<span class="nt">&lt;/button&gt;</span>
-				<span class="nt">&lt;/form&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Full name&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;search&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;textarea</span> <span class="na">rows=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&quot;mui-btn mui-btn-positive mui-btn-block&quot;</span><span class="nt">&gt;</span>Choose existing<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Form with input group -->
-			<article class="component" id="formsWithInputGroup">
-				<h3 class="component-title">Form with input group</h3>
+  <!-- Form with input group -->
+  <article class="component" id="formsWithInputGroup">
+    <h3 class="component-title">Form with input group</h3>
 
-				<div class="component-example component-example-fullbleed">
-					<form class="mui-input-group">
-						<input type="text" placeholder="Full name">
-						<input type="email" placeholder="Email">
-						<input type="text" placeholder="Username">
-					</form>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <form class="mui-input-group">
+        <input type="text" placeholder="Full name">
+        <input type="email" placeholder="Email">
+        <input type="text" placeholder="Username">
+      </form>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;mui-input-group&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Full name&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;email&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Email&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Username&quot;</span><span class="nt">&gt;</span>
-				<span class="nt">&lt;/form&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;mui-input-group&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Full name&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;email&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Email&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Username&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Form with input group and labels -->
-			<article class="component" id="formsWithInputGroupAndLabels">
-				<h3 class="component-title">Form with input group and labels</h3>
+  <!-- Form with input group and labels -->
+  <article class="component" id="formsWithInputGroupAndLabels">
+    <h3 class="component-title">Form with input group and labels</h3>
 
-				<div class="component-example component-example-fullbleed">
-					<form class="mui-input-group">
-						<div class="mui-input-row">
-							<label>Full name</label>
-							<input type="text" placeholder="Mister Ratchet">
-						</div>
-						<div class="mui-input-row">
-							<label>Email</label>
-							<input type="email" placeholder="ratchetframework@gmail.com">
-						</div>
-						<div class="mui-input-row">
-							<label>Username</label>
-							<input type="text" placeholder="goRatchet">
-						</div>
-					</form>
-				</div>
+    <div class="component-example component-example-fullbleed">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>Full name</label>
+          <input type="text" placeholder="Mister Ratchet">
+        </div>
+        <div class="mui-input-row">
+          <label>Email</label>
+          <input type="email" placeholder="ratchetframework@gmail.com">
+        </div>
+        <div class="mui-input-row">
+          <label>Username</label>
+          <input type="text" placeholder="goRatchet">
+        </div>
+      </form>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;mui-input-group&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;label&gt;</span>Full name<span class="nt">&lt;/label&gt;</span>
-						<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Mister Ratchet&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;label&gt;</span>Email<span class="nt">&lt;/label&gt;</span>
-						<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;email&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;ratchetframework@gmail.com&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;label&gt;</span>Username<span class="nt">&lt;/label&gt;</span>
-						<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;goRatchet&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;/form&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;mui-input-group&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>Full name<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Mister Ratchet&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>Email<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;email&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;ratchetframework@gmail.com&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-input-row&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>Username<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;goRatchet&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Toggle -->
-			<article class="component" id="toggles">
-				<h3 class="component-title">Switches</h3>
-				<p class="component-description">Switches can be used by sliding or tapping the control.</p>
+  <!-- Toggle -->
+  <article class="component" id="toggles">
+    <h3 class="component-title">Switches</h3>
+    <p class="component-description">Switches can be used by sliding or tapping the control.</p>
 
-				<div class="component-example">
-					<div class="mui-switch mui-active">
-						<div class="mui-switch-handle"></div>
-					</div>
-				</div>
+    <div class="component-example">
+      <div class="mui-switch mui-active">
+        <div class="mui-switch-handle"></div>
+      </div>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-				<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-				<p class="component-description">Switches.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
+    <p class="component-description">Switches.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
 
-				<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback document .querySelector(&#39;#myToggle&#39;) .addEventListener(&#39;toggle&#39;, myFunction)</span></code></pre></div>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback</span>
+<span class="nb">document</span>
+<span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#myToggle&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">,</span> <span class="nx">myFunction</span><span class="p">)</span></code></pre></div>
 
-			</article>
+  </article>
 
-			<!-- Popovers -->
-			<article class="component" id="mui-popovers">
-				<h3 class="component-title">Popovers</h3>
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mui-popover&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-popover&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Popover mui-title<span class="nt">&lt;/h1&gt;</span>
-					<span class="nt">&lt;/header&gt;</span>
-					<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item1<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item2<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item3<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item4<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item5<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item6<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item7<span class="nt">&lt;/li&gt;</span>
-						<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item8<span class="nt">&lt;/li&gt;</span>
-					<span class="nt">&lt;/ul&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+  <!-- Popovers -->
+  <article class="component" id="mui-popovers">
+    <h3 class="component-title">Popovers</h3>
 
-				<p class="component-description">Popovers are designed to only fire from <a href="#bars">mui-title bars</a>. Set the value of the mui-title href to the id of a mui-popover, like so:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mui-popover&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-popover&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Popover mui-title<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/header&gt;</span>
+  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item1<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item2<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item3<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item4<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item5<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item6<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item7<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>Item8<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myPopover&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>
+    <p class="component-description">Popovers are designed to only fire from <a href="#bars">mui-title bars</a>. Set the value of the mui-title href to the id of a mui-popover, like so:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myPopover&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>
       Tap mui-title
       <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-caret&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
     <span class="nt">&lt;/h1&gt;</span>
-					<span class="nt">&lt;/a&gt;</span>
-				<span class="nt">&lt;/header&gt;</span></code></pre></div>
-			</article>
+  <span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
+  </article>
 
-			<!-- Modals -->
-			<article class="component" id="modals">
-				<h3 class="component-title">Modals</h3>
+  <!-- Modals -->
+  <article class="component" id="modals">
+    <h3 class="component-title">Modals</h3>
 
-				<div class="component-example">
-					<a href="#myModalexample" class="mui-btn">Open modal</a>
-					<div id="myModalexample" class="mui-modal">
-						<header class="mui-bar mui-bar-nav">
-							<a class="mui-icon mui-icon-close mui-pull-right" href="#myModalexample"></a>
-							<h1 class="mui-title">Modal mobile</h1>
-						</header>
+    <div class="component-example">
+      <a href="#myModalexample" class="mui-btn">Open modal</a>
+      <div id="myModalexample" class="mui-modal">
+        <header class="mui-bar mui-bar-nav">
+          <a class="mui-icon mui-icon-close mui-pull-right" href="#myModalexample"></a>
+          <h1 class="mui-title">Modal mobile</h1>
+        </header>
 
-						<p class="mui-content-padded">The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
-					</div>
-				</div>
+        <p class="mui-content-padded">The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
+      </div>
+    </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Open modal<span class="nt">&lt;/a&gt;</span>
-				<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-modal&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close mui-pull-right&quot;</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
-						<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Modal<span class="nt">&lt;/h1&gt;</span>
-					<span class="nt">&lt;/header&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Open modal<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-modal&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close mui-pull-right&quot;</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Modal<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/header&gt;</span>
 
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.<span class="nt">&lt;/p&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-				<p class="component-description">Modals are designed to only fire from links. Set the value of the toggle links href to the id of a modal.</p>
+    <p class="component-description">Modals are designed to only fire from links. Set the value of the toggle links href to the id of a modal.</p>
 
-			</article>
+  </article>
 
-			<!-- Slider -->
-			<article class="component" id="sliders">
-				<h3 class="component-title">Sliders</h3>
-				<p class="component-description">Can be used with any number of slides with any type of content.</p>
+    <!-- Slider -->
+    <article class="component" id="sliders">
+      <h3 class="component-title">Sliders</h3>
+      <p class="component-description">Can be used with any number of slides with any type of content.</p>
 
-				<div class="component-example component-example-fullbleed">
-					<div class="mui-slider" id="mySlider">
-						<div class="mui-slider-group">
-							<div class="mui-slider-item">
-								<img src="http://dcloudio.github.io/mui/assets/img/slide-1.jpg" alt="Mountain and sky">
-								<span class="slide-text">
+      <div class="component-example component-example-fullbleed">
+        <div class="mui-slider" id="mySlider">
+          <div class="mui-slider-group">
+            <div class="mui-slider-item">
+              <img src="http://dcloudio.github.io/mui/assets/img/slide-1.jpg" alt="Mountain and sky">
+              <span class="slide-text">
                 <span class="mui-icon mui-icon-left-nav"></span>
-								Slide me
-								</span>
-							</div>
-							<div class="mui-slider-item">
-								<img src="http://dcloudio.github.io/mui/assets/img/slide-2.jpg" alt="Giant mecha">
-							</div>
-							<div class="mui-slider-item">
-								<img src="http://dcloudio.github.io/mui/assets/img/slide-3.jpg" alt="Big Ben">
-							</div>
-						</div>
-					</div>
-				</div>
+                Slide me
+              </span>
+            </div>
+            <div class="mui-slider-item">
+              <img src="http://dcloudio.github.io/mui/assets/img/slide-2.jpg" alt="Giant mecha">
+            </div>
+            <div class="mui-slider-item">
+              <img src="http://dcloudio.github.io/mui/assets/img/slide-3.jpg" alt="Big Ben">
+            </div>
+          </div>
+        </div>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span> <span class="na">id=</span><span class="s">&quot;mySlider&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-1.jpg&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;slide-text&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span> <span class="na">id=</span><span class="s">&quot;mySlider&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-1.jpg&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;slide-text&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-							Slide me
-							<span class="nt">&lt;/span&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-2.jpg&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-							<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-3.jpg&quot;</span><span class="nt">&gt;</span>
-						<span class="nt">&lt;/div&gt;</span>
-					<span class="nt">&lt;/div&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+        Slide me
+      <span class="nt">&lt;/span&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-2.jpg&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-3.jpg&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-				<p class="component-description">Sliders.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
+      <p class="component-description">Sliders.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
 
-				<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback document .querySelector(&#39;#mySlider&#39;) .addEventListener(&#39;slide&#39;, myFunction)</span></code></pre></div>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback</span>
+<span class="nb">document</span>
+<span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#mySlider&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;slide&#39;</span><span class="p">,</span> <span class="nx">myFunction</span><span class="p">)</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<!-- Muiicons -->
-			<article class="component no-border" id="muiicons">
-				<h3 class="component-title">Muiicons</h3>
-				<p class="component-description">Use Muiicons in your application to help inform interactions.</p>
+    <!-- Muiicons -->
+    <article class="component no-border" id="muiicons">
+      <h3 class="component-title">Muiicons</h3>
+      <p class="component-description">Use Muiicons in your application to help inform interactions.</p>
 
-				<div class="component-example">
-					<div class="mui-content-padded">
-						
-						<span class="mui-icon mui-icon-spinner mui-spin"></span>
-						
-						<span class="mui-icon mui-icon-spinner-cycle mui-spin"></span>
-						
-						<span class="mui-icon mui-icon-weibo"></span>
-						
-						<span class="mui-icon mui-icon-pin"></span>
-						
-						<span class="mui-icon mui-icon-phone"></span>
-						
-						<span class="mui-icon mui-icon-map"></span>
-						
-						<span class="mui-icon mui-icon-sms"></span>
-						
-						<span class="mui-icon mui-icon-chat"></span>
-						
-						<span class="mui-icon mui-icon-search"></span>
-						
-						<span class="mui-icon mui-icon-close"></span>
-						
-						<span class="mui-icon mui-icon-reply"></span>
-						
-						<span class="mui-icon mui-icon-trash"></span>
-						
-						<span class="mui-icon mui-icon-edit"></span>
-						
-						<span class="mui-icon mui-icon-home"></span>
-						
-						<span class="mui-icon mui-icon-category"></span>
-						
-						<span class="mui-icon mui-icon-calendar"></span>
-						
-						<span class="mui-icon mui-icon-cog"></span>
-						
-						<span class="mui-icon mui-icon-speech"></span>
-						
-						<span class="mui-icon mui-icon-arrow-left"></span>
-						
-						<span class="mui-icon mui-icon-arrow-right"></span>
-						
-						<span class="mui-icon mui-icon-up"></span>
-						
-						<span class="mui-icon mui-icon-down"></span>
-						
-						<span class="mui-icon mui-icon-right"></span>
-						
-						<span class="mui-icon mui-icon-left-nav"></span>
-						
-						<span class="mui-icon mui-icon-radio"></span>
-						
-						<span class="mui-icon mui-icon-radio-checked"></span>
-						
-						<span class="mui-icon mui-icon-checkbox"></span>
-						
-						<span class="mui-icon mui-icon-checkbox-checked"></span>
-						
-						<span class="mui-icon mui-icon-checkbox-cycle"></span>
-						
-						<span class="mui-icon mui-icon-checkbox-checked-cycle"></span>
-						
-						<span class="mui-icon mui-icon-bars"></span>
-						
-						<span class="mui-icon mui-icon-plus"></span>
-						
-						<span class="mui-icon mui-icon-phone-solid"></span>
-						
-						<span class="mui-icon mui-icon-phone-filled"></span>
-						
-						<span class="mui-icon mui-icon-close-cycle"></span>
-						
-					</div>
-				</div>
+      <div class="component-example">
+        <div class="mui-content-padded">
+        
+          <span class="mui-icon mui-icon-spinner mui-spin"></span>
+        
+          <span class="mui-icon mui-icon-spinner-cycle mui-spin"></span>
+        
+          <span class="mui-icon mui-icon-weibo"></span>
+        
+          <span class="mui-icon mui-icon-pin"></span>
+        
+          <span class="mui-icon mui-icon-phone"></span>
+        
+          <span class="mui-icon mui-icon-map"></span>
+        
+          <span class="mui-icon mui-icon-sms"></span>
+        
+          <span class="mui-icon mui-icon-chat"></span>
+        
+          <span class="mui-icon mui-icon-search"></span>
+        
+          <span class="mui-icon mui-icon-close"></span>
+        
+          <span class="mui-icon mui-icon-reply"></span>
+        
+          <span class="mui-icon mui-icon-trash"></span>
+        
+          <span class="mui-icon mui-icon-edit"></span>
+        
+          <span class="mui-icon mui-icon-home"></span>
+        
+          <span class="mui-icon mui-icon-category"></span>
+        
+          <span class="mui-icon mui-icon-calendar"></span>
+        
+          <span class="mui-icon mui-icon-cog"></span>
+        
+          <span class="mui-icon mui-icon-speech"></span>
+        
+          <span class="mui-icon mui-icon-arrow-left"></span>
+        
+          <span class="mui-icon mui-icon-arrow-right"></span>
+        
+          <span class="mui-icon mui-icon-up"></span>
+        
+          <span class="mui-icon mui-icon-down"></span>
+        
+          <span class="mui-icon mui-icon-right"></span>
+        
+          <span class="mui-icon mui-icon-left-nav"></span>
+        
+          <span class="mui-icon mui-icon-radio"></span>
+        
+          <span class="mui-icon mui-icon-radio-checked"></span>
+        
+          <span class="mui-icon mui-icon-checkbox"></span>
+        
+          <span class="mui-icon mui-icon-checkbox-checked"></span>
+        
+          <span class="mui-icon mui-icon-checkbox-cycle"></span>
+        
+          <span class="mui-icon mui-icon-checkbox-checked-cycle"></span>
+        
+          <span class="mui-icon mui-icon-bars"></span>
+        
+          <span class="mui-icon mui-icon-plus"></span>
+        
+          <span class="mui-icon mui-icon-phone-solid"></span>
+        
+          <span class="mui-icon mui-icon-phone-filled"></span>
+        
+          <span class="mui-icon mui-icon-close-cycle"></span>
+        
+        </div>
+      </div>
 
-				<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-spinner mui-spin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-spinner-cycle mui-spin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-weibo&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-pin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-map&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-sms&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-chat&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-reply&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-trash&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-edit&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-home&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-category&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-calendar&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-cog&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-speech&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-arrow-left&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-arrow-right&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-up&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-down&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-right&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-radio&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-radio-checked&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-checked&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-checked-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-bars&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-plus&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone-solid&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone-filled&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-					<span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-				<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-spinner mui-spin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-spinner-cycle mui-spin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-weibo&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-pin&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-map&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-sms&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-chat&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-search&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-reply&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-trash&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-edit&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-home&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-category&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-calendar&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-cog&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-speech&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-arrow-left&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-arrow-right&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-up&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-down&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-right&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-radio&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-radio-checked&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-checked&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-checkbox-checked-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-bars&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-plus&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone-solid&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-phone-filled&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+  <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close-cycle&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-			</article>
+    </article>
 
-			<!-- Footer -->
-			<div class="docs-footer">
+      <!-- Footer -->
+      <div class="docs-footer">
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
 	</p>
 
@@ -1349,8 +1327,8 @@
 <script src="http://dcloudio.github.io/mui/dist/js/mui.min.js"></script>
 <script src="http://dcloudio.github.io/mui/assets/js/docs.min.js"></script>
 
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 
   </body>
