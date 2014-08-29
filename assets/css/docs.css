@@ -590,7 +590,7 @@ code {
 	padding: 15px;
 }
 .component-example > .mui-btn,
-.component-example > .mui-toggle {
+.component-example > .mui-switch {
 	margin-bottom: 10px;
 }
 .component-example .slider {
@@ -714,10 +714,10 @@ code {
 #formsInDevice form.mui-input-group {
 	margin: 0;
 }
-#togglesInDevice .mui-toggle {
+#togglesInDevice .mui-switch {
 	margin: 10px auto;
 }
-.mui-toggle {
+.mui-switch {
 	cursor: pointer;
 }
 #popoversInDevice #iwindow:before {
