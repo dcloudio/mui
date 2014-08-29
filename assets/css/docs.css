@@ -752,7 +752,7 @@ code {
 		width: 100%;
 		height: 570px;
 	}
-	.mui-slider .mui-slide-group .slide-text {
+	.mui-slider .mui-slider-group .slide-text {
 		position: absolute;
 		top: 45%;
 		left: 0;
