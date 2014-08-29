@@ -1079,10 +1079,10 @@
   </article>
 
   <!-- Popovers -->
-  <article class="component" id="popovers">
+  <article class="component" id="mui-popovers">
     <h3 class="component-title">Popovers</h3>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;popover&quot;</span> <span class="na">class=</span><span class="s">&quot;popover&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mui-popover&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-popover&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Popover mui-title<span class="nt">&lt;/h1&gt;</span>
   <span class="nt">&lt;/header&gt;</span>
@@ -1098,7 +1098,7 @@
   <span class="nt">&lt;/ul&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-    <p class="component-description">Popovers are designed to only fire from <a href="#bars">mui-title bars</a>. Set the value of the mui-title href to the id of a popover, like so:</p>
+    <p class="component-description">Popovers are designed to only fire from <a href="#bars">mui-title bars</a>. Set the value of the mui-title href to the id of a mui-popover, like so:</p>
 
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myPopover&quot;</span><span class="nt">&gt;</span>
@@ -1115,30 +1115,30 @@
     <h3 class="component-title">Modals</h3>
 
     <div class="component-example">
-      <a href="#myModalexample" class="mui-btn">Open modal</a>
-      <div id="myModalexample" class="modal">
+      <a href="#myModalexample" class="mui-btn">Open mui-modal</a>
+      <div id="myModalexample" class="mui-modal">
         <header class="mui-bar mui-bar-nav">
           <a class="mui-icon mui-icon-close mui-pull-right" href="#myModalexample"></a>
           <h1 class="mui-title">Modal mobile</h1>
         </header>
 
-        <p class="mui-content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
+        <p class="mui-content-padded">The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
       </div>
     </div>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Open modal<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;modal&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-btn&quot;</span><span class="nt">&gt;</span>Open mui-modal<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;myModalexample&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-modal&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close mui-pull-right&quot;</span> <span class="na">href=</span><span class="s">&quot;#myModalexample&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
     <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Modal<span class="nt">&lt;/h1&gt;</span>
   <span class="nt">&lt;/header&gt;</span>
 
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-content-padded&quot;</span><span class="nt">&gt;</span>The contents of my mui-modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.<span class="nt">&lt;/p&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>
 
-    <p class="component-description">Modals are designed to only fire from links. Set the value of the mui-switch links href to the id of a modal.</p>
+    <p class="component-description">Modals are designed to only fire from links. Set the value of the mui-switch links href to the id of a mui-modal.</p>
 
   </article>
 
