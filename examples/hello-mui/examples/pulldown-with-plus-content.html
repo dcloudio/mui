@@ -62,9 +62,7 @@
 </div>
 <script>
 	mui.init({
-		optimize : true,
 		pullRefresh : {
-			container : '.mui-content',
 			down : {
 				callback :pulldownRefresh
 			}
@@ -82,7 +80,6 @@
 				li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
 				table.insertBefore(li, table.firstChild);
 			}
-			//ws.endPullToRefresh();
 			//refresh completed 这行代码必须调用
 			callback();
 		}, 1000);

@@ -327,21 +327,26 @@
 		swipeBack : false
 	});
 	(function($) {
+		var btnArray = ['确认','取消'];
 		$('#OA_task_1').on('tap', '.oa-task-action', function() {
-			if (confirm('确认删除该条记录吗?')) {
-				var cell = this.parentNode.parentNode;
-				cell.parentNode.removeChild(cell);
-			}
+			var cell = this.parentNode.parentNode;
+			cell.parentNode.removeChild(cell);
 		});
 		$('#OA_task_2').on('slideleft', '.mui-table-view-cell', function(event) {
-			if (confirm('左拖：确认删除该条记录吗?')) {
-				this.parentNode.removeChild(this);
-			}
+			var elem = this;
+			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
+				if(e.index==0){
+					elem.parentNode.removeChild(elem);
+				}
+			});
 		});
 		$('#OA_task_2').on('slideright', '.mui-table-view-cell', function(event) {
-			if (confirm('右拖：确认删除该条记录吗?')) {
-				this.parentNode.removeChild(this);
-			}
+			var elem = this;
+			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
+				if(e.index==0){
+					elem.parentNode.removeChild(elem);
+				}
+			});
 		});
 	})(mui); 
 </script>

@@ -50,9 +50,6 @@
 			//两个webview合成的预加载
 			id : 'preloadMixWebview', //可选ID，未设置的话使用URL作为窗口ID
 			url : 'preload-mixwebview-main.html',
-			preload : true,
-			styles : {
-			},
 			subpages : [{
 				id : 'preloadMixWebviewContent',
 				url : 'preload-mixwebview-content.html',
@@ -63,13 +60,9 @@
 		}, {
 			id : 'preloadWebview', //可选ID，未设置的话使用URL作为窗口ID
 			url : 'preload-webview.html',
-			preload : true,
 			styles : {
 			},
 			afterShowMethodName : 'preload_webview', //跨webview的js call,不应该有这种东西，应该5+触发afterShow，预加载窗口监听实现
-			subpages : [
-			//子webview配置
-			]
 		}]
 	});
 	//点击打开mix窗口(两个webview合成的预加载窗口)

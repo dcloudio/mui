@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -11,7 +12,8 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<style>
-			html, body {
+			html,
+			body {
 				background-color: #efeff4;
 			}
 		</style>
@@ -19,29 +21,19 @@
 			mui.init();
 		</script>
 	</head>
+
 	<body>
 
 <script type="text/javascript" charset="utf-8">
-	var ws = null,
-		list = null;
-	// 扩展API加载完毕，现在可以正常调用扩展API 
-	function plusReady() {
-		ws = plus.webview.currentWebview();
-//		wo = ws.opener();
+	var list;
+	// 扩展API加载完毕，现在可以正常调用扩展API
+	function init() {
 		list = plus.webview.create("pulldown-with-plus-content-custom.html", "pulldown-with-plus-content-custom.html", {
 			top: "48px",
 			bottom: "0px",
 			bounce: "vertical"
 		});
-//		ws.append(list);
-//		list.addEventListener("loaded", function() { //叶面加载完成后才显示
-//			ws.show("slide-in-right", 300);
-//			wo.evalJS("closeWaiting()");
-//			if (plus.os.name != "Android") {
-//				plus.nativeUI.alert("由于Android性能不足，我们提供了原生的下拉刷新加速方案。iOS设备请使 用iscroll等标准框架来解决下拉刷新问题");
-//			}
-//		}, false);
-		ws.append(list);
+		plus.webview.currentWebview().append(list);
 		// 实现列表可下拉刷新
 		list.addEventListener("dragBounce", onPullStateChange, false);
 		list.setBounce({
@@ -53,14 +45,10 @@
 			}
 		});
 	}
-	if (window.plus) {
-		plusReady();
-	} else {
-		document.addEventListener("plusready", plusReady, false);
-	}
+	mui.plusReady(init);
+
 	// DOMContentLoaded事件处理
-	var etext = null,
-		eicon = null;
+	var etext = null,eicon = null;
 	document.addEventListener("DOMContentLoaded", function() {
 		etext = document.getElementById("text");
 		eicon = document.getElementById("icon");
@@ -135,11 +123,11 @@
 	<h1 class="mui-title">自定义下拉刷新</h1>
 </header>
 <div class="mui-content">
-      <div style="text-align:center;height:44px;line-height:44px;">
-	<div id="pull">
-		<img id="icon" src="../images/pull_arrow.png" />
-	</div><font id="text">下拉可刷新</font>
-</div>      
+	<div style="text-align:center;height:44px;line-height:44px;">
+		<div id="pull">
+			<img id="icon" src="../images/pull_arrow.png" />
+		</div><font id="text">下拉可刷新</font>
+	</div>
 </div>
 
 

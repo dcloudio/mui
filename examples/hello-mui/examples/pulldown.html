@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -11,7 +12,8 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<style>
-			html, body {
+			html,
+			body {
 				background-color: #efeff4;
 			}
 		</style>
@@ -19,6 +21,7 @@
 			mui.init();
 		</script>
 	</head>
+
 	<body>
 
 <header class="mui-bar mui-bar-nav">
@@ -71,23 +74,27 @@
                 contentdown: '下拉可以刷新',
                 contentover: '释放立即刷新',
                 contentrefresh: '正在刷新...',
-                callback: function(callback) {
-                    setTimeout(function() {
-                        var table = document.body.querySelector('.mui-table-view');
-                        var cells = document.body.querySelectorAll('.mui-table-view-cell');
-                        for (var i = cells.length, len = i + 3; i < len; i++) {
-                            var li = document.createElement('li');
-                            li.className = 'mui-table-view-cell';
-                            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-                            table.insertBefore(li, table.firstChild);
-                        }
-                        callback(); //refresh completed
-                    }, 1000);
-                }
+                callback: pulldownRefresh
             }
         }
-
     });
+    /**
+     * 下拉刷新具体业务实现
+     */
+    function pulldownRefresh(callback){
+    	setTimeout(function() {
+            var table = document.body.querySelector('.mui-table-view');
+            var cells = document.body.querySelectorAll('.mui-table-view-cell');
+            for (var i = cells.length, len = i + 3; i < len; i++) {
+                var li = document.createElement('li');
+                li.className = 'mui-table-view-cell';
+                li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+                table.insertBefore(li, table.firstChild);
+            }
+            callback(); //refresh completed
+        }, 1000);
+    }
+    
 </script>
 </body>
 </html>

@@ -32,7 +32,7 @@
 			<h1 class="mui-title">off canvas（侧滑导航）</h1>
 		</header>
 		<div class="mui-content">
-			<ul class="mui-table-view mui-table-view-chevron">
+			<ul class="mui-table-view mui-table-view-chevron mui-hidden">
 				<li id="switch" class="mui-table-view-cell">
 					整体滑动
 					<div class="mui-switch">
@@ -116,11 +116,9 @@
 		swipeBack: false
 	});
 	//整体滑动暂不支持android手机，因为两个页面的移动动画，无法保证同步性；
-	mui.plusReady(function(){
-		if(mui.os.android){
-			document.getElementById("switch").style.display = 'none';
-		}
-	});
+	if (!mui.os.android) {
+		document.getElementById("switch").parentNode.classList.remove('mui-hidden');
+	}
 	var menu, showMenu = false,slideTogether = false;
 	window.addEventListener('pagebeforeshow', function() {
 		var left = '30%';

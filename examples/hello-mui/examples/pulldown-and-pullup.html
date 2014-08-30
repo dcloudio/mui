@@ -74,41 +74,49 @@
                 contentdown: '下拉可以刷新',
                 contentover: '释放立即刷新',
                 contentrefresh: '正在刷新...',
-                callback: function(callback) {
-                    setTimeout(function() {
-                        var table = document.body.querySelector('.mui-table-view');
-                        var cells = document.body.querySelectorAll('.mui-table-view-cell');
-                        for (var i = cells.length, len = i + 3; i < len; i++) {
-                            var li = document.createElement('li');
-                            li.className = 'mui-table-view-cell';
-                            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-                            table.insertBefore(li, table.firstChild);
-                        }
-                        callback(); //refresh completed
-                    }, 1000);
-                }
+                callback:pulldownRefresh
             },
             up: {
                 contentdown: '上拉显示更多',
                 contentover: '释放立即刷新',
                 contentrefresh: '正在刷新...',
-                callback: function(callback) {
-                    setTimeout(function() {
-                        var table = document.body.querySelector('.mui-table-view');
-                        var cells = document.body.querySelectorAll('.mui-table-view-cell');
-                        for (var i = cells.length, len = i + 3; i < len; i++) {
-                            var li = document.createElement('li');
-                            li.className = 'mui-table-view-cell';
-                            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-                            table.appendChild(li);
-                        }
-                        callback(); //refresh completed
-                    }, 1000);
-                }
+                callback: pullupRefresh
             }
         }
-
     });
+    /**
+     * 下拉刷新具体业务实现
+     */
+    function pulldownRefresh(callback){
+    	 setTimeout(function() {
+            var table = document.body.querySelector('.mui-table-view');
+            var cells = document.body.querySelectorAll('.mui-table-view-cell');
+            for (var i = cells.length, len = i + 3; i < len; i++) {
+                var li = document.createElement('li');
+                li.className = 'mui-table-view-cell';
+                li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+                //下拉刷新，新纪录插到最前面；
+                table.insertBefore(li, table.firstChild);
+            }
+            callback(); //refresh completed
+        }, 1000);
+    }
+    /**
+     * 上拉加载具体业务实现
+     */
+    function pullupRefresh(callback){
+	   setTimeout(function() {
+	        var table = document.body.querySelector('.mui-table-view');
+	        var cells = document.body.querySelectorAll('.mui-table-view-cell');
+	        for (var i = cells.length, len = i + 3; i < len; i++) {
+	            var li = document.createElement('li');
+	            li.className = 'mui-table-view-cell';
+	            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+	            table.appendChild(li);
+	        }
+	        callback(); //refresh completed
+	    }, 1000);
+    }
 </script>
 </body>
 </html>
