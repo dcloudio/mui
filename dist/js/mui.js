@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.3 (https://github.com/dcloudio/mui)
+ * Mui v0.5.4 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1334,17 +1334,21 @@ window.mui = mui;
     $.init.add(function() {
         var options = $.options;
         var pullRefreshOptions = options.pullRefresh || {};
-        var container = pullRefreshOptions.container;
-        if (container) {
-            var $container = $(container);
-            if ($container.length === 1) {
-                if ($.options.optimize && $.os.plus && $.os.android) {//android and optimize
-                    $container.plus_pulldownRefresh(pullRefreshOptions.down);
-                } else {
+        //只要是android手机，必须使用原生的下拉刷新；
+        if($.os.plus && $.os.android){
+            if(pullRefreshOptions.down){
+                $.plus_pulldownRefresh(pullRefreshOptions.down);
+            }
+        }else{
+            var container = pullRefreshOptions.container;
+            if (container) {
+                var $container = $(container);
+                if ($container.length === 1) {
                     $container.pullRefresh(pullRefreshOptions);
                 }
             }
         }
+
     });
 })(mui);
 /**
@@ -1832,38 +1836,35 @@ window.mui = mui;
 		contentrefresh : '正在刷新...'
 	}
 
-	$.fn.plus_pulldownRefresh = function(options) {
+	$.plus_pulldownRefresh = function(options) {
 		options = $.extend(pulldownOptions, options, true);
-		this.each(function() {
-			var self = this;
-			$.plusReady(function() {
-				var id = self.getAttribute('data-pullrefresh-plus');
-				if (!id) {//避免重复初始化5+ pullrefresh
-					id = ++$.uuid;
-					self.setAttribute('data-pullrefresh-plus', id);
-					var sw = $.currentWebview;
-					sw.setPullToRefresh({
-						support : true,
-						height : options.height + 'px',
-						range : "200px",
-						contentdown : {
-							caption : options.contentdown
-						},
-						contentover : {
-							caption : options.contentover
-						},
-						contentrefresh : {
-							caption : options.contentrefresh
-						}
-					}, function() {
-						options.callback && options.callback(function() {
-							sw.endPullToRefresh();
-						});
+		$.plusReady(function() {
+			var self = document.body;
+			var id = self.getAttribute('data-pullrefresh-plus');
+			if (!id) {//避免重复初始化5+ pullrefresh
+				id = ++$.uuid;
+				self.setAttribute('data-pullrefresh-plus', id);
+				var sw = $.currentWebview;
+				sw.setPullToRefresh({
+					support : true,
+					height : options.height + 'px',
+					range : "200px",
+					contentdown : {
+						caption : options.contentdown
+					},
+					contentover : {
+						caption : options.contentover
+					},
+					contentrefresh : {
+						caption : options.contentrefresh
+					}
+				}, function() {
+					options.callback && options.callback(function() {
+						sw.endPullToRefresh();
 					});
+				});
 
-				}
-			});
-
+			}
 		});
 	};
 })(mui);
@@ -3780,7 +3781,8 @@ window.mui = mui;
 						//opener.show();
 					} else {
 						//首页不存在opener的情况下，后退实际上应该是退出应用；
-						plus.runtime.quit();
+						//这个交给项目具体实现，框架暂不处理；
+						//plus.runtime.quit();
 					}
 				}
 			});

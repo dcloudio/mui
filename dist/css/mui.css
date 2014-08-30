@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.3 (https://github.com/dcloudio/mui)
+ * Mui v0.5.4 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -933,19 +933,19 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 .mui-btn-outlined.mui-btn-primary, .mui-btn-outlined.mui-btn-blue {
   color: #007aff;
 }
-.mui-btn-outlined.mui-btn-success, .mui-btn-outlined.mui-btn-green {
+.mui-btn-outlined.mui-btn-positive, .mui-btn-outlined.mui-btn-success, .mui-btn-outlined.mui-btn-green {
   color: #4cd964;
 }
 .mui-btn-outlined.mui-btn-warning, .mui-btn-outlined.mui-btn-yellow {
   color: #f0ad4e;
 }
-.mui-btn-outlined.mui-btn-danger, .mui-btn-outlined.mui-btn-red {
+.mui-btn-outlined.mui-btn-negative, .mui-btn-outlined.mui-btn-danger, .mui-btn-outlined.mui-btn-red {
   color: #dd524d;
 }
 .mui-btn-outlined.mui-btn-royal, .mui-btn-outlined.mui-btn-purple {
   color: #8a6de9;
 }
-.mui-btn-outlined.mui-btn-primary:active, .mui-btn-outlined.mui-btn-blue:active, .mui-btn-outlined.mui-btn-success:active, .mui-btn-outlined.mui-btn-green:active, .mui-btn-outlined.mui-btn-warning:active, .mui-btn-outlined.mui-btn-yellow:active, .mui-btn-outlined.mui-btn-danger:active, .mui-btn-outlined.mui-btn-red:active, .mui-btn-outlined.mui-btn-royal:active, .mui-btn-outlined.mui-btn-purple:active {
+.mui-btn-outlined.mui-btn-primary:active, .mui-btn-outlined.mui-btn-blue:active, .mui-btn-outlined.mui-btn-positive:active, .mui-btn-outlined.mui-btn-success:active, .mui-btn-outlined.mui-btn-green:active, .mui-btn-outlined.mui-btn-warning:active, .mui-btn-outlined.mui-btn-yellow:active, .mui-btn-outlined.mui-btn-negative:active, .mui-btn-outlined.mui-btn-danger:active, .mui-btn-outlined.mui-btn-red:active, .mui-btn-outlined.mui-btn-royal:active, .mui-btn-outlined.mui-btn-purple:active {
   color: #fff;
 }
 
@@ -1229,6 +1229,7 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 
 .mui-bar .mui-segmented-control {
   top: 7px;
+  width: auto;
   margin: 0 auto;
 }
 
@@ -1727,7 +1728,7 @@ select {
 .mui-input-row label {
   float: left;
   width: 35%;
-  padding: 8px 20px;
+  padding: 8px 15px;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.1;
 }
