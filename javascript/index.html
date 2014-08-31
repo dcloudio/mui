@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title></title>
+<title>javascript &middot; MUI</title>
 <meta name="description" content="MUI: 最接近原生APP体验的高性能前端框架">
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 <link rel="shortcut icon" href="http://dcloudio.github.io/mui/favicon.ico">
@@ -56,7 +56,8 @@
       <p class="page-description">极简的JS函数</p>
     </div>
   </div>
-  <div class="docs-component-toolbar js-docs-component-toolbar">
+  <!-- 暂时注释，回头也需要快速跳转 -->
+  <!-- <div class="docs-component-toolbar js-docs-component-toolbar">
   <div class="container">
     <div class="column units-2">
       <span class="docs-jump-menu mui-pull-left js-jump-menu">
@@ -81,10 +82,15 @@
     </div>
   </div>
 </div>
-
+ -->
 </div>
 
 <div class="container">
+  <style>
+    .component-description{
+      display: block;
+    }
+  </style>
   <!-- Components -->
   <div class="docs-components column-group">
     <div class="device-column column lg-units-5 mui-pull-right">
@@ -105,10 +111,11 @@
       <!-- Bars -->
       <article class="component mui-active" id="bars">
         <h3 class="component-title">页面初始化</h3>
-        <p class="component-description">应用页面显示时需要首先加载扩展和API代码库，当扩展API代码库加载完成时会触发pluseready事件，当设备触发该事件后，用户就可以安全的调用扩展API；mui将该事件封装成了<code>mui.plusReady()</code>方法。</p>
+        <p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>、<a href="#input">输入增强</a>。</p>
+        <p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;5+环境已具备，现在可以放心使用plus对象了&quot;</span><span class="p">);</span>
+     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;当前页面URL：&quot;</span><span class="o">+</span><span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">());</span>
 <span class="p">});</span></code></pre></div>
 
     </article>
@@ -230,7 +237,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 
     </article>
 
-    <article class="component mui-active">
+    <article id="gesture" class="component mui-active">
       <h3 class="component-title">手势事件</h3>
       <p class="component-description">在开发移动端的应用时，经常会用到手势事件，比如滑动；mui内置了常用的手势事件，目前支持的手势事件见如下列表：</p>
       <table id="gestureList" style="border-style: solid; border-width: 0pt;" border="1" cellspacing="0" cellpadding="5px">
@@ -329,7 +336,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 
   </article>
 
-  <article class="component mui-active">
+  <article id="preload" class="component mui-active">
       <h3 class="component-title">预加载</h3>
       <p class="component-description">所谓的预加载技术就是在用户尚未触发页面跳转时，提前创建目标页面，这样当用户跳转时，就可以立即进行页面切换，节省创建新页面的时间，提升app使用体验。
 要进行页面预加载，可通过mui.init方法中的preloadPages参数进行配置.</p>
@@ -353,7 +360,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a></p>
   </article>
 
-  <article class="component mui-active">
+  <article id="pullrefresh" class="component mui-active">
       <h3 class="component-title">下拉刷新</h3>
       <p class="component-description">下拉刷新涉及局部滚动，mui依然采用将下拉刷新页面分解为主页面和内容页面双webview的方式（参考<a href="#subpage">创建子页面</a>），解决卡头卡尾及区域滚动的问题；在android平台上，为解决拖动回弹动画的流畅度问题，mui使用原生下拉刷新；拖动时，拖动的不是div，而是一个完整的webview（内容页面），回弹动画使用原生动画；在iOS平台，H5的动画已经比较流畅，故使用纯H5方案，拖动的还是div区域。两个平台实现虽有差异，但mui经过封装，可使用一套代码实现下拉刷新。</p>
       <p class="component-description">主页面内容比较简单，只需要创建子页面即可：</p>
@@ -388,9 +395,32 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">}</span></code></pre></div>
   </article>
 
+  <article id="input" class="component mui-active">
+      <h3 class="component-title">输入增强</h3>
+      <p class="component-description">mui目前提供的输入增强包括：快速删除和语音输入两项功。要删除输入框中的内容，使用输入法键盘上的删除按键，只能逐个删除字符，mui提供了快速删除能力，只需要在对应input控件上添加<code>.mui-input-clear</code>类，当input控件中有内容时，右侧会有一个删除图标，点击会清空当前input的内容；另外，为了方便快速输入，mui集成了HTML5+的语音输入，只需要在对应input控件上添加<code>.mui-inpu-speech</code>类，就会在该控件右侧显示一个语音输入的图标，点击会启用科大讯飞语音输入界面。</p>
+      <p class="component-description"><strong>注意：</strong>输入增强功能无需配置，但必须调用<code>mui.init()</code>方法进行初始化。</p>
 
+  </article>
 
-
+  
+  <article id="switch" class="component mui-active">
+      <h3 class="component-title">开关事件</h3>
+      <p class="component-description">mui提供了开关控件样式，点击滑动两种手势都可以对开关控件进行操作，在开关控件进行切换时，会触发toggle事件,通过事件的detail.isActive属性可以判断当前开关状态。可通过监听toggle事件，在开关切换时执行特定业务逻辑。如下为使用示例：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;mySwitch&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;toggle&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">isActive</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;你启动了开关&quot;</span><span class="p">);</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;你关闭了开关&quot;</span><span class="p">);</span>  
+  <span class="p">}</span>
+<span class="p">})</span></code></pre></div>
+<p class="component-description">若要获得当前开关状态，可通过判断当前开关控件是否包含<code>.mui-active</code>类来实现，若包含，则为打开状态，否则即为关闭状态；如下为代码示例：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">isActive</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;mySwitch&quot;</span><span class="p">).</span><span class="nx">classList</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="s2">&quot;mui-active&quot;</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">isActive</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;打开状态&quot;</span><span class="p">);</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;关闭状态&quot;</span><span class="p">);</span>  
+<span class="p">}</span></code></pre></div>
+  </article>
 
 
 
