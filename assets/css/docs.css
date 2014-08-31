@@ -683,7 +683,7 @@ code {
 	overflow: hidden;
 }
 #buttonsInDevice .mui-btn,
-#buttonsBadgesInDevice .mui-btn,
+#buttonsWithBadgesInDevice .mui-btn,
 #buttonsWithIconsInDevice .mui-btn {
 	margin-top: 10px;
 	margin-right: 100px;
@@ -1126,4 +1126,12 @@ hr {
 .css .o,
 .css .o+.nt {
 	color: #999
+}
+
+
+#hello-mui-index{
+  background-image: url("../img/hello-mui-index.png");
+  background-size: contain;
+  width:240px;
+  height: 360px;
 }
