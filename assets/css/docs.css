@@ -1,3 +1,6 @@
+* {
+	-webkit-user-select: auto;
+}
 html,
 body {
 	width: 100%;
@@ -1128,11 +1131,9 @@ hr {
 .css .o+.nt {
 	color: #999
 }
-
-
-#hello-mui-index{
-  background-image: url("../img/hello-mui-index.png");
-  background-size: contain;
-  width:240px;
-  height: 360px;
+#hello-mui-index {
+	background-image: url("../img/hello-mui-index.png");
+	background-size: contain;
+	width: 240px;
+	height: 360px;
 }
