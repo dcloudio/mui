@@ -773,9 +773,7 @@ code {
 	font-size: 17px;
 	line-height: 21px;
 }
-.platform-ios .device {
-	background-position: -395px 0;
-}
+
 @media screen and (min-width: 768px) {
 	.device {
 		position: relative;
@@ -788,7 +786,7 @@ code {
 		background-image: url("../img/device-sprite.png");
 		background-repeat: no-repeat;
 		background-position: 0 0;
-		background-size: 300%;
+		background-size: 100%;
 		-webkit-transition: background-image .1s linear;
 		-moz-transition: background-image .1s linear;
 		transition: background-image .1s linear;
