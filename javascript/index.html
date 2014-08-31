@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title></title>
+<meta name="description" content="MUI: 最接近原生APP体验的高性能前端框架">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="http://dcloudio.github.io/mui/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css">
+
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
+
+
+  </head>
+  <body ontouchstart="">
+    <!--[if lt IE 9]>
+  <div class="bs-callout bs-callout-danger">
+    <h4>Attention!</h4>
+    <p>
+      Looks like your current browser is old and doesn't support many features used in this page.
+      Please take a second to <a href="http://browsehappy.com/">upgrade to a more modern browser</a>.
+    </p>
+  </div>
+<![endif]-->
+
+    <div class="docs-sub-header">
+  <header class="docs-masthead mui-clearfix">
+  <div class="container">
+    <div class="column">
+      <h1 class="docs-title">
+        <a href="http://dcloudio.github.io/mui/" >MUI</a>
+      </h1>
+      <nav class="docs-nav mui-clearfix">
+        <a class="docs-nav-trigger mui-icon mui-icon-bars mui-pull-right js-docs-nav-trigger" href="#"></a>
+        <div class="docs-nav-group">
+          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/" >首页</a>
+          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/getting-started" >新手指南</a>
+          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/components" >CSS组件</a>
+          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/javascript" >JavaScript</a>
+          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/about" >关于</a>
+          <a class="docs-nav-item" href="https://github.com/dcloudio/mui" >GitHub地址</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <div class="container">
+    <div class="docs-sub-content">
+      <h2 class="page-title">JavaScript</h2>
+      <p class="page-description">极简的JS函数</p>
+    </div>
+  </div>
+  <div class="docs-component-toolbar js-docs-component-toolbar">
+  <div class="container">
+    <div class="column units-2">
+      <span class="docs-jump-menu mui-pull-left js-jump-menu">
+  <span class="mui-icon mui-icon-list"></span>
+  Jump to
+  <span class="mui-icon mui-icon-caret"></span>
+</span>
+
+<div class="docs-component-group js-component-group">
+  <a class="docs-component-item" href="#bars">Bars</a>
+  <a class="docs-component-item" href="#typography">Typography</a>
+  <a class="docs-component-item" href="#table-views">Table views</a>
+  <a class="docs-component-item" href="#buttons">Buttons</a>
+  <a class="docs-component-item" href="#segmentedControls">Segmented controls</a>
+  <a class="docs-component-item" href="#badges">Badges</a>
+  <a class="docs-component-item" href="#forms">Forms</a>
+  <a class="docs-component-item" href="#toggles">Toggles</a>
+  <a class="docs-component-item" href="#popovers">Popovers</a>
+  <a class="docs-component-item" href="#modals">Modals</a>
+  <a class="docs-component-item" href="#sliders">Sliders</a>
+  <a class="docs-component-item" href="#ratchicons">Muiicons</a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="container">
+  <!-- Components -->
+  <div class="docs-components column-group">
+    <div class="device-column column lg-units-5 mui-pull-right">
+      <!-- In phone examples -->
+      <!-- 暂时注释，右侧模拟器，这里需要使用导航代替 -->
+<!--       <div class="device js-device">
+        <div class="device-content">
+          <div id="iwindow">
+            <header class="mui-bar mui-bar-nav">
+              <h1 class="mui-title">Title</h1>
+            </header>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="column lg-units-9 docs-content">
+      <!-- Bars -->
+      <article class="component mui-active" id="bars">
+        <h3 class="component-title">页面初始化</h3>
+        <p class="component-description">应用页面显示时需要首先加载扩展和API代码库，当扩展API代码库加载完成时会触发pluseready事件，当设备触发该事件后，用户就可以安全的调用扩展API；mui将该事件封装成了<code>mui.plusReady()</code>方法。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;5+环境已具备，现在可以放心使用plus对象了&quot;</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+    </article>
+
+    <article id="subpage" class="component mui-active">
+      <h3 class="component-title">创建子页面</h3>
+      <p class="component-description">
+在mobile app开发过程中，经常遇到卡头卡尾的页面，此时若使用局部滚动，在android手机上会出现滚动不流畅的问题；
+mui的解决思路是：将需要滚动的区域通过单独的webview实现，完全使用原生滚动。具体做法则是：将目标页面分解为主页面和内容页面，主页面显示卡头卡尾区域，比如顶部导航、底部选项卡等；内容页面显示具体需要滚动的内容，然后在主页面中调用mui.init方法初始化内容页面。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">subpages</span><span class="o">:</span><span class="p">[{</span>
+      <span class="nx">url</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span><span class="c1">//子页面HTML地址，支持本地地址和网络地址</span>
+      <span class="nx">id</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//子页面标志</span>
+      <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置，默认为0px</span>
+        <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
+        <span class="nx">left</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">left</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
+        <span class="nx">right</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">right</span><span class="o">-</span><span class="nx">position</span>
+        <span class="p">......</span>
+      <span class="p">}</span>
+    <span class="p">}]</span>
+  <span class="p">});</span></code></pre></div>
+<p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，<a href="http://www.html5plus.org/#specification#/specification/Webview.html">参考5+规范</a>；</p>
+      <p class="component-description"><strong>示例：</strong>Hello mui的首页其实就是index.html加list.html合并而成的，如下：</p>
+      <div id="subpage-demo">
+        <div>
+          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-index.png" alt="" style="border-color:blue;">
+          <div class="pagename">index.html</div>  
+        </div>
+        <div class="subpage-tip" >+</div>
+        <div>
+        <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="border-color:red;margin-top:36px;">  
+        <div class="pagename">list.html</div>  
+        </div>
+        <div class="subpage-tip">=</div>
+        <div>
+          <div id="hello-mui-index" style="border:1px solid blue;">
+          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="margin-top:38px;border-color:red;max-width:238px;"> 
+        </div>
+        <div class="pagename">合并后的首页</div>  
+        </div>
+      </div>
+
+      <style>
+        #subpage img{
+          max-width: 240px;
+          height: auto;
+          border:1px solid;
+        }
+        #subpage-demo>div{
+          float: left;
+        }
+        .subpage-tip{
+          font-size: 96px;
+          margin: auto 25px;
+          height: 360px;
+          line-height: 360px;
+        }
+        .pagename{
+          width: 240px;
+          text-align: center;
+          margin-top: 10px;
+        }
+      </style>
+ <p class="component-description" style="clear:both">index.html的作用就是显示固定导航，list.html显示具体列表内容，列表项的滚动是在list.html所在webview中使用原生滚动，既保证了滚动条不会透传顶部导航，符合app的体验，也保证了列表流畅滚动，解决了区域滚动卡顿的问题。 list.html就是index.html的子页面，创建代码比较简单，如下：</p>
+ <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">subpages</span><span class="o">:</span><span class="p">[{</span>
+      <span class="nx">url</span><span class="o">:</span><span class="s1">&#39;list.html&#39;</span><span class="p">,</span>
+      <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;list.html&#39;</span><span class="p">,</span>
+      <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">top</span><span class="o">:</span><span class="s1">&#39;48px&#39;</span><span class="p">,</span><span class="c1">//mui标题栏默认高度为48px；</span>
+        <span class="nx">bottom</span><span class="o">:</span><span class="s1">&#39;0px&#39;</span><span class="c1">//默认为0px，可不定义；</span>
+      <span class="p">}</span>
+    <span class="p">}]</span>
+  <span class="p">});</span></code></pre></div>
+    </article>
+
+    <article class="component mui-active" >
+      <h3 class="component-title">打开新页面</h3>
+      <p class="component-description">
+做web app，一个无法避开的问题就是转场动画；web是基于链接构建的，从一个页面点击链接跳转到另一个页面，如果通过有刷新的打开方式，用户要面对一个空白的页面等待；如果通过无刷新的方式，用Javascript移入DOM节点（常见的SPA解决方案），会碰到很高的性能挑战：DOM节点繁多，页面太大，转场动画不流畅甚至导致浏览器崩溃；
+mui的解决思路是：单webview只承载单个页面的dom，减少dom层级及页面大小；页面切换使用原生动画，将最耗性能的部分交给原生实现.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html">mui.openwindow({
+     url:new-page-url,
+     id:new-page-id,
+     styles:{
+     }
+})</code></pre></div>
+
+<p class="component-description">
+<strong>示例：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//tap为mui封装的单击事件，可参考手势事件章节</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">//打开关于页面</span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">openWindow</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;examples/info.html&#39;</span><span class="p">,</span> 
+    <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;info&#39;</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></div>
+
+    </article>
+
+    <article class="component mui-active">
+      <h3 class="component-title">关闭页面</h3>
+      <p class="component-description">mui框架已封装好窗口关闭逻辑，hbuilder中敲<code>mheader</code>自动生成的代码块，会自动生成带有返回导航箭头的标题栏，点击返回箭头可关闭当前页面。mui会监听包含<code>.mui-action-back</code>类的控件的点击事件，点击后会执行关闭窗口逻辑；因此，若希望在顶部导航栏之外的其它区域添加关闭页面的控件，只需要在对应控件上添加<code>.mui-action-back</code>类即可，如下为一个关闭按钮示例：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&#39;mui-btn mui-btn-danger mui-action-back&#39;</span><span class="nt">&gt;</span>关闭<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<p class="component-description">另一方面，也可以直接调用<code>mui.back()</code>方法，执行mui已封装好的窗口关闭逻辑；若希望自定义关闭事件，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;确定&quot;</span><span class="p">,</span><span class="s2">&quot;取消&quot;</span><span class="p">];</span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;确认关闭当前窗口？&#39;</span><span class="p">,</span><span class="s1">&#39;Hello MUI&#39;</span><span class="p">,</span><span class="nx">btn</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">index</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+      <span class="nx">mui</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+    </article>
+
+    <article class="component mui-active">
+      <h3 class="component-title">手势事件</h3>
+      <p class="component-description">在开发移动端的应用时，经常会用到手势事件，比如滑动；mui内置了常用的手势事件，目前支持的手势事件见如下列表：</p>
+      <table id="gestureList" style="border-style: solid; border-width: 0pt;" border="1" cellspacing="0" cellpadding="5px">
+    <tbody>
+        <tr>
+            <th>分类</th>
+            <th>参数</th>
+            <th>描述</th>
+        </tr>
+        <tr>
+            <td rowspan="2">点击</td>
+            <td>tap</td>
+            <td>单击屏幕</td>
+        </tr>
+        <tr>
+            <td>doubletap</td>
+            <td>双击屏幕</td>
+        </tr>
+        <tr>
+            <td>长按</td>
+            <td>longtap</td>
+            <td>长按屏幕</td>
+        </tr>
+        <tr>
+            <td rowspan="4">滑动</td>
+            <td>swipeleft</td>
+            <td>向左滑动</td>
+        </tr>
+        <tr>
+            <td>swiperight</td>
+            <td>向右滑动</td>
+        </tr>
+        <tr>
+            <td>swipeup</td>
+            <td>向上滑动</td>
+        </tr>
+        <tr>
+            <td>swipedown</td>
+            <td>向下滑动</td>
+        </tr>
+        <tr>
+            <td rowspan="3">拖动</td>
+            <td>dragstart</td>
+            <td>开始拖动</td>
+        </tr>
+        <tr>
+            <td>drag</td>
+            <td>拖动中</td>
+        </tr>
+        <tr>
+            <td>dragend</td>
+            <td>拖动结束</td>
+        </tr>
+
+    </tbody>
+    </table>
+    <style>
+      #gestureList{
+        margin-bottom: 15px;
+      }
+      #gestureList td{
+        padding-left: 8px;
+      }
+      #gestureList tr>td:first-child{
+        width: 70px;
+      }
+      #gestureList tr>td:last-child{
+        width: 100px;
+      }
+      #gestureList tr>td:nth-child(2){
+        width: 100px;
+      }
+    </style>
+      <h3 class="component-title">手势事件配置</h3>
+      <p class="component-description">mui默认会监听并触发所有手势事件，但为了节省资源，支持用户根据当前页面实际情况，通过mui.init方法中的gestureConfig参数，配置具体需要监听的手势事件，。</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">gestureConfig</span><span class="o">:</span><span class="p">{</span>
+   <span class="nx">tap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+   <span class="nx">doubletap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+   <span class="nx">longtap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+   <span class="nx">swipe</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+   <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+    <p class="component-note touch-only"><strong>注意:</strong>dragstart、drag、dragend共用drag开关，swipeleft、swiperight、swipeup、swipedown共用swipe开关</p>
+    </article>
+
+    <article class="component mui-active">
+      <h3 class="component-title">事件监听</h3>
+      <p class="component-description">同标准click事件一样，上述手势事件支持添加到任意DOM对象上，如下为一个示例：</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">elem</span><span class="p">.</span><span class="nx">addEventLisener</span><span class="p">(</span><span class="s2">&quot;swipeleft&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;你正在向左滑动&quot;</span><span class="p">);</span>
+<span class="p">});</span></code></pre></div>
+
+  </article>
+
+  <article class="component mui-active">
+      <h3 class="component-title">预加载</h3>
+      <p class="component-description">所谓的预加载技术就是在用户尚未触发页面跳转时，提前创建目标页面，这样当用户跳转时，就可以立即进行页面切换，节省创建新页面的时间，提升app使用体验。
+要进行页面预加载，可通过mui.init方法中的preloadPages参数进行配置.</p>
+
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">preloadPages</span><span class="o">:</span><span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">url</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
+      <span class="nx">id</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span>
+      <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
+      <span class="p">},</span>
+      <span class="nx">subpages</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span>
+      <span class="p">}</span>
+     <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">});</span></code></pre></div>
+
+    <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a></p>
+  </article>
+
+  <article class="component mui-active">
+      <h3 class="component-title">下拉刷新</h3>
+      <p class="component-description">下拉刷新涉及局部滚动，mui依然采用将下拉刷新页面分解为主页面和内容页面双webview的方式（参考<a href="#subpage">创建子页面</a>），解决卡头卡尾及区域滚动的问题；在android平台上，为解决拖动回弹动画的流畅度问题，mui使用原生下拉刷新；拖动时，拖动的不是div，而是一个完整的webview（内容页面），回弹动画使用原生动画；在iOS平台，H5的动画已经比较流畅，故使用纯H5方案，拖动的还是div区域。两个平台实现虽有差异，但mui经过封装，可使用一套代码实现下拉刷新。</p>
+      <p class="component-description">主页面内容比较简单，只需要创建子页面即可：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+    <span class="nx">subpages</span><span class="o">:</span><span class="p">[{</span>
+      <span class="nx">url</span><span class="o">:</span><span class="nx">pullrefresh</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span><span class="c1">//下拉刷新内容页面地址</span>
+      <span class="nx">id</span><span class="o">:</span><span class="nx">pullrefresh</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//内容页面标志</span>
+      <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//内容页面顶部位置,需根据实际页面布局计算，若使用标准mui导航，顶部默认为48px；</span>
+        <span class="p">.....</span><span class="c1">//其它参数定义</span>
+      <span class="p">}</span>
+    <span class="p">}]</span>
+  <span class="p">});</span></code></pre></div>
+<p class="component-description">内容页面需要做两件事情，首先、通过mui.init方法中pullRefresh参数配置下拉刷新各项参数，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">pullRefresh</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">container</span><span class="o">:</span><span class="nx">refreshContainer</span><span class="p">,</span><span class="c1">//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等</span>
+    <span class="nx">down</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="nx">contentdown</span> <span class="o">:</span> <span class="s2">&quot;下拉可以刷新&quot;</span><span class="p">,</span><span class="c1">//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容</span>
+      <span class="nx">contentover</span> <span class="o">:</span> <span class="s2">&quot;释放立即刷新&quot;</span><span class="p">,</span><span class="c1">//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容</span>
+      <span class="nx">contentrefresh</span> <span class="o">:</span> <span class="s2">&quot;正在刷新...&quot;</span><span class="p">,</span><span class="c1">//可选，正在刷新状态时，下拉刷新控件上显示的标题内容</span>
+      <span class="nx">callback</span> <span class="o">:</span><span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span> <span class="c1">//必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">其次，根据具体业务编写刷新函数，需要注意的是，加载完新数据后，需要执行callback()方法；</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+     <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
+     <span class="p">......</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码；</span>
+     <span class="nx">callback</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+  </article>
+
+
+
+
+
+
+
+
+
+ 
+  
+      <!-- Footer -->
+      <div class="docs-footer">
+	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
+	</p>
+
+	<ul class="docs-footer-links">
+		<li>最新版本 v0.5.3</li>
+		<li>&middot;</li>
+		<li><a href="https://github.com/dcloudio/mui/issues">Issues</a>
+		</li>
+		<li>&middot;</li>
+		<li><a href="https://github.com/dcloudio/mui/releases">Releases</a>
+		</li>
+		<li>&middot;</li>
+	</ul>
+</div>
+<script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js"></script>
+
+    </div>
+  </div>
+</div>
+
+  </body>
+</html>
