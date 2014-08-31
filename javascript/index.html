@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-01 01:23:37 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-01 01:23:37 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-01 01:25:08 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-01 01:25:08 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -115,7 +115,7 @@
         <p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;当前页面URL：&quot;</span><span class="o">+</span><span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">());</span>
+     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;当前页面URL：&quot;</span><span class="o">+</span><span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">().</span><span class="nx">getURL</span><span class="p">());</span>
 <span class="p">});</span></code></pre></div>
 
     </article>
@@ -397,7 +397,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 
   <article id="input" class="component mui-active">
       <h3 class="component-title">输入增强</h3>
-      <p class="component-description">mui目前提供的输入增强包括：快速删除和语音输入两项功能。要删除输入框中的内容，使用输入法键盘上的删除按键，只能逐个删除字符，mui提供了快速删除能力，只需要在对应input控件上添加<code>.mui-input-clear</code>类，当input控件中有内容时，右侧会有一个删除图标，点击会清空当前input的内容；另外，为了方便快速输入，mui集成了HTML5+的语音输入，只需要在对应input控件上添加<code>.mui-inpu-speech</code>类，就会在该控件右侧显示一个语音输入的图标，点击会启用科大讯飞语音输入界面。</p>
+      <p class="component-description">mui目前提供的输入增强包括：快速删除和语音输入两项功能。要删除输入框中的内容，使用输入法键盘上的删除按键，只能逐个删除字符，mui提供了快速删除能力，只需要在对应input控件上添加<code>.mui-input-clear</code>类，当input控件中有内容时，右侧会有一个删除图标，点击会清空当前input的内容；另外，为了方便快速输入，mui集成了HTML5+的语音输入，只需要在对应input控件上添加<code>.mui-input-speech</code>类，就会在该控件右侧显示一个语音输入的图标，点击会启用科大讯飞语音输入界面。</p>
       <p class="component-description"><strong>注意：</strong>输入增强功能无需配置，但必须调用<code>mui.init()</code>方法进行初始化。</p>
 
   </article>
@@ -445,8 +445,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-01 01:23:37 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-01 01:23:37 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-01 01:25:08 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-01 01:25:08 +0800"></script>
 
     </div>
   </div>
