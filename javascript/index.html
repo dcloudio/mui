@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-01 01:35:08 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-01 01:35:08 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-01 21:53:23 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-01 21:53:23 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -111,7 +111,7 @@
       <!-- Bars -->
       <article class="component mui-active" id="bars">
         <h3 class="component-title">页面初始化</h3>
-        <p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>、<a href="#input">输入增强</a>。</p>
+        <p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>。</p>
         <p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
@@ -421,6 +421,61 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">}</span></code></pre></div>
   </article>
 
+    <article id="slide" class="component mui-active">
+      <h3 class="component-title">slide事件</h3>
+      <p class="component-description">mui提供了图片轮播、可拖动式图文表格、可拖动式选项卡、左右滑动9宫格组件，这些组件都用到了mui框架的slide插件，有较多共同点。首先，Dom内容构造基本相同，都必须有一个<code>.mui-slider</code>的父容器；其次，当拖动切换显示内容时，均会触发slide事件（可拖动式选项卡在点击选项卡标题时，也会触发slide事件），通过该事件的detail.slideNumber参数可以获得当前显示项的索引（第一项索引为0，第二项为1，以此类推），利用该事件，可在显示内容切换时，动态处理一些业务逻辑。</p>
+        <p class="component-description">如下为一个可拖动式选项卡示例，为提高页面加载速度，页面加载时，仅显示第一个选项卡的内容，第二、第三选项卡内容为空。</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--选项卡标题区--&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-indicator mui-segmented-control mui-segmented-control-inverted&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item1&quot;</span><span class="nt">&gt;</span>待办公文<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item2&quot;</span><span class="nt">&gt;</span>已办公文<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-control-item&quot;</span> <span class="na">href=</span><span class="s">&quot;#item3&quot;</span><span class="nt">&gt;</span>全部公文<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-progress-bar mui-col-xs-4&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group&quot;</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!--第一个选项卡内容区--&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;item1&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-control-content mui-active&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>待办公文1<span class="nt">&lt;/li&gt;</span>
+          <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>待办公文2<span class="nt">&lt;/li&gt;</span>
+          <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>待办公文3<span class="nt">&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="c">&lt;!--第二个选项卡内容区，页面加载时为空--&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;item2&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-control-content&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+      <span class="c">&lt;!--第三个选项卡内容区，页面加载时为空--&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;item3&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-control-content&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span></code></pre></div>
+<p class="component-description">当切换到第二、第三个选项卡时，再动态获取相应内容进行显示：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">item2Show</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span><span class="nx">item3Show</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span><span class="c1">//子选项卡是否显示标志</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;slide&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span> <span class="o">===</span> <span class="mi">1</span><span class="o">&amp;&amp;!</span><span class="nx">item2Show</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//切换到第二个选项卡</span>
+    <span class="c1">//根据具体业务，动态获得第二个选项卡内容；</span>
+    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">....</span>
+    <span class="c1">//显示内容</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;item2&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
+    <span class="c1">//改变标志位，下次直接显示</span>
+    <span class="nx">item2Show</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span> <span class="o">===</span> <span class="mi">2</span><span class="o">&amp;&amp;!</span><span class="nx">item3Show</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//切换到第三个选项卡</span>
+    <span class="c1">//根据具体业务，动态获得第三个选项卡内容；</span>
+    <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="p">....</span>
+    <span class="c1">//显示内容</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;item3&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">content</span><span class="p">;</span>
+    <span class="c1">//改变标志位，下次直接显示</span>
+    <span class="nx">item3Show</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">图片轮播、可拖动式图文表格等均可按照同样方式监听内容变化，比如我们可以在图片轮播界面显示当前正在看的是第几张图片：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;slide&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//注意slideNumber是从0开始的；</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">).</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;你正在看第&quot;</span><span class="o">+</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;张图片&quot;</span><span class="p">;</span>
+<span class="p">});</span></code></pre></div>
+  </article>
+
 
 
 
@@ -444,8 +499,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-01 01:35:08 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-01 01:35:08 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-01 21:53:23 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-01 21:53:23 +0800"></script>
 
     </div>
   </div>
