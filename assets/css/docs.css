@@ -669,6 +669,13 @@ code {
 		border-radius: 3px;
 	}
 }
+#segmentedControlsWithPaginationInDevice .mui-control-content {
+	background-color: white;
+	min-height: 215px;
+}
+#segmentedControlsWithPaginationInDevice .mui-control-content .mui-loading {
+	margin-top: 50px;
+}
 #muiicons .mui-icon,
 #muiiconsInDevice .mui-icon {
 	width: 50px;
@@ -805,7 +812,7 @@ code {
 		overflow: hidden;
 		font-size: 17px;
 		line-height: 21px;
-		background-color: #fff;
+		background-color: #efeff4;
 	}
 	.device .mui-content,
 	.device .mui-bar,
@@ -818,10 +825,11 @@ code {
 		bottom: 0;
 		left: 0;
 	}
-	#offCanvasWithLeftInDevice .mui-inner-wrap,#offCanvasWithRightInDevice .mui-inner-wrap {
+	#offCanvasWithLeftInDevice .mui-inner-wrap,
+	#offCanvasWithRightInDevice .mui-inner-wrap {
 		min-height: 569px;
 	}
-	.mui-inner-wrap .mui-content{
+	.mui-inner-wrap .mui-content {
 		top: 0;
 	}
 }
