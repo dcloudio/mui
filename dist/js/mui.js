@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.3 (https://github.com/dcloudio/mui)
+ * Mui v0.5.4 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1334,31 +1334,22 @@ window.mui = mui;
     $.init.add(function() {
         var options = $.options;
         var pullRefreshOptions = options.pullRefresh || {};
-        var container = pullRefreshOptions.container;
-        if (container) {
-            var $container = $(container);
-            if ($container.length === 1) {
-                if ($.options.optimize && $.os.plus && $.os.android) {//android and optimize
-                    $container.plus_pulldownRefresh(pullRefreshOptions.down);
-                } else {
+        //只要是android手机，必须使用原生的下拉刷新；
+        if($.os.plus && $.os.android){
+            if(pullRefreshOptions.down){
+                $.plus_pulldownRefresh(pullRefreshOptions.down);
+            }
+        }else{
+            var container = pullRefreshOptions.container;
+            if (container) {
+                var $container = $(container);
+                if ($container.length === 1) {
                     $container.pullRefresh(pullRefreshOptions);
                 }
             }
         }
+
     });
-})(mui);
-/**
- * mui.init plugins
- * @param {type} $
- * @returns {undefined}
- */
-(function($) {
-	$.init.add(function() {
-		//slider
-		$('.mui-slider-group').slider();
-		//input
-		$('.mui-input-row input').input();
-	});
 })(mui);
 /**
  * mui titlebar
@@ -1832,38 +1823,35 @@ window.mui = mui;
 		contentrefresh : '正在刷新...'
 	}
 
-	$.fn.plus_pulldownRefresh = function(options) {
+	$.plus_pulldownRefresh = function(options) {
 		options = $.extend(pulldownOptions, options, true);
-		this.each(function() {
-			var self = this;
-			$.plusReady(function() {
-				var id = self.getAttribute('data-pullrefresh-plus');
-				if (!id) {//避免重复初始化5+ pullrefresh
-					id = ++$.uuid;
-					self.setAttribute('data-pullrefresh-plus', id);
-					var sw = $.currentWebview;
-					sw.setPullToRefresh({
-						support : true,
-						height : options.height + 'px',
-						range : "200px",
-						contentdown : {
-							caption : options.contentdown
-						},
-						contentover : {
-							caption : options.contentover
-						},
-						contentrefresh : {
-							caption : options.contentrefresh
-						}
-					}, function() {
-						options.callback && options.callback(function() {
-							sw.endPullToRefresh();
-						});
+		$.plusReady(function() {
+			var self = document.body;
+			var id = self.getAttribute('data-pullrefresh-plus');
+			if (!id) {//避免重复初始化5+ pullrefresh
+				id = ++$.uuid;
+				self.setAttribute('data-pullrefresh-plus', id);
+				var sw = $.currentWebview;
+				sw.setPullToRefresh({
+					support : true,
+					height : options.height + 'px',
+					range : "200px",
+					contentdown : {
+						caption : options.contentdown
+					},
+					contentover : {
+						caption : options.contentover
+					},
+					contentrefresh : {
+						caption : options.contentrefresh
+					}
+				}, function() {
+					options.callback && options.callback(function() {
+						sw.endPullToRefresh();
 					});
+				});
 
-				}
-			});
-
+			}
 		});
 	};
 })(mui);
@@ -2530,7 +2518,9 @@ window.mui = mui;
 		}, options);
 		if (this.options.slideshowDelay != newOptions.slideshowDelay) {
 			this.options.slideshowDelay = newOptions.slideshowDelay;
-			this.initTimer();
+			if (this.options.slideshowDelay) {
+				this.nextItem();
+			}
 		}
 	};
 	//TODO 暂时不做自动clone
@@ -2827,6 +2817,9 @@ window.mui = mui;
 			}
 		});
 	};
+	$.ready(function() {
+		$('.mui-slider-group').slider();
+	});
 })(mui, window);
 /**
  * Toggles switch
@@ -3512,17 +3505,17 @@ window.mui = mui;
 	var Input = function(element, options) {
 		this.element = element;
 		this.options = options || {
-			actions : 'clear'
+			actions: 'clear'
 		};
-		if (~this.options.actions.indexOf('slider')) {//slider
+		if (~this.options.actions.indexOf('slider')) { //slider
 			this.sliderActionClass = CLASS_TOOLTIP + ' ' + CLASS_HIDDEN;
 			this.sliderActionSelector = SELECTOR_TOOLTIP;
-		} else {//clear,speech,search
+		} else { //clear,speech,search
 			if (~this.options.actions.indexOf('clear')) {
 				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + (element.value ? '' : (' ' + CLASS_HIDDEN));
 				this.clearActionSelector = SELECTOR_ICON_CLOSE;
 			}
-			if (~this.options.actions.indexOf('speech')) {//only for 5+
+			if (~this.options.actions.indexOf('speech')) { //only for 5+
 				this.speechActionClass = CLASS_ICON + ' ' + CLASS_ICON_SPEECH;
 				this.speechActionSelector = SELECTOR_ICON_SPEECH;
 			}
@@ -3649,15 +3642,14 @@ window.mui = mui;
 			var self = this;
 			self.element.value = '';
 			plus.speech.startRecognize({
-				engine : 'iFly'
+				engine: 'iFly'
 			}, function(s) {
 				self.element.value += s;
 				setTimeout(function() {
 					self.element.focus();
 				}, 0);
 				plus.speech.stopRecognize();
-			}, function(e) {
-			});
+			}, function(e) {});
 		} else {
 			alert('only for 5+');
 		}
@@ -3685,7 +3677,7 @@ window.mui = mui;
 			if (!id) {
 				id = ++$.uuid;
 				$.data[id] = new Input(this, {
-					actions : actions.join(',')
+					actions: actions.join(',')
 				});
 				for (var i = 0, len = actions.length; i < len; i++) {
 					this.setAttribute('data-input-' + actions[i], id);
@@ -3694,8 +3686,10 @@ window.mui = mui;
 
 		});
 	};
+	$.ready(function() {
+		$('.mui-input-row input').input();
+	});
 })(mui, window, document);
-
 /**
  * mui back
  * @param {type} $
@@ -3780,7 +3774,8 @@ window.mui = mui;
 						//opener.show();
 					} else {
 						//首页不存在opener的情况下，后退实际上应该是退出应用；
-						plus.runtime.quit();
+						//这个交给项目具体实现，框架暂不处理；
+						//plus.runtime.quit();
 					}
 				}
 			});

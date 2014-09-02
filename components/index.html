@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-01 01:35:08 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-01 01:35:08 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-02 18:32:31 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-02 18:32:31 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -284,41 +284,223 @@
 	<p class="component-description">Can be used with any number of slides with any type of content.</p>
 
 	<div class="component-example">
-		<div class="mui-slider" id="mySlider">
-  <div class="mui-slider-group">
-    <div class="mui-slider-item">
-      <img src="http://dcloudio.github.io/mui/assets/img/slide-1.jpg">
-      <span class="slide-text">
-        <span class="mui-icon mui-icon-left-nav"></span>
-        Slide me
-      </span>
-    </div>
-    <div class="mui-slider-item">
-      <img src="http://dcloudio.github.io/mui/assets/img/slide-2.jpg">
-    </div>
-    <div class="mui-slider-item">
-      <img src="http://dcloudio.github.io/mui/assets/img/slide-3.jpg">
-    </div>
-  </div>
+		<ul class="mui-table-view mui-table-view-chevron">
+	<li id="slider_switch" class="mui-table-view-cell">
+		定时轮播
+		<div class="mui-switch">
+			<div class="mui-switch-handle"></div>
+		</div>
+	</li>
+</ul>
+<div id="slider" class="mui-slider">
+	<div class="mui-slider-group mui-slider-loop">
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg"></a>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg"></a>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/muwu.jpg"></a>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/cbd.jpg"></a>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/yuantiao.jpg"></a>
+		</div>
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#"><img src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg"></a>
+		</div>
+	</div>
+	<div class="mui-slider-indicator">
+		<div class="mui-indicator mui-active"></div>
+		<div class="mui-indicator"></div>
+		<div class="mui-indicator"></div>
+		<div class="mui-indicator"></div>
+	</div>
 </div>
 	</div>
 
-	<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span> <span class="na">id=</span><span class="s">&quot;mySlider&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-1.jpg&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;slide-text&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
-        Slide me
-      <span class="nt">&lt;/span&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-2.jpg&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/slide-3.jpg&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-  <span class="nt">&lt;/div&gt;</span>
+	<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">&quot;slider_switch&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+		定时轮播
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;slider&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group mui-slider-loop&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/yuantiao.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/shuijiao.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/muwu.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/cbd.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/yuantiao.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://dcloudio.github.io/mui/assets/img/shuijiao.jpg&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-indicator&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator mui-active&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>  <p class="component-description">Sliders.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#mySlider&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;slide&#39;</span><span class="p">,</span> <span class="nx">myFunction</span><span class="p">)</span></code></pre></div> 
+
+</article>
+    	
+    		<!-- slidersWithTitle -->
+<article class="component mui-active" id="slidersWithTitle">
+	<h3 class="component-title">图片轮播下方悬浮标题</h3>
+	<p class="component-description"></p>
+
+	<div class="component-example">
+		<ul class="mui-table-view mui-table-view-chevron">
+	<li id="slider_switch" class="mui-table-view-cell">定时轮播
+		<div class="mui-switch">
+			<div class="mui-switch-handle"></div>
+		</div>
+	</li>
+</ul>
+<div id="slider" class="mui-slider">
+	<div class="mui-slider-group mui-slider-loop">
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#">
+				<img src="/assets/img/yuantiao.jpg">
+			</a>
+			<p class="mui-slider-title">
+				静静看这世界
+			</p>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="/assets/img/shuijiao.jpg">
+			</a>
+			<p class="mui-slider-title">
+				幸福就是可以一起睡觉
+			</p>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="/assets/img/muwu.jpg">
+			</a>
+			<p class="mui-slider-title">
+				想要一间这样的木屋，静静的喝咖啡
+			</p>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="/assets/img/cbd.jpg">
+			</a>
+			<p class="mui-slider-title">
+				Color of SIP CBD
+			</p>
+		</div>
+		<div class="mui-slider-item">
+			<a href="#">
+				<img src="/assets/img/yuantiao.jpg">
+			</a>
+			<p class="mui-slider-title">
+				静静看这世界
+			</p>
+		</div>
+		<div class="mui-slider-item mui-slider-item-duplicate">
+			<a href="#">
+				<img src="/assets/img/shuijiao.jpg">
+			</a>
+			<p class="mui-slider-title">
+				幸福就是可以一起睡觉
+			</p>
+		</div>
+	</div>
+	<div class="mui-slider-indicator mui-text-right">
+		<div class="mui-indicator mui-active"></div>
+		<div class="mui-indicator"></div>
+		<div class="mui-indicator"></div>
+		<div class="mui-indicator"></div>
+	</div>
+</div>
+	</div>
+
+	<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">&quot;slider_switch&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>定时轮播
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;slider&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group mui-slider-loop&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/yuantiao.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				静静看这世界
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/shuijiao.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				幸福就是可以一起睡觉
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/muwu.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				想要一间这样的木屋，静静的喝咖啡
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/cbd.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				Color of SIP CBD
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/yuantiao.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				静静看这世界
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/assets/img/shuijiao.jpg&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;/a&gt;</span>
+			<span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;mui-slider-title&quot;</span><span class="nt">&gt;</span>
+				幸福就是可以一起睡觉
+			<span class="nt">&lt;/p&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-indicator mui-text-right&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator mui-active&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-indicator&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>  <p class="component-description">Sliders.js binds an event to the document that returns a detail object and can be used to fire a callback.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Only needed if you want to fire a callback</span>
@@ -1046,8 +1228,8 @@
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-01 01:35:08 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-01 01:35:08 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-02 18:32:31 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-02 18:32:31 +0800"></script>
 
     </div>
   </div>
