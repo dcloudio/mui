@@ -818,6 +818,12 @@ code {
 		bottom: 0;
 		left: 0;
 	}
+	#offCanvasWithLeftInDevice .mui-inner-wrap,#offCanvasWithRightInDevice .mui-inner-wrap {
+		min-height: 569px;
+	}
+	.mui-inner-wrap .mui-content{
+		top: 0;
+	}
 }
 @media screen and (min-width: 1200px) {
 	.device {

@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-02 20:04:21 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-02 20:04:21 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-02 20:27:58 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-02 20:27:58 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -2219,6 +2219,376 @@
 
 </article>
     	
+    		<!-- offCanvasWithLeft -->
+<article class="component mui-active" id="offCanvasWithLeft">
+	<h3 class="component-title">侧滑导航(左侧)</h3>
+	<p class="component-description"></p>
+
+	<div class="component-example">
+		<div class="mui-off-canvas-wrap mui-draggable">
+	<div class="mui-inner-wrap">
+		<header class="mui-bar mui-bar-nav">
+			<a href="#offCanvas" class="mui-icon mui-icon-bars mui-pull-left"></a>
+			<a class="mui-icon mui-icon-close mui-pull-right"></a>
+			<h1 class="mui-title">Container with slide menu</h1>
+		</header>
+		<aside id="offCanvas" class="mui-off-canvas-left">
+			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 1
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 3
+					</a>
+				</li>
+			</ul>
+		</aside>
+		<div class="mui-content">
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li id="offCanvas_switch" class="mui-table-view-cell">
+					整体滑动
+					<div class="mui-switch mui-active">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 1
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 3
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 4
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 5
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 6
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 7
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 8
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 9
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!-- off-canvas backdrop -->
+		<div class="mui-off-canvas-backdrop"></div>
+	</div>
+</div>
+	</div>
+
+	<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-wrap mui-draggable&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-inner-wrap&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#offCanvas&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-bars mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-close mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+			<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Container with slide menu<span class="nt">&lt;/h1&gt;</span>
+		<span class="nt">&lt;/header&gt;</span>
+		<span class="nt">&lt;aside</span> <span class="na">id=</span><span class="s">&quot;offCanvas&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-left&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron mui-table-view-inverted&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 1
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 2
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 3
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+		<span class="nt">&lt;/aside&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">&quot;offCanvas_switch&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					整体滑动
+					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
+						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+					<span class="nt">&lt;/div&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 1
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 2
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 3
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 4
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 5
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 6
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 7
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 8
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 9
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="c">&lt;!-- off-canvas backdrop --&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-backdrop&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div> 
+
+</article>
+    	
+    		<!-- offCanvasWithRight -->
+<article class="component mui-active" id="offCanvasWithRight">
+	<h3 class="component-title">侧滑导航(右侧)</h3>
+	<p class="component-description"></p>
+
+	<div class="component-example">
+		<div class="mui-off-canvas-wrap mui-draggable">
+	<div class="mui-inner-wrap">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a href="#offCanvas" class="mui-icon mui-icon-bars mui-pull-right"></a>
+			<h1 class="mui-title">Container with slide menu(right)</h1>
+		</header>
+		<aside id="offCanvas" class="mui-off-canvas-right">
+			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 1
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 3
+					</a>
+				</li>
+			</ul>
+		</aside>
+		<div class="mui-content">
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li id="offCanvas_switch" class="mui-table-view-cell">
+					整体滑动
+					<div class="mui-switch mui-active">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 1
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 3
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 4
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 5
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 6
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 7
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 8
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 9
+					</a>
+				</li>
+			</ul>
+		</div>
+		<!-- off-canvas backdrop -->
+		<div class="mui-off-canvas-backdrop"></div>
+	</div>
+</div>
+	</div>
+
+	<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-wrap mui-draggable&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-inner-wrap&quot;</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-left-nav mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+			<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#offCanvas&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-icon-bars mui-pull-right&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+			<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>Container with slide menu(right)<span class="nt">&lt;/h1&gt;</span>
+		<span class="nt">&lt;/header&gt;</span>
+		<span class="nt">&lt;aside</span> <span class="na">id=</span><span class="s">&quot;offCanvas&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-right&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron mui-table-view-inverted&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 1
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 2
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 3
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+		<span class="nt">&lt;/aside&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content&quot;</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">&quot;offCanvas_switch&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					整体滑动
+					<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch mui-active&quot;</span><span class="nt">&gt;</span>
+						<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-switch-handle&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+					<span class="nt">&lt;/div&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+			<span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 1
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 2
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 3
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 4
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 5
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 6
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 7
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 8
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+				<span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;mui-table-view-cell&quot;</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-navigate-right&quot;</span><span class="nt">&gt;</span>
+						Item 9
+					<span class="nt">&lt;/a&gt;</span>
+				<span class="nt">&lt;/li&gt;</span>
+			<span class="nt">&lt;/ul&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="c">&lt;!-- off-canvas backdrop --&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-backdrop&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div> 
+
+</article>
+    	
     		<!-- popovers -->
 <article class="component mui-active" id="popovers">
 	<h3 class="component-title">弹出菜单</h3>
@@ -2468,8 +2838,8 @@
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-02 20:04:21 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-02 20:04:21 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-02 20:27:58 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-02 20:27:58 +0800"></script>
 
     </div>
   </div>
