@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-02 20:59:57 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-02 20:59:57 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-04 00:13:52 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-04 00:13:52 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -209,10 +209,29 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     show:{
       aniShow:animationType,//页面显示动画，默认为”slide-in-right“；
       duration:animationTime//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+    },
+    waiting:{
+      title:&#39;正在加载...&#39;,//等待对话框上显示的提示内容
+      options:{
+        width:waiting-dialog-widht,//等待框背景区域宽度，默认根据内容自动计算合适宽度
+        height:waiting-dialog-height,//等待框背景区域高度，默认根据内容自动计算合适高度
+        ......
+      }
     }
 })</code></pre></div>
 <p class="component-description">
-<strong>参数说明：</strong>styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；aniShow表示页面显示动画，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>。</p>
+<strong>参数说明：</strong></p>
+<ul>
+  <li>
+    <p>styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；</p>
+  </li>
+  <li>
+    <p>aniShow表示页面显示动画，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a></p>
+  </li>
+    <li>
+    <p>waiting表示系统等待框，mui框架在打开新页面时等待框的处理逻辑为：显示等待框-->创建目标页面webview-->目标页面loaded事件发生-->关闭等待框；因此，只有当新页面为新创建页面（webview）时，会显示等待框，否则若为预加载好的页面，则直接显示目标页面，不会显示等待框。waiting中的参数：title表示等待框上的提示文字，options表示等待框显示参数，比如宽高、背景色、提示文字颜色等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/nativeUI.shtml#plus.nativeUI.WaitingOption">5+规范中的WaitingOption</a>。</p>
+  </li>
+</ul>
 <p class="component-description">
 <strong>示例：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//tap为mui封装的单击事件，可参考手势事件章节</span>
@@ -498,8 +517,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-02 20:59:57 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-02 20:59:57 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-04 00:13:52 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-04 00:13:52 +0800"></script>
 
     </div>
   </div>
