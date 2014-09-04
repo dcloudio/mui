@@ -24,9 +24,18 @@
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">导航栏</h1>
-</header>
+<h3>查看地图</h3>
+<style type="text/css">
+  h3{
+  	text-align: center;
+  	margin: 50% auto;
+  }
+</style>
+<script type="text/javascript" charset="utf-8">
+	mui.back = function(){
+		//执行父页面的关闭逻辑；
+		mui.currentWebview.opener().evalJS("mui.back()");
+	}
+</script>
 </body>
 </html>

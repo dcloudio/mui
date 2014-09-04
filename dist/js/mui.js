@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.4 (https://github.com/dcloudio/mui)
+ * Mui v0.5.5 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -953,8 +953,17 @@ window.mui = mui;
 		swipeBack: false,
 		preloadPages: [], //5+ lazyLoad webview
 		preloadLimit: 10 //预加载窗口的数量限制(一旦超出，先进先出)
-
 	};
+
+	//默认页面动画
+	var defaultShow = {
+		duration:$.os.ios?200:100,
+		aniShow: 'slide-in-right'
+	}
+	//若执行了显示动画初始化操作，则要覆盖默认配置
+	if($.options.show){
+		defaultShow = $.extend(defaultShow, $.options.show,true);
+	}
 
 	$.currentWebview = null;
 	$.isHomePage = false;
@@ -975,14 +984,7 @@ window.mui = mui;
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		var duration = 100;
-		if ($.os.ios) {
-			duration = 200;
-		}
-		return $.extend({
-			aniShow: 'slide-in-right',
-			duration: duration
-		}, options);
+		return $.extend(defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
@@ -1070,6 +1072,7 @@ window.mui = mui;
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
+
 		if (!window.plus) {
 			return;
 		}
@@ -1087,13 +1090,29 @@ window.mui = mui;
 		}
 		options = options || {};
 		var params = options.params || {};
-		var webview;
+		var webview,nShow;
 		if ($.webviews[id]) { //已缓存
 			var webviewCache = $.webviews[id];
 			if (webviewCache.preload) { //预加载
 				webview = webviewCache.webview;
+				//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
+				if(!webview||!webview.getURL()){
+					//再次新建一个webview；
+					options = $.extend(options, {
+						id: id,
+						url: url,
+						showAfterLoad: options.showAfterLoad === false ? false : true,
+						preload:true
+
+					});
+					webview = $.createWindow(options);
+				}
 				//每次show都需要传递动画参数；
-				webview.show(webviewCache.show.aniShow, webviewCache.show.duration, function() {
+				//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
+				nShow = webviewCache.show;
+				nShow = options.show?$.extend(nShow, options.show):nShow;
+				
+				webview.show(nShow.aniShow, nShow.duration, function() {
 					triggerPreload(webview);
 					trigger(webview,'pagebeforeshow',false);
 				});
@@ -1133,9 +1152,9 @@ window.mui = mui;
 			webview = $.createWindow(options);
 		}
 		if (options.showAfterLoad) {
-			var nWaitingOptions = $.waitingOptions(options.waiting);
-			var nWaiting = plus.nativeUI.showWaiting(nWaitingOptions.title || '', nWaitingOptions);
-			var nShow = $.showOptions(options.show);
+			var waitingConfig = $.waitingOptions(options.waiting);
+			var nWaiting = plus.nativeUI.showWaiting(waitingConfig.title || '', waitingConfig.options);
+			nShow = $.showOptions(options.show);
 			webview.addEventListener("loaded", function() {
 				nWaiting.close();
 				webview.show(nShow.aniShow, nShow.duration, function() {
@@ -1172,7 +1191,7 @@ window.mui = mui;
 		var id = options.id || options.url;
 		var webview;
 		if (options.preload) {
-			if ($.webviews[id]) { //已经cache
+			if ($.webviews[id]&& $.webviews[id].webview.getURL()) { //已经cache
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
 				//preload
@@ -1209,15 +1228,17 @@ window.mui = mui;
 				var first = $.data.preloads.shift();
 				var webviewCache = $.webviews[first];
 				if (webviewCache && webviewCache.webview) {
-					//IOS下 close的时候会导致卡顿。
-					webviewCache.webview.close(); //关闭该预加载webview	
+					//需要将自己打开的所有页面，全部close；
+					//关闭该预加载webview	
+					$.closeAll(webviewCache.webview);
 				}
 				//删除缓存
 				delete $.webviews[first];
 			}
 		} else {
+			//暂不支持存储配置，因为配置也占据预加载限额，需要细分；
 			//非预加载的webview存储窗口配置
-			$.webviews[id] = options;
+			// $.webviews[id] = options;
 			if (isCreate !== false) { //直接创建非预加载窗口
 				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles));
 				if (options.subpages) {
@@ -1230,6 +1251,36 @@ window.mui = mui;
 		}
 		return webview;
 	};
+
+	/**
+	*关闭当前webview打开的所有webview；
+	*/
+	$.closeOpened = function(webview){
+		var opened = webview.opened();
+		if(opened){
+			for(var i=0,len = opened.length;i<len;i++){
+				var openedWebview = opened[i];
+				var open_open = openedWebview.opened();
+				if(open_open&&open_open.length>0){
+					$.closeOpened(openedWebview);
+				}else{
+					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
+					if(openedWebview.parent()!==webview){
+						openedWebview.close('none');	
+					}
+				}
+			}
+		}
+	}
+	$.closeAll = function(webview,aniShow){
+		$.closeOpened(webview);
+		if(aniShow){
+			webview.close(aniShow);
+		}else{
+			webview.close();
+		}
+	}
+
 	/**
 	 * 批量创建webview
 	 * @param {type} options
@@ -1350,19 +1401,6 @@ window.mui = mui;
         }
 
     });
-})(mui);
-/**
- * mui.init plugins
- * @param {type} $
- * @returns {undefined}
- */
-(function($) {
-	$.init.add(function() {
-		//slider
-		$('.mui-slider-group').slider();
-		//input
-		$('.mui-input-row input').input();
-	});
 })(mui);
 /**
  * mui titlebar
@@ -2434,7 +2472,7 @@ window.mui = mui;
 
 	window.addEventListener('tap', function(e) {
 
-		var targetTab = $.targets.tab;
+		var targetTab = $.targets[name];
 		if (!targetTab) {
 			return;
 		}
@@ -2464,23 +2502,24 @@ window.mui = mui;
 		if (!targetBody) {
 			return;
 		}
-		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {//tab bar popover
+		//选项卡含二级菜单的情况，再次点击要隐藏子菜单
+		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {
 			targetTab.classList[isLastActive ? 'remove' : 'add'](className);
 			return;
 		}
 		if (isLastActive) {//same
 			return;
 		}
+		//隐藏之前显示内容区
 		activeBodies = targetBody.parentNode.getElementsByClassName(className);
-
 		for (var i = 0; i < activeBodies.length; i++) {
 			activeBodies[i].classList.remove(className);
 		}
-
+		//显示目标内容区
 		targetBody.classList.add(className);
 
 		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-		
+		//触发可拖动式选项卡的切换事件
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber : Array.prototype.indexOf.call(contents, targetBody)
 		})
@@ -2531,7 +2570,9 @@ window.mui = mui;
 		}, options);
 		if (this.options.slideshowDelay != newOptions.slideshowDelay) {
 			this.options.slideshowDelay = newOptions.slideshowDelay;
-			this.initTimer();
+			if (this.options.slideshowDelay) {
+				this.nextItem();
+			}
 		}
 	};
 	//TODO 暂时不做自动clone
@@ -2828,6 +2869,9 @@ window.mui = mui;
 			}
 		});
 	};
+	$.ready(function() {
+		$('.mui-slider-group').slider();
+	});
 })(mui, window);
 /**
  * Toggles switch
@@ -3513,17 +3557,17 @@ window.mui = mui;
 	var Input = function(element, options) {
 		this.element = element;
 		this.options = options || {
-			actions : 'clear'
+			actions: 'clear'
 		};
-		if (~this.options.actions.indexOf('slider')) {//slider
+		if (~this.options.actions.indexOf('slider')) { //slider
 			this.sliderActionClass = CLASS_TOOLTIP + ' ' + CLASS_HIDDEN;
 			this.sliderActionSelector = SELECTOR_TOOLTIP;
-		} else {//clear,speech,search
+		} else { //clear,speech,search
 			if (~this.options.actions.indexOf('clear')) {
 				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + (element.value ? '' : (' ' + CLASS_HIDDEN));
 				this.clearActionSelector = SELECTOR_ICON_CLOSE;
 			}
-			if (~this.options.actions.indexOf('speech')) {//only for 5+
+			if (~this.options.actions.indexOf('speech')) { //only for 5+
 				this.speechActionClass = CLASS_ICON + ' ' + CLASS_ICON_SPEECH;
 				this.speechActionSelector = SELECTOR_ICON_SPEECH;
 			}
@@ -3650,15 +3694,14 @@ window.mui = mui;
 			var self = this;
 			self.element.value = '';
 			plus.speech.startRecognize({
-				engine : 'iFly'
+				engine: 'iFly'
 			}, function(s) {
 				self.element.value += s;
 				setTimeout(function() {
 					self.element.focus();
 				}, 0);
 				plus.speech.stopRecognize();
-			}, function(e) {
-			});
+			}, function(e) {});
 		} else {
 			alert('only for 5+');
 		}
@@ -3686,7 +3729,7 @@ window.mui = mui;
 			if (!id) {
 				id = ++$.uuid;
 				$.data[id] = new Input(this, {
-					actions : actions.join(',')
+					actions: actions.join(',')
 				});
 				for (var i = 0, len = actions.length; i < len; i++) {
 					this.setAttribute('data-input-' + actions[i], id);
@@ -3695,8 +3738,10 @@ window.mui = mui;
 
 		});
 	};
+	$.ready(function() {
+		$('.mui-input-row input').input();
+	});
 })(mui, window, document);
-
 /**
  * mui back
  * @param {type} $
@@ -3775,7 +3820,8 @@ window.mui = mui;
 						if (wobj.preload) {
 							wobj.hide("auto");
 						} else {
-							wobj.close();
+							//关闭页面时，需要将其打开的所有子页面全部关闭；
+							$.closeAll(wobj);
 						}
 						//TODO 暂时屏蔽父窗口的隐藏与显示，与预加载一起使用时太多bug
 						//opener.show();
