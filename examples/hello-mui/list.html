@@ -318,7 +318,7 @@
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell ">
-							<a class="mui-navigate-right" href="examples/pulldown.html">
+							<a class="mui-navigate-right" href="examples/pullrefresh-down-main.html">
 								下拉刷新
 							</a>
 						</li>
@@ -340,7 +340,7 @@
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/pulldown-with-plus-main.html">
+							<a class="mui-navigate-right" href="examples/pullrefresh-down-main.html">
 								下拉刷新默认样式
 							</a>
 						</li>
@@ -394,14 +394,14 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tabbar.html">
-								默认样式
+								div模式
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="examples/tabbar-with-anchor.html">
-						Tab bar with anchor
-						</a>
-						</li>-->
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/tab-webview-main.html">
+								webview模式
+							</a>
+						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tabbar-labels-only.html">
 								文字选项卡
@@ -536,9 +536,6 @@
 
 						//监听展开事件
 						$('#demos').on('expand', '.mui-collapse', function(e) {
-							if (this.id !== 'pull-refresh-pandora') {
-								return;
-							}
 							count = 0;
 							$('.mui-table-view a', this).each(function() {
 								var id = this.getAttribute('href');
@@ -552,18 +549,14 @@
 											preload: true
 										});
 									}, (count++) * 100);
-									if (count >= 3) {
-										return false;
-									}
 								}
 							});
 						});
 					}
 
-
-
 					// 关闭启动界面
 					plus.navigator.closeSplashscreen();
+					//下拉刷新两个平台有区别；
 					if ($.os.ios) {
 						document.getElementById('pull-refresh-pandora').style.display = "none";
 					} else if ($.os.android) {
@@ -577,6 +570,45 @@
 					}
 				});
 			})(mui);
+			
+	/**
+	 * 处理链接点击事件
+	 */
+	$.ready(function() {
+		$('body').on('tap', 'a', function(e) {
+			var id = this.getAttribute('href');
+			if (id) {
+				if (~id.indexOf('.html')) {
+					if (window.plus) {
+						//侧滑导航涉及Index问题，需要单独处理；
+						if(~id.indexOf('offcanvas-')){
+							$.openWindow({
+								id: id,
+								url: this.href,
+								styles:{
+									zindex:9999,
+								},
+								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+							});
+						}else{
+							$.openWindow({
+								id: id,
+								url: this.href,
+								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+							});
+						}
+					} else {
+						document.location.href = this.href;
+					}
+				} else {
+					if (typeof plus !== 'undefined') {
+						plus.runtime.openURL(id);
+					}
+				}
+			}
+		});
+	});
+			
 		</script>
 	</body>
 

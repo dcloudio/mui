@@ -3,47 +3,9 @@
 	$.initGlobal({
 		optimize: true,
 		swipeBack: true,
-		showAfterLoad: true,
-		titleBar: false,
-		back: function() {
-			//			return {
-			//				preload : true//TODO 默认启用预加载等show，hide事件，动画都完成后放开预加载
-			//			}
-		},
-		show: {
-			aniShow: 'slide-in-right',
-			duration: 400
-		}
+		showAfterLoad: true
 	});
-	/**
-	 * hyperlink
-	 */
-	$.ready(function() {
-		$('body').on('tap', 'a', function(e) {
-			var id = this.getAttribute('href');
-			if (id) {
-				if (~id.indexOf('.html')) {
-					if (window.plus) {
-						$.openWindow({
-							id: id,
-							url: this.href,
-							styles:{
-								zindex:9999,
-							},
-							preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
-						});
-					} else {
-						document.location.href = this.href;
-					}
-				} else {
-					if (typeof plus !== 'undefined') {
-						plus.runtime.openURL(id);
-					}
-				}
-			}
 
-		});
-	});
 })(mui);
 
 /**

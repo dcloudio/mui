@@ -26,7 +26,7 @@
 
 <div class="mui-content">
 	<div class="mui-content-padded">
-		<ul class="mui-table-view mui-table-view-chevron">
+		<ul id='list' class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell">
 				<a class="mui-navigate-right">
 					Item 6
@@ -63,6 +63,7 @@
 <script>
 	mui.init({
 		pullRefresh : {
+			container: '#list',
 			down : {
 				callback :pulldownRefresh
 			}

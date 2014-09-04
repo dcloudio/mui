@@ -24,22 +24,18 @@
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left mui-pull-left"></a>
-	<h1 class="mui-title">下拉刷新</h1>
-</header>
-
-<script>
-	mui.init({
-		subpages : [{
-			id : 'pulldown-with-plus-content',
-			url : 'pulldown-with-plus-content.html',
-			styles : {
-				top : '48px',
-				bottom : 0
-			}
-		}]
-	}); 
+<h3>在线咨询</h3>
+<style type="text/css">
+  h3{
+  	text-align: center;
+  	margin: 50% auto;
+  }
+</style>
+<script type="text/javascript" charset="utf-8">
+	mui.back = function(){
+		//执行父页面的关闭逻辑；
+		mui.currentWebview.opener().evalJS("mui.back()");
+	}
 </script>
 </body>
 </html>
