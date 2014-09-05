@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-04 00:13:52 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-04 00:13:52 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-05 12:04:49 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-05 12:04:49 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -198,7 +198,7 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
 做web app，一个无法避开的问题就是转场动画；web是基于链接构建的，从一个页面点击链接跳转到另一个页面，如果通过有刷新的打开方式，用户要面对一个空白的页面等待；如果通过无刷新的方式，用Javascript移入DOM节点（常见的SPA解决方案），会碰到很高的性能挑战：DOM节点繁多，页面太大，转场动画不流畅甚至导致浏览器崩溃；
 mui的解决思路是：单webview只承载单个页面的dom，减少dom层级及页面大小；页面切换使用原生动画，将最耗性能的部分交给原生实现.</p>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html">mui.openwindow({
+<div class="highlight"><pre><code class="language-html" data-lang="html">mui.openWindow({
     url:new-page-url,
     id:new-page-id,
     styles:{
@@ -517,8 +517,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-04 00:13:52 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-04 00:13:52 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-05 12:04:49 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-05 12:04:49 +0800"></script>
 
     </div>
   </div>
