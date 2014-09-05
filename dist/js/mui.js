@@ -1072,7 +1072,6 @@ window.mui = mui;
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
-
 		if (!window.plus) {
 			return;
 		}
@@ -2472,7 +2471,7 @@ window.mui = mui;
 
 	window.addEventListener('tap', function(e) {
 
-		var targetTab = $.targets[name];
+		var targetTab = $.targets.tab;
 		if (!targetTab) {
 			return;
 		}
@@ -2502,24 +2501,23 @@ window.mui = mui;
 		if (!targetBody) {
 			return;
 		}
-		//选项卡含二级菜单的情况，再次点击要隐藏子菜单
-		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {
+		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {//tab bar popover
 			targetTab.classList[isLastActive ? 'remove' : 'add'](className);
 			return;
 		}
 		if (isLastActive) {//same
 			return;
 		}
-		//隐藏之前显示内容区
 		activeBodies = targetBody.parentNode.getElementsByClassName(className);
+
 		for (var i = 0; i < activeBodies.length; i++) {
 			activeBodies[i].classList.remove(className);
 		}
-		//显示目标内容区
+
 		targetBody.classList.add(className);
 
 		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-		//触发可拖动式选项卡的切换事件
+		
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber : Array.prototype.indexOf.call(contents, targetBody)
 		})
@@ -3804,9 +3802,10 @@ window.mui = mui;
 			var wobj = $.currentWebview;
 			var parent = wobj.parent();
 			wobj.canBack(function(e) {
-				if (e.canBack) {//webview history back
-					window.history.back();
-				} else {//webview close or hide
+				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
+				// if (e.canBack) {//webview history back
+				// 	window.history.back();
+				// } else {//webview close or hide
 					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
 					if (parent) {
 						wobj = parent;
@@ -3830,7 +3829,7 @@ window.mui = mui;
 						//这个交给项目具体实现，框架暂不处理；
 						//plus.runtime.quit();
 					}
-				}
+				// }
 			});
 
 		} else if (window.history.length > 1) {
