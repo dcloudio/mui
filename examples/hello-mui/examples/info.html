@@ -66,5 +66,19 @@
             	margin-left: 5px;
             }
 </style>
+<script type="text/javascript" charset="utf-8">
+	//处理点击事件，需要打开原生浏览器
+	$('body').on('tap', 'a', function(e) {
+		var href = this.getAttribute('href');
+		if (href) {
+			if(window.plus){
+				plus.runtime.openURL(href);
+			}else{
+				location.href = href;
+			}
+		}
+	});
+</script>
+
 </body>
 </html>
