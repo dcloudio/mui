@@ -534,21 +534,34 @@
 							}
 						});
 
-						//监听展开事件
+						//监听展开事件,预加载二级列表的前几个；
 						$('#demos').on('expand', '.mui-collapse', function(e) {
 							count = 0;
 							$('.mui-table-view a', this).each(function() {
-								var id = this.getAttribute('href');
+								var id = url = this.getAttribute('href');
 								if (~id.indexOf('.html') && !~$.data.preloads.indexOf(id)) { //如果没在缓存，则创建预加载
-									var url = this.href;
-									//延迟100ms处理，避免影响操作流畅
-									setTimeout(function() {
+									//单独处理侧滑导航的index
+									if(~id.indexOf('offcanvas-')){
+										$.createWindow({
+											id: id,
+											url: url,
+											styles:{
+												zindex:9999
+											},
+											preload: true
+										});
+									}else{
 										$.createWindow({
 											id: id,
 											url: url,
 											preload: true
 										});
-									}, (count++) * 100);
+									}
+									
+									count++;
+									if(count>2){
+										 return false;
+									}
 								}
 							});
 						});
@@ -586,15 +599,15 @@
 								id: id,
 								url: this.href,
 								styles:{
-									zindex:9999,
+									zindex:9999
 								},
-								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+								preload: true 
 							});
 						}else{
 							$.openWindow({
 								id: id,
 								url: this.href,
-								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+								preload:true 
 							});
 						}
 					} else {

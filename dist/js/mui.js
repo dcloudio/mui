@@ -3801,21 +3801,23 @@ window.mui = mui;
 		if (window.plus) {
 			var wobj = $.currentWebview;
 			var parent = wobj.parent();
+			if (parent) {
+				wobj = parent;
+			}
 			wobj.canBack(function(e) {
 				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
 				// if (e.canBack) {//webview history back
 				// 	window.history.back();
 				// } else {//webview close or hide
 					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
-					if (parent) {
-						wobj = parent;
-					}
+					
 					var opener = wobj.opener();
 					if (opener) {
-						var openerParent = opener.parent();
-						if (openerParent) {
-							opener = openerParent;
-						}
+						//by chb 暂不自动处理老页面的隐藏；
+						// var openerParent = opener.parent();
+						// if (openerParent) {
+						// 	opener = openerParent;
+						// }
 						if (wobj.preload) {
 							wobj.hide("auto");
 						} else {
