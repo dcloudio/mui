@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<style>
+	.mui-h6, h5, h4 {
+		font-weight: 500;
+		margin: 0;
+		margin-left: 5px;
+		text-transform: none;
+	}
+	.mui-table-view .mui-table-view-cell {
+		padding-right: 0;
+	}
+	.oa-task-cell.mui-table .mui-table-cell, .oa-contact-cell.mui-table .mui-table-cell {
+		padding: 11px 0;
+		vertical-align: middle;
+	}
+
+	.oa-task-cell, .oa-contact-cell {
+		position: relative;
+		margin: -11px 0;
+	}
+
+	.oa-task-time {
+		width: 15%;
+	}
+	.oa-task-status {
+		width: 30%;
+		-webkit-transition: width .4s;
+		transition: width .4s;
+	}
+	.oa-task-time span, .oa-task-status, .oa-task-action {
+		text-align: center;
+	}
+	.oa-task-cell.mui-table .mui-table-cell.oa-task-content {
+		width: 55%;
+		padding-left: 15px;
+	}
+	.oa-task-time-start, .oa-task-time-end {
+		display: block;
+		width: 50px;
+	}
+
+	.oa-contact-avatar {
+		width: 75px;
+	}
+	.oa-contact-avatar img {
+		border-radius: 50%;
+	}
+	.oa-contact-content {
+		width: 100%;
+	}
+	.oa-contact-name {
+		margin-right: 20px;
+	}
+	.oa-contact-name, oa-contact-position {
+		float: left;
+	}
+	/*左拖，右拖，超出该区域宽度后，释放触发slideleft,slideright事件*/
+	/*重要：该样式定制拉出的功能图标区域的width(必须)*/
+	.oa-task-action {
+		background-color: #527fdc;
+		color: white;
+		width: 25%;
+		line-height: 62px;
+	}
+	/*左拖拉出，右拖关闭菜单*/
+	/*重要：该样式定制拉出的功能菜单区域的margin-left(必须,该值是功能菜单距离mui-slider-cell左侧的位置)*/
+	.oa-contact-action {
+		background-color: #527fdc;
+		margin-left: 75px;
+		height: 87px;
+	}
+	.oa-contact-action .mui-icon {
+		width: 20%;
+		color: white;
+		text-align: center;
+		line-height: 87px;
+		height: 87px;
+		float: left;
+	}
+	.oa-contact-action .mui-icon:first-child, .oa-contact-action .mui-icon:last-child {
+		width: 40%;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">滑动触发列表项菜单</h1>
+</header>
+<div class="mui-content">
+	<h5 class="mui-content-padded">拖拽(滑动)显示功能按钮，点击按钮触发事件</h5>
+	<ul id="OA_task_1" class="mui-table-view mui-table-view-striped mui-table-view-slider">
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-right oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">左拖(左滑)</h5>
+						<p class="mui-h6 mui-ellipsis">
+							一会议室
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-left oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">右拖(右滑)</h5>
+						<p class="mui-h6 mui-ellipsis">
+							一会议室
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-left oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-right oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">左右拖拽(滑动)</h5>
+						<p class="mui-h6 mui-ellipsis">
+							一会议室
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<h5 class="mui-content-padded">拖拽显示功能图标，释放后还原，自动触发事件</h5>
+	<ul id="OA_task_2" class="mui-table-view mui-table-view-striped mui-table-view-slider">
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-right mui-bounce oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">左拖</h5>
+						<p class="mui-h6 mui-ellipsis">
+							一会议室
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-left mui-bounce oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">10:00</span><span class="oa-task-time-end mui-h6">10:30</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">右拖</h5>
+						<p class="mui-h6 mui-ellipsis">
+							海淀区皂君庙乙2号院4号楼
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="mui-slider-left mui-bounce oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-right mui-bounce oa-task-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-close"></span>
+				</div>
+				<div class="mui-slider-handle oa-task-cell mui-table">
+					<div class="oa-task-time mui-table-cell">
+						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+					</div>
+					<div class="oa-task-content mui-table-cell">
+						<h4 class="mui-ellipsis">左右拖拽</h5>
+						<p class="mui-h6 mui-ellipsis">
+							一会议室
+						</p>
+					</div>
+					<div class="oa-task-status mui-table-cell">
+						<span class="mui-icon mui-icon-phone"></span>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<h5 class="mui-content-padded">左拖拉出，右拖关闭功能菜单</h5>
+	<ul id="OA_contact" class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="oa-contact-cell mui-table">
+					<div class="oa-contact-avatar mui-table-cell">
+						<img src="../images/60x60.gif"/>
+					</div>
+					<div class="oa-contact-content mui-table-cell">
+						<div class="mui-clearfix">
+							<h4 class="oa-contact-name">李明明</h4>
+							<span class="oa-contact-position mui-h6">总经理</span>
+						</div>
+						<p class="oa-contact-email mui-h6">
+							limingming@dh.cn
+						</p>
+					</div>
+				</div>
+				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-phone"></span>
+					<span class="mui-icon mui-icon-sms"></span>
+					<span class="mui-icon mui-icon-chat"></span>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="oa-contact-cell mui-table">
+					<div class="oa-contact-avatar mui-table-cell">
+						<img src="../images/60x60.gif"/>
+					</div>
+					<div class="oa-contact-content mui-table-cell">
+						<div class="mui-clearfix">
+							<h4 class="oa-contact-name">张聪聪</h4>
+							<span class="oa-contact-position mui-h6">理事长</span>
+						</div>
+						<p class="oa-contact-email mui-h6">
+							zcc@dh.cn
+						</p>
+					</div>
+				</div>
+				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-phone"></span>
+					<span class="mui-icon mui-icon-sms"></span>
+					<span class="mui-icon mui-icon-chat"></span>
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-slider-cell">
+				<div class="oa-contact-cell mui-table">
+					<div class="oa-contact-avatar mui-table-cell">
+						<img src="../images/60x60.gif"/>
+					</div>
+					<div class="oa-contact-content mui-table-cell">
+						<div class="mui-clearfix">
+							<h4 class="oa-contact-name">吴丽丽</h4>
+							<span class="oa-contact-position mui-h6">理事长</span>
+						</div>
+						<p class="oa-contact-email mui-h6">
+							wulili@dh.cn
+						</p>
+					</div>
+				</div>
+				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
+					<span class="mui-icon mui-icon-phone"></span>
+					<span class="mui-icon mui-icon-sms"></span>
+					<span class="mui-icon mui-icon-chat"></span>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<script>
+	mui.init({
+		swipeBack : false
+	});
+	(function($) {
+		var btnArray = ['确认','取消'];
+		$('#OA_task_1').on('tap', '.oa-task-action', function() {
+			var cell = this.parentNode.parentNode;
+			cell.parentNode.removeChild(cell);
+		});
+		$('#OA_task_2').on('slideleft', '.mui-table-view-cell', function(event) {
+			var elem = this;
+			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
+				if(e.index==0){
+					elem.parentNode.removeChild(elem);
+				}
+			});
+		});
+		$('#OA_task_2').on('slideright', '.mui-table-view-cell', function(event) {
+			var elem = this;
+			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
+				if(e.index==0){
+					elem.parentNode.removeChild(elem);
+				}
+			});
+		});
+	})(mui); 
+</script>
+</body>
+</html>

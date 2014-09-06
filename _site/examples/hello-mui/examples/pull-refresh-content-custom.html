@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>demo</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html, body, .mui-content {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+	<body>
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<title>Hello H5+</title>
+		<script type="text/javascript" charset="utf-8">
+var ws=null,wo=null;
+// 扩展API加载完毕，现在可以正常调用扩展API 
+function plusReady(){
+	// 获取自身窗口
+	ws=plus.webview.currentWebview();
+	wo=ws.opener();
+}
+// 判断扩展API是否准备，否则监听"plusready"事件
+if(window.plus){
+	plusReady();
+}else{
+	document.addEventListener("plusready",plusReady,false);
+}
+// DOM构建完成获取列表元素
+var list=null;
+document.addEventListener("DOMContentLoaded",function(){
+	list=document.getElementById("list");
+});
+// 刷新页面
+function onRefresh(){
+	setTimeout(function(){
+		if(list){
+			var item=document.createElement("li");
+			item.innerHTML="<span>New Item "+(new Date())+"</span>";
+			list.insertBefore(item,list.firstChild);
+		}
+		ws.endPullToRefresh();
+		wo.evalJS("pullReset()");
+	},2000);
+}
+		</script>
+		<link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8"/>
+		<style type="text/css">
+li {
+	padding: 1em;
+	border-bottom: 1px solid #eaeaea;
+}
+li:active {
+	background: #f4f4f4;
+}
+		</style>
+	</head>
+	<body>
+		<ul id="list" style="list-style:none;margin:0;padding:0;">
+			<li><span onclick="alert('ok');">Initializ List Item 1</span></li>
+			<li><span>Initializ List Item 2</span></li>
+			<li><span>Initializ List Item 3</span></li>
+			<li><span>Initializ List Item 4</span></li>
+			<li><span>Initializ List Item 5</span></li>
+			<li><span>Initializ List Item 6</span></li>
+			<li><span>Initializ List Item 7</span></li>
+			<li><span>Initializ List Item 8</span></li>
+			<li><span>Initializ List Item 9</span></li>
+			<li><span>Initializ List Item 10</span></li>
+		</ul>
+	</body>
+</html>
+</body>
+</html>

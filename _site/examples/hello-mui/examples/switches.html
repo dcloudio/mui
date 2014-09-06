@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">开关（Toggles）</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-content-padded">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-active">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-mini mui-active ">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-mini">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-blue mui-active">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-blue">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-blue mui-switch-mini mui-active">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<span></span>
+				<div class="mui-switch mui-switch-blue mui-switch-mini">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<script>
+	// mui.plusReady(function(){
+	//     plus.webview.currentWebview().setStyle({bounce:'none'});
+	// });
+	$('.mui-content .mui-switch').each(function() {//循环所有toggle
+		//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
+		this.parentNode.querySelector('span').innerText = '状态：' + (this.classList.contains('mui-active') ? 'true' : 'false');
+		/**
+		 * toggle 事件监听
+		 */
+		this.addEventListener('toggle', function(event) {
+			//event.detail.isActive 可直接获取当前状态
+			this.parentNode.querySelector('span').innerText = '状态：' + (event.detail.isActive ? 'true' : 'false');
+		});
+	}); 
+</script>
+</body>
+</html>

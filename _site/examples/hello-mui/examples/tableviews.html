@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">默认列表</h1>
+</header>
+<div class="mui-content">
+	<h5></h5>
+    <div class="mui-card">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell mui-hidden">cared
+                <div id="M_Toggle" class="mui-switch mui-active">
+                    <div class="mui-switch-handle"></div>
+                </div>
+            </li>
+            <li class="mui-table-view-divider">单行列表</li>
+            <li class="mui-table-view-cell">列表第1项</li>
+            <li class="mui-table-view-cell">列表第2项</li>
+            <li class="mui-table-view-cell">列表第3项</li>
+            <li class="mui-table-view-divider">两行列表</li>
+            <li class="mui-table-view-cell"><span class="mui-ellipsis-2">我的内容比较多，但也不会超过两行，因为加了.mui-ellipsis-2,mui会自动截断，变成省略号</span></li>
+            <li class="mui-table-view-cell"><span class="mui-ellipsis-2">我的内容比较多，但也不会超过两行，因为加了.mui-ellipsis-2,mui会自动截断，变成省略号</span></li>
+            <li class="mui-table-view-cell"><span class="mui-ellipsis-2">我的内容比较多，但也不会超过两行，因为加了.mui-ellipsis-2,mui会自动截断，变成省略号</span></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

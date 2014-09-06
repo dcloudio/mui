@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">语音助手</h1>
+</header>
+<div class="mui-content">
+	<h5 class="mui-content-padded" style="text-align: center;">长按进行语音输入(支持命令：列表，按钮)</h5>
+</div>
+<script>
+	(function($) {
+		var content = document.querySelector('.mui-content');
+		window.addEventListener('longtap', function() {
+			if (window.plus) {
+				plus.speech.startRecognize({
+					engine : 'iFly'
+				}, function(s) {
+					s = (s + '').replace(/[\ |\!|\;|\:|\,|\.|\?|\。|\，|\？|\！]/g, '').trim();
+					if (s) {
+						if (speechs.hasOwnProperty(s)) {
+							speechs[s]();
+						} else {
+							alert('命令"' + s + '"错误,支持语音命令：列表，按钮。');
+						}
+					} else {
+						alert('您好像没有说话哦');
+					}
+					plus.speech.stopRecognize();
+				}, function(e) {
+				});
+			} else {
+				alert('only for 5+');
+			}
+			event.preventDefault();
+		});
+		var speechs = {
+			'列表' : function() {
+				var div = document.createElement('div');
+				div.innerHTML = '<ul class="mui-table-view"><li class="mui-table-view-cell"><a class="mui-navigate-right">Item 1</a></li><li class="mui-table-view-cell"><a class="mui-navigate-right">Item 2</a></li><li class="mui-table-view-cell"><a class="mui-navigate-right">Item 3</a></li></ul>';
+				content.appendChild(div.firstElementChild);
+			},
+			'按钮' : function() {
+				var div = document.createElement('div');
+				div.innerHTML = '<button>按钮</button>';
+				content.appendChild(div.firstElementChild);
+			}
+		}
+	})(mui); 
+</script>
+</body>
+</html>

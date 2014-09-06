@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="stylesheet" href="../css/mui.css">
+        <script src="../js/mui.js"></script>
+        <script src="../js/app.js"></script>
+        <style>
+            html,body,.mui-content{
+                background-color: #efeff4;
+            }
+        </style>
+    </head>
+    <body class="mui-mobile">
+<link rel="stylesheet" href="../css/mui-grid.css">
+<style>
+	.mui-slider-indicator {
+		bottom: 0;
+	}
+	.mui-slider{
+		background-color:#f2f2f2;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left mui-pull-left"></a>
+	<h1 class="mui-title">Table views with grid and pagination</h1>
+</header>
+<div class="mui-content">
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			循环
+			<div id="Gallery_Toggle" class="mui-switch">
+				<div class="mui-switch-handle"></div>
+			</div>
+		</li>
+	</ul>
+	<div id="Gallery" class="mui-slider" style="margin-top:15px;">
+		<div class="mui-slider-group">
+			<div class="mui-slider-item">
+				<ul class="mui-table-view mui-grid-view">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-home"><span class="mui-number">5</span></span>
+							<div class="mui-media-body">
+								Home
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-sms"></span>
+							<div class="mui-media-body">
+								Email
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-calendar"></span>
+							<div class="mui-media-body">
+								Calendar
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-chat"></span>
+							<div class="mui-media-body">
+								Chat
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-category"></span>
+							<div class="mui-media-body">
+								Sort
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-map"></span>
+							<div class="mui-media-body">
+								Map
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-search"></span>
+							<div class="mui-media-body">
+								Search
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-phone"></span>
+							<div class="mui-media-body">
+								Phone
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-cog"></span>
+							<div class="mui-media-body">
+								Setting
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-slider-item">
+				<ul class="mui-table-view mui-grid-view">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-home"></span>
+							<div class="mui-media-body">
+								Home
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-sms"><span class="mui-number">6</span></span>
+							<div class="mui-media-body">
+								Email
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-calendar"></span>
+							<div class="mui-media-body">
+								Calendar
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-chat"></span>
+							<div class="mui-media-body">
+								Chat
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-category"></span>
+							<div class="mui-media-body">
+								Sort
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-map"></span>
+							<div class="mui-media-body">
+								Map
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-search"></span>
+							<div class="mui-media-body">
+								Search
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-phone"></span>
+							<div class="mui-media-body">
+								Phone
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-cog"></span>
+							<div class="mui-media-body">
+								Setting
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-slider-item">
+				<ul class="mui-table-view mui-grid-view">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-home"></span>
+							<div class="mui-media-body">
+								Home
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-sms"></span>
+							<div class="mui-media-body">
+								Email
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-calendar"><span class="mui-number">7</span></span>
+							<div class="mui-media-body">
+								Calendar
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-chat"></span>
+							<div class="mui-media-body">
+								Chat
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-category"></span>
+							<div class="mui-media-body">
+								Sort
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-map"></span>
+							<div class="mui-media-body">
+								Map
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-search"></span>
+							<div class="mui-media-body">
+								Search
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-phone"></span>
+							<div class="mui-media-body">
+								Phone
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="#">
+							<span class="mui-icon mui-icon-cog"></span>
+							<div class="mui-media-body">
+								Setting
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<div class="mui-slider-indicator">
+			<div class="mui-indicator mui-active"></div>
+			<div class="mui-indicator"></div>
+			<div class="mui-indicator"></div>
+		</div>
+	</div>
+</div>
+<script>
+	$.init({
+		swipeBack : false,
+	});
+	$.ready(function() {
+		var slider = document.getElementById('Gallery');
+		var group = slider.querySelector('.mui-slider-group');
+		var items = $('.mui-slider-item', group);
+		var first = items[0].cloneNode(true);
+		first.classList.add('mui-slider-item-duplicate');
+		var last = items[items.length - 1].cloneNode(true);
+		last.classList.add('mui-slider-item-duplicate');
+
+		function toggleLoop(toggle) {
+			if (toggle) {
+				group.classList.add('mui-slider-loop');
+				group.insertBefore(last, group.firstChild);
+				group.appendChild(first);
+			} else {
+				group.classList.remove('mui-slider-loop');
+				group.removeChild(first);
+				group.removeChild(last);
+			}
+		}
+
+
+		document.getElementById('Gallery_Toggle').addEventListener('toggle', function(e) {
+			var detail = e.detail;
+			toggleLoop(detail.isActive);
+		});
+
+	});
+
+</script>
+<script>
+    //EVENTS
+//    $.each(['tap','longtap','doubletap', 'dragleft', 'dragright', 'dragup', 'dragdown', 'dragend', 'swipeleft', 'swiperight', 'swipeup', 'swipedown'], function(index, type) {
+//        window.addEventListener(type, function(event) {
+//            console.log(type);
+//            event.detail.gesture = null;
+//            console.log(JSON.stringify(event.detail));
+//        });
+//    });
+</script>
+</body>
+</html>

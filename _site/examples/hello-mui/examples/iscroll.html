@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<style>
+	body {
+		overflow: hidden; /* this is important to prevent the whole page to bounce */
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">iscroll 4</h1>
+</header>
+<nav class="mui-bar mui-bar-tab">
+	<a class="mui-tab-item mui-active" href="#">
+		<span class="mui-icon mui-icon-phone"></span>
+		<span class="mui-tab-label">Phone</span>
+	</a>
+	<a class="mui-tab-item" href="#">
+		<span class="mui-icon mui-icon-chat"></span>
+		<span class="mui-tab-label">Chat</span>
+	</a>
+	<a class="mui-tab-item" href="#">
+		<span class="mui-icon mui-icon-sms"></span>
+		<span class="mui-tab-label">SMS</span>
+	</a>
+	<a class="mui-tab-item" href="#">
+		<span class="mui-icon mui-icon-map"></span>
+		<span class="mui-tab-label">Map</span>
+	</a>
+</nav>
+<div class="mui-bar mui-bar-standard mui-bar-header-secondary">
+	<button id="addRow" class="mui-btn mui-btn-primary mui-btn-block">
+		增加50个列表项
+	</button>
+</div>
+<div id="wrapper" class="mui-content mui-iscroll-wrapper">
+	<div class="mui-iscroll">
+		<ul class="mui-table-view mui-table-view-chevron"></ul>
+	</div>
+</div>
+<script src="../js/iscroll.js"></script>
+<script>
+	(function($) {
+		$.ready(function() {
+			document.addEventListener('touchmove', function(e) {
+				e.preventDefault();
+			}, false);
+			var myScroll = new iScroll('wrapper', {
+				hScroll : false,
+				bounce : false,
+				lockDirection : true,
+				useTransform : true,
+				useTransition : false,
+				checkDOMChanges : false,
+				onBeforeScrollStart : function(e) {
+					var target = e.target;
+					while (target.nodeType != 1) {
+						target = target.parentNode;
+						if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA') {
+							e.preventDefault();
+						}
+					}
+				}
+			});
+			var table = document.body.querySelector('.mui-table-view');
+			function addRows(count) {
+				var cells = document.body.querySelectorAll('.mui-table-view-cell');
+				var frag = document.createDocumentFragment();
+				for (var i = cells.length, len = i + count; i < len; i++) {
+					var li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+					frag.appendChild(li);
+				}
+				table.appendChild(frag);
+				//refresh
+				myScroll.refresh();
+			}
+
+			addRows(100);
+
+			document.getElementById('addRow').addEventListener('tap', function() {
+				addRows(50);
+				alert('增加成功，共计' + document.body.querySelectorAll('.mui-table-view-cell').length + '个列表项');
+			});
+		});
+
+	})(mui); 
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<script type="text/javascript" charset="utf-8">
+	var ws = null,
+		wo = null;
+	// 扩展API加载完毕，现在可以正常调用扩展API 
+	function plusReady() {
+			// 获取自身窗口
+			ws = plus.webview.currentWebview();
+			wo = ws.opener();
+		}
+		// 判断扩展API是否准备，否则监听"plusready"事件
+	if (window.plus) {
+		plusReady();
+	} else {
+		document.addEventListener("plusready", plusReady, false);
+	}
+	// DOM构建完成获取列表元素
+	var list = null;
+	document.addEventListener("DOMContentLoaded", function() {
+		list = document.getElementById("list");
+	});
+	// 刷新页面
+	function onRefresh() {
+		setTimeout(function() {
+			if (list) {
+				var item = document.createElement("li");
+				item.innerHTML = "<span>New Item " + (new Date()) + "</span>";
+				list.insertBefore(item, list.firstChild);
+			}
+			ws.endPullToRefresh();
+			wo.evalJS("pullReset()");
+		}, 2000);
+		
+		setTimeout(function() {
+			var table = document.body.querySelector('.mui-table-view');
+			var cells = document.body.querySelectorAll('.mui-table-view-cell');
+			for (var i = cells.length, len = i + 3; i < len; i++) {
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell';
+				li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+				table.insertBefore(li, table.firstChild);
+			}
+			ws.endPullToRefresh();
+			wo.evalJS("pullReset()");
+		}, 1000);
+		
+		
+	}
+</script>
+
+<div class="mui-content">
+	<div class="mui-content-padded">
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 6
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 5
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 4
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 3
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 2
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 1
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+</body>
+</html>

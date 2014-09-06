@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">消息框（dialog）</h1>
+</header>
+<div class="mui-content">
+
+	<div class="mui-content-padded" style="margin: 5px;text-align: center;">
+		<button id='alertBtn' class="mui-btn mui-btn-blue mui-btn-outlined">警告消息框</button>
+		<button id='confirmBtn' class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>
+		<button id='promptBtn' class="mui-btn mui-btn-blue mui-btn-outlined">输入对话框</button>
+		<button id='toastBtn' class="mui-btn mui-btn-blue mui-btn-outlined">自动消失提示框</button>
+		<div id="info">
+
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	var info = document.getElementById("info");
+	  document.getElementById("alertBtn").addEventListener('tap',function(){
+	  	mui.alert('欢迎使用Hello MUI','Hello MUI',function(){
+	  		info.innerText = '你刚关闭了警告框';
+	  	});
+	  });
+	  
+	  document.getElementById("confirmBtn").addEventListener('tap',function(){
+	  	var btnArray = ['是','否'];
+	  	mui.confirm('MUI是个好框架，确认？','Hello MUI',btnArray,function(e){
+	  		if(e.index==0){
+	  			info.innerText = '你刚确认MUI是个好框架';
+	  		}else{
+	  			info.innerText = 'MUI没有得到你的认可，继续加油'
+	  		}
+	  	})
+	  });
+	  
+	  document.getElementById("promptBtn").addEventListener('tap',function(){
+	  	var btnArray = ['确定','取消'];
+	  	mui.prompt('请输入你对MUI的评语：','性能好',btnArray,function(e){
+	  		if(e.index==0){
+	  			info.innerText = '谢谢你的评语：'+e.value;
+	  		}else{
+	  			info.innerText = '你点了取消按钮';
+	  		}
+	  	})
+	  });
+	  document.getElementById("toastBtn").addEventListener('tap',function(){
+	  	mui.toast('欢迎体验Hello MUI');
+	  });
+</script>
+<style type="text/css">
+  .mui-btn{
+  	display: block;
+  	width: 120px;
+  	margin: 10px auto;
+  }
+  #info{
+  	padding: 20px 10px ;
+  }
+</style>
+</body>
+</html>

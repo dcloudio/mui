@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<link rel="stylesheet" href="../css/oa.css">
+<style>
+    .mui-segmented-control{
+        background-color: #f6f6f6;
+        border: 0;
+    }
+    .mui-segmented-control .mui-control-item{
+        border: 0;
+    }
+    .mui-segmented-control .mui-control-item:active,.mui-segmented-control .mui-control-item.mui-active{
+        background-color: #f6f6f6;
+    }
+    .mui-segmented-control .mui-control-item.mui-active .mui-btn{
+        color: #fff;
+        background-color: #ee574f;
+        border-color: #ee574f;
+    }
+    .mui-segmented-control .mui-control-item .mui-block{
+        color:#a7a7a7;      
+        margin-top: 5px;
+    }
+
+    .mui-h5,.mui-h6{
+        margin-top: 0;
+    }
+    .mui-input-row label{
+        width: 45%;
+    }
+    .oa-mute{
+        color:#8f8f94;
+    }
+
+    .mui-control-item .mui-block{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+
+</style>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">待办详情</h1>
+</header>
+<div class="mui-content">
+    <div class="mui-segmented-control">
+        <a class="mui-control-item mui-active" href="#item1mobile">
+            <button class="mui-btn mui-fab mui-btn-mini">
+                <span class="oa-icon oa-icon-pages"></span>
+            </button>
+            <span class="mui-block">正文</span>
+        </a>
+        <a class="mui-control-item" href="#item2mobile">
+            <span class="mui-btn mui-fab mui-btn-mini">
+                <span class="mui-icon mui-icon-search"></span>
+            </span>
+            <span class="mui-block">搜索</span>
+        </a>
+        <a class="mui-control-item" href="#item3mobile">
+            <span class="mui-btn mui-fab mui-btn-mini">
+                <span class="oa-icon oa-icon-gear"></span>
+            </span>
+            <span class="mui-block">流程跟踪</span>
+        </a>
+        <a class="mui-control-item" href="#item4mobile">
+            <span class="mui-btn mui-fab mui-btn-mini">
+                <span class="oa-icon oa-icon-list"></span>
+            </span>
+            <span class="mui-block">意见列表</span>
+        </a>
+    </div>
+    <div class="mui-content-padded">
+        <span id="item1mobile" class="mui-control-content mui-active">Item 1</span>
+        <span id="item2mobile" class="mui-control-content">Item 2</span>
+        <span id="item3mobile" class="mui-control-content">Item 3</span>
+        <span id="item4mobile" class="mui-control-content">Item 4</span>
+    </div>
+</div>
+</body>
+</html>

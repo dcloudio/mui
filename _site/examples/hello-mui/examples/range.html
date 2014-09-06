@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+
+<style>
+
+    h5{
+        padding-top: 15px;
+    }
+
+    .field-contain label{
+        width: auto;
+        padding-right: 0;
+    }
+
+    .field-contain input[type='text']{
+        width: 40px;
+        height: 30px;
+        padding: 5px 0;
+        float: none;
+        text-align: center;
+    }
+</style>
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">滑块（range）</h1>
+</header>
+<div class="mui-content">
+    
+    <div class="mui-content-padded">  
+        <h5 style='margin-top:35px;'>label+输入框+滑块：</h5> 
+        <div class="mui-input-row mui-input-range field-contain">
+            <div style="float:left">
+                <label >滑块：</label>
+                <input type="text" id='field-range-input' value='60'>
+            </div>
+            <div style="margin-left:121px;">
+                <input type="range" id='field-range' value="60" min="0" max="100" />
+            </div>
+        </div>   
+        <h5>label+滑块：<span id='inline-range-val'>20</span></h5> 
+        <div class="mui-input-row mui-input-range">
+            <label>滑块：</label>
+            <input type="range" id='inline-range' value="20" min="0" max="100" >
+        </div>
+
+        <h5>整行滑块：<span id='block-range-val'>50</span></h5>   
+        <div class="mui-input-row mui-input-range">
+            <input type="range" id='block-range' value="50" min="0" max="100" >
+        </div>
+        
+    </div>
+
+</div>
+
+
+<script>
+    //监听input事件，获取range的value值，也可以直接element.value获取该range的值
+    var rangeList = document.querySelectorAll('input[type="range"]');
+    for(var i=0,len=rangeList.length;i<len;i++){
+        rangeList[i].addEventListener('input',function(){
+            if(this.id.indexOf('field')>=0){
+                document.getElementById(this.id+'-input').value = this.value;
+            }else{
+                document.getElementById(this.id+'-val').innerHTML = this.value;
+            }
+            
+
+        });
+    }
+
+    document.getElementById('field-range-input').addEventListener('input',function(){
+        document.getElementById('field-range').value = this.value;
+    });
+
+
+</script>
+</body>
+</html>

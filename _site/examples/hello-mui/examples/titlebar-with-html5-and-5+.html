@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<script>
+    mui.init({
+        optimize: false,
+        titleBar: {
+            title: 'Title bar with 5+(html5)'
+        }
+    });
+    $.ready(function() {
+        $.get('pulldown.html', function(response) {
+            var wrap = document.createElement('div');
+            wrap.innerHTML = response;
+            var content = wrap.querySelector('.mui-content');
+            document.body.appendChild(content);
+            //动态执行html中的script代码
+            var scripts = wrap.querySelectorAll('script');
+            for (var i = 0, len = scripts.length; i < len; i++) {
+                var script = document.createElement("script");
+                script.text = scripts[i].innerHTML;
+                document.head.appendChild(script).parentNode.removeChild(script);
+            }
+        });
+    });
+</script>
+</body>
+</html>

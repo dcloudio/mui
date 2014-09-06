@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<link rel="stylesheet" href="../css/oa.css">
+<style>
+    .mui-table h4, .mui-table h5, .mui-table .mui-h5, .mui-table .mui-h6, .mui-table p {
+        margin-top: 0;
+    }
+    .mui-table h4 {
+        line-height: 21px;
+        font-weight: 500;
+    }
+
+    .mui-table .oa-icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+    .mui-table .oa-icon-star-filled {
+        color: #f14e41;
+    }
+
+</style>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">通讯录</h1>
+</header>
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item mui-active" href="tabbar.html">
+        <span class="mui-icon mui-icon-phone"></span>
+        <span class="mui-tab-label">Phone</span>
+    </a>
+    <a class="mui-tab-item" href="tabbar-with-chat.html">
+        <span class="mui-icon mui-icon-chat"></span>
+        <span class="mui-tab-label">Chat</span>
+    </a>
+    <a class="mui-tab-item" href="tabbar-with-sms.html">
+        <span class="mui-icon mui-icon-sms"></span>
+        <span class="mui-tab-label">SMS</span>
+    </a>
+    <a class="mui-tab-item" href="tabbar-with-map.html">
+        <span class="mui-icon mui-icon-map"></span>
+        <span class="mui-tab-label">Map</span>
+    </a>
+</nav>
+<script type="text/javascript">
+    mui.plusReady(function(){
+        var webview = plus.webview.currentWebview();
+        var list = plus.webview.create('oa-contact-list.html', 'oa-list', {top:'45px',bottom:'50px'});
+        webview.append(list);
+    });
+    mui.init({optimize:false,swipeBack: false});
+</script>
+</body>
+</html>

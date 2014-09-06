@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">单选框（Radio）</h1>
+</header>
+<div class="mui-content">
+	<h5 class="mui-content-padded">图标左对齐</h5>
+	<div class="mui-card">
+		<form class="mui-input-group">
+			<div class="mui-input-row mui-radio mui-left">
+				<label>Radio</label>
+				<input name="radio1" type="radio">
+			</div>
+			<div class="mui-input-row mui-radio mui-left">
+				<label>Radio</label>
+				<input name="radio1" type="radio" checked>
+			</div>
+		</form>
+	</div>
+
+	<h5 class="mui-content-padded">图标右对齐</h5>
+	<div class="mui-card">
+		<form class="mui-input-group">
+			<div class="mui-input-row mui-radio">
+				<label>Radio</label>
+				<input name="radio1" type="radio">
+			</div>
+			<div class="mui-input-row mui-radio">
+				<label>Radio</label>
+				<input name="radio1" type="radio" checked>
+			</div>
+		</form>
+	</div>
+
+</div>
+</body>
+</html>

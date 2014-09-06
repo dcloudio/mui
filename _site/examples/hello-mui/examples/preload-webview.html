@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">Preload Webview with init</h1>
+</header>
+<div class="mui-content"></div>
+<script>
+	mui.init({
+		back : function() {//建议5+可以在创建窗体时，允许传进去自定义参数，然后获取该窗体可以访问该参数，这样mui就可以识别出是lazyload窗口。而不用自己写了
+			if (window.plus) {
+				content.innerHTML = '';
+				//隐藏后清空内容区
+				return {
+					preload : true
+				};
+			}
+		}
+	});
+	var content = document.querySelector('.mui-content');
+	function preload_webview(params) {
+		params = JSON.parse(params || JSON.stringify({
+			count : 10
+		}));
+		var nWaiting;
+		if (plus) {
+			//TODO 5+没有提供show动画之后的callback。所以这里暂时延迟400ms来显示动画
+			setTimeout(function() {
+				nWaiting = plus.nativeUI.showWaiting();
+			}, 400);
+		}
+		setTimeout(function() {
+			var html = [];
+			html.push('<div class="mui-card"><ul class="mui-table-view">');
+			for (var i = 0; i < params.count; i++) {
+				html.push('<li class="mui-table-view-cell"><a class="mui-navigate-right">Item ' + (i + 1) + '</a></li>');
+			}
+			html.push('</ul></div>');
+			content.innerHTML = html.join('');
+			if (nWaiting) {
+				nWaiting.close();
+			}
+		}, 2000);
+	}
+</script>
+</body>
+</html>

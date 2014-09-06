@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<style>
+	input, button, .mui-btn {
+		margin-top: 10px;
+		margin-left: 10px;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">按钮（Button）</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-content-padded">
+		<h5>有底色按钮：</h5>
+		<button class="mui-btn">
+			默认
+		</button>
+		<div class="mui-btn mui-btn-primary">
+			蓝色
+		</div>
+		<span class="mui-btn mui-btn-success">
+			绿色
+		</span>
+		<button class="mui-btn mui-btn-warning">
+			黄色
+		</button>
+		<button class="mui-btn mui-btn-danger">
+			红色
+		</button>
+		<button class="mui-btn mui-btn-royal">
+			紫色
+		</button>
+
+		<h5 style="margin-top: 10px;">无底色按钮（使用父元素的背景色）：</h5>	
+		<button class="mui-btn mui-btn-outlined">
+			默认
+		</button>
+		<button class="mui-btn mui-btn-primary mui-btn-outlined">
+			操作
+		</button>
+		<button class="mui-btn mui-btn-success mui-btn-outlined">
+			成功
+		</button>
+		<button class="mui-btn mui-btn-warning mui-btn-outlined">
+			警告
+		</button>
+		<button class="mui-btn mui-btn-danger mui-btn-outlined">
+			危险
+		</button>
+		<button class="mui-btn mui-btn-royal mui-btn-outlined">
+			高贵
+		</button>
+		<h5 style="margin-top: 15px;">链接按钮：</h5>	
+		<button class="mui-btn mui-btn-link">
+			添加
+		</button>
+		<h5 style="margin-top: 10px;">默认input标签样式：</h5>	
+		<input type="button" value="type=button" />
+		<input type="reset" value="type=reset" />
+		<input type="submit" value="type=submit" />
+		<h5 style="margin-top: 10px;">默认button标签样式：</h5>	
+		<button>按钮</button>
+
+	</div>
+</div>
+</body>
+</html>
