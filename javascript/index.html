@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-05 12:04:49 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-05 12:04:49 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-07 22:25:32 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-07 22:25:32 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -363,15 +363,14 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <!-- 预加载 -->
       <article id="preload" class="component mui-active">
       <h3 class="component-title">预加载</h3>
-      <p class="component-description">所谓的预加载技术就是在用户尚未触发页面跳转时，提前创建目标页面，这样当用户跳转时，就可以立即进行页面切换，节省创建新页面的时间，提升app使用体验。
-要进行页面预加载，可通过mui.init方法中的preloadPages参数进行配置.</p>
-
+      <p class="component-description">所谓的预加载技术就是在用户尚未触发页面跳转时，提前创建目标页面，这样当用户跳转时，就可以立即进行页面切换，节省创建新页面的时间，提升app使用体验。mui提供两种方式实现页面预加载。</p>
+      <p class="component-description">方式一：通过mui.init方法中的preloadPages参数进行配置.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">preloadPages</span><span class="o">:</span><span class="p">[</span>
     <span class="p">{</span>
-      <span class="nx">url</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
-      <span class="nx">id</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span>
+      <span class="nx">url</span><span class="o">:</span><span class="nx">prelaod</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
+      <span class="nx">id</span><span class="o">:</span><span class="nx">preload</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span>
       <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
       <span class="p">},</span>
       <span class="nx">subpages</span><span class="o">:</span><span class="p">[</span>
@@ -382,7 +381,33 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">]</span>
 <span class="p">});</span></code></pre></div>
 
-    <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a></p>
+    <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a>。</p>
+    <p class="component-description">方式二：通过mui.createWindow方法预加载.</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
+    <span class="nx">id</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//默认使用当前页面的url作为id</span>
+    <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
+      <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置，默认为0px</span>
+      <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
+      <span class="p">......</span>
+    <span class="p">},</span>
+    <span class="nx">preload</span><span class="o">:</span><span class="kc">true</span><span class="c1">//预加载标志，默认为false</span>
+<span class="p">})</span></code></pre></div>
+<p class="component-description">示例：Hello mui首页显示后，用户点击badge（数字角标）、checkbox（复选框）、dialog（消息框）三个页面时，不会出现waiting等待框，而是立即打开了新页面；但点击icon（图标）页面时，则会先显示waiting等待框，再进入新页面；这种效果就是因为使用了预加载技术，Hello mui设置首页最多允许预加载3个页面（preloadLimit为3），然后在首页plusReady事件后，预加载了前3个一级列表页面，，故有前面所述的体验效果；实现代码如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#list&gt;.mui-table-view-cell&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">//只预加载一级列表，二级列表在其展开时再预加载；</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="s1">&#39;mui-collapse&#39;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">);</span>
+    <span class="c1">//预加载，默认使用url作为其id</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">({</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span><span class="p">,</span>
+      <span class="nx">preload</span><span class="o">:</span> <span class="kc">true</span><span class="c1">//必需</span>
+    <span class="p">});</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">&gt;=</span> <span class="nx">limit</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
   </article>
     <!-- 下拉刷新 -->
       <article id="pullrefresh" class="component mui-active">
@@ -517,8 +542,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-05 12:04:49 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-05 12:04:49 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-07 22:25:32 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-07 22:25:32 +0800"></script>
 
     </div>
   </div>
