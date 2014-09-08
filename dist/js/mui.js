@@ -1072,6 +1072,7 @@ window.mui = mui;
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
+
 		if (!window.plus) {
 			return;
 		}
@@ -1595,7 +1596,7 @@ window.mui = mui;
 	var defaultOptions = {
 		down: {
 			height: 50,
-			contentdown: '下拉可以刷新',
+			contentdown: '下拉可刷新',
 			contentover: '释放立即刷新',
 			contentrefresh: '正在刷新...'
 		},
@@ -1770,9 +1771,9 @@ window.mui = mui;
 			self.translateY = Math.abs(self.translateY) < 2 ? 0 : self.translateY;
 			self.setTranslate(self.translateY);
 			if (Math.abs(self.translateY) >= Math.abs(self.pullOptions.height)) {
-				self.showLoading(CLASS_PULL_CAPTION_OVER);
+				self.setCaption(CLASS_PULL_CAPTION_OVER);
 			} else {
-				self.hideLoading(CLASS_PULL_CAPTION_DOWN);
+				self.setCaption(CLASS_PULL_CAPTION_DOWN);
 			}
 			self.lastTranslateY = self.translateY;
 		}
@@ -1795,7 +1796,7 @@ window.mui = mui;
 	PullRefresh.prototype.load = function() {
 		var self = this;
 		self.isLoading = true;
-		self.showLoading(CLASS_PULL_CAPTION_REFRESH);
+		self.setCaption(CLASS_PULL_CAPTION_REFRESH);
 		self.setTranslate(self.pullOptions.height);
 		var callback = self.pullOptions.callback;
 		callback && callback(function() {
@@ -1815,13 +1816,13 @@ window.mui = mui;
 		});
 	};
 
-	PullRefresh.prototype.showLoading = function(className) {
-		this.setCaption(className);
+	// PullRefresh.prototype.showLoading = function(className) {
+	// 	this.setCaption(className);
 
-	};
-	PullRefresh.prototype.hideLoading = function(className) {
-		this.setCaption(className);
-	};
+	// };
+	// PullRefresh.prototype.hideLoading = function(className) {
+	// 	this.setCaption(className);
+	// };
 
 	PullRefresh.prototype.setCaption = function(className) {
 		var pocket = this.pullOptions && this.pullOptions.height > 0 ? this.topPocket : this.bottomPocket;
