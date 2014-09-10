@@ -11,7 +11,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<style type="text/css">
-			#demos {
+			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
 				margin-top: -1px;
 			}
@@ -120,11 +120,11 @@
 								左右滑动分页样式
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<!--<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/oa-grid.html">
 								高度自适应示例
 							</a>
-						</li>
+						</li>-->
 					</ul>
 				</li>
 				
@@ -519,24 +519,25 @@
 					count = 0;
 					$('.mui-table-view a', this).each(function() {
 						var url = this.getAttribute("href");
-						//单独处理侧滑导航的index
-						if(~url.indexOf('offcanvas-')){
-							$.createWindow({
-								url: url,
-								styles:{
-									zindex:9999
-								},
-								preload: true
-							});
-						}else{
-							$.createWindow({
-								url: url,
-								preload: true
-							});
-						}
-						
-						if(++count>=limit){
+						if (~url.indexOf('.html')) {
+							//单独处理侧滑导航的index
+							if(~url.indexOf('offcanvas-')){
+								$.createWindow({
+									url: url,
+									styles:{
+										zindex:9999
+									},
+									preload: true
+								});
+							}else{
+								$.createWindow({
+									url: url,
+									preload: true
+								});
+							}
+							if(++count>=limit){
 							 return false;
+							}
 						}
 					});
 				});
