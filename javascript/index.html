@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-07 22:25:32 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-07 22:25:32 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-10 15:58:41 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-10 15:58:41 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -207,10 +207,12 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       ......
     },
     show:{
+      autoShow:true,//页面loaded事件发生后自动显示，默认为true
       aniShow:animationType,//页面显示动画，默认为”slide-in-right“；
       duration:animationTime//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
     },
     waiting:{
+      autoShow:true,//自动显示等待框，默认为true
       title:&#39;正在加载...&#39;,//等待对话框上显示的提示内容
       options:{
         width:waiting-dialog-widht,//等待框背景区域宽度，默认根据内容自动计算合适宽度
@@ -223,17 +225,17 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <strong>参数说明：</strong></p>
 <ul>
   <li>
-    <p>styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；</p>
+    styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；
   </li>
   <li>
-    <p>aniShow表示页面显示动画，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a></p>
+    show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
   </li>
     <li>
-    <p>waiting表示系统等待框，mui框架在打开新页面时等待框的处理逻辑为：显示等待框-->创建目标页面webview-->目标页面loaded事件发生-->关闭等待框；因此，只有当新页面为新创建页面（webview）时，会显示等待框，否则若为预加载好的页面，则直接显示目标页面，不会显示等待框。waiting中的参数：title表示等待框上的提示文字，options表示等待框显示参数，比如宽高、背景色、提示文字颜色等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/nativeUI.shtml#plus.nativeUI.WaitingOption">5+规范中的WaitingOption</a>。</p>
+    <p>waiting表示系统等待框；mui框架在打开新页面时等待框的处理逻辑为：显示等待框-->创建目标页面webview-->目标页面loaded事件发生-->关闭等待框；因此，只有当新页面为新创建页面（webview）时，会显示等待框，否则若为预加载好的页面，则直接显示目标页面，不会显示等待框。waiting中的参数：autoShow表示自动显示等待框，默认为true，若为false，则不显示等待框；注意：若显示了等待框，但目标页面不自动显示，则需在目标页面中通过如下代码关闭等待框<code>plus.nativeUI.closeWaiting();</code>。title表示等待框上的提示文字，options表示等待框显示参数，比如宽高、背景色、提示文字颜色等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/nativeUI.shtml#plus.nativeUI.WaitingOption">5+规范中的WaitingOption</a>。</p>
   </li>
 </ul>
 <p class="component-description">
-<strong>示例：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
+<strong>示例1：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//tap为mui封装的单击事件，可参考手势事件章节</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">//打开关于页面</span>
@@ -243,6 +245,31 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">});</span>
 <span class="p">});</span></code></pre></div>
 <p class="component-description">因没有传入styles参数，故默认全屏显示；也没有传入show参数，故使用slide-in-right动画，新页面从右侧滑入。</p>
+
+
+<p class="component-description">
+<strong>示例2：</strong>从A页面打开B页面，B页面为一个需要从服务端加载的列表页面，若在B页面loaded事件发生时就将其显示出来，因服务器数据尚未加载完毕，列表页面为空，用户体验不好；可通过如下方式改善用户体验（最好的用户体验应该是通过<a href="#preload">预加载</a>的方式）：第一步，B页面loaded事件发生后，不自动显示；</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//A页面中打开B页面，设置show的autoShow为false，则B页面在其loaded事件发生后，不会自动显示；</span>
+<span class="nx">mui</span><span class="p">.</span><span class="nx">openWindow</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;B.html&#39;</span><span class="p">,</span> 
+    <span class="nx">show</span><span class="o">:</span><span class="p">{</span>
+      <span class="nx">autoShow</span><span class="o">:</span><span class="kc">false</span>
+    <span class="p">}</span>
+  <span class="p">});</span></code></pre></div>
+<p>第二步，在B页面获取列表数据后，再关闭等待框、显示B页面</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//B页面onload从服务器获取列表数据；</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">//从服务器获取数据</span>
+  <span class="p">....</span>
+  <span class="c1">//业务数据获取完毕，并已插入当前页面DOM；</span>
+  <span class="c1">//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；</span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">//关闭等待框</span>
+    <span class="nx">plus</span><span class="p">.</span><span class="nx">nativeUI</span><span class="p">.</span><span class="nx">closeWaiting</span><span class="p">();</span>
+    <span class="c1">//显示当前页面</span>
+    <span class="nx">mui</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
     </article> 
     <!-- 关闭页面 -->
     <article id="closewindow" class="component mui-active">
@@ -440,7 +467,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码；</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
      <span class="nx">callback</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
@@ -542,8 +569,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-07 22:25:32 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-07 22:25:32 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-10 15:58:41 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-10 15:58:41 +0800"></script>
 
     </div>
   </div>
