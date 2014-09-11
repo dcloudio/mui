@@ -61,7 +61,7 @@
 	  
 	  document.getElementById("promptBtn").addEventListener('tap',function(){
 	  	var btnArray = ['确定','取消'];
-	  	mui.prompt('请输入你对MUI的评语：','性能好',btnArray,function(e){
+	  	mui.prompt('请输入你对MUI的评语：','性能好','Hello MUI',btnArray,function(e){
 	  		if(e.index==0){
 	  			info.innerText = '谢谢你的评语：'+e.value;
 	  		}else{
