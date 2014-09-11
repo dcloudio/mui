@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.5 (https://github.com/dcloudio/mui)
+ * Mui v0.5.6 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -957,6 +957,7 @@ window.mui = mui;
 
 	//默认页面动画
 	var defaultShow = {
+		autoShow:true,
 		duration:$.os.ios?200:100,
 		aniShow: 'slide-in-right'
 	}
@@ -976,7 +977,10 @@ window.mui = mui;
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend({}, options);
+		return $.extend({
+			autoShow:true,
+			title:''
+		}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -1090,91 +1094,62 @@ window.mui = mui;
 		}
 		options = options || {};
 		var params = options.params || {};
-		var webview,nShow;
+		var webview,nShow,nWaiting;
 		if ($.webviews[id]) { //已缓存
 			var webviewCache = $.webviews[id];
-			if (webviewCache.preload) { //预加载
-				webview = webviewCache.webview;
-				//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
-				if(!webview||!webview.getURL()){
-					//再次新建一个webview；
-					options = $.extend(options, {
-						id: id,
-						url: url,
-						showAfterLoad: options.showAfterLoad === false ? false : true,
-						preload:true
-
-					});
-					webview = $.createWindow(options);
-				}
-				//每次show都需要传递动画参数；
-				//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
-				nShow = webviewCache.show;
-				nShow = options.show?$.extend(nShow, options.show):nShow;
-				
-				webview.show(nShow.aniShow, nShow.duration, function() {
-					triggerPreload(webview);
-					trigger(webview,'pagebeforeshow',false);
-				});
-				//TODO 预加载模式，暂不隐藏父窗口，bug太多
-				//TODO 最好不要让MUI处理这种东西，统一处理窗口隐藏
-				//				setTimeout(function() {
-				//					console.log('webview.isVisible()1::::' + webview.isVisible());
-				//					if (webview.isVisible() === 'true') {//只有当前窗口显示的状态，才隐藏父窗口(解决在show动画过程中，执行后退导致的父窗口被关闭没有显示问题)
-				//						console.log('webview.isVisible()2::::' + webview.isVisible());
-				//						var wobj = plus.webview.currentWebview();
-				//						var parent = wobj.parent();
-				//						if (parent) {
-				//							parent.hide();
-				//						} else {
-				//							wobj.hide();
-				//						}
-				//					}//哎。多增加点时间。否则会发现提前hide主窗口后，动画还没结束，导致看到了主屏幕
-				//				}, webviewCache.show.duration + 1000);
-
-				webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
-				return this;
-			} else { //非预加载
-				//将当前传入的options覆盖之前缓存的
-				options = $.extend(webviewCache, $.extend(options, {
+			webview = webviewCache.webview;
+			//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
+			if(!webview||!webview.getURL()){
+				//再次新建一个webview；
+				options = $.extend(options, {
 					id: id,
 					url: url,
-					showAfterLoad: options.showAfterLoad === false ? false : true
-				}));
+					preload:true
+
+				});
 				webview = $.createWindow(options);
 			}
+			//每次show都需要传递动画参数；
+			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
+			nShow = webviewCache.show;
+			nShow = options.show?$.extend(nShow, options.show):nShow;
+			
+			webview.show(nShow.aniShow, nShow.duration, function() {
+				triggerPreload(webview);
+				trigger(webview,'pagebeforeshow',false);
+			});
+
+			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			return webview;
 		} else { //新窗口
+			//显示waiting
+			var waitingConfig = $.waitingOptions(options.waiting);
+			if(waitingConfig.autoShow){
+				nWaiting = plus.nativeUI.showWaiting(waitingConfig.title, waitingConfig.options);
+			}
+			//创建页面
 			options = $.extend(options, {
 				id: id,
-				url: url,
-				showAfterLoad: options.showAfterLoad === false ? false : true
+				url: url
 			});
 			webview = $.createWindow(options);
-		}
-		if (options.showAfterLoad) {
-			var waitingConfig = $.waitingOptions(options.waiting);
-			var nWaiting = plus.nativeUI.showWaiting(waitingConfig.title || '', waitingConfig.options);
+			//显示
 			nShow = $.showOptions(options.show);
-			webview.addEventListener("loaded", function() {
-				nWaiting.close();
-				webview.show(nShow.aniShow, nShow.duration, function() {
-					triggerPreload(webview);
-					trigger(webview,'pagebeforeshow',false);
-				});
-				webview.showed = true;
-				options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
-				//TODO 最好不要让MUI处理这种东西，统一处理窗口隐藏
-				//				setTimeout(function() {
-				//					var wobj = plus.webview.currentWebview();
-				//					var parent = wobj.parent();
-				//					if (parent) {
-				//						parent.hide();
-				//					} else {
-				//						wobj.hide();
-				//					}
-				//				}, nShow.duration);
-
-			}, false);
+			if(nShow.autoShow){
+				webview.addEventListener("loaded", function() {
+					//关闭等待框
+					if(nWaiting){
+						nWaiting.close();	
+					}
+					//显示页面
+					webview.show(nShow.aniShow, nShow.duration, function() {
+						triggerPreload(webview);
+						trigger(webview,'pagebeforeshow',false);
+					});
+					webview.showed = true;
+					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+				}, false);
+			}
 		}
 		return webview;
 	};
@@ -1236,9 +1211,6 @@ window.mui = mui;
 				delete $.webviews[first];
 			}
 		} else {
-			//暂不支持存储配置，因为配置也占据预加载限额，需要细分；
-			//非预加载的webview存储窗口配置
-			// $.webviews[id] = options;
 			if (isCreate !== false) { //直接创建非预加载窗口
 				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles));
 				if (options.subpages) {
@@ -1596,7 +1568,7 @@ window.mui = mui;
 	var defaultOptions = {
 		down: {
 			height: 50,
-			contentdown: '下拉可以刷新',
+			contentdown: '下拉可刷新',
 			contentover: '释放立即刷新',
 			contentrefresh: '正在刷新...'
 		},
@@ -1771,9 +1743,9 @@ window.mui = mui;
 			self.translateY = Math.abs(self.translateY) < 2 ? 0 : self.translateY;
 			self.setTranslate(self.translateY);
 			if (Math.abs(self.translateY) >= Math.abs(self.pullOptions.height)) {
-				self.showLoading(CLASS_PULL_CAPTION_OVER);
+				self.setCaption(CLASS_PULL_CAPTION_OVER);
 			} else {
-				self.hideLoading(CLASS_PULL_CAPTION_DOWN);
+				self.setCaption(CLASS_PULL_CAPTION_DOWN);
 			}
 			self.lastTranslateY = self.translateY;
 		}
@@ -1796,7 +1768,7 @@ window.mui = mui;
 	PullRefresh.prototype.load = function() {
 		var self = this;
 		self.isLoading = true;
-		self.showLoading(CLASS_PULL_CAPTION_REFRESH);
+		self.setCaption(CLASS_PULL_CAPTION_REFRESH);
 		self.setTranslate(self.pullOptions.height);
 		var callback = self.pullOptions.callback;
 		callback && callback(function() {
@@ -1816,13 +1788,13 @@ window.mui = mui;
 		});
 	};
 
-	PullRefresh.prototype.showLoading = function(className) {
-		this.setCaption(className);
+	// PullRefresh.prototype.showLoading = function(className) {
+	// 	this.setCaption(className);
 
-	};
-	PullRefresh.prototype.hideLoading = function(className) {
-		this.setCaption(className);
-	};
+	// };
+	// PullRefresh.prototype.hideLoading = function(className) {
+	// 	this.setCaption(className);
+	// };
 
 	PullRefresh.prototype.setCaption = function(className) {
 		var pocket = this.pullOptions && this.pullOptions.height > 0 ? this.topPocket : this.bottomPocket;
@@ -2472,7 +2444,7 @@ window.mui = mui;
 
 	window.addEventListener('tap', function(e) {
 
-		var targetTab = $.targets[name];
+		var targetTab = $.targets.tab;
 		if (!targetTab) {
 			return;
 		}
@@ -2502,24 +2474,23 @@ window.mui = mui;
 		if (!targetBody) {
 			return;
 		}
-		//选项卡含二级菜单的情况，再次点击要隐藏子菜单
-		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {
+		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {//tab bar popover
 			targetTab.classList[isLastActive ? 'remove' : 'add'](className);
 			return;
 		}
 		if (isLastActive) {//same
 			return;
 		}
-		//隐藏之前显示内容区
 		activeBodies = targetBody.parentNode.getElementsByClassName(className);
+
 		for (var i = 0; i < activeBodies.length; i++) {
 			activeBodies[i].classList.remove(className);
 		}
-		//显示目标内容区
+
 		targetBody.classList.add(className);
 
 		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-		//触发可拖动式选项卡的切换事件
+		
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber : Array.prototype.indexOf.call(contents, targetBody)
 		})
@@ -3803,20 +3774,23 @@ window.mui = mui;
 		if (window.plus) {
 			var wobj = $.currentWebview;
 			var parent = wobj.parent();
+			if (parent) {
+				wobj = parent;
+			}
 			wobj.canBack(function(e) {
-				if (e.canBack) {//webview history back
-					window.history.back();
-				} else {//webview close or hide
+				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
+				// if (e.canBack) {//webview history back
+				// 	window.history.back();
+				// } else {//webview close or hide
 					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
-					if (parent) {
-						wobj = parent;
-					}
+					
 					var opener = wobj.opener();
 					if (opener) {
-						var openerParent = opener.parent();
-						if (openerParent) {
-							opener = openerParent;
-						}
+						//by chb 暂不自动处理老页面的隐藏；
+						// var openerParent = opener.parent();
+						// if (openerParent) {
+						// 	opener = openerParent;
+						// }
 						if (wobj.preload) {
 							wobj.hide("auto");
 						} else {
@@ -3830,7 +3804,7 @@ window.mui = mui;
 						//这个交给项目具体实现，框架暂不处理；
 						//plus.runtime.quit();
 					}
-				}
+				// }
 			});
 
 		} else if (window.history.length > 1) {

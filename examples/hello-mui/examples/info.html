@@ -12,8 +12,7 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<style>
-			html,
-			body {
+			html,body {
 				background-color: #efeff4;
 			}
 		</style>
@@ -46,7 +45,7 @@
 		</p>
 		<p>更多详细介绍，请到<a href="http://dcloudio.github.io/mui">mui官网</a>查看；</p>
 		<h4>版本介绍</h4>
-		<p>当前版本为0.5.5，可到<a href="https://github.com/dcloudio/mui">Github</a>上获取最新版本。</p>
+		<p>当前版本为0.5.6，可到<a href="https://github.com/dcloudio/mui">Github</a>上获取最新版本。</p>
 		<h4>License</h4>
 		<p >
 			mui遵循MIT License，源码已提交至Github，<a href="https://github.com/dcloudio/mui">点击查看</a>;
@@ -66,5 +65,19 @@
             	margin-left: 5px;
             }
 </style>
+<script type="text/javascript" charset="utf-8">
+	//处理点击事件，需要打开原生浏览器
+	$('body').on('tap', 'a', function(e) {
+		var href = this.getAttribute('href');
+		if (href) {
+			if(window.plus){
+				plus.runtime.openURL(href);
+			}else{
+				location.href = href;
+			}
+		}
+	});
+</script>
+
 </body>
 </html>

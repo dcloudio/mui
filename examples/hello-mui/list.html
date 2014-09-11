@@ -11,7 +11,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<style type="text/css">
-			#demos {
+			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
 				margin-top: -1px;
 			}
@@ -20,7 +20,7 @@
 
 	<body>
 		<div class="mui-content">
-			<ul id="demos" class="mui-table-view mui-table-view-chevron">
+			<ul id="list" class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/badges.html">
 						badge（数字角标）
@@ -120,11 +120,11 @@
 								左右滑动分页样式
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<!--<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/oa-grid.html">
 								高度自适应示例
 							</a>
-						</li>
+						</li>-->
 					</ul>
 				</li>
 				
@@ -438,21 +438,13 @@
 				</ul>
 				</li>-->
 
-				
-
 				<!--<li class="mui-table-view-cell">
 				<a class="mui-navigate-right" href="examples/modals.html">
 				弹出窗口（Modals）
 				</a>
 				</li>-->
 				
-				
 
-				
-
-				
-
-				
 				<!--<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/preload.html">
 
@@ -500,76 +492,71 @@
 			</ul>
 		</div>
 		<script>
+			var limit = 3,count = 0;
 			mui.init({
-				preloadLimit: 3, //同时并存10个预加载窗口
+				preloadLimit: limit, //同时并存的预加载窗口数量
 				swipeBack: false,
 			});
-			 //TODO 等show，hide事件，动画都完成后放开预加载
-			(function($) {
-				$.plusReady(function() {
-					//初始化所有一级列表的预加载
-					var demos = document.getElementById('demos');
-					if ($.os.android) {
-						var count = 0;
-						$('.mui-table-view-cell', demos).each(function() {
-							if (!this.classList.contains('mui-collapse')) {
-								if (this.parentNode === demos) {
-									var a = this.querySelector('a');
-									var id = a.getAttribute('href');
-									if (~id.indexOf('.html') && !~$.data.preloads.indexOf(id)) { //如果没在缓存，则创建预加载
-										var url = a.href;
-										//延迟100ms处理，避免影响操作流畅
-										setTimeout(function() {
-											$.createWindow({
-												id: id,
-												url: url,
-												preload: true
-											});
-										}, (count++) * 100);
-										if (count >= 3) {
-											return false;
-										}
-									}
-								}
-							}
+			$.plusReady(function() {
+				//初始化一级列表的预加载
+				$('#list>.mui-table-view-cell', document.body).each(function() {
+					//只预加载一级列表，二级列表在其展开时再预加载；
+					if (!this.classList.contains('mui-collapse')) {
+						var url = this.querySelector('a').getAttribute("href");
+						//预加载，默认使用url作为其id
+						$.createWindow({
+							url: url,
+							preload: true
 						});
-
-						//监听展开事件
-						$('#demos').on('expand', '.mui-collapse', function(e) {
-							count = 0;
-							$('.mui-table-view a', this).each(function() {
-								var id = this.getAttribute('href');
-								if (~id.indexOf('.html') && !~$.data.preloads.indexOf(id)) { //如果没在缓存，则创建预加载
-									var url = this.href;
-									//延迟100ms处理，避免影响操作流畅
-									setTimeout(function() {
-										$.createWindow({
-											id: id,
-											url: url,
-											preload: true
-										});
-									}, (count++) * 100);
-								}
-							});
-						});
-					}
-
-					// 关闭启动界面
-					plus.navigator.closeSplashscreen();
-					//下拉刷新两个平台有区别；
-					if ($.os.ios) {
-						document.getElementById('pull-refresh-pandora').style.display = "none";
-					} else if ($.os.android) {
-						document.getElementById('pull-refresh-h5').style.display = "none";
-						var list = document.querySelectorAll('.ios-only');
-						if(list){
-							for(var i=0;i<list.length;i++){
-								list[i].style.display = 'none';
-							}
+						if (++count >= limit) {
+							return false;
 						}
 					}
 				});
-			})(mui);
+
+				//监听展开事件,预加载二级列表的前几个；
+				$('#list').on('expand', '.mui-collapse', function(e) {
+					count = 0;
+					$('.mui-table-view a', this).each(function() {
+						var url = this.getAttribute("href");
+						if (~url.indexOf('.html')) {
+							//单独处理侧滑导航的index
+							if(~url.indexOf('offcanvas-')){
+								$.createWindow({
+									url: url,
+									styles:{
+										zindex:9999
+									},
+									preload: true
+								});
+							}else{
+								$.createWindow({
+									url: url,
+									preload: true
+								});
+							}
+							if(++count>=limit){
+							 return false;
+							}
+						}
+					});
+				});
+
+				// 关闭启动界面
+				plus.navigator.closeSplashscreen();
+				//下拉刷新两个平台有区别；
+				if ($.os.ios) {
+					document.getElementById('pull-refresh-pandora').style.display = "none";
+				} else if ($.os.android) {
+					document.getElementById('pull-refresh-h5').style.display = "none";
+					var list = document.querySelectorAll('.ios-only');
+					if(list){
+						for(var i=0;i<list.length;i++){
+							list[i].style.display = 'none';
+						}
+					}
+				}
+			});
 			
 	/**
 	 * 处理链接点击事件
@@ -586,15 +573,15 @@
 								id: id,
 								url: this.href,
 								styles:{
-									zindex:9999,
+									zindex:9999
 								},
-								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+								preload: true 
 							});
 						}else{
 							$.openWindow({
 								id: id,
 								url: this.href,
-								preload: $.os.ios ? false : true //TODO 暂时屏蔽IOS的预加载
+								preload:true 
 							});
 						}
 					} else {
