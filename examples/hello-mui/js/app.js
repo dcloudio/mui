@@ -2,10 +2,8 @@
 	//全局配置(通常所有页面引用该配置，特殊页面使用mui.init({})来覆盖全局配置)
 	$.initGlobal({
 		optimize: true,
-		swipeBack: true,
-		showAfterLoad: true
+		swipeBack: true
 	});
-
 })(mui);
 
 /**

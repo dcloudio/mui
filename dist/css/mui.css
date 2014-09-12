@@ -2837,14 +2837,6 @@ select {
   content: "\e360";
 }
 
-.mui-icon-volumehigh:before {
-  content: "\e361";
-}
-
-.mui-icon-volumelow:before {
-  content: "\e362";
-}
-
 .mui-icon-image:before {
   content: "\e363";
 }
@@ -2969,10 +2961,6 @@ select {
   content: "\e466";
 }
 
-.mui-icon-searchstrong:before {
-  content: "\e467";
-}
-
 .mui-icon-plusempty:before {
   content: "\e468";
 }
@@ -2987,10 +2975,6 @@ select {
 
 .mui-icon-checkmarkempty:before {
   content: "\e472";
-}
-
-.mui-icon-share:before {
-  content: "\e473";
 }
 
 .mui-icon-home:before {
@@ -3053,10 +3037,6 @@ select {
   content: "\e560";
 }
 
-.mui-icon-settingsstrong:before {
-  content: "\e561";
-}
-
 .mui-icon-list:before {
   content: "\e562";
 }
@@ -3065,16 +3045,8 @@ select {
   content: "\e563";
 }
 
-.mui-icon-more-vertical:before {
-  content: "\e564";
-}
-
 .mui-icon-loop:before {
   content: "\e565";
-}
-
-.mui-icon-loopstrong:before {
-  content: "\e566";
 }
 
 .mui-icon-paperclip:before {
