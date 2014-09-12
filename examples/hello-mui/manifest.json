@@ -107,7 +107,7 @@
 	},
 	"plus": {
 		"splashscreen": {
-			"autoclose": true,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
+			"autoclose": false,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
 			"waiting": true/*autoclose设置为false时生效，在此事件后，启动图片自动关闭，单位为毫秒*/
 		},
 		"runmode": "liberate",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
