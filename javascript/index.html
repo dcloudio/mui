@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-12 16:09:59 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-12 16:09:59 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-12 17:26:05 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-12 17:26:05 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -131,13 +131,15 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
       <span class="nx">url</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span><span class="c1">//子页面HTML地址，支持本地地址和网络地址</span>
       <span class="nx">id</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//子页面标志</span>
       <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
-        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置，默认为0px</span>
-        <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
+        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置</span>
+        <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面底部位置</span>
+        <span class="nx">width</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">width</span><span class="p">,</span><span class="c1">//子页面宽度，默认为100%</span>
+        <span class="nx">height</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">height</span><span class="p">,</span><span class="c1">//子页面高度，默认为100%</span>
         <span class="p">......</span>
       <span class="p">}</span>
     <span class="p">}]</span>
   <span class="p">});</span></code></pre></div>
-<p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；</p>
+<p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。</p>
       <p class="component-description"><strong>示例：</strong>Hello mui的首页其实就是index.html加list.html合并而成的，如下：</p>
       <div id="subpage-demo">
         <div>
@@ -202,8 +204,10 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     url:new-page-url,
     id:new-page-id,
     styles:{
-      top:subpage-top-position,//子页面顶部位置，默认为0px
-      bottom:subpage-bottom-position,
+      top:newpage-top-position,//新页面顶部位置
+      bottom:newage-bottom-position,//新页面顶部位置
+      width:newpage-width,//新页面宽度，默认为100%
+      height:newpage-height,//新页面高度，默认为100%
       ......
     },
     show:{
@@ -225,7 +229,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <strong>参数说明：</strong></p>
 <ul>
   <li>
-    styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；
+    styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。
   </li>
   <li>
     show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
@@ -280,8 +284,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <p class="component-description">mui框架同时实现了页面的右滑关闭功能，默认未启用，若要使用右滑关闭功能，需要在<code>mui.init();</code>方法中设置swipeBack参数，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
 	<span class="nx">swipeBack</span><span class="o">:</span><span class="kc">true</span> <span class="c1">//启用右滑关闭功能</span>
-<span class="p">});</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">});</span></code></pre></div>
 <p class="component-description">若希望自定义关闭事件，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
@@ -575,8 +578,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-12 16:09:59 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-12 16:09:59 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-12 17:26:05 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-12 17:26:05 +0800"></script>
 
     </div>
   </div>
