@@ -1826,7 +1826,7 @@ select {
   color: #007aff;
 }
 
-.mui-radio input[type="radio"]:before, .mui-checkbox.mui-checkbox-cycle input[type="checkbox"]:before {
+.mui-radio input[type="radio"]:before {
   content: "\e411";
 }
 
@@ -1835,14 +1835,10 @@ select {
 }
 
 .mui-checkbox input[type="checkbox"]:before {
-  content: "\e413";
+  content: "\e411";
 }
 
 .mui-checkbox input[type="checkbox"]:checked:before {
-  content: "\e443";
-}
-
-.mui-checkbox-cycle input[type="checkbox"]:checked:before {
   content: "\e442";
 }
 
@@ -2889,16 +2885,8 @@ select {
   content: "\e410";
 }
 
-.mui-icon-circle:before {
+.mui-icon-circle:before, .mui-icon-checkbox:before {
   content: "\e411";
-}
-
-.mui-icon-checkmark:before {
-  content: "\e412";
-}
-
-.mui-icon-checkbox:before {
-  content: "\e413";
 }
 
 .mui-icon-close-filled:before, .mui-icon-clear:before {
@@ -2925,12 +2913,8 @@ select {
   content: "\e441";
 }
 
-.mui-icon-checkmark-filled:before {
-  content: "\e442";
-}
-
 .mui-icon-checkbox-filled:before {
-  content: "\e443";
+  content: "\e442";
 }
 
 .mui-icon-closeempty:before {
