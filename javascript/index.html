@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-07 22:25:32 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-07 22:25:32 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-13 19:37:35 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-13 19:37:35 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -111,7 +111,7 @@
     <!-- 页面初始化 -->
     <article class="component mui-active" id="pageinit">
 	<h3 class="component-title">页面初始化</h3>
-	<p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#closepage">关闭页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>。</p>
+	<p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#closewindow">关闭页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>。</p>
 	<p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
@@ -131,13 +131,15 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
       <span class="nx">url</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span><span class="c1">//子页面HTML地址，支持本地地址和网络地址</span>
       <span class="nx">id</span><span class="o">:</span><span class="nx">your</span><span class="o">-</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//子页面标志</span>
       <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
-        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置，默认为0px</span>
-        <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
+        <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置</span>
+        <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面底部位置</span>
+        <span class="nx">width</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">width</span><span class="p">,</span><span class="c1">//子页面宽度，默认为100%</span>
+        <span class="nx">height</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">height</span><span class="p">,</span><span class="c1">//子页面高度，默认为100%</span>
         <span class="p">......</span>
       <span class="p">}</span>
     <span class="p">}]</span>
   <span class="p">});</span></code></pre></div>
-<p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；</p>
+<p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。</p>
       <p class="component-description"><strong>示例：</strong>Hello mui的首页其实就是index.html加list.html合并而成的，如下：</p>
       <div id="subpage-demo">
         <div>
@@ -202,15 +204,19 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     url:new-page-url,
     id:new-page-id,
     styles:{
-      top:subpage-top-position,//子页面顶部位置，默认为0px
-      bottom:subpage-bottom-position,
+      top:newpage-top-position,//新页面顶部位置
+      bottom:newage-bottom-position,//新页面顶部位置
+      width:newpage-width,//新页面宽度，默认为100%
+      height:newpage-height,//新页面高度，默认为100%
       ......
     },
     show:{
+      autoShow:true,//页面loaded事件发生后自动显示，默认为true
       aniShow:animationType,//页面显示动画，默认为”slide-in-right“；
       duration:animationTime//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
     },
     waiting:{
+      autoShow:true,//自动显示等待框，默认为true
       title:&#39;正在加载...&#39;,//等待对话框上显示的提示内容
       options:{
         width:waiting-dialog-widht,//等待框背景区域宽度，默认根据内容自动计算合适宽度
@@ -223,17 +229,17 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <strong>参数说明：</strong></p>
 <ul>
   <li>
-    <p>styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；</p>
+    styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。
   </li>
   <li>
-    <p>aniShow表示页面显示动画，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a></p>
+    show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
   </li>
     <li>
-    <p>waiting表示系统等待框，mui框架在打开新页面时等待框的处理逻辑为：显示等待框-->创建目标页面webview-->目标页面loaded事件发生-->关闭等待框；因此，只有当新页面为新创建页面（webview）时，会显示等待框，否则若为预加载好的页面，则直接显示目标页面，不会显示等待框。waiting中的参数：title表示等待框上的提示文字，options表示等待框显示参数，比如宽高、背景色、提示文字颜色等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/nativeUI.shtml#plus.nativeUI.WaitingOption">5+规范中的WaitingOption</a>。</p>
+    <p>waiting表示系统等待框；mui框架在打开新页面时等待框的处理逻辑为：显示等待框-->创建目标页面webview-->目标页面loaded事件发生-->关闭等待框；因此，只有当新页面为新创建页面（webview）时，会显示等待框，否则若为预加载好的页面，则直接显示目标页面，不会显示等待框。waiting中的参数：autoShow表示自动显示等待框，默认为true，若为false，则不显示等待框；注意：若显示了等待框，但目标页面不自动显示，则需在目标页面中通过如下代码关闭等待框<code>plus.nativeUI.closeWaiting();</code>。title表示等待框上的提示文字，options表示等待框显示参数，比如宽高、背景色、提示文字颜色等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/nativeUI.shtml#plus.nativeUI.WaitingOption">5+规范中的WaitingOption</a>。</p>
   </li>
 </ul>
 <p class="component-description">
-<strong>示例：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
+<strong>示例1：</strong>Hello mui中，点击首页右上角的图标，会打开关于页面，实现代码如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//tap为mui封装的单击事件，可参考手势事件章节</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;info&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">//打开关于页面</span>
@@ -243,13 +249,43 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">});</span>
 <span class="p">});</span></code></pre></div>
 <p class="component-description">因没有传入styles参数，故默认全屏显示；也没有传入show参数，故使用slide-in-right动画，新页面从右侧滑入。</p>
+
+
+<p class="component-description">
+<strong>示例2：</strong>从A页面打开B页面，B页面为一个需要从服务端加载的列表页面，若在B页面loaded事件发生时就将其显示出来，因服务器数据尚未加载完毕，列表页面为空，用户体验不好；可通过如下方式改善用户体验（最好的用户体验应该是通过<a href="#preload">预加载</a>的方式）：第一步，B页面loaded事件发生后，不自动显示；</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//A页面中打开B页面，设置show的autoShow为false，则B页面在其loaded事件发生后，不会自动显示；</span>
+<span class="nx">mui</span><span class="p">.</span><span class="nx">openWindow</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;B.html&#39;</span><span class="p">,</span> 
+    <span class="nx">show</span><span class="o">:</span><span class="p">{</span>
+      <span class="nx">autoShow</span><span class="o">:</span><span class="kc">false</span>
+    <span class="p">}</span>
+  <span class="p">});</span></code></pre></div>
+<p>第二步，在B页面获取列表数据后，再关闭等待框、显示B页面</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//B页面onload从服务器获取列表数据；</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">//从服务器获取数据</span>
+  <span class="p">....</span>
+  <span class="c1">//业务数据获取完毕，并已插入当前页面DOM；</span>
+  <span class="c1">//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；</span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">//关闭等待框</span>
+    <span class="nx">plus</span><span class="p">.</span><span class="nx">nativeUI</span><span class="p">.</span><span class="nx">closeWaiting</span><span class="p">();</span>
+    <span class="c1">//显示当前页面</span>
+    <span class="nx">mui</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
     </article> 
     <!-- 关闭页面 -->
     <article id="closewindow" class="component mui-active">
   <h3 class="component-title">关闭页面</h3>
   <p class="component-description">mui框架已封装好窗口关闭逻辑，hbuilder中敲<code>mheader</code>自动生成的代码块，会自动生成带有返回导航箭头的标题栏，点击返回箭头可关闭当前页面。mui会监听包含<code>.mui-action-back</code>类的控件的点击事件，点击后会执行关闭窗口逻辑；因此，若希望在顶部导航栏之外的其它区域添加关闭页面的控件，只需要在对应控件上添加<code>.mui-action-back</code>类即可，如下为一个关闭按钮示例：</p>
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&#39;mui-btn mui-btn-danger mui-action-back&#39;</span><span class="nt">&gt;</span>关闭<span class="nt">&lt;/button&gt;</span></code></pre></div>
-<p class="component-description">另一方面，也可以直接调用<code>mui.back()</code>方法，执行mui已封装好的窗口关闭逻辑；若希望自定义关闭事件，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
+<p class="component-description">另一方面，也可以直接调用<code>mui.back()</code>方法，执行mui已封装好的窗口关闭逻辑；</p>
+<p class="component-description">mui框架同时实现了页面的右滑关闭功能，默认未启用，若要使用右滑关闭功能，需要在<code>mui.init();</code>方法中设置swipeBack参数，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+	<span class="nx">swipeBack</span><span class="o">:</span><span class="kc">true</span> <span class="c1">//启用右滑关闭功能</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">若希望自定义关闭事件，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;确定&quot;</span><span class="p">,</span><span class="s2">&quot;取消&quot;</span><span class="p">];</span>
@@ -355,7 +391,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       <h3 class="component-title">事件监听</h3>
       <p class="component-description">同标准click事件一样，上述手势事件支持添加到任意DOM对象上，如下为一个示例：</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">elem</span><span class="p">.</span><span class="nx">addEventLisener</span><span class="p">(</span><span class="s2">&quot;swipeleft&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">elem</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;swipeleft&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;你正在向左滑动&quot;</span><span class="p">);</span>
 <span class="p">});</span></code></pre></div>
 
@@ -440,7 +476,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码；</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
      <span class="nx">callback</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
@@ -531,7 +567,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</p>
 
 	<ul class="docs-footer-links">
-		<li>最新版本 v0.5.4</li>
+		<li>最新版本 v0.5.6</li>
 		<li>&middot;</li>
 		<li><a href="https://github.com/dcloudio/mui/issues">Issues</a>
 		</li>
@@ -542,8 +578,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-07 22:25:32 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-07 22:25:32 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-13 19:37:35 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-13 19:37:35 +0800"></script>
 
     </div>
   </div>
