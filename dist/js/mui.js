@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.4 (https://github.com/dcloudio/mui)
+ * Mui v0.5.6 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -19,12 +19,14 @@ var mui = (function(document, undefined) {
 		context = context || document;
 		if (!selector)
 			return wrap();
-		if ( typeof selector === 'object')
+		if (typeof selector === 'object')
 			return wrap([selector], null);
+		if (typeof selector === 'function')
+			return $.ready(selector);
 		try {
 			if (idSelectorRE.test(selector)) {
-				var found = context.getElementById(RegExp.$1);
-				return wrap( found ? [found] : []);
+				var found = document.getElementById(RegExp.$1);
+				return wrap(found ? [found] : []);
 			}
 			return wrap($.qsa(selector, context), selector);
 		} catch (e) {
@@ -58,13 +60,13 @@ var mui = (function(document, undefined) {
 			source = {};
 		}
 		for (var key in source)
-		if (source[key] !== undefined) {
-			if (deep && typeof target[key] === 'object') {
-				$.extend(target[key], source[key], deep);
-			} else {
-				target[key] = source[key];
+			if (source[key] !== undefined) {
+				if (deep && typeof target[key] === 'object') {
+					$.extend(target[key], source[key], deep);
+				} else {
+					target[key] = source[key];
+				}
 			}
-		}
 
 		return target;
 	};
@@ -118,18 +120,18 @@ var mui = (function(document, undefined) {
 	 */
 	$.trigger = function(element, eventType, eventData) {
 		element.dispatchEvent(new CustomEvent(eventType, {
-			detail : eventData,
-			bubbles : true,
-			cancelable : true
+			detail: eventData,
+			bubbles: true,
+			cancelable: true
 		}));
 		return this;
 	};
 	/**
-         * getStyles
-         * @param {type} element
-         * @param {type} property
-         * @returns {styles}
-         */
+	 * getStyles
+	 * @param {type} element
+	 * @param {type} property
+	 * @returns {styles}
+	 */
 	$.getStyles = function(element, property) {
 		var styles = element.ownerDocument.defaultView.getComputedStyle(element, null);
 		if (property) {
@@ -138,11 +140,11 @@ var mui = (function(document, undefined) {
 		return styles;
 	};
 	/**
-         * parseTranslate
-         * @param {type} translateString
-         * @param {type} position
-         * @returns {Object}
-         */
+	 * parseTranslate
+	 * @param {type} translateString
+	 * @param {type} position
+	 * @returns {Object}
+	 */
 	$.parseTranslate = function(translateString, position) {
 		var result = translateString.match(translateRE || '');
 		if (!result || !result[1]) {
@@ -150,9 +152,9 @@ var mui = (function(document, undefined) {
 		}
 		result = result[1].split(",");
 		result = {
-			x : parseFloat(result[0]),
-			y : parseFloat(result[1]),
-			z : parseFloat(result[2])
+			x: parseFloat(result[0]),
+			y: parseFloat(result[1]),
+			z: parseFloat(result[2])
 		};
 		if (position && result.hasOwnProperty(position)) {
 			return result[position];
@@ -160,11 +162,11 @@ var mui = (function(document, undefined) {
 		return result;
 	};
 	/**
-         * parseTranslateMatrix
-         * @param {type} translateString
-         * @param {type} position
-         * @returns {Object}
-         */
+	 * parseTranslateMatrix
+	 * @param {type} translateString
+	 * @param {type} position
+	 * @returns {Object}
+	 */
 	$.parseTranslateMatrix = function(translateString, position) {
 		var matrix = translateString.match(translateMatrixRE);
 		var is3D = matrix && matrix[1];
@@ -180,9 +182,9 @@ var mui = (function(document, undefined) {
 			matrix = [0, 0, 0];
 		}
 		var result = {
-			x : parseFloat(matrix[0]),
-			y : parseFloat(matrix[1]),
-			z : parseFloat(matrix[2])
+			x: parseFloat(matrix[0]),
+			y: parseFloat(matrix[1]),
+			z: parseFloat(matrix[2])
 		};
 		if (position && result.hasOwnProperty(position)) {
 			return result[position];
@@ -193,7 +195,7 @@ var mui = (function(document, undefined) {
 	 * $.fn
 	 */
 	$.fn = {
-		each : function(callback) {
+		each: function(callback) {
 			[].every.call(this, function(el, idx) {
 				return callback.call(el, idx, el) !== false;
 			});
@@ -204,7 +206,6 @@ var mui = (function(document, undefined) {
 })(document);
 window.mui = mui;
 '$' in window || (window.$ = mui);
-
 /**
  * mui target(action>popover>modal>tab>toggle)
  */
@@ -647,6 +648,12 @@ window.mui = mui;
 	window.addEventListener($.EVENT_MOVE, detectTouchMove);
 	window.addEventListener($.EVENT_END, detectTouchEnd);
 	window.addEventListener($.EVENT_CANCEL, detectTouchEnd);
+	//fixed hashchange(android)
+	window.addEventListener($.EVENT_CLICK, function(e) {
+		if ($.targets.popover || $.targets.tab || $.targets.offcanvas || $.targets.modal) {
+			e.preventDefault();
+		}
+	});
 
 	/**
 	 * mui delegate events
@@ -953,8 +960,18 @@ window.mui = mui;
 		swipeBack: false,
 		preloadPages: [], //5+ lazyLoad webview
 		preloadLimit: 10 //预加载窗口的数量限制(一旦超出，先进先出)
-
 	};
+
+	//默认页面动画
+	var defaultShow = {
+		autoShow:true,
+		duration:$.os.ios?200:100,
+		aniShow: 'slide-in-right'
+	}
+	//若执行了显示动画初始化操作，则要覆盖默认配置
+	if($.options.show){
+		defaultShow = $.extend(defaultShow, $.options.show,true);
+	}
 
 	$.currentWebview = null;
 	$.isHomePage = false;
@@ -967,7 +984,10 @@ window.mui = mui;
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend({}, options);
+		return $.extend({
+			autoShow:true,
+			title:''
+		}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -975,14 +995,7 @@ window.mui = mui;
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		var duration = 100;
-		if ($.os.ios) {
-			duration = 200;
-		}
-		return $.extend({
-			aniShow: 'slide-in-right',
-			duration: duration
-		}, options);
+		return $.extend(defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
@@ -1070,6 +1083,7 @@ window.mui = mui;
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
+
 		if (!window.plus) {
 			return;
 		}
@@ -1087,75 +1101,62 @@ window.mui = mui;
 		}
 		options = options || {};
 		var params = options.params || {};
-		var webview;
+		var webview,nShow,nWaiting;
 		if ($.webviews[id]) { //已缓存
 			var webviewCache = $.webviews[id];
-			if (webviewCache.preload) { //预加载
-				webview = webviewCache.webview;
-				//每次show都需要传递动画参数；
-				webview.show(webviewCache.show.aniShow, webviewCache.show.duration, function() {
-					triggerPreload(webview);
-					trigger(webview,'pagebeforeshow',false);
-				});
-				//TODO 预加载模式，暂不隐藏父窗口，bug太多
-				//TODO 最好不要让MUI处理这种东西，统一处理窗口隐藏
-				//				setTimeout(function() {
-				//					console.log('webview.isVisible()1::::' + webview.isVisible());
-				//					if (webview.isVisible() === 'true') {//只有当前窗口显示的状态，才隐藏父窗口(解决在show动画过程中，执行后退导致的父窗口被关闭没有显示问题)
-				//						console.log('webview.isVisible()2::::' + webview.isVisible());
-				//						var wobj = plus.webview.currentWebview();
-				//						var parent = wobj.parent();
-				//						if (parent) {
-				//							parent.hide();
-				//						} else {
-				//							wobj.hide();
-				//						}
-				//					}//哎。多增加点时间。否则会发现提前hide主窗口后，动画还没结束，导致看到了主屏幕
-				//				}, webviewCache.show.duration + 1000);
-
-				webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
-				return this;
-			} else { //非预加载
-				//将当前传入的options覆盖之前缓存的
-				options = $.extend(webviewCache, $.extend(options, {
+			webview = webviewCache.webview;
+			//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
+			if(!webview||!webview.getURL()){
+				//再次新建一个webview；
+				options = $.extend(options, {
 					id: id,
 					url: url,
-					showAfterLoad: options.showAfterLoad === false ? false : true
-				}));
+					preload:true
+
+				});
 				webview = $.createWindow(options);
 			}
+			//每次show都需要传递动画参数；
+			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
+			nShow = webviewCache.show;
+			nShow = options.show?$.extend(nShow, options.show):nShow;
+			
+			webview.show(nShow.aniShow, nShow.duration, function() {
+				triggerPreload(webview);
+				trigger(webview,'pagebeforeshow',false);
+			});
+
+			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			return webview;
 		} else { //新窗口
+			//显示waiting
+			var waitingConfig = $.waitingOptions(options.waiting);
+			if(waitingConfig.autoShow){
+				nWaiting = plus.nativeUI.showWaiting(waitingConfig.title, waitingConfig.options);
+			}
+			//创建页面
 			options = $.extend(options, {
 				id: id,
-				url: url,
-				showAfterLoad: options.showAfterLoad === false ? false : true
+				url: url
 			});
 			webview = $.createWindow(options);
-		}
-		if (options.showAfterLoad) {
-			var nWaitingOptions = $.waitingOptions(options.waiting);
-			var nWaiting = plus.nativeUI.showWaiting(nWaitingOptions.title || '', nWaitingOptions);
-			var nShow = $.showOptions(options.show);
-			webview.addEventListener("loaded", function() {
-				nWaiting.close();
-				webview.show(nShow.aniShow, nShow.duration, function() {
-					triggerPreload(webview);
-					trigger(webview,'pagebeforeshow',false);
-				});
-				webview.showed = true;
-				options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
-				//TODO 最好不要让MUI处理这种东西，统一处理窗口隐藏
-				//				setTimeout(function() {
-				//					var wobj = plus.webview.currentWebview();
-				//					var parent = wobj.parent();
-				//					if (parent) {
-				//						parent.hide();
-				//					} else {
-				//						wobj.hide();
-				//					}
-				//				}, nShow.duration);
-
-			}, false);
+			//显示
+			nShow = $.showOptions(options.show);
+			if(nShow.autoShow){
+				webview.addEventListener("loaded", function() {
+					//关闭等待框
+					if(nWaiting){
+						nWaiting.close();	
+					}
+					//显示页面
+					webview.show(nShow.aniShow, nShow.duration, function() {
+						triggerPreload(webview);
+						trigger(webview,'pagebeforeshow',false);
+					});
+					webview.showed = true;
+					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+				}, false);
+			}
 		}
 		return webview;
 	};
@@ -1172,7 +1173,7 @@ window.mui = mui;
 		var id = options.id || options.url;
 		var webview;
 		if (options.preload) {
-			if ($.webviews[id]) { //已经cache
+			if ($.webviews[id]&& $.webviews[id].webview.getURL()) { //已经cache
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
 				//preload
@@ -1209,15 +1210,14 @@ window.mui = mui;
 				var first = $.data.preloads.shift();
 				var webviewCache = $.webviews[first];
 				if (webviewCache && webviewCache.webview) {
-					//IOS下 close的时候会导致卡顿。
-					webviewCache.webview.close(); //关闭该预加载webview	
+					//需要将自己打开的所有页面，全部close；
+					//关闭该预加载webview	
+					$.closeAll(webviewCache.webview);
 				}
 				//删除缓存
 				delete $.webviews[first];
 			}
 		} else {
-			//非预加载的webview存储窗口配置
-			$.webviews[id] = options;
 			if (isCreate !== false) { //直接创建非预加载窗口
 				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles));
 				if (options.subpages) {
@@ -1230,6 +1230,36 @@ window.mui = mui;
 		}
 		return webview;
 	};
+
+	/**
+	*关闭当前webview打开的所有webview；
+	*/
+	$.closeOpened = function(webview){
+		var opened = webview.opened();
+		if(opened){
+			for(var i=0,len = opened.length;i<len;i++){
+				var openedWebview = opened[i];
+				var open_open = openedWebview.opened();
+				if(open_open&&open_open.length>0){
+					$.closeOpened(openedWebview);
+				}else{
+					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
+					if(openedWebview.parent()!==webview){
+						openedWebview.close('none');	
+					}
+				}
+			}
+		}
+	}
+	$.closeAll = function(webview,aniShow){
+		$.closeOpened(webview);
+		if(aniShow){
+			webview.close(aniShow);
+		}else{
+			webview.close();
+		}
+	}
+
 	/**
 	 * 批量创建webview
 	 * @param {type} options
@@ -1287,9 +1317,12 @@ window.mui = mui;
 				setTimeout(function() {
 					triggerPreload($.currentWebview);
 				}, 300);
-
 			}
-
+			//设置ios顶部状态栏颜色；
+	        if($.os.ios){
+	    		var statusBarBackground = $.options.statusBarBackground?$.options.statusBarBackground:'#f7f7f7';
+	    		plus.navigator.setStatusBarBackground(statusBarBackground);
+	        }
 		});
 	});
 	window.addEventListener('preload', function() {
@@ -1306,26 +1339,6 @@ window.mui = mui;
 	});
 })(mui);
 /**
- * mui.init titleBar
- * @param {type} $
- * @returns {undefined}
- */
-(function($) {
-    $.init.add(function() {
-        var options = $.options;
-        if (options.titleBar) {
-            $.titleBar(options.titleBar);
-        }
-        //设置ios顶部状态栏颜色；
-        if($.os.ios){
-        	$.plusReady(function(){
-        		var statusBarBackground = $.options.statusBarBackground?$.options.statusBarBackground:'#f7f7f7';
-        		plus.navigator.setStatusBarBackground(statusBarBackground);
-        	});
-        }
-    });
-})(mui);
-/**
  * mui.init pulldownRefresh
  * @param {type} $
  * @returns {undefined}
@@ -1334,86 +1347,36 @@ window.mui = mui;
     $.init.add(function() {
         var options = $.options;
         var pullRefreshOptions = options.pullRefresh || {};
-        //只要是android手机，必须使用原生的下拉刷新；
-        if($.os.plus && $.os.android){
-            if(pullRefreshOptions.down){
-                $.plus_pulldownRefresh(pullRefreshOptions.down);
-            }
-        }else{
-            var container = pullRefreshOptions.container;
-            if (container) {
-                var $container = $(container);
-                if ($container.length === 1) {
-                    $container.pullRefresh(pullRefreshOptions);
+
+        //需要判断是否为plus，这个需要等一下；
+        setTimeout(function() {
+            if($.os.plus && $.os.android){
+                //只要是android手机，必须使用原生的下拉刷新；
+                if(pullRefreshOptions.down){
+                    $.plus_pulldownRefresh(pullRefreshOptions.down);
+                }
+                if(pullRefreshOptions.up){
+                    var container = pullRefreshOptions.container;
+                    if (container) {
+                        var $container = $(container);
+                        if ($container.length === 1) {
+                            $container.pullRefresh(pullRefreshOptions);
+                        }
+                    }
+                }
+            }else{
+                var container = pullRefreshOptions.container;
+                if (container) {
+                    var $container = $(container);
+                    if ($container.length === 1) {
+                        $container.pullRefresh(pullRefreshOptions);
+                    }
                 }
             }
-        }
+        }, 1000);    
 
     });
 })(mui);
-/**
- * mui titlebar
- * @param {type} $
- * @param {type} window
- * @param {type} document
- * @param {type} undefined
- * @returns {undefined}
- */
-(function($, window, document, undefined) {
-
-	$.titleBar = function(options) {
-		//因为.mui-bar默认有1px阴影，6px的模糊(51px?太多了)，titleBar默认高度设置为48px；
-		options = $.extend({
-			template : 'top.html',
-			height : "48px"
-		}, options);
-		//在5+app中，为了避免titleBar区域出现滚动条，只要是5+，就使用webview，不区分android和ios；
-		if ($.options.optimize && $.os.plus) {//android and optimize
-			$.plusReady(function() {
-				//titleBar一般都是被append到主窗口的，因此ID不需要，默认为null问题不大；
-				var header = plus.webview.create(options.template, null, {
-					scalable : false,
-					position : "dock",
-					dock : "top",
-					height : options.height
-				});
-				//TODO
-				//1.优化。看看有没有更好的方案，这样的代码略显丑陋
-				//2.需要转义options.title
-				//3.如果不是.title，而是自定义的，该参数无意义；
-				header.addEventListener('loaded', function() {
-					header.evalJS('document.querySelector(".mui-title").innerHTML="' + options.title + '"');
-				});
-				//TODO 建议5+统一处理。不要来回相反的append
-				var pulldownRefreshOptions = options.pulldownRefresh || {};
-				var container = pulldownRefreshOptions.container;
-				if (container) {
-					header.append($.currentWebview);
-				} else {
-					$.currentWebview.append(header);
-				}
-
-			});
-		} else {
-			//TODO 后续需要优化
-			$.get(options.template, function(response) {
-				var body = response.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0];
-				var wrap = document.createElement('div');
-				wrap.innerHTML = body;
-				while (wrap.firstChild) {
-					document.body.insertBefore(wrap.firstChild, document.body.firstChild);
-				}
-				if (options.title) {
-					var title = document.body.querySelector('.mui-bar .mui-title');
-					if (title) {
-						title.innerHTML = options.title;
-					}
-				}
-			});
-		}
-		return this;
-	};
-})(mui, window, document); 
 /**
  * mui ajax
  * @param {type} $
@@ -1530,7 +1493,7 @@ window.mui = mui;
 	var CLASS_PULL_CAPTION_REFRESH = CLASS_PULL_CAPTION + '-refresh';
 
 	var CLASS_ICON = 'mui-icon';
-	var CLASS_ICON_SPINNER = 'mui-icon-spinner';
+	var CLASS_ICON_SPINNER = 'mui-icon-spinner-cycle';
 	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
 	var CLASS_SPIN = 'mui-spin';
 
@@ -1545,7 +1508,7 @@ window.mui = mui;
 	var defaultOptions = {
 		down: {
 			height: 50,
-			contentdown: '下拉可以刷新',
+			contentdown: '下拉可刷新',
 			contentover: '释放立即刷新',
 			contentrefresh: '正在刷新...'
 		},
@@ -1553,7 +1516,7 @@ window.mui = mui;
 			height: 50,
 			contentdown: '上拉显示更多',
 			contentover: '释放立即刷新',
-			contentrefresh: '正在刷新...',
+			contentrefresh: '正在加载...',
 			duration: 300
 		}
 	};
@@ -1604,9 +1567,30 @@ window.mui = mui;
 	PullRefresh.prototype.initEvent = function() {
 		var self = this;
 		if (self.bottomPocket) {
-			self.element.addEventListener('dragup', function(e) {
-				self.dragUp(e);
-			});
+			if($.os.plus){
+				var pocket = self.bottomPocket;
+				pocket.style.display = "none";
+				//图标需要显示出来
+				pocket.querySelector('.'+CLASS_PULL_LOADING).className = CLASS_LOADING +' mui-active';
+				//不需要这么多节点，只显示正在加载即可；
+				pocket.querySelector('.'+CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.'+CLASS_PULL_CAPTION_DOWN));
+				pocket.querySelector('.'+CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.'+CLASS_PULL_CAPTION_OVER));
+				pocket.querySelector('.'+CLASS_PULL_CAPTION_REFRESH).classList.add('mui-in');;
+				document.addEventListener('plusscrollbottom',function(){
+					if(self.isLoading) return;
+					self.isLoading = true;
+					pocket.style.display = "block";
+					var callback = self.options.up.callback;
+					callback && callback(function() {
+						pocket.style.display = "none";
+						self.isLoading = false;
+					});
+				},false);
+			}else{
+				self.element.addEventListener('dragup', function(e) {
+					self.dragUp(e);
+				});
+			}
 		}
 		if (self.topPocket) {
 			self.element.addEventListener('dragdown', function(e) {
@@ -1619,6 +1603,7 @@ window.mui = mui;
 			});
 			self.element.addEventListener('drag', function(e) {
 				var direction = e.detail.direction;
+				//左右拖动处理逻辑？
 				if (self.dragDirection && direction !== 'up' && direction !== 'down') {
 					if (self.pullOptions) {
 						if (self.pullOptions.height > 0) {
@@ -1691,6 +1676,7 @@ window.mui = mui;
 		var self = this;
 		if (self.pullOptions) {
 			cancelAnimationFrame(self.requestAnimationFrame);
+			//移动距离够了，就刷新，否则就啥都不干，恢复到原始状态；
 			if (Math.abs(e.detail.deltaY * 0.4) >= Math.abs(self.pullOptions.height)) {
 				self.load();
 			} else {
@@ -1703,11 +1689,13 @@ window.mui = mui;
 	PullRefresh.prototype.hide = function() {
 		this.translateY = 0;
 		if (this.requestAnimationFrame) {
+			//在dragEnd中已经调用过了，可能重复了
 			cancelAnimationFrame(this.requestAnimationFrame);
 			this.requestAnimationFrame = null;
 		}
 		this.element.style.webkitTransitionDuration = '0.5s';
 		this.setTranslate(0);
+		//恢复到正常状态，下拉可刷新
 		this.setCaption(CLASS_PULL_CAPTION_DOWN);
 		if (this.pullOptions.height > 0) {
 			this.loading.classList.remove(CLASS_REVERSE);
@@ -1720,9 +1708,9 @@ window.mui = mui;
 			self.translateY = Math.abs(self.translateY) < 2 ? 0 : self.translateY;
 			self.setTranslate(self.translateY);
 			if (Math.abs(self.translateY) >= Math.abs(self.pullOptions.height)) {
-				self.showLoading(CLASS_PULL_CAPTION_OVER);
+				self.setCaption(CLASS_PULL_CAPTION_OVER);
 			} else {
-				self.hideLoading(CLASS_PULL_CAPTION_DOWN);
+				self.setCaption(CLASS_PULL_CAPTION_DOWN);
 			}
 			self.lastTranslateY = self.translateY;
 		}
@@ -1745,7 +1733,7 @@ window.mui = mui;
 	PullRefresh.prototype.load = function() {
 		var self = this;
 		self.isLoading = true;
-		self.showLoading(CLASS_PULL_CAPTION_REFRESH);
+		self.setCaption(CLASS_PULL_CAPTION_REFRESH);
 		self.setTranslate(self.pullOptions.height);
 		var callback = self.pullOptions.callback;
 		callback && callback(function() {
@@ -1765,13 +1753,13 @@ window.mui = mui;
 		});
 	};
 
-	PullRefresh.prototype.showLoading = function(className) {
-		this.setCaption(className);
+	// PullRefresh.prototype.showLoading = function(className) {
+	// 	this.setCaption(className);
 
-	};
-	PullRefresh.prototype.hideLoading = function(className) {
-		this.setCaption(className);
-	};
+	// };
+	// PullRefresh.prototype.hideLoading = function(className) {
+	// 	this.setCaption(className);
+	// };
 
 	PullRefresh.prototype.setCaption = function(className) {
 		var pocket = this.pullOptions && this.pullOptions.height > 0 ? this.topPocket : this.bottomPocket;
@@ -1794,6 +1782,7 @@ window.mui = mui;
 					this.loading.className = CLASS_LOADING_DOWN;
 				}
 			} else {
+				//上拉处理的有点简单了，即使纯H5版本，也需要分开处理；
 				this.loading.className = CLASS_LOADING;
 			}
 		}
@@ -1904,6 +1893,7 @@ window.mui = mui;
 				var container = findOffCanvasContainer(offcanvas);
 				if (container) {
 					$.targets._container = container;
+					event.preventDefault(); //fixed hashchange
 					return offcanvas;
 				}
 			}
@@ -2242,6 +2232,7 @@ window.mui = mui;
 		if (target.tagName === 'A' && target.hash) {
 			var modal = document.getElementById(target.hash.replace('#', ''));
 			if (modal && modal.classList.contains(CLASS_MODAL)) {
+				event.preventDefault();//fixed hashchange
 				return modal;
 			}
 		}
@@ -2287,6 +2278,7 @@ window.mui = mui;
 		if (target.tagName === 'A' && target.hash) {
 			$.targets._popover = document.getElementById(target.hash.replace('#', ''));
 			if ($.targets._popover && $.targets._popover.classList.contains(CLASS_POPOVER)) {
+				event.preventDefault();//fixed hashchange
 				return target;
 			}
 		}
@@ -2407,6 +2399,7 @@ window.mui = mui;
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
+			event.preventDefault();//fixed hashchange
 			return target;
 		}
 		return false;
@@ -2705,6 +2698,9 @@ window.mui = mui;
 	 * @returns {undefined}
 	 */
 	Slider.prototype.gotoItem = function(slideNumber) {
+		if (!(slideNumber === 1 && this.getSlideNumber() === slideNumber)) {
+			slideNumber = slideNumber > 0 ? -slideNumber : slideNumber;
+		}
 		var self = this;
 		var slider = self.element;
 		var slideLength = self.sliderLength;
@@ -2799,6 +2795,7 @@ window.mui = mui;
 
 	$.fn.slider = function(options) {
 		//新增定时轮播 重要：remove该轮播时，请获取data-slidershowTimer然后手动clearTimeout
+		var slider = null;
 		this.each(function() {
 			var sliderGroup = this;
 			if (this.classList.contains(CLASS_SLIDER)) {
@@ -2807,15 +2804,16 @@ window.mui = mui;
 			var id = sliderGroup.getAttribute('data-slider');
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = new Slider(sliderGroup, options);
+				$.data[id] = slider = new Slider(sliderGroup, options);
 				sliderGroup.setAttribute('data-slider', id);
 			} else {
-				var slider = $.data[id];
-				if (slider) {
+				slider = $.data[id];
+				if (slider && options) {
 					slider.refresh(options);
 				}
 			}
 		});
+		return slider;
 	};
 	$.ready(function() {
 		$('.mui-slider-group').slider();
@@ -3702,7 +3700,7 @@ window.mui = mui;
 	 */
 	$.back = function() {
 		if (window.history.length > 1) {
-			if ( typeof $.options.back === 'function') {
+			if (typeof $.options.back === 'function') {
 				if ($.options.back() !== false) {
 					window.history.back();
 				}
@@ -3720,12 +3718,14 @@ window.mui = mui;
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
 		if (detail.angle > -15 && detail.angle < 15 && $.options.swipeBack === true) {
+			if ($.targets.toggle) {
+				return;
+			}
 			$.back();
 		}
 	});
 
 })(mui, window);
-
 /**
  * mui back 5+
  * @param {type} $
@@ -3739,7 +3739,7 @@ window.mui = mui;
 	$.back = function() {
 		var isBack = true;
 		var callback = false;
-		if ( typeof $.options.back === 'function') {
+		if (typeof $.options.back === 'function') {
 			callback = $.options.back();
 			if (callback === false) {
 				isBack = false;
@@ -3751,24 +3751,28 @@ window.mui = mui;
 		if (window.plus) {
 			var wobj = $.currentWebview;
 			var parent = wobj.parent();
+			if (parent) {
+				wobj = parent;
+			}
 			wobj.canBack(function(e) {
-				if (e.canBack) {//webview history back
+				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
+				if (e.canBack) { //webview history back
 					window.history.back();
-				} else {//webview close or hide
+				} else { //webview close or hide
 					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
-					if (parent) {
-						wobj = parent;
-					}
+
 					var opener = wobj.opener();
 					if (opener) {
-						var openerParent = opener.parent();
-						if (openerParent) {
-							opener = openerParent;
-						}
+						//by chb 暂不自动处理老页面的隐藏；
+						// var openerParent = opener.parent();
+						// if (openerParent) {
+						// 	opener = openerParent;
+						// }
 						if (wobj.preload) {
 							wobj.hide("auto");
 						} else {
-							wobj.close();
+							//关闭页面时，需要将其打开的所有子页面全部关闭；
+							$.closeAll(wobj);
 						}
 						//TODO 暂时屏蔽父窗口的隐藏与显示，与预加载一起使用时太多bug
 						//opener.show();
@@ -3791,11 +3795,11 @@ window.mui = mui;
 		var menu = document.querySelector('.mui-action-menu');
 		if (menu) {
 			$.trigger(menu, 'tap');
-		} else {//执行父窗口的menu
+		} else { //执行父窗口的menu
 			if (window.plus) {
 				var wobj = $.currentWebview;
 				var parent = wobj.parent();
-				if (parent) {//又得evalJS
+				if (parent) { //又得evalJS
 					parent.evalJS('mui&&mui.menu();');
 				}
 			}

@@ -11,11 +11,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-13 19:37:35 +0800">
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-13 19:37:35 +0800">
 =======
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-12 17:26:05 +0800">
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-12 17:26:05 +0800">
+>>>>>>> FETCH_HEAD
+=======
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-14 18:32:55 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-14 18:32:55 +0800">
 >>>>>>> FETCH_HEAD
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
@@ -116,7 +121,7 @@
     <!-- 页面初始化 -->
     <article class="component mui-active" id="pageinit">
 	<h3 class="component-title">页面初始化</h3>
-	<p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#closewindow">关闭页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh">下拉刷新</a>。</p>
+	<p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#closewindow">关闭页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh-down">下拉刷新</a>、<a href="#pullrefresh-up">上拉加载</a>。</p>
 	<p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">plusReady</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
@@ -485,6 +490,28 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
      <span class="nx">callback</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
+    <!-- 上拉加载 -->
+      <article id="pullrefresh-up" class="component mui-active">
+      <h3 class="component-title">上拉加载</h3>
+      <p class="component-description">mui的上拉加载实现比较简单，检测5+ runtime提供的滚动条滚动到底事件（plusscrollbottom），显示“正在加载”提示-->开始加载业务数据-->隐藏"正在加载"提示。使用方式类似下拉刷新，首先、通过mui.init方法中pullRefresh参数配置上拉加载各项参数，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">pullRefresh</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">container</span><span class="o">:</span><span class="nx">refreshContainer</span><span class="p">,</span><span class="c1">//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等</span>
+    <span class="nx">up</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="nx">contentrefresh</span> <span class="o">:</span> <span class="s2">&quot;正在加载...&quot;</span><span class="p">,</span><span class="c1">//可选，正在加载状态时，上拉加载控件上显示的标题内容</span>
+      <span class="nx">callback</span> <span class="o">:</span><span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span> <span class="c1">//必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">其次，根据具体业务编写加载函数，需要注意的是，加载完新数据后，需要执行callback()方法；</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+     <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
+     <span class="p">......</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
+     <span class="nx">callback</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+<p class="component-description"><strong>注意：</strong>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载。</p>
+  </article>
     <!-- 下拉刷新 -->
       <article id="input" class="component mui-active">
       <h3 class="component-title">输入增强</h3>
@@ -584,11 +611,16 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-13 19:37:35 +0800"></script>
 <script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-13 19:37:35 +0800"></script>
 =======
 <script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-12 17:26:05 +0800"></script>
 <script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-12 17:26:05 +0800"></script>
+>>>>>>> FETCH_HEAD
+=======
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-14 18:32:55 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-14 18:32:55 +0800"></script>
 >>>>>>> FETCH_HEAD
 
     </div>
