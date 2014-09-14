@@ -2650,7 +2650,7 @@ select {
 .mui-pull-bottom-pocket .mui-pull-loading {
   display: none;
 }
-.mui-pull-bottom-pocket .mui-pull-loading.mui-in {
+.mui-pull-bottom-pocket .mui-pull-loading.mui-active {
   display: inline-block;
 }
 

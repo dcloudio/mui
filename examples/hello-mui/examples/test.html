@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.tpl.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">默认列表</h1>
+		</header>
+		<div class="mui-content">
+			<div id="tableview"></div>
+			<div id="slider"></div>
+			<div id="slider-table-pagination"></div>
+			<div id="grid"></div>
+		</div>
+		<script>
+			var tableview = [];
+			for (var i = 0; i < 10; i++) {
+				tableview.push({
+					title: '选项1',
+					//src: 'http://dcloudio.github.io/mui/assets/img/shuijiao.jpg',
+					//desc: '图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述',
+					//ellipsis: 2,
+					//divider: false,
+					navigate: true,
+					striped: false, //二级列表
+					chevron: false, //二级列表
+					inverted: false, //二级列表
+					//					badge:{
+					//						text:'10',
+					//						style:'primary'
+					//					},
+					//					btn:{
+					//						text:'button',
+					//						style:'primary'
+					//					},
+					//					switch: {
+					//						style: 'primary',
+					//						size:'mini',
+					//						active: i % 3 == 1 ? false : true,
+					//					},
+					//					checkbox: {
+					//						name: 'radio',
+					//						value: i,
+					//					},
+
+					tableview: [{
+						title: '子选项1'
+					}, {
+						title: '子选项2'
+					}, {
+						title: '子选项3'
+					}]
+				});
+			}
+
+			var slider = [];
+			var img1 = {
+				href: '',
+				src: 'http://dcloudio.github.io/mui/assets/img/shuijiao.jpg',
+				title: '图片1'
+			};
+			var img2 = {
+				href: '',
+				src: 'http://dcloudio.github.io/mui/assets/img/muwu.jpg',
+				title: '图片2'
+			};
+			var img3 = {
+				href: '',
+				src: 'http://dcloudio.github.io/mui/assets/img/cbd.jpg',
+				title: '图片3'
+			};
+			var img4 = {
+				href: '',
+				src: 'http://dcloudio.github.io/mui/assets/img/yuantiao.jpg',
+				title: '图片4'
+			};
+			slider.push(img1);
+			slider.push(img2);
+			slider.push(img3);
+			slider.push(img4);
+			var slidertable = [];
+			slidertable.push([img1, img2]);
+			slidertable.push([img3, img4]);
+			(function($) {
+				$(function() {
+					$('#tableview').tableview({
+						striped: true,
+						chevron: false,
+						inverted: false,
+						tableview: tableview,
+					});
+					var sliderApi = $('#slider').slider({
+						loop: true,
+						slideshowDelay: 0,
+						slider: slider,
+					});
+
+					function testApi(index, callback) {
+						setTimeout(function() {
+							sliderApi.gotoItem(index);
+							callback();
+						}, 2000);
+					}
+					testApi(1, function() {
+						testApi(2, function() {
+							testApi(3, function() {
+								testApi(0, function() {
+									console.log('finish');
+								});
+							});
+						});
+					});
+					$('#slider-table-pagination').slider({
+						loop: true,
+						slideshowDelay: 0,
+						slider: slidertable,
+					});
+					//快捷用法(直接传数据数组)
+					$('#grid').grid(slider);
+					//标准用法(传入一个包含数据数组的对象，以防需要其他额外的参数)					
+					//					$('#grid').grid({
+					//						grid: slider,
+					//					});
+				});
+			})(mui);
+		</script>
+	</body>
+
+</html>

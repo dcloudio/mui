@@ -25,7 +25,7 @@
 
 <header class="mui-bar mui-bar-nav">
     <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">Pullup</h1>
+    <h1 class="mui-title">上拉加载</h1>
 </header>
 <div class="mui-content">
     <div class="mui-content-padded">
@@ -60,6 +60,51 @@
                     Item 6
                 </a>
             </li>
+           <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 7
+                </a>
+            </li>
+           <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 8
+                </a>
+            </li>
+             <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 9
+                </a>
+            </li>
+           <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 10
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 11
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 12
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 13
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 14
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right">
+                    Item 15
+                </a>
+            </li>
         </ul>
     </div>
 </div>
@@ -71,11 +116,12 @@
             up: {
                 contentdown: '上拉显示更多',
                 contentover: '释放立即刷新',
-                contentrefresh: '正在刷新...',
+                contentrefresh: '正在加载...',
                 callback: pullupRefresh
             }
         }
     });
+
    	/**
      * 上拉加载具体业务实现
      */
@@ -90,7 +136,7 @@
 	            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
 	            table.appendChild(li);
 	        }
-	    }, 1000);
+	    }, 2000);
 	}
 </script>
 </body>

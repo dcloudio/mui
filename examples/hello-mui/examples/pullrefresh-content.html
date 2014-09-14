@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<div class="mui-content">
+	<div class="mui-content-padded">
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 15
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 14
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 13
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 12
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 11
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 10
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 9
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 8
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 7
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 6
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 5
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 4
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 3
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 2
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 1
+                </a>
+			</li>
+		</ul>
+	</div>
+</div>
+<script>
+	mui.init({
+	        swipeBack:false,
+	        optimize: false,
+	        pullRefresh: {
+	            container: '.mui-content-padded',
+	            down: {
+	                callback:pulldownRefresh
+	            },
+	            up: {
+	                contentrefresh: '正在加载...',
+	                callback: pullupRefresh
+	            }
+	        }
+	    });
+	    /**
+	     * 下拉刷新具体业务实现
+	     */
+	    function pulldownRefresh(callback){
+	    	 setTimeout(function() {
+	            var table = document.body.querySelector('.mui-table-view');
+	            var cells = document.body.querySelectorAll('.mui-table-view-cell');
+	            for (var i = cells.length, len = i + 3; i < len; i++) {
+	                var li = document.createElement('li');
+	                li.className = 'mui-table-view-cell';
+	                li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+	                //下拉刷新，新纪录插到最前面；
+	                table.insertBefore(li, table.firstChild);
+	            }
+	            callback(); //refresh completed
+	        }, 1500);
+	    }
+	    /**
+	     * 上拉加载具体业务实现
+	     */
+	    function pullupRefresh(callback){
+		   setTimeout(function() {
+		   	callback(); //refresh completed
+	        var table = document.body.querySelector('.mui-table-view');
+	        var cells = document.body.querySelectorAll('.mui-table-view-cell');
+	        for (var i = cells.length, len = i + 3; i < len; i++) {
+	            var li = document.createElement('li');
+	            li.className = 'mui-table-view-cell';
+	            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+	            table.appendChild(li);
+	        }
+	    }, 1500);
+	    }
+</script>
+</body>
+</html>
