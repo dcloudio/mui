@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-14 17:31:01 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-14 17:31:01 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-14 18:32:55 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-14 18:32:55 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -500,6 +500,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
      <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
      <span class="nx">callback</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
+<p class="component-description"><strong>注意：</strong>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载。</p>
   </article>
     <!-- 下拉刷新 -->
       <article id="input" class="component mui-active">
@@ -599,8 +600,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-14 17:31:01 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-14 17:31:01 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-14 18:32:55 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-14 18:32:55 +0800"></script>
 
     </div>
   </div>
