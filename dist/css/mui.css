@@ -229,6 +229,7 @@ th {
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   -webkit-user-select: none;
+  outline: none;
 
   -webkit-tap-highlight-color: transparent;
   -webkit-tap-highlight-color: transparent;
@@ -794,27 +795,29 @@ p {
   }
 }
 .mui-spin {
-  -webkit-transform-origin: 50% 54%;
-          transform-origin: 50% 54%;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
   -webkit-animation: spin 1s infinite linear;
           animation: spin 1s infinite linear;
+
+  -webkit-animation-fill-mode: forwards;
 }
 
 @-webkit-keyframes spin {
-  0% {
+  from {
     -webkit-transform: rotate(0deg);
   }
 
-  100% {
+  99% {
     -webkit-transform: rotate(360deg);
   }
 }
 @keyframes spin {
-  0% {
+  from {
     transform: rotate(0deg);
   }
 
-  100% {
+  99% {
     transform: rotate(360deg);
   }
 }
@@ -1554,13 +1557,19 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 }
 
 .mui-grid-view.mui-grid-9 {
+  padding: 0 0 1px 0;
   padding-right: 0;
   background-color: #f2f2f2;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+  padding: 11px 15px;
+  margin: 0;
   vertical-align: top;
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
+}
+.mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active {
+  background-color: #eee;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell > a:not(.mui-btn) {
   padding: 15px;
@@ -2650,7 +2659,7 @@ select {
 .mui-pull-bottom-pocket .mui-pull-loading {
   display: none;
 }
-.mui-pull-bottom-pocket .mui-pull-loading.mui-active {
+.mui-pull-bottom-pocket .mui-pull-loading.mui-in {
   display: inline-block;
 }
 
@@ -2678,7 +2687,7 @@ select {
 .mui-pull-caption {
   position: relative;
   display: inline-block;
-  margin-top: -5px;
+  margin-top: 0;
   margin-left: 10px;
   overflow: visible;
   font-size: 15px;

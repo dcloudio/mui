@@ -10,18 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-13 19:37:35 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-13 19:37:35 +0800">
-=======
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-12 17:26:05 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-12 17:26:05 +0800">
->>>>>>> FETCH_HEAD
-=======
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-14 18:32:55 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-14 18:32:55 +0800">
->>>>>>> FETCH_HEAD
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-15 18:22:13 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-15 18:22:13 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -220,6 +210,9 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       height:newpage-height,//新页面高度，默认为100%
       ......
     },
+    extras:{
+      .....//自定义扩展参数，可以用来处理页面间传值
+    }
     show:{
       autoShow:true,//页面loaded事件发生后自动显示，默认为true
       aniShow:animationType,//页面显示动画，默认为”slide-in-right“；
@@ -241,6 +234,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <li>
     styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。
   </li>
+  <li>extras:新窗口的额外扩展参数，可用来处理页面间传值；例如：<code>var webview = mui.openWindow({url:'info.html',extras:{name:'mui'}});console.log(webview.name);</code>，会输出"mui"字符串；</li>
   <li>
     show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
   </li>
@@ -610,18 +604,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-13 19:37:35 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-13 19:37:35 +0800"></script>
-=======
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-12 17:26:05 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-12 17:26:05 +0800"></script>
->>>>>>> FETCH_HEAD
-=======
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-14 18:32:55 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-14 18:32:55 +0800"></script>
->>>>>>> FETCH_HEAD
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-15 18:22:13 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-15 18:22:13 +0800"></script>
 
     </div>
   </div>

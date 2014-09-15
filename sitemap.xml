@@ -2,15 +2,7 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://dcloudio.github.io/mui/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -18,15 +10,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/about/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -35,15 +19,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/components/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -52,15 +28,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/getting-started-old/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -69,15 +37,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/getting-started/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -88,15 +48,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/javascript-old/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -105,15 +57,7 @@
   
   <url>
     <loc>http://dcloudio.github.io/mui/javascript/</loc>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <lastmod>2014-09-13T19:37:35+08:00</lastmod>
-=======
-    <lastmod>2014-09-12T17:26:05+08:00</lastmod>
->>>>>>> FETCH_HEAD
-=======
-    <lastmod>2014-09-14T18:32:55+08:00</lastmod>
->>>>>>> FETCH_HEAD
+    <lastmod>2014-09-15T18:22:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

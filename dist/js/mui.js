@@ -1177,15 +1177,15 @@ window.mui = mui;
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
 				//preload
-				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), {
+				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
 					preload: true
-				});
+				},options.extras));
 				if (options.subpages) {
 					$.each(options.subpages, function(index, subpage) {
 						//TODO 子窗口也可能已经创建，比如公用模板的情况；
-						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), {
+						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
 							preload: true
-						});
+						},subpage.extras));
 						webview.append(subWebview);
 					});
 				}
@@ -1219,10 +1219,10 @@ window.mui = mui;
 			}
 		} else {
 			if (isCreate !== false) { //直接创建非预加载窗口
-				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles));
+				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles),options.extras);
 				if (options.subpages) {
 					$.each(options.subpages, function(index, subpage) {
-						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles));
+						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles),subpage.extras);
 						webview.append(subWebview);
 					});
 				}
@@ -1284,7 +1284,7 @@ window.mui = mui;
 		var webview;
 		if (!$.webviews[id]) { //保证执行一遍
 			//TODO 这里也有隐患，比如某个webview不是作为subpage创建的，而是作为target webview的话；
-			webview = plus.webview.create(options.url, id, options.styles);
+			webview = plus.webview.create(options.url, id, options.styles,options.extras);
 			//TODO 理论上，子webview也应该计算到预加载队列中，但这样就麻烦了，要退必须退整体，否则可能出现问题；
 			webview.addEventListener('loaded', function() {
 				$.currentWebview.append(webview);
@@ -1567,37 +1567,76 @@ window.mui = mui;
 	PullRefresh.prototype.initEvent = function() {
 		var self = this;
 		if (self.bottomPocket) {
-			if($.os.plus){
-				var pocket = self.bottomPocket;
-				pocket.style.display = "none";
-				//图标需要显示出来
-				pocket.querySelector('.'+CLASS_PULL_LOADING).className = CLASS_LOADING +' mui-active';
-				//不需要这么多节点，只显示正在加载即可；
-				pocket.querySelector('.'+CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.'+CLASS_PULL_CAPTION_DOWN));
-				pocket.querySelector('.'+CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.'+CLASS_PULL_CAPTION_OVER));
-				pocket.querySelector('.'+CLASS_PULL_CAPTION_REFRESH).classList.add('mui-in');;
-				document.addEventListener('plusscrollbottom',function(){
-					if(self.isLoading) return;
-					self.isLoading = true;
-					pocket.style.display = "block";
-					var callback = self.options.up.callback;
-					callback && callback(function() {
-						pocket.style.display = "none";
-						self.isLoading = false;
-					});
-				},false);
-			}else{
+			if (self.options.up.draggable) {
 				self.element.addEventListener('dragup', function(e) {
 					self.dragUp(e);
 				});
+			} else {
+				var callback = self.options.up.callback;
+				if (callback) {
+					var scrolling = false;
+					var isLoading = false;
+					setInterval(function() {
+						if (scrolling) {
+							scrolling = false;
+							if (isLoading) return;
+							var scrollHeight = document.body.scrollHeight;
+							if (window.innerHeight + window.scrollY + 5 > scrollHeight) {
+								self.isLoading = isLoading = true;
+								$.gestures.stoped = true;
+								//window.scrollTo(0, scrollHeight);
+								self.pullOptions = self.options.up;
+								self.loading = self.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+								self.setCaption(CLASS_PULL_CAPTION_REFRESH);
+								callback(function() {
+									self.isLoading = isLoading = false;
+									self.setCaption(CLASS_PULL_CAPTION_DOWN);
+									self.pullOptions = null;
+								});
+							}
+						}
+					}, 250);
+
+					window.addEventListener('scroll', function() {
+						scrolling = true;
+					});
+					window.addEventListener('touchmove', function() {
+						scrolling = true;
+					});
+				}
+
 			}
+			//			if ($.os.plus) {
+			//				var pocket = self.bottomPocket;
+			//				pocket.style.display = "none";
+			//				//图标需要显示出来
+			//				pocket.querySelector('.' + CLASS_PULL_LOADING).className = CLASS_LOADING + ' mui-active';
+			//				//不需要这么多节点，只显示正在加载即可；
+			//				pocket.querySelector('.' + CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.' + CLASS_PULL_CAPTION_DOWN));
+			//				pocket.querySelector('.' + CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.' + CLASS_PULL_CAPTION_OVER));
+			//				pocket.querySelector('.' + CLASS_PULL_CAPTION_REFRESH).classList.add('mui-in');;
+			//				document.addEventListener('plusscrollbottom', function() {
+			//					if (self.isLoading) return;
+			//					self.isLoading = true;
+			//					pocket.style.display = "block";
+			//					var callback = self.options.up.callback;
+			//					callback && callback(function() {
+			//						pocket.style.display = "none";
+			//						self.isLoading = false;
+			//					});
+			//				}, false);
+			//			} else {
+			//				self.element.addEventListener('dragup', function(e) {
+			//					self.dragUp(e);
+			//				});
+			//			}
 		}
 		if (self.topPocket) {
 			self.element.addEventListener('dragdown', function(e) {
 				self.dragDown(e);
 			});
 		}
-		if (self.bottomPocket || self.topPocket) {
+		if ((self.bottomPocket && self.options.up.draggable === true) || self.topPocket) {
 			self.element.addEventListener('dragstart', function(e) {
 				self.dragStart(e);
 			});
@@ -1697,7 +1736,7 @@ window.mui = mui;
 		this.setTranslate(0);
 		//恢复到正常状态，下拉可刷新
 		this.setCaption(CLASS_PULL_CAPTION_DOWN);
-		if (this.pullOptions.height > 0) {
+		if (this.pullOptions && this.pullOptions.height > 0) {
 			this.loading.classList.remove(CLASS_REVERSE);
 		}
 		this.pullOptions = null;
@@ -1782,8 +1821,11 @@ window.mui = mui;
 					this.loading.className = CLASS_LOADING_DOWN;
 				}
 			} else {
-				//上拉处理的有点简单了，即使纯H5版本，也需要分开处理；
-				this.loading.className = CLASS_LOADING;
+				if (className === CLASS_PULL_CAPTION_REFRESH) {
+					this.loading.className = CLASS_LOADING + ' ' + CLASS_IN;
+				} else {
+					this.loading.className = CLASS_LOADING;
+				}
 			}
 		}
 	};
@@ -2919,6 +2961,7 @@ window.mui = mui;
 
 	var CLASS_ACTIVE = 'mui-active';
 	var CLASS_SELECTED = 'mui-selected';
+	var CLASS_GRID_VIEW = 'mui-grid-view';
 	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
 	var CLASS_DISABLED = 'mui-disabled';
 	var CLASS_TOGGLE = 'mui-switch';
@@ -3166,9 +3209,11 @@ window.mui = mui;
 							}
 						}
 					}
-					var link = cell.querySelector('a');
-					if (link && link.parentNode === cell) { //li>a
-						a = link;
+					if (!cell.parentNode.classList.contains(CLASS_GRID_VIEW)) {
+						var link = cell.querySelector('a');
+						if (link && link.parentNode === cell) { //li>a
+							a = link;
+						}
 					}
 					sliderCell = cell.querySelector(SELECTOR_SLIDER_CELL);
 					if (sliderCell && sliderCell.parentNode === cell) {

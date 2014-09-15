@@ -3476,10 +3476,31 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
   if (stack1 != null) { buffer += stack1; }
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.tableview : depth0), {"name":"if","hash":{},"fn":this.program(12, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\">\n";
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(14, data),"inverse":this.noop,"data":data}));
+  buffer += "\">\n	";
+  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), "||", (depth0 != null ? depth0.src : depth0), {"name":"ifCond","hash":{},"fn":this.program(14, data),"inverse":this.program(26, data),"data":data}));
   if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.src : depth0), "||", (depth0 != null ? depth0.desc : depth0), {"name":"ifCond","hash":{},"fn":this.program(19, data),"inverse":this.program(21, data),"data":data}));
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.tableview : depth0), {"name":"if","hash":{},"fn":this.program(28, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n</li>\n";
+},"2":function(depth0,helpers,partials,data) {
+  return "divider";
+  },"4":function(depth0,helpers,partials,data) {
+  return "cell";
+  },"6":function(depth0,helpers,partials,data) {
+  return " mui-radio";
+  },"8":function(depth0,helpers,partials,data) {
+  return " mui-checkbox";
+  },"10":function(depth0,helpers,partials,data) {
+  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  return " mui-"
+    + escapeExpression(lambda(depth0, depth0));
+},"12":function(depth0,helpers,partials,data) {
+  return " mui-collapse";
+  },"14":function(depth0,helpers,partials,data) {
+  var stack1, helperMissing=helpers.helperMissing, buffer = " ";
+  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data}));
+  if (stack1 != null) { buffer += stack1; }
+  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.src : depth0), "||", (depth0 != null ? depth0.desc : depth0), {"name":"ifCond","hash":{},"fn":this.program(20, data),"inverse":this.program(22, data),"data":data}));
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
   stack1 = this.invokePartial(partials.badge, '		', 'badge', depth0, undefined, helpers, partials, data);
@@ -3500,51 +3521,39 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
   stack1 = this.invokePartial(partials.media, '		', 'media', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(23, data),"inverse":this.noop,"data":data}));
+  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(24, data),"inverse":this.noop,"data":data}));
   if (stack1 != null) { buffer += stack1; }
-  buffer += " ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.tableview : depth0), {"name":"if","hash":{},"fn":this.program(25, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n</li>\n";
-},"2":function(depth0,helpers,partials,data) {
-  return "divider";
-  },"4":function(depth0,helpers,partials,data) {
-  return "cell";
-  },"6":function(depth0,helpers,partials,data) {
-  return " mui-radio";
-  },"8":function(depth0,helpers,partials,data) {
-  return " mui-checkbox";
-  },"10":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return " mui-"
-    + escapeExpression(lambda(depth0, depth0));
-},"12":function(depth0,helpers,partials,data) {
-  return " mui-collapse";
-  },"14":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "	<a class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.navigate : depth0), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
+  return buffer;
+},"15":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "\n	<a class=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.navigate : depth0), {"name":"if","hash":{},"fn":this.program(16, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(18, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + ">\n";
-},"15":function(depth0,helpers,partials,data) {
+},"16":function(depth0,helpers,partials,data) {
   return "mui-navigate-right";
-  },"17":function(depth0,helpers,partials,data) {
+  },"18":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return " href=\""
     + escapeExpression(((helper = (helper = helpers.href || (depth0 != null ? depth0.href : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"href","hash":{},"data":data}) : helper)))
     + "\" ";
-},"19":function(depth0,helpers,partials,data) {
+},"20":function(depth0,helpers,partials,data) {
   return "";
-},"21":function(depth0,helpers,partials,data) {
+},"22":function(depth0,helpers,partials,data) {
   var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "		";
   stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n";
-},"23":function(depth0,helpers,partials,data) {
-  return "\n		</a>\r";
-  },"25":function(depth0,helpers,partials,data) {
+},"24":function(depth0,helpers,partials,data) {
+  return "\n		</a>\n";
+  },"26":function(depth0,helpers,partials,data) {
+  var stack1, lambda=this.lambda, buffer = "	";
+  stack1 = lambda(depth0, depth0);
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n";
+},"28":function(depth0,helpers,partials,data) {
   var stack1, buffer = " ";
   stack1 = this.invokePartial(partials.tableview, '', 'tableview', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
@@ -3564,14 +3573,14 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
 	var div = document.createElement('div');
 	$.each(['tableview', 'slider', 'grid'], function(index, plugin) {
 		(function(name) {
-			var oldPlugin = oldPluginApi = null;
+			var oldPlugin = null;
+			var oldPluginApi = null;
 			if ($.fn[name]) {
 				oldPlugin = $.fn[name];
 			}
 			$.fn[name] = function(options) {
-
 				var opts = {
-					echo: true
+					output: true
 				};
 				if (isArray(options)) {
 					opts[name] = options;
@@ -3581,19 +3590,22 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
 				if (!opts.hasOwnProperty(name)) { //no data
 					return oldPlugin && oldPlugin.call(this, opts);
 				}
-				var template = Handlebars.compile('{{>' + name + '}}');
+				var template = Handlebars.compile(opts.tpl ? opts.tpl : '{{>' + name + '}}');
 				var html = '';
 				this.each(function() {
 					var id = this.id;
 					html = template($.extend({
 						id: id
 					}, opts));
-					if (opts.echo === false) {
+					if (opts.output === false) {
 						return false;
 					} else {
 						div.innerHTML = html;
-						var element = div.firstElementChild;
-						this.parentNode.replaceChild(element, this);
+						var element = null;
+						while (!!(element = div.firstElementChild)) {
+							this.parentNode.insertBefore(element, this);
+						}
+						this.parentNode.removeChild(this);
 						if (oldPlugin) {
 							$.ready(function() {
 								oldPluginApi = oldPlugin.call($(element), opts);
@@ -3601,7 +3613,7 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
 						}
 					}
 				});
-				if (opts.echo === false) {
+				if (opts.output === false) {
 					return html;
 				} else if (oldPluginApi) {
 					return oldPluginApi;
