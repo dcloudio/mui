@@ -809,7 +809,7 @@ p {
   }
 
   100% {
-    -webkit-transform: rotate(360deg);
+    -webkit-transform: rotate(359deg);
   }
 }
 @keyframes spin {
@@ -818,7 +818,7 @@ p {
   }
 
   100% {
-    transform: rotate(360deg);
+    transform: rotate(359deg);
   }
 }
 input[type="button"],
