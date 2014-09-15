@@ -808,7 +808,7 @@ p {
     -webkit-transform: rotate(0deg);
   }
 
-  99% {
+  100% {
     -webkit-transform: rotate(360deg);
   }
 }
@@ -817,7 +817,7 @@ p {
     transform: rotate(0deg);
   }
 
-  99% {
+  100% {
     transform: rotate(360deg);
   }
 }
