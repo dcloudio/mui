@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.6 (https://github.com/dcloudio/mui)
+ * Mui v0.5.7 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1543,7 +1543,7 @@ window.mui = mui;
 	};
 	PullRefresh.prototype.initPocket = function() {
 		var options = this.options;
-		if (options.down && options.down.hasOwnProperty('callback')) {
+		if (options.down && options.down.hasOwnProperty('callback')&&!($.os.plus&&$.os.android)) {
 			this.topPocket = this.element.querySelector('.' + CLASS_PULL_TOP_POCKET);
 			if (!this.topPocket) {
 				this.topPocket = this.createPocket(CLASS_PULL_TOP_POCKET, options.down);

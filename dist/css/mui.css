@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.6 (https://github.com/dcloudio/mui)
+ * Mui v0.5.7 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1563,7 +1563,7 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell {
   padding: 11px 15px;
-  margin: 0;
+  margin: -1px 0 0 -1px;
   vertical-align: top;
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
