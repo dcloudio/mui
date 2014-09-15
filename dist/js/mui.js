@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.6 (https://github.com/dcloudio/mui)
+ * Mui v0.5.7 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1344,38 +1344,41 @@ window.mui = mui;
  * @returns {undefined}
  */
 (function($) {
-    $.init.add(function() {
-        var options = $.options;
-        var pullRefreshOptions = options.pullRefresh || {};
+	$.init.add(function() {
+		var options = $.options;
+		var pullRefreshOptions = options.pullRefresh || {};
 
-        //需要判断是否为plus，这个需要等一下；
-        setTimeout(function() {
-            if($.os.plus && $.os.android){
-                //只要是android手机，必须使用原生的下拉刷新；
-                if(pullRefreshOptions.down){
-                    $.plus_pulldownRefresh(pullRefreshOptions.down);
-                }
-                if(pullRefreshOptions.up){
-                    var container = pullRefreshOptions.container;
-                    if (container) {
-                        var $container = $(container);
-                        if ($container.length === 1) {
-                            $container.pullRefresh(pullRefreshOptions);
-                        }
-                    }
-                }
-            }else{
-                var container = pullRefreshOptions.container;
-                if (container) {
-                    var $container = $(container);
-                    if ($container.length === 1) {
-                        $container.pullRefresh(pullRefreshOptions);
-                    }
-                }
-            }
-        }, 1000);    
+		//需要判断是否为plus，这个需要等一下；
+		setTimeout(function() {
+			if ($.os.plus && $.os.android) {
+				//只要是android手机，必须使用原生的下拉刷新；
+				if (pullRefreshOptions.down) {
+					$.plus_pulldownRefresh(pullRefreshOptions.down);
+				}
+				if (pullRefreshOptions.up) {
+					var container = pullRefreshOptions.container;
+					if (container) {
+						var $container = $(container);
+						if ($container.length === 1) {
+							$container.pullRefresh({
+								container: container,
+								up: pullRefreshOptions.up
+							});
+						}
+					}
+				}
+			} else {
+				var container = pullRefreshOptions.container;
+				if (container) {
+					var $container = $(container);
+					if ($container.length === 1) {
+						$container.pullRefresh(pullRefreshOptions);
+					}
+				}
+			}
+		}, 1000);
 
-    });
+	});
 })(mui);
 /**
  * mui ajax
