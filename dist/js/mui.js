@@ -1603,8 +1603,10 @@ window.mui = mui;
 					window.addEventListener('scroll', function() {
 						scrolling = true;
 					});
-					window.addEventListener('touchmove', function() {
-						scrolling = true;
+					window.addEventListener('dragend', function(event) {
+						if (event.detail.direction === 'up') {
+							scrolling = true;
+						}
 					});
 				}
 
