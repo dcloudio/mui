@@ -30,9 +30,17 @@
 		</header>
 		<div class="mui-content">
 			<div id="tableview"></div>
+			<div id="tableview_tpl"></div>
 			<div id="slider"></div>
 			<div id="slider-table-pagination"></div>
 			<div id="grid"></div>
+
+			<script id="tpl" type="text/x-handlebars-template">
+				<h5 class="mui-content-padded">自定义模板</h5>
+				<div class="mui-card">
+					{{>tableview}}
+				</div>
+			</script>
 		</div>
 		<script>
 			var tableview = [];
@@ -106,11 +114,16 @@
 			(function($) {
 				$(function() {
 					$('#tableview').tableview({
+						tpl: '', //可自己指定自定义模板
 						striped: true,
 						chevron: false,
 						inverted: false,
 						tableview: tableview,
 					});
+					$('#tableview_tpl').tableview({
+						tpl: document.getElementById("tpl").innerText,//指定了自定义模板
+						tableview: ['item 1', 'item 2', 'item 3', 'item 4', 'item 5']
+					})
 					var sliderApi = $('#slider').slider({
 						loop: true,
 						slideshowDelay: 0,
