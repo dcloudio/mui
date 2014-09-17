@@ -204,8 +204,8 @@ var mui = (function(document, undefined) {
 	};
 	return $;
 })(document);
-window.mui = mui;
-'$' in window || (window.$ = mui);
+//window.mui = mui;
+//'$' in window || (window.$ = mui);
 /**
  * mui target(action>popover>modal>tab>toggle)
  */
@@ -855,37 +855,42 @@ window.mui = mui;
  * @param {type} $
  * @returns {undefined}
  */
-(function($) {
-    function detect(ua) {
-        this.os = {};
-        var funcs = [function() {//android
-                var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
-                if (android) {
-                    this.os.android = true;
-                    this.os.version = android[2];
-                }
-                return this.os.android === true;
-            }, function() {//ios
-                var iphone = ua.match(/(iPhone\sOS)\s([\d_]+)/);
-                if (iphone) {//iphone
-                    this.os.ios = this.os.iphone = true;
-                    this.os.version = iphone[2].replace(/_/g, '.');
-                } else {
-                    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
-                    if (ipad) {//ipad
-                        this.os.ios = this.os.ipad = true;
-                        this.os.version = ipad[2].replace(/_/g, '.');
-                    }
-                }
-                return this.os.ios === true;
-            }];
-        [].every.call(funcs, function(func) {
-            return !func.call($);
-        });
-    }
-    detect.call($, navigator.userAgent);
-})(mui);
+(function($, window) {
+	function detect(ua) {
+		this.os = {};
+		var funcs = [
 
+			function() { //android
+				var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
+				if (android) {
+					this.os.android = true;
+					this.os.version = android[2];
+
+					this.os.isBadAndroid = !(/Chrome\/\d/.test(window.navigator.appVersion));
+				}
+				return this.os.android === true;
+			},
+			function() { //ios
+				var iphone = ua.match(/(iPhone\sOS)\s([\d_]+)/);
+				if (iphone) { //iphone
+					this.os.ios = this.os.iphone = true;
+					this.os.version = iphone[2].replace(/_/g, '.');
+				} else {
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
+					if (ipad) { //ipad
+						this.os.ios = this.os.ipad = true;
+						this.os.version = ipad[2].replace(/_/g, '.');
+					}
+				}
+				return this.os.ios === true;
+			}
+		];
+		[].every.call(funcs, function(func) {
+			return !func.call($);
+		});
+	}
+	detect.call($, navigator.userAgent);
+})(mui, window);
 /**
  * $.os.plus
  * @param {type} $
