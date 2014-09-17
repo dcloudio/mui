@@ -2039,7 +2039,6 @@ var mui = (function(document, undefined) {
 	if ($.os.android) {
 		return;
 	}
-	var CLASS_SLIDER = 'mui-slider';
 	var CLASS_SWITCH = 'mui-switch';
 	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
 	var CLASS_SLIDER_HANDLE = 'mui-slider-handle';
@@ -2142,9 +2141,9 @@ var mui = (function(document, undefined) {
 						break;
 					}
 				}
-				if (classList.contains(CLASS_SLIDER)) { //slider
-					break;
-				}
+//				if (classList.contains(CLASS_SLIDER)) { //slider
+//					break;
+//				}
 				if (classList.contains(CLASS_OFF_CANVAS_WRAP) && classList.contains(CLASS_DRAGGABLE)) {
 					container = target;
 					innerContainer = container.querySelector(SELECTOR_INNER_WRAP);
@@ -2595,7 +2594,7 @@ var mui = (function(document, undefined) {
 		slider.addEventListener('dragstart', function(event) {
 			var detail = event.detail;
 			var direction = detail.direction;
-			if (direction == 'left' || direction == 'right') { //reset
+			if (direction === 'left' || direction === 'right') { //reset
 				isDragable = true;
 				self.translateX = self.lastTranslateX = 0;
 				self.scrollX = self.getScroll();
@@ -2607,6 +2606,15 @@ var mui = (function(document, undefined) {
 				}
 				self.maxTranslateX = ((self.sliderLength - 1) * self.sliderWidth);
 				event.detail.gesture.preventDefault();
+				var isStopPropagation = true;
+				if (!self.isLoop) {
+					if (direction === 'right' && self.scrollX === 0) {
+						isStopPropagation = false;
+					} else if (direction === 'left' && self.scrollX === -self.maxTranslateX) {
+						isStopPropagation = false;
+					}
+				}
+				isStopPropagation && event.stopPropagation();
 			}
 		});
 		slider.addEventListener('drag', function(event) {
