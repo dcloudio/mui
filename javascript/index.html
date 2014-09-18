@@ -586,6 +586,71 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">).</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;你正在看第&quot;</span><span class="o">+</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;张图片&quot;</span><span class="p">;</span>
 <span class="p">});</span></code></pre></div>
   </article>
+
+
+  <!-- 自定义事件 -->
+        <article id="customevent" class="component mui-active">
+      <h3 class="component-title">自定义事件</h3>
+      <p class="component-description">用户开发应用中会大量使用事件功能。除了浏览器内置的事件及mui框架内置的事件（比如手势事件）外，mui同时支持用户触发和绑定自定义事件。通过自定义事件，用户可以轻松实现页面间数据传递。</p>
+        <p class="component-description"><strong>监听自定义事件</strong></p>
+        <p class="component-description">添加自定义事件监听操作和标准js事件监听类似，可直接通过window对象添加，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;customEvent&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+  <span class="c1">//通过event.detail可获得传递过来的参数内容</span>
+  <span class="p">....</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description"><strong>触发自定义事件</strong></p>
+<p class="component-description">通过mui.fire方法可触发目标窗口的自定义事件：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="nx">targetPage</span><span class="p">,</span><span class="s1">&#39;customEvent&#39;</span><span class="p">,{</span>
+  <span class="c1">//自定义事件参数</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description"><strong>示例：</strong>假设如下场景：从新闻列表页面进入新闻详情页面，新闻详情页面为共用页面，通过传递新闻ID通知详情页面需要显示具体哪个新闻，详情页面再动态向服务器请求数据，mui要实现类似需求可通过如下步骤实现：
+<ul>
+  <li>
+    在列表页面中预加载详情页面（假设为detail.html）
+  </li>
+  <li>
+    列表页面在点击新闻标题时，首先，获得该新闻id，触发详情页面的newsId事件，并将新闻id作为事件参数传递过去；然后再打开详情页面；
+  </li>
+  <li>详情页面监听newsId自定义事件</li>
+</ul>
+</p>
+<p class="component-description">列表页面代码如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//初始化预加载详情页面</span>
+<span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">preloadPages</span><span class="o">:</span><span class="p">[{</span>
+    <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;detail.html&#39;</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span><span class="s1">&#39;detail.html&#39;</span>           
+  <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">detailPage</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="c1">//添加列表项的点击事件</span>
+<span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-content&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;tap&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+  <span class="c1">//获得详情页面</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">detailPage</span><span class="p">){</span>
+    <span class="nx">detailPage</span> <span class="o">=</span> <span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">getWebviewById</span><span class="p">(</span><span class="s1">&#39;detail.html&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="c1">//触发详情页面的newsId事件</span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="nx">detailPage</span><span class="p">,</span><span class="s1">&#39;newsId&#39;</span><span class="p">,{</span>
+    <span class="nx">id</span><span class="o">:</span><span class="nx">id</span>
+  <span class="p">});</span>
+<span class="c1">//打开详情页面          </span>
+  <span class="nx">mui</span><span class="p">.</span><span class="nx">openWindow</span><span class="p">({</span>
+    <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;detail.html&#39;</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">详情页面代码如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//添加newId自定义事件监听</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;newsId&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+  <span class="c1">//获得事件参数</span>
+  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+  <span class="c1">//根据id向服务器请求新闻详情</span>
+  <span class="p">.....</span>
+<span class="p">});</span></code></pre></div>
+  </article>
+
   
       <!-- Footer -->
       <div class="docs-footer">
