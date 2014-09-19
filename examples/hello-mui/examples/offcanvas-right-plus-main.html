@@ -124,16 +124,18 @@
 		if(slideTogether){
 			left = '100%';
 		}
-		menu = mui.createWindow({
+		menu = mui.openWindow({
 			id: 'offcanvas-plus-menu',
 			url: 'offcanvas-plus-menu.html',
 			styles: {
 				left: '30%',
 				width:'70%',
 				zindex: 9998
+			},
+			show:{
+				aniShow:'none'
 			}
 		});
-		menu.show('none');
 		mui.currentWebview.setStyle({left:0});
 	});
 	//点击侧滑按钮

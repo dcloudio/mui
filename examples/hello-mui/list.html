@@ -127,7 +127,7 @@
 						</li>-->
 					</ul>
 				</li>
-				
+
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/icons.html">
 						icon（图标）
@@ -361,7 +361,7 @@
 						</li>
 					</ul>
 				</li>
-				
+
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/radio.html">
 						radio（单选框）
@@ -394,9 +394,9 @@
 						switch（开关）
 					</a>
 				</li>
-				
 
-		
+
+
 				<li class="mui-table-view-cell mui-collapse">
 					<a class="mui-navigate-right" href="#">
 						tab bar（选项卡）
@@ -453,7 +453,7 @@
 				弹出窗口（Modals）
 				</a>
 				</li>-->
-				
+
 
 				<!--<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/preload.html">
@@ -502,110 +502,109 @@
 			</ul>
 		</div>
 		<script>
-			var limit = 5,count = 0;
+			var limit = 3,
+				count = 0;
 			mui.init({
 				preloadLimit: limit, //同时并存的预加载窗口数量
 				swipeBack: false,
 			});
-			$.plusReady(function() {
-				//初始化一级列表的预加载
-				$('#list>.mui-table-view-cell', document.body).each(function() {
-					//只预加载一级列表，二级列表在其展开时再预加载；
-					if (!this.classList.contains('mui-collapse')) {
-						var url = this.querySelector('a').getAttribute("href");
-						//预加载，默认使用url作为其id
-						$.createWindow({
-							url: url,
-							preload: true
+			(function($) {
+				$.plusReady(function() {
+					//初始化一级列表的预加载
+					$('#list>.mui-table-view-cell', document.body).each(function() {
+						//只预加载一级列表，二级列表在其展开时再预加载；
+						if (!this.classList.contains('mui-collapse')) {
+							var url = this.querySelector('a').getAttribute("href");
+							//预加载，默认使用url作为其id
+							$.preload({
+								url: url,
+							});
+							if (++count >= limit) {
+								return false;
+							}
+						}
+					});
+
+					//监听展开事件,预加载二级列表的前几个；
+					$('#list').on('expand', '.mui-collapse', function(e) {
+						count = 0;
+						$('.mui-table-view a', this).each(function() {
+							var url = this.getAttribute("href");
+							if (~url.indexOf('.html')) {
+								//单独处理侧滑导航的index
+								if (~url.indexOf('offcanvas-')) {
+									$.preload({
+										url: url,
+										styles: {
+											zindex: 9999
+										},
+									});
+								} else {
+									$.preload({
+										url: url,
+									});
+								}
+								if (++count >= limit) {
+									return false;
+								}
+							}
 						});
-						if (++count >= limit) {
-							return false;
+					});
+
+					// 关闭启动界面
+					plus.navigator.closeSplashscreen();
+					//下拉刷新两个平台有区别；
+					if ($.os.ios) {
+						document.getElementById('pull-refresh-pandora').style.display = "none";
+					} else if ($.os.android) {
+						document.getElementById('pull-refresh-h5').style.display = "none";
+						var list = document.querySelectorAll('.ios-only');
+						if (list) {
+							for (var i = 0; i < list.length; i++) {
+								list[i].style.display = 'none';
+							}
 						}
 					}
 				});
 
-				//监听展开事件,预加载二级列表的前几个；
-				$('#list').on('expand', '.mui-collapse', function(e) {
-					count = 0;
-					$('.mui-table-view a', this).each(function() {
-						var url = this.getAttribute("href");
-						if (~url.indexOf('.html')) {
-							//单独处理侧滑导航的index
-							if(~url.indexOf('offcanvas-')){
-								$.createWindow({
-									url: url,
-									styles:{
-										zindex:9999
-									},
-									preload: true
-								});
-							}else{
-								$.createWindow({
-									url: url,
-									preload: true
-								});
-							}
-							if(++count>=limit){
-							 return false;
+				/**
+				 * 处理链接点击事件
+				 */
+				$.ready(function() {
+					$('body').on('tap', 'a', function(e) {
+						var id = this.getAttribute('href');
+						if (id) {
+							if (~id.indexOf('.html')) {
+								if (window.plus) {
+									//侧滑导航涉及Index问题，需要单独处理；
+									if (~id.indexOf('offcanvas-')) {
+										$.openWindow({
+											id: id,
+											url: this.href,
+											styles: {
+												zindex: 9999
+											},
+											preload: true
+										});
+									} else {
+										$.openWindow({
+											id: id,
+											url: this.href,
+											preload: true
+										});
+									}
+								} else {
+									document.location.href = this.href;
+								}
+							} else {
+								if (typeof plus !== 'undefined') {
+									plus.runtime.openURL(id);
+								}
 							}
 						}
 					});
 				});
-
-				// 关闭启动界面
-				plus.navigator.closeSplashscreen();
-				//下拉刷新两个平台有区别；
-				if ($.os.ios) {
-					document.getElementById('pull-refresh-pandora').style.display = "none";
-				} else if ($.os.android) {
-					document.getElementById('pull-refresh-h5').style.display = "none";
-					var list = document.querySelectorAll('.ios-only');
-					if(list){
-						for(var i=0;i<list.length;i++){
-							list[i].style.display = 'none';
-						}
-					}
-				}
-			});
-			
-	/**
-	 * 处理链接点击事件
-	 */
-	$.ready(function() {
-		$('body').on('tap', 'a', function(e) {
-			var id = this.getAttribute('href');
-			if (id) {
-				if (~id.indexOf('.html')) {
-					if (window.plus) {
-						//侧滑导航涉及Index问题，需要单独处理；
-						if(~id.indexOf('offcanvas-')){
-							$.openWindow({
-								id: id,
-								url: this.href,
-								styles:{
-									zindex:9999
-								},
-								preload: true 
-							});
-						}else{
-							$.openWindow({
-								id: id,
-								url: this.href,
-								preload:true 
-							});
-						}
-					} else {
-						document.location.href = this.href;
-					}
-				} else {
-					if (typeof plus !== 'undefined') {
-						plus.runtime.openURL(id);
-					}
-				}
-			}
-		});
-	});
-			
+			})(mui);
 		</script>
 	</body>
 

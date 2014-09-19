@@ -127,18 +127,19 @@
 		if (slideTogether) {
 			left = '-70%';
 		}
-		menu = mui.createWindow({
+		menu = mui.openWindow({
 			id: 'offcanvas-plus-menu',
 			url: 'offcanvas-plus-menu.html',
 			styles: {
 				left: left,
 				width: '70%',
 				zindex: 9998
+			},
+			show:{
+				aniShow:'none'
 			}
 		});
-		if (menu) {
-			menu.show('none');
-		}
+		//初始化主页面位置
 		mui.currentWebview.setStyle({
 			left: 0
 		});
