@@ -1237,6 +1237,17 @@ var mui = (function(document, undefined) {
 	};
 
 	/**
+	* 预加载
+	*/
+	$.preload = function(options){
+		//调用预加载函数，不管是否传递preload参数，强制变为true
+		if(!options.preload){
+			options.preload = true;
+		}
+		$.createWindow(options);
+	}
+
+	/**
 	*关闭当前webview打开的所有webview；
 	*/
 	$.closeOpened = function(webview){
@@ -2039,8 +2050,6 @@ var mui = (function(document, undefined) {
 	if ($.os.android) {
 		return;
 	}
-	var CLASS_SWITCH = 'mui-switch';
-	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
 	var CLASS_SLIDER_HANDLE = 'mui-slider-handle';
 	var CLASS_OFF_CANVAS_LEFT = 'mui-off-canvas-left';
 	var CLASS_OFF_CANVAS_RIGHT = 'mui-off-canvas-right';
@@ -2133,17 +2142,6 @@ var mui = (function(document, undefined) {
 		for (; target && target !== document; target = target.parentNode) {
 			var classList = target.classList;
 			if (classList) {
-				if (classList.contains(CLASS_SWITCH)) { //switch
-					break;
-				}
-				if (classList.contains(CLASS_TABLE_VIEW_CELL)) { //swipe table view cell
-					if (target.querySelector('.' + CLASS_SLIDER_HANDLE)) {
-						break;
-					}
-				}
-//				if (classList.contains(CLASS_SLIDER)) { //slider
-//					break;
-//				}
 				if (classList.contains(CLASS_OFF_CANVAS_WRAP) && classList.contains(CLASS_DRAGGABLE)) {
 					container = target;
 					innerContainer = container.querySelector(SELECTOR_INNER_WRAP);
@@ -2933,7 +2931,7 @@ var mui = (function(document, undefined) {
 		$.trigger(toggle, 'toggle', {
 			isActive: slideOn
 		});
-
+		toggle.removeEventListener('dragstart', $.stopPropagation);
 	};
 	var dragToggle = function(event) {
 		if (!toggle) {
@@ -2954,6 +2952,7 @@ var mui = (function(document, undefined) {
 	window.addEventListener($.EVENT_START, function(e) {
 		toggle = $.targets.toggle;
 		if (toggle) {
+			toggle.addEventListener('dragstart', $.stopPropagation);
 			handle = toggle.querySelector(SELECTOR_SWITCH_HANDLE);
 			toggleWidth = toggle.clientWidth;
 			handleWidth = handle.clientWidth;
@@ -3237,6 +3236,7 @@ var mui = (function(document, undefined) {
 					if (sliderCell && sliderCell.parentNode === cell) {
 						var handle = sliderCell.querySelector(SELECTOR_SLIDER_HANDLE);
 						if (handle) { //slider
+							toggleEvents(cell);
 							sliderHandle = handle;
 							sliderHandleWidth = sliderHandle.offsetWidth;
 							sliderHandleLeft = $.getStyles(sliderHandle, 'margin-left');
@@ -3273,52 +3273,71 @@ var mui = (function(document, undefined) {
 	window.addEventListener('touchmove', function(event) {
 		toggleActive(false);
 	});
-	window.addEventListener('dragstart', function(event) {
-		if (!sliderHandle) {
-			return;
-		}
-		var detail = event.detail;
-		var direction = detail.direction;
-		var angle = detail.angle;
-		if (direction === 'left') {
-			if ((sliderRight || sliderHandle) && (angle > 150 || angle < -150)) {
-				if (!sliderRight && sliderLeft && sliderTranslateX === 0) { //仅有左侧按钮时不允许左拖
-					return;
-				}
-				if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === 0) { //抽屉式已展开，不允许左拖
-					return;
-				}
-				isDraging = true;
-			}
-		} else if (direction === 'right') {
-			if ((sliderLeft || sliderHandle) && angle > -30 && angle < 30) {
-				if (!sliderLeft && sliderRight && sliderTranslateX === 0) { //仅有右侧按钮时不允许右拖
-					return;
-				}
-				if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === sliderHandleWidth) { //抽屉式已关闭，不允许右拖
-					return;
-				}
-				isDraging = true;
-			}
-		}
-	});
-	window.addEventListener('drag', function(event) {
-		if (isDraging) {
-			if (!sliderRequestAnimationFrame) {
-				updateTranslate();
-			}
-			translateX = event.detail.deltaX * factor;
-			event.detail.gesture.preventDefault();
-		}
-	});
 
-	window.addEventListener('dragend', function(event) {
-		if (isDraging) {
-			endDraging(false, event.detail);
-		}
-	});
-	window.addEventListener('swiperight', function(event) {
-		if (sliderHandle) {
+	var handleEvent = {
+		handleEvent: function(event) {
+			switch (event.type) {
+				case 'dragstart':
+					this.dragstart(event);
+					break;
+				case 'drag':
+					this.drag(event);
+					break;
+				case 'dragend':
+					this.dragend(event);
+					break;
+				case 'swiperight':
+					this.swiperight(event);
+					break;
+				case 'swipeleft':
+					this.swipeleft(event);
+					break;
+			}
+		},
+		dragstart: function(event) {
+			var detail = event.detail;
+			var direction = detail.direction;
+			var angle = detail.angle;
+			if (direction === 'left') {
+				if ((sliderRight || sliderHandle) && (angle > 150 || angle < -150)) {
+					if (!sliderRight && sliderLeft && sliderTranslateX === 0) { //仅有左侧按钮时不允许左拖
+						return;
+					}
+					if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === 0) { //抽屉式已展开，不允许左拖
+						return;
+					}
+					isDraging = true;
+				}
+			} else if (direction === 'right') {
+				if ((sliderLeft || sliderHandle) && angle > -30 && angle < 30) {
+					if (!sliderLeft && sliderRight && sliderTranslateX === 0) { //仅有右侧按钮时不允许右拖
+						return;
+					}
+					if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === sliderHandleWidth) { //抽屉式已关闭，不允许右拖
+						return;
+					}
+					isDraging = true;
+				}
+			}
+			if(isDraging){
+				event.stopPropagation();
+			}
+		},
+		drag: function(event) {
+			if (isDraging) {
+				if (!sliderRequestAnimationFrame) {
+					updateTranslate();
+				}
+				translateX = event.detail.deltaX * factor;
+				event.detail.gesture.preventDefault();
+			}
+		},
+		dragend: function(event) {
+			if (isDraging) {
+				endDraging(false, event.detail);
+			}
+		},
+		swiperight: function(event) {
 			var isSwipeable = false;
 			if (sliderLeft && !sliderLeft.classList.contains(CLASS_BOUNCE) && sliderTranslateX === 0) {
 				//left show
@@ -3336,10 +3355,8 @@ var mui = (function(document, undefined) {
 				event.stopImmediatePropagation();
 				endDraging(true, event.detail);
 			}
-		}
-	});
-	window.addEventListener('swipeleft', function(event) {
-		if (sliderHandle) {
+		},
+		swipeleft: function(event) {
 			var isSwipeable = false;
 			if (sliderRight && !sliderRight.classList.contains(CLASS_BOUNCE) && sliderTranslateX === 0) {
 				//right show
@@ -3358,18 +3375,32 @@ var mui = (function(document, undefined) {
 				endDraging(true, event.detail);
 			}
 		}
-	});
+	}
+
+	function toggleEvents(element, isRemove) {
+		var method = !!isRemove ? 'removeEventListener' : 'addEventListener';
+		element[method]('dragstart', handleEvent);
+		element[method]('drag', handleEvent);
+		element[method]('dragend', handleEvent);
+		element[method]('swiperight', handleEvent);
+		element[method]('swipeleft', handleEvent);
+	}
+
+
+
 	window.addEventListener('touchend', function(event) { //使用touchend来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
 		if (!cell) {
 			return;
 		}
 		toggleActive(false);
+		sliderHandle && toggleEvents(cell, true);
 	});
 	window.addEventListener('touchcancel', function(event) { //使用touchcancel来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
 		if (!cell) {
 			return;
 		}
 		toggleActive(false);
+		sliderHandle && toggleEvents(cell, true);
 	});
 	var radioOrCheckboxClick = function() {
 		var classList = cell.classList;

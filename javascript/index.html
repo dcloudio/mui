@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-18 05:41:39 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-18 05:41:39 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-19 18:04:16 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-19 18:04:16 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -234,7 +234,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <li>
     styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。
   </li>
-  <li>extras:新窗口的额外扩展参数，可用来处理页面间传值；例如：<code>var webview = mui.openWindow({url:'info.html',extras:{name:'mui'}});console.log(webview.name);</code>，会输出"mui"字符串；</li>
+  <li>extras:新窗口的额外扩展参数，可用来处理页面间传值；例如：<code>var webview = mui.openWindow({url:'info.html',extras:{name:'mui'}});console.log(webview.name);</code>，会输出"mui"字符串；注意：扩展参数仅在打开新窗口时有效，若目标窗口为预加载页面，则通过mui.openWindow方法打开时传递的extras参数无效。</li>
   <li>
     show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
   </li>
@@ -411,27 +411,20 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="p">{</span>
       <span class="nx">url</span><span class="o">:</span><span class="nx">prelaod</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
       <span class="nx">id</span><span class="o">:</span><span class="nx">preload</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span>
-      <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
-      <span class="p">},</span>
-      <span class="nx">subpages</span><span class="o">:</span><span class="p">[</span>
-      <span class="p">{</span>
-      <span class="p">}</span>
-     <span class="p">]</span>
+      <span class="nx">styles</span><span class="o">:</span><span class="p">{},</span><span class="c1">//窗口参数</span>
+      <span class="nx">extras</span><span class="o">:</span><span class="p">{},</span><span class="c1">//自定义扩展参数</span>
+      <span class="nx">subpages</span><span class="o">:</span><span class="p">[{},{}]</span><span class="c1">//预加载页面的子页面</span>
     <span class="p">}</span>
   <span class="p">]</span>
 <span class="p">});</span></code></pre></div>
 
     <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a>。</p>
-    <p class="component-description">方式二：通过mui.createWindow方法预加载.</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">({</span>
+    <p class="component-description">方式二：通过mui.preload方法预加载.</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">preload</span><span class="p">({</span>
     <span class="nx">url</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
     <span class="nx">id</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//默认使用当前页面的url作为id</span>
-    <span class="nx">styles</span><span class="o">:</span><span class="p">{</span>
-      <span class="nx">top</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">top</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span><span class="c1">//子页面顶部位置，默认为0px</span>
-      <span class="nx">bottom</span><span class="o">:</span><span class="nx">subpage</span><span class="o">-</span><span class="nx">bottom</span><span class="o">-</span><span class="nx">position</span><span class="p">,</span>
-      <span class="p">......</span>
-    <span class="p">},</span>
-    <span class="nx">preload</span><span class="o">:</span><span class="kc">true</span><span class="c1">//预加载标志，默认为false</span>
+    <span class="nx">styles</span><span class="o">:</span><span class="p">{},</span><span class="c1">//窗口参数</span>
+    <span class="nx">extras</span><span class="o">:</span><span class="p">{}</span><span class="c1">//自定义扩展参数</span>
 <span class="p">})</span></code></pre></div>
 <p class="component-description">示例：Hello mui首页显示后，用户点击badge（数字角标）、checkbox（复选框）、dialog（消息框）三个页面时，不会出现waiting等待框，而是立即打开了新页面；但点击icon（图标）页面时，则会先显示waiting等待框，再进入新页面；这种效果就是因为使用了预加载技术，Hello mui设置首页最多允许预加载3个页面（preloadLimit为3），然后在首页plusReady事件后，预加载了前3个一级列表页面，，故有前面所述的体验效果；实现代码如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#list&gt;.mui-table-view-cell&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -439,9 +432,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="s1">&#39;mui-collapse&#39;</span><span class="p">))</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">);</span>
     <span class="c1">//预加载，默认使用url作为其id</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">createWindow</span><span class="p">({</span>
-      <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span><span class="p">,</span>
-      <span class="nx">preload</span><span class="o">:</span> <span class="kc">true</span><span class="c1">//必需</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">preload</span><span class="p">({</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span>
     <span class="p">});</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">&gt;=</span> <span class="nx">limit</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
@@ -530,6 +522,14 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">}</span><span class="k">else</span><span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;关闭状态&quot;</span><span class="p">);</span>  
 <span class="p">}</span></code></pre></div>
+<p class="component-description">同理，要打开、关闭开控件，同样操作该控件的<code>.mui-active</code>类即可，如下为示例代码：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">mySwitch</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;mySwitch&quot;</span><span class="p">);</span>
+<span class="c1">//添加mui-active类，打开开关</span>
+<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span>
+<span class="c1">//删除mui-active类，关闭开关</span>
+<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span>
+<span class="c1">//也可以直接使用toggle方法自动处理打开或关闭</span>
+<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span></code></pre></div>
   </article>
     <!-- slide事件 -->
         <article id="slide" class="component mui-active">
@@ -586,9 +586,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">).</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;你正在看第&quot;</span><span class="o">+</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;张图片&quot;</span><span class="p">;</span>
 <span class="p">});</span></code></pre></div>
   </article>
-
-
-  <!-- 自定义事件 -->
+    <!-- 自定义事件 -->
         <article id="customevent" class="component mui-active">
       <h3 class="component-title">自定义事件</h3>
       <p class="component-description">用户开发应用中会大量使用事件功能。除了浏览器内置的事件及mui框架内置的事件（比如手势事件）外，mui同时支持用户触发和绑定自定义事件。通过自定义事件，用户可以轻松实现页面间数据传递。</p>
@@ -650,7 +648,48 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">.....</span>
 <span class="p">});</span></code></pre></div>
   </article>
-
+    <!-- 图片轮播插件 -->
+    <article id="plugin-slider" class="component mui-active">
+  <h3 class="component-title">图片轮播</h3>
+  <p class="component-description">mui框架内置了图片轮播插件，通过该插件封装的JS API，用户可以设定是否自动轮播及轮播周期，如下为代码示例：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
+<span class="kd">var</span> <span class="nx">gallery</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">);</span>
+<span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">({</span>
+  <span class="nx">slideshowDelay</span><span class="o">:</span><span class="mi">5000</span><span class="c1">//自动轮播周期，若为0则不自动播放，默认为0；</span>
+<span class="p">});</span></code></pre></div>
+  <p class="component-description">因此若希望图片轮播不要自动播放，而是用户手动滑动才切换，只需要通过如上方法，将slideshowDelay参数设为0即可。</p>
+  <p class="component-description">若要跳转到第x张图片，则可以使用图片轮播插件的gotoItem方法，例如：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
+<span class="kd">var</span> <span class="nx">gallery</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">);</span>
+<span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">(</span><span class="s1">&#39;gotoItem&#39;</span><span class="p">,</span><span class="nx">index</span><span class="p">);</span><span class="c1">//跳转到第index张图片，index从0开始；</span></code></pre></div>
+<p class="component-description">图片轮播涉及的另外一个问题：是否支持循环播放，比如有1、2、3、4四张图片，从第1张图片起，依次向左滑动切换图片，当切换到第4张图片时，继续向左滑动，接下来会有两种效果：
+  <ul>
+    <li>支持循环：左滑，直接切换到第1张图片；</li>
+    <li>不支持循环：左滑，无反应，继续显示第4张图片，用户若要显示第1张图片，必须连续向右滑动切换到第1张图片；</li>
+  </ul>
+  当显示第1张图片时，继续右滑是否显示第4张图片，是同样问题；这个问题的实现需要通过<code>.mui-slider-loop</code>类及DOM节点来控制；若不支持循环，代码比较简单，如下：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;2.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;3.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<p class="component-description">若要支持循环，则需要在<code>.mui-slider-group</code>节点上增加<code>.mui-slider-loop</code>类，同时需要重复增加2张图片，图片顺序变为：4、1、2、3、4、1，代码示例如下：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group mui-slider-loop&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--支持循环，需要重复图片节点--&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;2.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;3.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="c">&lt;!--支持循环，需要重复图片节点--&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+</article>
   
       <!-- Footer -->
       <div class="docs-footer">
@@ -658,7 +697,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</p>
 
 	<ul class="docs-footer-links">
-		<li>最新版本 v0.5.6</li>
+		<li>最新版本 v0.5.7</li>
 		<li>&middot;</li>
 		<li><a href="https://github.com/dcloudio/mui/issues">Issues</a>
 		</li>
@@ -669,8 +708,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-18 05:41:39 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-18 05:41:39 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-19 18:04:16 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-19 18:04:16 +0800"></script>
 
     </div>
   </div>
