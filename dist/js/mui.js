@@ -37,7 +37,7 @@ var mui = (function(document, undefined) {
 
 	var wrap = function(dom, selector) {
 		dom = dom || [];
-		dom.__proto__ = $.fn;
+		dom['__proto__'] = $.fn;
 		dom.selector = selector || '';
 		return dom;
 	};
@@ -408,7 +408,7 @@ var mui = (function(document, undefined) {
 		var targetElement = $.targets.click;
 		if (targetElement) {
 			var clickEvent, touch;
-			// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
+			// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect
 			if (document.activeElement && document.activeElement !== targetElement) {
 				document.activeElement.blur();
 			}
@@ -523,7 +523,6 @@ var mui = (function(document, undefined) {
 		$.gestures.sort(function(a, b) {
 			return a.index - b.index;
 		});
-
 		return $.gestures;
 	};
 	/**
@@ -575,7 +574,7 @@ var mui = (function(document, undefined) {
 		}
 		$.each($.gestures, function(index, gesture) {
 			if (!$.gestures.stoped) {
-				if ($.options.gestureConfig[gesture.name]) {
+				if ($.options.gestureConfig[gesture.name] !== false) {
 					if (gesture.hasOwnProperty('handle')) {
 						gesture.handle(event, touch);
 					}
@@ -586,16 +585,25 @@ var mui = (function(document, undefined) {
 	var touch = {};
 	var detectTouchStart = function(event) {
 		$.gestures.stoped = false;
+		var now = Date.now();
+		var point = event.touches[0];
 		touch = {
 			target: event.target,
 			lastTarget: (touch.lastTarget ? touch.lastTarget : null),
-			startTime: Date.now(),
+			startTime: now,
 			touchTime: 0,
+			flickStartTime: now,
 			lastTapTime: (touch.lastTapTime ? touch.lastTapTime : 0),
 			start: {
-				x: event.touches[0].pageX,
-				y: event.touches[0].pageY
+				x: point.pageX,
+				y: point.pageY
 			},
+			flickStart: {
+				x: point.pageX,
+				y: point.pageY
+			},
+			flickDistanceX: 0,
+			flickDistanceY: 0,
 			move: {
 				x: 0,
 				y: 0
@@ -618,11 +626,16 @@ var mui = (function(document, undefined) {
 		if ($.gestures.stoped) {
 			return;
 		}
-		touch.touchTime = Date.now() - touch.startTime;
+		var now = Date.now();
+		touch.touchTime = now - touch.startTime;
 		touch.move = {
 			x: event.touches[0].pageX,
 			y: event.touches[0].pageY
 		};
+		if (now - touch.flickStartTime > 300) {
+			touch.flickStartTime = now;
+			touch.flickStart = touch.move;
+		}
 		touch.distance = getDistance(touch.start, touch.move);
 		touch.angle = getAngle(touch.start, touch.move);
 		touch.direction = getDirectionByAngle(touch.angle);
@@ -638,7 +651,11 @@ var mui = (function(document, undefined) {
 		if ($.gestures.stoped) {
 			return;
 		}
-		touch.touchTime = Date.now() - touch.startTime;
+		var now = Date.now();
+		touch.touchTime = now - touch.startTime;
+		touch.flickTime = now - touch.flickStartTime;
+		touch.flickDistanceX = touch.move.x - touch.flickStart.x;
+		touch.flickDistanceY = touch.move.y - touch.flickStart.y;
 		touch.gesture = event;
 
 		detect(event, touch);
@@ -699,35 +716,63 @@ var mui = (function(document, undefined) {
 	};
 })(mui, window);
 /**
+ * mui gesture flick[left|right|up|down]
+ * @param {type} $
+ * @param {type} name
+ * @returns {undefined}
+ */
+(function($, name) {
+	var handle = function(event, touch) {
+		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
+			var options = this.options;
+			if (touch.direction && options.flickMaxTime > touch.flickTime && touch.distance > options.flickMinDistince) {
+				touch.flick = true;
+				$.trigger(event.target, name, touch);
+				$.trigger(event.target, name + touch.direction, touch);
+			}
+		}
+	};
+	/**
+	 * mui gesture flick
+	 */
+	$.registerGesture({
+		name: name,
+		index: 5,
+		handle: handle,
+		options: {
+			flickMaxTime: 300,
+			flickMinDistince: 10
+		}
+	});
+})(mui, 'flick');
+/**
  * mui gesture swipe[left|right|up|down]
  * @param {type} $
  * @param {type} name
  * @returns {undefined}
  */
 (function($, name) {
-    var handle = function(event, touch) {
-        if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
-            var options = this.options;
-            if (touch.direction && options.swipeMaxTime > touch.touchTime && touch.distance > options.swipeMinDistince) {
-                if (event.target.type !== 'range') {//ignore input range
-                    touch.swipe = true;
-                    $.trigger(event.target, name + touch.direction, touch);
-                }
-            }
-        }
-    };
-    /**
-     * mui gesture swipe
-     */
-    $.registerGesture({
-        name: name,
-        index: 10,
-        handle: handle,
-        options: {
-            swipeMaxTime: 300,
-            swipeMinDistince: 18
-        }
-    });
+	var handle = function(event, touch) {
+		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
+			var options = this.options;
+			if (touch.direction && options.swipeMaxTime > touch.touchTime && touch.distance > options.swipeMinDistince) {
+				touch.swipe = true;
+				$.trigger(event.target, name + touch.direction, touch);
+			}
+		}
+	};
+	/**
+	 * mui gesture swipe
+	 */
+	$.registerGesture({
+		name: name,
+		index: 10,
+		handle: handle,
+		options: {
+			swipeMaxTime: 300,
+			swipeMinDistince: 18
+		}
+	});
 })(mui, 'swipe');
 /**
  * mui gesture drag[start|left|right|up|down|end]
@@ -778,9 +823,9 @@ var mui = (function(document, undefined) {
 	var handle = function(event, touch) {
 		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
 			var options = this.options;
-			if (touch.distance < options.tabMaxDistance && touch.touchTime < options.tapMaxTime) {
+			if (touch.distance < options.tapMaxDistance && touch.touchTime < options.tapMaxTime) {
 				if ($.options.gestureConfig.doubletap && touch.lastTarget && (touch.lastTarget === event.target)) { //same target
-					if (touch.lastTapTime && (touch.startTime - touch.lastTapTime) < options.tabMaxInterval) {
+					if (touch.lastTapTime && (touch.startTime - touch.lastTapTime) < options.tapMaxInterval) {
 						$.trigger(event.target, 'doubletap', touch);
 						touch.lastTapTime = Date.now();
 						touch.lastTarget = event.target;
@@ -794,15 +839,15 @@ var mui = (function(document, undefined) {
 		}
 	};
 	/**
-	 * mui gesture tab
+	 * mui gesture tap
 	 */
 	$.registerGesture({
 		name: name,
 		index: 30,
 		handle: handle,
 		options: {
-			tabMaxInterval: 300,
-			tabMaxDistance: 5,
+			tapMaxInterval: 300,
+			tapMaxDistance: 5,
 			tapMaxTime: 250
 		}
 	});
@@ -919,6 +964,7 @@ var mui = (function(document, undefined) {
 			tap: true,
 			doubletap: true,
 			longtap: true,
+			flick: true,
 			swipe: true,
 			drag: true
 		}
@@ -1355,6 +1401,136 @@ var mui = (function(document, undefined) {
 	});
 })(mui);
 /**
+ * mui back
+ * @param {type} $
+ * @param {type} window
+ * @returns {undefined}
+ */
+(function($, window) {
+	/**
+	 * 后退
+	 */
+	$.back = function() {
+		if (window.history.length > 1) {
+			if (typeof $.options.back === 'function') {
+				if ($.options.back() !== false) {
+					window.history.back();
+				}
+			} else {
+				window.history.back();
+			}
+		}
+	};
+	window.addEventListener('tap', function(e) {
+		var action = $.targets.action;
+		if (action && action.classList.contains('mui-action-back')) {
+			$.back();
+		}
+	});
+	window.addEventListener('swiperight', function(e) {
+		var detail = e.detail;
+		if (detail.angle > -15 && detail.angle < 15 && $.options.swipeBack === true) {
+			if ($.targets.toggle) {
+				return;
+			}
+			$.back();
+		}
+	});
+
+})(mui, window);
+/**
+ * mui back 5+
+ * @param {type} $
+ * @param {type} window
+ * @returns {undefined}
+ */
+(function($, window) {
+	/**
+	 * 后退(5+关闭当前窗口)
+	 */
+	$.back = function() {
+		var isBack = true;
+		var callback = false;
+		if (typeof $.options.back === 'function') {
+			callback = $.options.back();
+			if (callback === false) {
+				isBack = false;
+			}
+		}
+		if (!isBack) {
+			return;
+		}
+		if (window.plus) {
+			var wobj = $.currentWebview;
+			var parent = wobj.parent();
+			if (parent) {
+				wobj = parent;
+			}
+			wobj.canBack(function(e) {
+				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
+				if (e.canBack) { //webview history back
+					window.history.back();
+				} else { //webview close or hide
+					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
+
+					var opener = wobj.opener();
+					if (opener) {
+						//by chb 暂不自动处理老页面的隐藏；
+						// var openerParent = opener.parent();
+						// if (openerParent) {
+						// 	opener = openerParent;
+						// }
+						if (wobj.preload) {
+							wobj.hide("auto");
+						} else {
+							//关闭页面时，需要将其打开的所有子页面全部关闭；
+							$.closeAll(wobj);
+						}
+						//TODO 暂时屏蔽父窗口的隐藏与显示，与预加载一起使用时太多bug
+						//opener.show();
+					} else {
+						//首页不存在opener的情况下，后退实际上应该是退出应用；
+						//这个交给项目具体实现，框架暂不处理；
+						//plus.runtime.quit();
+					}
+				}
+			});
+
+		} else if (window.history.length > 1) {
+			window.history.back();
+		} else {
+			window.close();
+		}
+	};
+
+	$.menu = function() {
+		var menu = document.querySelector('.mui-action-menu');
+		if (menu) {
+			$.trigger(menu, 'tap');
+		} else { //执行父窗口的menu
+			if (window.plus) {
+				var wobj = $.currentWebview;
+				var parent = wobj.parent();
+				if (parent) { //又得evalJS
+					parent.evalJS('mui&&mui.menu();');
+				}
+			}
+		}
+	}
+
+	$.plusReady(function() {
+		plus.key.addEventListener('backbutton', function() {
+			$.back();
+		}, false);
+
+		plus.key.addEventListener('menubutton', function() {
+			$.menu();
+		}, false);
+
+	});
+
+})(mui, window);
+/**
  * mui.init pulldownRefresh
  * @param {type} $
  * @returns {undefined}
@@ -1492,376 +1668,814 @@ var mui = (function(document, undefined) {
 })(mui, window);
 
 /**
- * pullRefresh plugin
+ * scroll
  * @param {type} $
  * @param {type} window
  * @param {type} document
- * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, undefined) {
+(function($, window, document, name, undefined) {
+	var CLASS_SCROLLBAR = 'mui-scrollbar';
+	var CLASS_INDICATOR = 'mui-scrollbar-indicator';
+	var CLASS_SCROLLBAR_VERTICAL = CLASS_SCROLLBAR + '-vertical';
+	var CLASS_SCROLLBAR_HORIZONTAL = CLASS_SCROLLBAR + '-horizontal';
+
+	var ease = {
+		quadratic: {
+			style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+			fn: function(k) {
+				return k * (2 - k);
+			}
+		},
+		circular: {
+			style: 'cubic-bezier(0.1, 0.57, 0.1, 1)',
+			fn: function(k) {
+				return Math.sqrt(1 - (--k * k));
+			}
+		}
+	}
+	var Scroll = function(element, options) {
+		this.wrapper = this.element = element;
+		this.scroller = this.wrapper.children[0];
+		this.scrollerStyle = this.scroller.style;
+
+		this.options = $.extend({
+			scrollY: true,
+			scrollX: false,
+			startX: 0,
+			startY: 0,
+			hardwareAccelerated: true,
+			preventDefaultException: {
+				tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
+			},
+			momentum: true,
+
+			bounce: true,
+			bounceTime: 600,
+			bounceEasing: ease.circular.style,
+
+			directionLockThreshold: 5,
+
+		}, options, true);
+
+		this.x = 0;
+		this.y = 0;
+		this.translateZ = this.options.hardwareAccelerated ? ' translateZ(0)' : '';
+
+		this.init();
+		this.refresh();
+		this.scrollTo(this.options.startX, this.options.startY);
+	};
+	Scroll.prototype.init = function() {
+		this._initPullRefresh();
+		this._initIndicators();
+
+		this.initEvent();
+	};
+	Scroll.prototype._initIndicators = function() {
+		var indicators = [],
+			indicator;
+
+		var self = this;
+
+		self.indicators = [];
+
+		// Vertical scrollbar
+		if (self.options.scrollY) {
+			indicator = {
+				el: this.createScrollBar(CLASS_SCROLLBAR_VERTICAL),
+				listenX: false
+			};
+
+			this.wrapper.appendChild(indicator.el);
+			indicators.push(indicator);
+		}
+
+		// Horizontal scrollbar
+		if (this.options.scrollX) {
+			indicator = {
+				el: this.createScrollBar(CLASS_SCROLLBAR_HORIZONTAL),
+				listenY: false
+			};
+
+			this.wrapper.appendChild(indicator.el);
+			indicators.push(indicator);
+		}
+
+		if (this.options.indicators) {
+			indicators = indicators.concat(this.options.indicators);
+		}
+
+		for (var i = indicators.length; i--;) {
+			this.indicators.push(new Indicator(this, indicators[i]));
+		}
+
+		this.wrapper.addEventListener('scrollend', function() {
+			self.indicators.map(function(indicator) {
+				indicator.fade();
+			});
+		});
+
+		this.wrapper.addEventListener('scrollstart', function() {
+			self.indicators.map(function(indicator) {
+				indicator.fade(1);
+			});
+		});
+
+		this.wrapper.addEventListener('beforescrollstart', function() {
+			self.indicators.map(function(indicator) {
+				indicator.fade(1, true);
+			});
+		});
+
+		this.wrapper.addEventListener('refresh', function() {
+			self.indicators.map(function(indicator) {
+				indicator.refresh();
+			});
+		});
+	};
+
+	Scroll.prototype.initEvent = function() {
+		window.addEventListener('orientationchange', this);
+		window.addEventListener('resize', this);
+		this.wrapper.addEventListener('touchstart', this);
+		this.wrapper.addEventListener('touchcancel', this);
+		this.wrapper.addEventListener('touchend', this);
+		this.wrapper.addEventListener('drag', this);
+		this.wrapper.addEventListener('dragend', this);
+		this.wrapper.addEventListener('flick', this);
+		this.scroller.addEventListener('webkitTransitionEnd', this);
+		var that = this;
+		this.wrapper.addEventListener('scrollend', function() {
+			if (that.y <= that.maxScrollY) {
+				$.trigger(that.wrapper, 'scrollbottom', that);
+			}
+		});
+	};
+	Scroll.prototype.handleEvent = function(e) {
+
+		switch (e.type) {
+			case 'touchstart':
+				this._start(e);
+				break;
+			case 'touchcancel':
+			case 'touchend':
+				this._end(e);
+				break;
+			case 'drag':
+				this._drag(e);
+				break;
+			case 'dragend':
+			case 'flick':
+				this._flick(e);
+				break;
+			case 'orientationchange':
+			case 'resize':
+				this._resize();
+				break;
+			case 'webkitTransitionEnd':
+				this._transitionEnd(e);
+				break;
+		}
+	};
+	Scroll.prototype._transitionEnd = function(e) {
+		if (e.target != this.scroller || !this.isInTransition) {
+			return;
+		}
+
+		this._transitionTime();
+		if (!this.resetPosition(this.options.bounceTime)) {
+			this.isInTransition = false;
+			$.trigger(this.wrapper, 'scrollend', this);
+		}
+	};
+	Scroll.prototype.preventDefaultException = function(el, exceptions) {
+		for (var i in exceptions) {
+			if (exceptions[i].test(el[i])) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+	Scroll.prototype.getComputedPosition = function() {
+		return $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
+	};
+	Scroll.prototype._start = function(e) {
+
+		this.moved = this.needReset = false;
+		if (!this.loading) {
+			this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
+		}
+
+		this._transitionTime();
+
+		if (this.isInTransition) {
+			this.needReset = true;
+			this.isInTransition = false;
+			var pos = this.getComputedPosition();
+			this._setTranslate(Math.round(pos.x), Math.round(pos.y));
+			$.trigger(this.wrapper, 'scrollend', this);
+		}
+		this.reset();
+		$.trigger(this.wrapper, 'beforescrollstart', this);
+	};
+	Scroll.prototype._end = function(e) {
+		if (!this.moved && this.needReset) {
+			this.resetPosition(this.options.bounceTime);
+		}
+	};
+	Scroll.prototype._drag = function(e) {
+		var detail = e.detail;
+
+		detail.gesture.preventDefault();
+		var deltaX = detail.deltaX - detail.lastDeltaX;
+		var deltaY = detail.deltaY - detail.lastDeltaY;
+		var absDeltaX = Math.abs(detail.deltaX);
+		var absDeltaY = Math.abs(detail.deltaY);
+		if (absDeltaX > absDeltaY + this.options.directionLockThreshold) {
+			deltaY = 0;
+		} else if (absDeltaY >= absDeltaX + this.options.directionLockThreshold) {
+			deltaX = 0;
+		}
+
+		deltaX = this.hasHorizontalScroll ? deltaX : 0;
+		deltaY = this.hasVerticalScroll ? deltaY : 0;
+		var newX = this.x + deltaX;
+		var newY = this.y + deltaY;
+		// Slow down if outside of the boundaries
+		if (newX > 0 || newX < this.maxScrollX) {
+			newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+		}
+		if (newY > 0 || newY < this.maxScrollY) {
+			newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+		}
+		if (!this.requestAnimationFrame) {
+			this._updateTranslate();
+		}
+		if (!this.moved) {
+			$.trigger(this.wrapper, 'scrollstart', this);
+		}
+		this.moved = true;
+		this.x = newX;
+		this.y = newY;
+		if (!this.pulldown && !this.loading && this.topPocket && detail.direction === 'down' && this.y >= 0) {
+			this.pulldown = true;
+			this.pullPocket = this.topPocket;
+			this.pullCaption = this.topCaption;
+			this.pullLoading = this.topLoading;
+		}
+		if (this.pulldown) {
+			this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
+		}
+	};
+	Scroll.prototype._flick = function(e) {
+		var detail = e.detail;
+		this._clearRequestAnimationFrame();
+		if (e.type === 'dragend' && detail.flick) { //dragend
+			return;
+		}
+
+		var newX = Math.round(this.x);
+		var newY = Math.round(this.y);
+
+		this.isInTransition = false;
+		// reset if we are outside of the boundaries
+		if (this.resetPosition(this.options.bounceTime)) {
+			return;
+		}
+
+		this.scrollTo(newX, newY); // ensures that the last position is rounded
+
+		if (e.type === 'dragend') { //dragend
+			$.trigger(this.wrapper, 'scrollend', this);
+			return;
+		}
+		var time = 0;
+		var easing = '';
+		// start momentum animation if needed
+		if (this.options.momentum && detail.flickTime < 300) {
+			momentumX = this.hasHorizontalScroll ? this.momentum(this.x, detail.flickDistanceX, detail.flickTime, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : {
+				destination: newX,
+				duration: 0
+			};
+			momentumY = this.hasVerticalScroll ? this.momentum(this.y, detail.flickDistanceY, detail.flickTime, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : {
+				destination: newY,
+				duration: 0
+			};
+			newX = momentumX.destination;
+			newY = momentumY.destination;
+			time = Math.max(momentumX.duration, momentumY.duration);
+			this.isInTransition = true;
+		}
+
+		if (newX != this.x || newY != this.y) {
+			if (newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY) {
+				easing = ease.quadratic;
+			}
+			this.scrollTo(newX, newY, time, easing);
+			return;
+		}
+
+		$.trigger(this.wrapper, 'scrollend', this);
+	};
+
+	Scroll.prototype._resize = function() {
+		var that = this;
+
+		clearTimeout(this.resizeTimeout);
+
+		this.resizeTimeout = setTimeout(function() {
+			that.refresh();
+		}, this.options.resizePolling);
+	};
+	Scroll.prototype.momentum = function(current, distance, time, lowerMargin, wrapperSize, deceleration) {
+		var speed = parseFloat(Math.abs(distance) / time),
+			destination,
+			duration;
+
+		deceleration = deceleration === undefined ? 0.0006 : deceleration;
+
+		destination = current + (speed * speed) / (2 * deceleration) * (distance < 0 ? -1 : 1);
+		duration = speed / deceleration;
+		if (destination < lowerMargin) {
+			destination = wrapperSize ? lowerMargin - (wrapperSize / 2.5 * (speed / 8)) : lowerMargin;
+			distance = Math.abs(destination - current);
+			duration = distance / speed;
+		} else if (destination > 0) {
+			destination = wrapperSize ? wrapperSize / 2.5 * (speed / 8) : 0;
+			distance = Math.abs(current) + destination;
+			duration = distance / speed;
+		}
+
+		return {
+			destination: Math.round(destination),
+			duration: duration
+		};
+	};
+	Scroll.prototype.resetPosition = function(time) {
+		var x = this.x,
+			y = this.y;
+
+		time = time || 0;
+		if (!this.hasHorizontalScroll || this.x > 0) {
+			x = 0;
+		} else if (this.x < this.maxScrollX) {
+			x = this.maxScrollX;
+		}
+		if (this.pulldown && this.y >= this.options.down.height) {
+			this.pulldownLoading(x, time);
+			return true;
+		}
+		if (!this.hasVerticalScroll || this.y > 0) {
+			y = 0;
+		} else if (this.y < this.maxScrollY) {
+			y = this.maxScrollY;
+		}
+
+		if (x == this.x && y == this.y) {
+			return false;
+		}
+		this.scrollTo(x, y, time, this.options.bounceEasing);
+
+		return true;
+	};
+	Scroll.prototype.reset = function() {
+		this.wrapper.offsetHeight;
+
+		var paddingLeft = parseFloat($.getStyles(this.wrapper, 'padding-left')) || 0;
+		var paddingRight = parseFloat($.getStyles(this.wrapper, 'padding-right')) || 0;
+		var paddingTop = parseFloat($.getStyles(this.wrapper, 'padding-top')) || 0;
+		var paddingBottom = parseFloat($.getStyles(this.wrapper, 'padding-bottom')) || 0;
+
+		var clientWidth = this.wrapper.clientWidth;
+		var clientHeight = this.wrapper.clientHeight;
+
+		this.scrollerWidth = this.scroller.offsetWidth;
+		this.scrollerHeight = this.scroller.offsetHeight;
+
+		this.wrapperWidth = clientWidth - paddingLeft - paddingRight;
+		this.wrapperHeight = clientHeight - paddingTop - paddingBottom;
+
+		this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
+		this.maxScrollY = Math.min(this.wrapperHeight - this.scrollerHeight, 0);
+		this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
+		this.hasVerticalScroll = (this.options.scrollY && this.maxScrollY < 0) || (this.topPocket ? true : false);
+
+		if (!this.hasHorizontalScroll) {
+			this.maxScrollX = 0;
+			this.scrollerWidth = this.wrapperWidth;
+		}
+
+		if (!this.hasVerticalScroll) {
+			this.maxScrollY = 0;
+			this.scrollerHeight = this.wrapperHeight;
+		}
+
+		this.indicators.map(function(indicator) {
+			indicator.refresh();
+		});
+	};
+	Scroll.prototype.refresh = function() {
+		this.reset();
+		$.trigger(this.wrapper, 'refresh', this);
+		this.resetPosition();
+	};
+
+	Scroll.prototype.createScrollBar = function(clazz) {
+		var scrollbar = document.createElement('div');
+		var indicator = document.createElement('div');
+		scrollbar.className = CLASS_SCROLLBAR + ' ' + clazz;
+		indicator.className = CLASS_INDICATOR;
+		scrollbar.appendChild(indicator);
+		if (clazz === CLASS_SCROLLBAR_VERTICAL) {
+			this.scrollbarY = scrollbar;
+			this.scrollbarIndicatorY = indicator;
+		} else if (clazz === CLASS_SCROLLBAR_HORIZONTAL) {
+			this.scrollbarX = scrollbar;
+			this.scrollbarIndicatorX = indicator;
+		}
+		this.wrapper.appendChild(scrollbar);
+		return scrollbar;
+	};
+	Scroll.prototype.scrollTo = function(x, y, time, easing) {
+		var easing = easing || ease.circular;
+		this.isInTransition = time > 0;
+		if (this.isInTransition) {
+			this._clearRequestAnimationFrame();
+			this._transitionTimingFunction(easing.style);
+			this._transitionTime(time);
+			this._setTranslate(x, y);
+		} else {
+			this._setTranslate(x, y);
+		}
+
+	};
+	Scroll.prototype._transitionTime = function(time) {
+		time = time || 0;
+		this.scrollerStyle['webkitTransitionDuration'] = time + 'ms';
+		if (!time && $.os.isBadAndroid) {
+			this.scrollerStyle['webkitTransitionDuration'] = '0.001s';
+		}
+		if (this.indicators) {
+			for (var i = this.indicators.length; i--;) {
+				this.indicators[i].transitionTime(time);
+			}
+		}
+	};
+
+	Scroll.prototype._transitionTimingFunction = function(easing) {
+		this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
+		if (this.indicators) {
+			for (var i = this.indicators.length; i--;) {
+				this.indicators[i].transitionTimingFunction(easing);
+			}
+		}
+	};
+
+	Scroll.prototype._translate = function(x, y) {
+		this.x = x;
+		this.y = y;
+	};
+	Scroll.prototype._clearRequestAnimationFrame = function() {
+		if (this.requestAnimationFrame) {
+			cancelAnimationFrame(this.requestAnimationFrame);
+			this.requestAnimationFrame = null;
+		}
+	};
+	Scroll.prototype._setTranslate = function(x, y) {
+		this.x = x;
+		this.y = y;
+		this.scrollerStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
+		if (this.indicators) {
+			for (var i = this.indicators.length; i--;) {
+				this.indicators[i].updatePosition();
+			}
+		}
+		this.lastX = this.x;
+		this.lastY = this.y;
+	};
+	Scroll.prototype._updateTranslate = function() {
+		var self = this;
+		if (self.x !== self.lastX || self.y !== self.lastY) {
+			self._setTranslate(self.x, self.y);
+		}
+		self.requestAnimationFrame = requestAnimationFrame(function() {
+			self._updateTranslate();
+		});
+	};
+	//pullrefreh
 
 	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
 	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
 	var CLASS_PULL = 'mui-pull';
-	var CLASS_PULL_ARROW = 'mui-pull-arrow';
 	var CLASS_PULL_LOADING = 'mui-pull-loading';
 	var CLASS_PULL_CAPTION = 'mui-pull-caption';
-	var CLASS_PULL_CAPTION_DOWN = CLASS_PULL_CAPTION + '-down';
-	var CLASS_PULL_CAPTION_OVER = CLASS_PULL_CAPTION + '-over';
-	var CLASS_PULL_CAPTION_REFRESH = CLASS_PULL_CAPTION + '-refresh';
 
 	var CLASS_ICON = 'mui-icon';
-	var CLASS_ICON_SPINNER = 'mui-icon-spinner-cycle';
-	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
-	var CLASS_SPIN = 'mui-spin';
+	var CLASS_PRELOADER = 'mui-preloader';
+	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
+	var CLASS_PRELOADER_SPIN = 'mui-preloader-spin';
 
 	var CLASS_IN = 'mui-in';
 	var CLASS_REVERSE = 'mui-reverse';
 
-	var CLASS_HIDDEN = 'mui-hidden';
+	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
+	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
+	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
 
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN + ' ' + CLASS_REVERSE;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_SPINNER + ' ' + CLASS_SPIN;
-	var defaultOptions = {
+	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{downCaption}</div>', '</div>'].join('');
+
+	var pullRefreshOptions = {
 		down: {
 			height: 50,
-			contentdown: '下拉可刷新',
+			contentdown: '下拉可以刷新',
 			contentover: '释放立即刷新',
 			contentrefresh: '正在刷新...'
 		},
 		up: {
 			height: 50,
 			contentdown: '上拉显示更多',
-			contentover: '释放立即刷新',
 			contentrefresh: '正在加载...',
 			duration: 300
 		}
 	};
-	var html = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">', '<span class="' + CLASS_PULL_CAPTION_DOWN + ' ' + CLASS_IN + '">{downCaption}</span>', '<span class="' + CLASS_PULL_CAPTION_OVER + '">{overCaption}</span>', '<span class="' + CLASS_PULL_CAPTION_REFRESH + '">{refreshCaption}</span>', '</div>', '</div>'];
-
-	var PullRefresh = function(element, options) {
-		this.element = element;
-		this.options = $.extend(defaultOptions, options, true);
-		this.options.up.height = -this.options.up.height;
-		this.pullOptions = null;
-
-		this.init();
-
+	Scroll.prototype.pulldownLoading = function(x, time) {
+		x = x || 0;
+		this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
+		if (this.loading) {
+			return;
+		}
+		this._setCaption(this.options.down.contentrefresh);
+		this.loading = true;
+		this.indicators.map(function(indicator) {
+			indicator.fade(0);
+		});
+		var callback = this.options.down.callback;
+		var that = this;
+		callback && callback(function() {
+			that.scrollTo(x, 0, time, that.options.bounceEasing);
+			that.loading = false;
+			that._setCaption(that.options.down.contentdown);
+		});
 	};
-	PullRefresh.prototype.init = function() {
-		this.element.style.webkitTransform = 'translate3d(0,0,0)';
-		this.element.style.position = 'relative';
-		this.element.style['-webkit-backface-visibility'] = 'hidden';
-		this.translateY = 0;
-		this.lastTranslateY = 0;
-
-		this.initPocket();
-		this.initEvent();
+	Scroll.prototype.pullupLoading = function(x, time) {
+		x = x || 0;
+		this.scrollTo(x, this.maxScrollY, time, this.options.bounceEasing);
+		if (this.loading) {
+			return;
+		}
+		this._setCaption(this.options.up.contentrefresh);
+		this.indicators.map(function(indicator) {
+			indicator.fade(0);
+		});
+		this.loading = true;
+		var callback = this.options.up.callback;
+		var that = this;
+		callback && callback(function() {
+			that.loading = false;
+			that._setCaption(that.options.up.contentdown);
+		});
 	};
-	PullRefresh.prototype.initPocket = function() {
+	Scroll.prototype._initPullRefresh = function() {
+		this._initPocket();
+	};
+	Scroll.prototype._initPocket = function() {
 		var options = this.options;
 		if (options.down && options.down.hasOwnProperty('callback')) {
-			this.topPocket = this.element.querySelector('.' + CLASS_PULL_TOP_POCKET);
+			this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
 			if (!this.topPocket) {
-				this.topPocket = this.createPocket(CLASS_PULL_TOP_POCKET, options.down);
-				this.element.insertBefore(this.topPocket, this.element.firstChild);
+				this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down);
+				this.scroller.insertBefore(this.topPocket, this.scroller.firstChild);
+
+				this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
+				this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+
 			}
 		}
 		if (options.up && options.up.hasOwnProperty('callback')) {
-			this.bottomPocket = this.element.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
+			this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
 			if (!this.bottomPocket) {
-				this.bottomPocket = this.createPocket(CLASS_PULL_BOTTOM_POCKET, options.up);
-				this.element.appendChild(this.bottomPocket);
+				this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up);
+				this.scroller.appendChild(this.bottomPocket);
+
+				this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+				this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
 			}
+			var that = this;
+			this.wrapper.addEventListener('scrollbottom', function() {
+				if (!that.pulldown && !that.loading) {
+					that.pullPocket = that.bottomPocket;
+					that.pullCaption = that.bottomCaption;
+					that.pullLoading = that.bottomLoading;
+					that.pullupLoading();
+				}
+			});
 		}
 	};
-	PullRefresh.prototype.createPocket = function(clazz, options) {
+	Scroll.prototype._createPocket = function(clazz, options) {
 		var pocket = document.createElement('div');
 		pocket.className = clazz;
-		pocket.innerHTML = html.join('').replace('{downCaption}', options.contentdown).replace('{overCaption}', options.contentover).replace('{refreshCaption}', options.contentrefresh);
+		pocket.innerHTML = pocketHtml.replace('{downCaption}', options.contentdown);
 		return pocket;
 	};
-	PullRefresh.prototype.initEvent = function() {
-		var self = this;
-		if (self.bottomPocket) {
-			if (self.options.up.draggable) {
-				self.element.addEventListener('dragup', function(e) {
-					self.dragUp(e);
-				});
-			} else {
-				var callback = self.options.up.callback;
-				if (callback) {
-					var scrolling = false;
-					var isLoading = false;
-					setInterval(function() {
-						if (scrolling) {
-							scrolling = false;
-							if (isLoading) return;
-							var scrollHeight = document.body.scrollHeight;
-							if (window.innerHeight + window.scrollY + 5 > scrollHeight) {
-								self.isLoading = isLoading = true;
-								$.gestures.stoped = true;
-								//window.scrollTo(0, scrollHeight);
-								self.pullOptions = self.options.up;
-								self.loading = self.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-								self.setCaption(CLASS_PULL_CAPTION_REFRESH);
-								callback(function() {
-									self.isLoading = isLoading = false;
-									self.setCaption(CLASS_PULL_CAPTION_DOWN);
-									self.pullOptions = null;
-								});
-							}
-						}
-					}, 250);
 
-					window.addEventListener('scroll', function() {
-						scrolling = true;
-					});
-					window.addEventListener('dragend', function(event) {
-						if (event.detail.direction === 'up') {
-							scrolling = true;
-						}
-					});
-				}
-
-			}
-			//			if ($.os.plus) {
-			//				var pocket = self.bottomPocket;
-			//				pocket.style.display = "none";
-			//				//图标需要显示出来
-			//				pocket.querySelector('.' + CLASS_PULL_LOADING).className = CLASS_LOADING + ' mui-active';
-			//				//不需要这么多节点，只显示正在加载即可；
-			//				pocket.querySelector('.' + CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.' + CLASS_PULL_CAPTION_DOWN));
-			//				pocket.querySelector('.' + CLASS_PULL_CAPTION).removeChild(pocket.querySelector('.' + CLASS_PULL_CAPTION_OVER));
-			//				pocket.querySelector('.' + CLASS_PULL_CAPTION_REFRESH).classList.add('mui-in');;
-			//				document.addEventListener('plusscrollbottom', function() {
-			//					if (self.isLoading) return;
-			//					self.isLoading = true;
-			//					pocket.style.display = "block";
-			//					var callback = self.options.up.callback;
-			//					callback && callback(function() {
-			//						pocket.style.display = "none";
-			//						self.isLoading = false;
-			//					});
-			//				}, false);
-			//			} else {
-			//				self.element.addEventListener('dragup', function(e) {
-			//					self.dragUp(e);
-			//				});
-			//			}
+	Scroll.prototype._setCaption = function(title) {
+		if (this.loading) {
+			return;
 		}
-		if (self.topPocket) {
-			self.element.addEventListener('dragdown', function(e) {
-				self.dragDown(e);
-			});
-		}
-		if ((self.bottomPocket && self.options.up.draggable === true) || self.topPocket) {
-			self.element.addEventListener('dragstart', function(e) {
-				self.dragStart(e);
-			});
-			self.element.addEventListener('drag', function(e) {
-				var direction = e.detail.direction;
-				//左右拖动处理逻辑？
-				if (self.dragDirection && direction !== 'up' && direction !== 'down') {
-					if (self.pullOptions) {
-						if (self.pullOptions.height > 0) {
-							self.dragDown(e);
-						} else {
-							self.dragUp(e);
-						}
+		var options = this.options;
+		var pocket = this.pullPocket;
+		if (pocket) {
+			if (title !== this.lastTitle) {
+				var caption = this.pullCaption;
+				var loading = this.pullLoading;
+				caption.innerHTML = title;
+				if (this.pulldown) {
+					//					if (title === options.down.contentrefresh) {
+					loading.className = CLASS_LOADING;
+					//					} else if (title === options.down.contentover) {
+					//						loading.className = CLASS_LOADING_UP;
+					//					} else if (title === options.down.contentdown) {
+					//						loading.className = CLASS_LOADING_DOWN;
+					//					}
+				} else {
+					if (title === options.up.contentrefresh) {
+						loading.className = CLASS_LOADING + ' ' + CLASS_IN;
+					} else {
+						loading.className = CLASS_LOADING;
 					}
 				}
-			});
-			self.element.addEventListener('dragend', function(e) {
-				self.dragEnd(e);
-			});
+				this.lastTitle = title;
+			}
 		}
 	};
-	PullRefresh.prototype.dragStart = function(e) {
-		var detail = e.detail;
-		if (detail.direction === 'up' || detail.direction === 'down') {
-			this.element.style.webkitTransitionDuration = '0s';
-			this.isLoading = this.dragDirection = false;
+	//Indicator
+	var Indicator = function(scroller, options) {
+		this.wrapper = typeof options.el == 'string' ? document.querySelector(options.el) : options.el;
+		this.wrapperStyle = this.wrapper.style;
+		this.indicator = this.wrapper.children[0];
+		this.indicatorStyle = this.indicator.style;
+		this.scroller = scroller;
+
+		this.options = $.extend({
+			listenX: true,
+			listenY: true,
+			fade: false,
+			speedRatioX: 0,
+			speedRatioY: 0
+		}, options);
+
+
+		this.sizeRatioX = 1;
+		this.sizeRatioY = 1;
+		this.maxPosX = 0;
+		this.maxPosY = 0;
+
+		if (this.options.fade) {
+			this.wrapperStyle['webkitTransform'] = this.scroller.translateZ;
+			this.wrapperStyle['webkitTransitionDuration'] = $.os.isBadAndroid ? '0.001s' : '0ms';
+			this.wrapperStyle.opacity = '0';
 		}
-	};
-	PullRefresh.prototype.dragUp = function(e) {
-		var self = this;
-		if (self.isLoading || self.dragDirection === 'down') {
-			return;
-		}
-		var scrollHeight = document.body.scrollHeight;
-		if (!self.dragDirection && window.innerHeight + window.scrollY + 40 < scrollHeight) {
-			return;
-		}
-		window.scrollTo(0, scrollHeight);
-		self.pullOptions = self.options.up;
-		self.loading = self.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-		self.drag(e);
-	};
-	PullRefresh.prototype.dragDown = function(e) {
-		var self = this;
-		if (self.isLoading || self.dragDirection === 'up') {
-			return;
-		}
-		var scrollY = window.scrollY;
-		if (!self.dragDirection && scrollY > 5) {
-			return;
-		} else if (scrollY !== 0) {
-			window.scrollTo(0, 0);
-		}
-		self.pullOptions = self.options.down;
-		self.loading = self.topPocket.querySelector('.' + CLASS_PULL_LOADING);
-		self.drag(e);
-	};
-	PullRefresh.prototype.drag = function(e) {
-		if (!this.pullOptions) {
-			return;
-		}
-		if (this.pullOptions.height > 0) {
-			if (e.detail.deltaY < 0) {
+	}
+	Indicator.prototype = {
+		handleEvent: function(e) {
+
+		},
+		transitionTime: function(time) {
+			time = time || 0;
+			this.indicatorStyle['webkitTransitionDuration'] = time + 'ms';
+			if (!time && $.os.android) {
+				this.indicatorStyle['webkitTransitionDuration'] = '0.001s';
+			}
+		},
+
+		transitionTimingFunction: function(easing) {
+			this.indicatorStyle['webkitTransitionTimingFunction'] = easing;
+		},
+
+		refresh: function() {
+			this.transitionTime();
+
+			if (this.options.listenX && !this.options.listenY) {
+				this.indicatorStyle.display = this.scroller.hasHorizontalScroll ? 'block' : 'none';
+			} else if (this.options.listenY && !this.options.listenX) {
+				this.indicatorStyle.display = this.scroller.hasVerticalScroll ? 'block' : 'none';
+			} else {
+				this.indicatorStyle.display = this.scroller.hasHorizontalScroll || this.scroller.hasVerticalScroll ? 'block' : 'none';
+			}
+
+			this.wrapper.offsetHeight; // force refresh
+
+			if (this.options.listenX) {
+				this.wrapperWidth = this.wrapper.clientWidth;
+				this.indicatorWidth = Math.max(Math.round(this.wrapperWidth * this.wrapperWidth / (this.scroller.scrollerWidth || this.wrapperWidth || 1)), 8);
+				this.indicatorStyle.width = this.indicatorWidth + 'px';
+
+				this.maxPosX = this.wrapperWidth - this.indicatorWidth;
+
+				this.minBoundaryX = 0;
+				this.maxBoundaryX = this.maxPosX;
+
+				this.sizeRatioX = this.options.speedRatioX || (this.scroller.maxScrollX && (this.maxPosX / this.scroller.maxScrollX));
+			}
+
+			if (this.options.listenY) {
+				this.wrapperHeight = this.wrapper.clientHeight;
+				this.indicatorHeight = Math.max(Math.round(this.wrapperHeight * this.wrapperHeight / (this.scroller.scrollerHeight || this.wrapperHeight || 1)), 8);
+				this.indicatorStyle.height = this.indicatorHeight + 'px';
+
+				this.maxPosY = this.wrapperHeight - this.indicatorHeight;
+
+				this.minBoundaryY = 0;
+				this.maxBoundaryY = this.maxPosY;
+
+				this.sizeRatioY = this.options.speedRatioY || (this.scroller.maxScrollY && (this.maxPosY / this.scroller.maxScrollY));
+			}
+
+			this.updatePosition();
+		},
+
+		updatePosition: function() {
+			var x = this.options.listenX && Math.round(this.sizeRatioX * this.scroller.x) || 0,
+				y = this.options.listenY && Math.round(this.sizeRatioY * this.scroller.y) || 0;
+
+			if (x < this.minBoundaryX) {
+				this.width = Math.max(this.indicatorWidth + x, 8);
+				this.indicatorStyle.width = this.width + 'px';
+				x = this.minBoundaryX;
+			} else if (x > this.maxBoundaryX) {
+				this.width = Math.max(this.indicatorWidth - (x - this.maxPosX), 8);
+				this.indicatorStyle.width = this.width + 'px';
+				x = this.maxPosX + this.indicatorWidth - this.width;
+			} else if (this.width != this.indicatorWidth) {
+				this.width = this.indicatorWidth;
+				this.indicatorStyle.width = this.width + 'px';
+			}
+
+			if (y < this.minBoundaryY) {
+				this.height = Math.max(this.indicatorHeight + y * 3, 8);
+				this.indicatorStyle.height = this.height + 'px';
+				y = this.minBoundaryY;
+			} else if (y > this.maxBoundaryY) {
+				this.height = Math.max(this.indicatorHeight - (y - this.maxPosY) * 3, 8);
+				this.indicatorStyle.height = this.height + 'px';
+				y = this.maxPosY + this.indicatorHeight - this.height;
+			} else if (this.height != this.indicatorHeight) {
+				this.height = this.indicatorHeight;
+				this.indicatorStyle.height = this.height + 'px';
+			}
+
+			this.x = x;
+			this.y = y;
+
+			this.indicatorStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.scroller.translateZ;
+
+		},
+
+
+		fade: function(val, hold) {
+			if (hold && !this.visible) {
 				return;
 			}
-		}
 
-		this.dragDirection = this.pullOptions.height > 0 ? 'down' : 'up';
-		if (!this.requestAnimationFrame) {
-			this.updateTranslate();
-		}
-		e.detail.gesture.preventDefault();
-		this.translateY = e.detail.deltaY * 0.4;
-	};
-	PullRefresh.prototype.dragEnd = function(e) {
-		var self = this;
-		if (self.pullOptions) {
-			cancelAnimationFrame(self.requestAnimationFrame);
-			//移动距离够了，就刷新，否则就啥都不干，恢复到原始状态；
-			if (Math.abs(e.detail.deltaY * 0.4) >= Math.abs(self.pullOptions.height)) {
-				self.load();
-			} else {
-				this.hide();
-			}
-			$.gestures.stoped = true;
-		}
+			clearTimeout(this.fadeTimeout);
+			this.fadeTimeout = null;
 
-	};
-	PullRefresh.prototype.hide = function() {
-		this.translateY = 0;
-		if (this.requestAnimationFrame) {
-			//在dragEnd中已经调用过了，可能重复了
-			cancelAnimationFrame(this.requestAnimationFrame);
-			this.requestAnimationFrame = null;
+			var time = val ? 250 : 500,
+				delay = val ? 0 : 300;
+
+			val = val ? '1' : '0';
+
+			this.wrapperStyle['webkitTransitionDuration'] = time + 'ms';
+
+			this.fadeTimeout = setTimeout((function(val) {
+				this.wrapperStyle.opacity = val;
+				this.visible = +val;
+			}).bind(this, val), delay);
 		}
-		this.element.style.webkitTransitionDuration = '0.5s';
-		this.setTranslate(0);
-		//恢复到正常状态，下拉可刷新
-		this.setCaption(CLASS_PULL_CAPTION_DOWN);
-		if (this.pullOptions && this.pullOptions.height > 0) {
-			this.loading.classList.remove(CLASS_REVERSE);
-		}
-		this.pullOptions = null;
 	};
-	PullRefresh.prototype.updateTranslate = function() {
-		var self = this;
-		if (self.translateY !== self.lastTranslateY) {
-			self.translateY = Math.abs(self.translateY) < 2 ? 0 : self.translateY;
-			self.setTranslate(self.translateY);
-			if (Math.abs(self.translateY) >= Math.abs(self.pullOptions.height)) {
-				self.setCaption(CLASS_PULL_CAPTION_OVER);
-			} else {
-				self.setCaption(CLASS_PULL_CAPTION_DOWN);
+	$.fn.scroll = function(options) {
+		this.each(function() {
+			var scroll = this.getAttribute('data-scroll');
+			if (!scroll) {
+				var id = ++$.uuid;
+				$.data[id] = new Scroll(this, options);
+				this.setAttribute('data-scroll', id);
 			}
-			self.lastTranslateY = self.translateY;
-		}
-		self.requestAnimationFrame = requestAnimationFrame(function() {
-			self.updateTranslate();
 		});
 	};
-	PullRefresh.prototype.setTranslate = function(height) {
-		this.element.style.webkitTransform = 'translate3d(0,' + height + 'px,0)';
-		if (this.bottomPocket) {
-			if (height < 0) { //up
-				this.bottomPocket.style.bottom = (height > this.pullOptions.height ? height : this.pullOptions.height) + 'px';
-			} else if (height === 0) {
-				//this.bottomPocket.removeAttribute('style');//靠，为啥5+里边remove不掉呢
-				this.bottomPocket.setAttribute('style', '');
-			}
-		}
-	};
-
-	PullRefresh.prototype.load = function() {
-		var self = this;
-		self.isLoading = true;
-		self.setCaption(CLASS_PULL_CAPTION_REFRESH);
-		self.setTranslate(self.pullOptions.height);
-		var callback = self.pullOptions.callback;
-		callback && callback(function() {
-			if (self.pullOptions && self.pullOptions.height < 0) {
-				//self.bottomPocket.classList.add(CLASS_HIDDEN);
-				var duration = Math.min(1000, self.pullOptions.duration);
-				setTimeout(function() {
-					$.scrollTo(document.body.scrollHeight - window.innerHeight, duration, function() {
-						self.isLoading = false;
-						//self.bottomPocket.classList.remove(CLASS_HIDDEN);
-					});
-				}, 100);
-			} else {
-				self.isLoading = false;
-			}
-			self.hide();
-		});
-	};
-
-	// PullRefresh.prototype.showLoading = function(className) {
-	// 	this.setCaption(className);
-
-	// };
-	// PullRefresh.prototype.hideLoading = function(className) {
-	// 	this.setCaption(className);
-	// };
-
-	PullRefresh.prototype.setCaption = function(className) {
-		var pocket = this.pullOptions && this.pullOptions.height > 0 ? this.topPocket : this.bottomPocket;
-		if (pocket) {
-			var caption = pocket.querySelector('.' + CLASS_PULL_CAPTION);
-			var last = caption.querySelector('.' + CLASS_IN);
-			if (last) {
-				last.classList.remove(CLASS_IN);
-			}
-			var active = caption.querySelector('.' + className);
-			if (active) {
-				active.classList.add(CLASS_IN);
-			}
-			if (this.pullOptions && this.pullOptions.height > 0) {
-				if (className === CLASS_PULL_CAPTION_REFRESH) {
-					this.loading.className = CLASS_LOADING;
-				} else if (className === CLASS_PULL_CAPTION_OVER) {
-					this.loading.className = CLASS_LOADING_UP;
-				} else {
-					this.loading.className = CLASS_LOADING_DOWN;
-				}
-			} else {
-				if (className === CLASS_PULL_CAPTION_REFRESH) {
-					this.loading.className = CLASS_LOADING + ' ' + CLASS_IN;
-				} else {
-					this.loading.className = CLASS_LOADING;
-				}
-			}
-		}
-	};
-
 	$.fn.pullRefresh = function(options) {
 		this.each(function() {
 			var pullrefresh = this.getAttribute('data-pullrefresh');
 			if (!pullrefresh) {
 				var id = ++$.uuid;
-				$.data[id] = new PullRefresh(this, options);
+				$.data[id] = new Scroll(this, $.extend(pullRefreshOptions, options, true));
 				this.setAttribute('data-pullrefresh', id);
 			}
 		});
 	};
-})(mui, window, document);
+})(mui, window, document, 'scroll');
 /**
  * pulldownRefresh 5+
  * @param {type} $
@@ -2618,6 +3232,7 @@ var mui = (function(document, undefined) {
 		slider.addEventListener('drag', function(event) {
 			if (isDragable) {
 				self.dragItem(event);
+				event.stopPropagation();
 			}
 
 		});
@@ -2625,16 +3240,18 @@ var mui = (function(document, undefined) {
 			if (isDragable) {
 				self.gotoItem(self.getSlideNumber());
 				isDragable = self.isSwipeable = false;
+				event.stopPropagation();
 			}
 		});
+//		slider.addEventListener('flick', $.stopPropagation);
 		slider.addEventListener('swipeleft', function(event) {
 			if (self.isSwipeable) {
 				//stop dragend
 				$.gestures.stoped = true;
 				self.nextItem();
 				isDragable = self.isSwipeable = false;
-				event.stopImmediatePropagation();
 			}
+			event.stopPropagation();
 		});
 		slider.addEventListener('swiperight', function(event) {
 			if (self.isSwipeable) {
@@ -2642,8 +3259,8 @@ var mui = (function(document, undefined) {
 				$.gestures.stoped = true;
 				self.prevItem();
 				isDragable = self.isSwipeable = false;
-				event.stopImmediatePropagation();
 			}
+			event.stopPropagation();
 		});
 		slider.addEventListener('slide', function(e) {
 			var detail = e.detail;
@@ -2932,6 +3549,8 @@ var mui = (function(document, undefined) {
 			isActive: slideOn
 		});
 		toggle.removeEventListener('dragstart', $.stopPropagation);
+//		toggle.removeEventListener('flick', $.stopPropagation);
+		event.stopPropagation();
 	};
 	var dragToggle = function(event) {
 		if (!toggle) {
@@ -2947,12 +3566,14 @@ var mui = (function(document, undefined) {
 		handle.style['-webkit-transition-duration'] = '0s';
 		handle.style.webkitTransform = 'translate3d(' + deltaX + 'px,0,0)';
 		toggle.classList[(deltaX > (toggleWidth / 2 - handleWidth / 2)) ? 'add' : 'remove'](CLASS_ACTIVE);
+		event.stopPropagation();
 	};
 
 	window.addEventListener($.EVENT_START, function(e) {
 		toggle = $.targets.toggle;
 		if (toggle) {
 			toggle.addEventListener('dragstart', $.stopPropagation);
+//			toggle.addEventListener('flick', $.stopPropagation);
 			handle = toggle.querySelector(SELECTOR_SWITCH_HANDLE);
 			toggleWidth = toggle.clientWidth;
 			handleWidth = handle.clientWidth;
@@ -3193,9 +3814,13 @@ var mui = (function(document, undefined) {
 		}
 	};
 	window.addEventListener('touchstart', function(event) {
+		if (cell) {
+			toggleActive(false);
+		}
 		cell = a = sliderHandle = sliderLeft = sliderRight = isDraging = sliderRequestAnimationFrame = false;
 		translateX = lastTranslateX = sliderTranslateX = sliderHandleWidth = sliderLeftWidth = sliderRightWidth = 0;
 		sliderLeftBg = sliderRightBg = '';
+
 		var target = event.target;
 		var isDisabled = false;
 		for (; target && target !== document; target = target.parentNode) {
@@ -3319,7 +3944,7 @@ var mui = (function(document, undefined) {
 					isDraging = true;
 				}
 			}
-			if(isDraging){
+			if (isDraging) {
 				event.stopPropagation();
 			}
 		},
@@ -3352,9 +3977,9 @@ var mui = (function(document, undefined) {
 			}
 			if (isSwipeable) {
 				$.gestures.stoped = true;
-				event.stopImmediatePropagation();
 				endDraging(true, event.detail);
 			}
+			event.stopPropagation();
 		},
 		swipeleft: function(event) {
 			var isSwipeable = false;
@@ -3371,9 +3996,9 @@ var mui = (function(document, undefined) {
 			}
 			if (isSwipeable) {
 				$.gestures.stoped = true;
-				event.stopImmediatePropagation();
 				endDraging(true, event.detail);
 			}
+			event.stopPropagation();
 		}
 	}
 
@@ -3697,6 +4322,9 @@ var mui = (function(document, undefined) {
 			};
 			element.addEventListener('input', showTip);
 			element.addEventListener('tap', showTip);
+			element.addEventListener('touchmove', function(e) {
+				e.stopPropagation();
+			});
 		} else {
 			if (this.clearActionClass) {
 				var action = this.clearAction;
@@ -3782,133 +4410,3 @@ var mui = (function(document, undefined) {
 		$('.mui-input-row input').input();
 	});
 })(mui, window, document);
-/**
- * mui back
- * @param {type} $
- * @param {type} window
- * @returns {undefined}
- */
-(function($, window) {
-	/**
-	 * 后退
-	 */
-	$.back = function() {
-		if (window.history.length > 1) {
-			if (typeof $.options.back === 'function') {
-				if ($.options.back() !== false) {
-					window.history.back();
-				}
-			} else {
-				window.history.back();
-			}
-		}
-	};
-	window.addEventListener('tap', function(e) {
-		var action = $.targets.action;
-		if (action && action.classList.contains('mui-action-back')) {
-			$.back();
-		}
-	});
-	window.addEventListener('swiperight', function(e) {
-		var detail = e.detail;
-		if (detail.angle > -15 && detail.angle < 15 && $.options.swipeBack === true) {
-			if ($.targets.toggle) {
-				return;
-			}
-			$.back();
-		}
-	});
-
-})(mui, window);
-/**
- * mui back 5+
- * @param {type} $
- * @param {type} window
- * @returns {undefined}
- */
-(function($, window) {
-	/**
-	 * 后退(5+关闭当前窗口)
-	 */
-	$.back = function() {
-		var isBack = true;
-		var callback = false;
-		if (typeof $.options.back === 'function') {
-			callback = $.options.back();
-			if (callback === false) {
-				isBack = false;
-			}
-		}
-		if (!isBack) {
-			return;
-		}
-		if (window.plus) {
-			var wobj = $.currentWebview;
-			var parent = wobj.parent();
-			if (parent) {
-				wobj = parent;
-			}
-			wobj.canBack(function(e) {
-				//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
-				if (e.canBack) { //webview history back
-					window.history.back();
-				} else { //webview close or hide
-					//TODO 会不会存在多层嵌套?如果存在需要递归找到最顶层
-
-					var opener = wobj.opener();
-					if (opener) {
-						//by chb 暂不自动处理老页面的隐藏；
-						// var openerParent = opener.parent();
-						// if (openerParent) {
-						// 	opener = openerParent;
-						// }
-						if (wobj.preload) {
-							wobj.hide("auto");
-						} else {
-							//关闭页面时，需要将其打开的所有子页面全部关闭；
-							$.closeAll(wobj);
-						}
-						//TODO 暂时屏蔽父窗口的隐藏与显示，与预加载一起使用时太多bug
-						//opener.show();
-					} else {
-						//首页不存在opener的情况下，后退实际上应该是退出应用；
-						//这个交给项目具体实现，框架暂不处理；
-						//plus.runtime.quit();
-					}
-				}
-			});
-
-		} else if (window.history.length > 1) {
-			window.history.back();
-		} else {
-			window.close();
-		}
-	};
-
-	$.menu = function() {
-		var menu = document.querySelector('.mui-action-menu');
-		if (menu) {
-			$.trigger(menu, 'tap');
-		} else { //执行父窗口的menu
-			if (window.plus) {
-				var wobj = $.currentWebview;
-				var parent = wobj.parent();
-				if (parent) { //又得evalJS
-					parent.evalJS('mui&&mui.menu();');
-				}
-			}
-		}
-	}
-
-	$.plusReady(function() {
-		plus.key.addEventListener('backbutton', function() {
-			$.back();
-		}, false);
-
-		plus.key.addEventListener('menubutton', function() {
-			$.menu();
-		}, false);
-
-	});
-
-})(mui, window);
