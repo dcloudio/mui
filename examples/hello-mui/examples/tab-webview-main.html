@@ -53,83 +53,40 @@
 	</a>
 </nav>
 <script type="text/javascript" charset="utf-8">
-	//选项卡设计思路：
-	//1、第一个选项卡对应webview，作为入口页面，主页面加载后需立即展现
-	//故将其作为子页面append到主窗口，这样主窗口预加载时，会同时预加载子页面；
-	//2、其它选项卡对应webview，不会立即展现，故可在主页面显示时，再进行预加载；
-  mui.init({
-  	subpages:[{
-  		url:'tab-webview-subpage-phone.html',
-  		id:'tab-webview-subpage-phone.html',
-  		styles:{
-  			top:'48px',
-  			bottom:'50px'
-  		}
- 	 }],
-  	preloadPages:[{
-  		url:'tab-webview-subpage-chat.html',
-  		id:'tab-webview-subpage-chat.html',
-  		styles:{
-  			top:'48px',
-  			bottom:'50px'
-  		}
-  	},{
-  		url:'tab-webview-subpage-contact.html',
-  		id:'tab-webview-subpage-contact.html',
-  		styles:{
-  			top:'48px',
-  			bottom:'50px'
-  		}
-  	},{
-  		url:'tab-webview-subpage-map.html',
-  		id:'tab-webview-subpage-map.html',
-  		styles:{
-  			top:'48px',
-  			bottom:'50px'
-  		}
-  	}]
-  });
-  
-  //当前激活选项，默认为第一个；
-  var firstTab = activeTab = 'tab-webview-subpage-phone.html';
-  //选项卡点击事件
-  $('.mui-bar-tab').on('tap', 'a', function(e) {
-  	var targetTab = this.getAttribute('href');
-  	if(targetTab==activeTab){
-  		return;
-  	}
-  	//当前为第一个选项卡，则仅显示目标选项卡即可；
-  	if(activeTab==firstTab){
-  		$.openWindow({url:targetTab,id:targetTab,show:{aniShow:'none'}});
-  	}else{
-  		//如果目标选项卡为第一个选项卡，则直接隐藏当前选项卡即可；
-  		if(targetTab == firstTab){
-  			plus.webview.hide(activeTab);
-  		}else{
-  			//先显示目标选项卡，再隐藏当前选项卡
-  			$.openWindow({url:targetTab,id:targetTab,show:{aniShow:'none'}});
-  			plus.webview.hide(activeTab);
-  		}
-  	}
-  	activeTab = targetTab;
-  });
 
-	
-	var defaultBack = mui.back;
-	mui.back = function(){
-		//先隐藏自己；
-		defaultBack();
-		//再隐藏当前显示的子webview
-		plus.webview.hide(activeTab);
-	}
-	
-	window.addEventListener("pagebeforeshow",function(){
-		if(activeTab!==firstTab){
-			$.openWindow({url:activeTab,id:activeTab,show:{aniShow:'none'}});
+	var subpages = ['tab-webview-subpage-phone.html','tab-webview-subpage-chat.html','tab-webview-subpage-contact.html','tab-webview-subpage-map.html'];
+	var subpage_style = {
+		top: '48px',
+		bottom: '50px'
+	};
+	//创建子页面，首个选项卡页面显示，其它均隐藏；
+	mui.plusReady(function(){
+		var self = plus.webview.currentWebview();
+		for(var i=0;i<4;i++){
+			var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
+			if(i>0){
+				sub.hide();
+			}
+			self.append(sub);
 		}
 	});
-  
-  
+	
+	//当前激活选项，默认为第一个；
+	var activeTab = subpages[0];
+	//选项卡点击事件
+	mui('.mui-bar-tab').on('tap', 'a', function(e) {
+		var targetTab = this.getAttribute('href');
+		if (targetTab == activeTab) {
+			return;
+		}
+		
+		//先隐藏当前的
+		plus.webview.hide(activeTab);
+		//再显示目标
+		plus.webview.show(targetTab);
+		//更改当前活跃的选项卡
+		activeTab = targetTab;
+	});
 </script>
 </body>
 </html>
