@@ -37,7 +37,7 @@ var mui = (function(document, undefined) {
 
 	var wrap = function(dom, selector) {
 		dom = dom || [];
-		dom['__proto__'] = $.fn;
+		Object.setPrototypeOf(dom, $.fn);
 		dom.selector = selector || '';
 		return dom;
 	};
@@ -271,10 +271,14 @@ var mui = (function(document, undefined) {
  * @returns {undefined}
  */
 (function(undefined) {
-	if (String.prototype.trim === undefined) {// fix for iOS 3.2
+	if (String.prototype.trim === undefined) { // fix for iOS 3.2
 		String.prototype.trim = function() {
 			return this.replace(/^\s+|\s+$/g, '');
 		};
+	}
+	Object.setPrototypeOf = Object.setPrototypeOf || function(obj, proto) {
+		obj['__proto__'] = proto;
+		return obj;
 	}
 
 })();
@@ -282,18 +286,18 @@ var mui = (function(document, undefined) {
  * fixed CustomEvent
  */
 (function() {
-	if ( typeof window.CustomEvent === 'undefined') {
+	if (typeof window.CustomEvent === 'undefined') {
 		function CustomEvent(event, params) {
 			params = params || {
-				bubbles : false,
-				cancelable : false,
-				detail : undefined
+				bubbles: false,
+				cancelable: false,
+				detail: undefined
 			};
 			var evt = document.createEvent('Events');
 			var bubbles = true;
 			if (params) {
 				for (var name in params) {
-					(name === 'bubbles') ? ( bubbles = !!params[name]) : (evt[name] = params[name]);
+					(name === 'bubbles') ? (bubbles = !!params[name]) : (evt[name] = params[name]);
 				}
 			}
 			evt.initEvent(event, bubbles, true);
@@ -303,7 +307,6 @@ var mui = (function(document, undefined) {
 		window.CustomEvent = CustomEvent;
 	}
 })();
-
 /**
  * mui fixed classList
  * @param {type} document
@@ -586,7 +589,7 @@ var mui = (function(document, undefined) {
 	var detectTouchStart = function(event) {
 		$.gestures.stoped = false;
 		var now = Date.now();
-		var point = event.touches[0];
+		var point = event.touches ? event.touches[0] : event;
 		touch = {
 			target: event.target,
 			lastTarget: (touch.lastTarget ? touch.lastTarget : null),
@@ -627,10 +630,11 @@ var mui = (function(document, undefined) {
 			return;
 		}
 		var now = Date.now();
+		var point = event.touches ? event.touches[0] : event;
 		touch.touchTime = now - touch.startTime;
 		touch.move = {
-			x: event.touches[0].pageX,
-			y: event.touches[0].pageY
+			x: point.pageX,
+			y: point.pageY
 		};
 		if (now - touch.flickStartTime > 300) {
 			touch.flickStartTime = now;
@@ -1667,14 +1671,47 @@ var mui = (function(document, undefined) {
 
 })(mui, window);
 
-/**
- * scroll
- * @param {type} $
- * @param {type} window
- * @param {type} document
- * @returns {undefined}
- */
-(function($, window, document, name, undefined) {
+(function($) {
+	var initializing = false,
+		fnTest = /xyz/.test(function() {
+			xyz;
+		}) ? /\b_super\b/ : /.*/;
+
+	var Class = function() {};
+	Class.extend = function(prop) {
+		var _super = this.prototype;
+		initializing = true;
+		var prototype = new this();
+		initializing = false;
+		for (var name in prop) {
+			prototype[name] = typeof prop[name] == "function" &&
+				typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+				(function(name, fn) {
+					return function() {
+						var tmp = this._super;
+
+						this._super = _super[name];
+
+						var ret = fn.apply(this, arguments);
+						this._super = tmp;
+
+						return ret;
+					};
+				})(name, prop[name]) :
+				prop[name];
+		}
+		function Class() {
+			if (!initializing && this.init)
+				this.init.apply(this, arguments);
+		}
+		Class.prototype = prototype;
+		Class.prototype.constructor = Class;
+		Class.extend = arguments.callee;
+		return Class;
+	};
+	$.Class = Class;
+})(mui);
+(function($, window, document, undefined) {
 	var CLASS_SCROLLBAR = 'mui-scrollbar';
 	var CLASS_INDICATOR = 'mui-scrollbar-indicator';
 	var CLASS_SCROLLBAR_VERTICAL = CLASS_SCROLLBAR + '-vertical';
@@ -1694,622 +1731,460 @@ var mui = (function(document, undefined) {
 			}
 		}
 	}
-	var Scroll = function(element, options) {
-		this.wrapper = this.element = element;
-		this.scroller = this.wrapper.children[0];
-		this.scrollerStyle = this.scroller.style;
+	var Scroll = $.Class.extend({
+		init: function(element, options) {
+			this.wrapper = this.element = element;
+			this.scroller = this.wrapper.children[0];
+			this.scrollerStyle = this.scroller.style;
 
-		this.options = $.extend({
-			scrollY: true,
-			scrollX: false,
-			startX: 0,
-			startY: 0,
-			hardwareAccelerated: true,
-			preventDefaultException: {
-				tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
-			},
-			momentum: true,
+			this.options = $.extend({
+				scrollY: true,
+				scrollX: false,
+				startX: 0,
+				startY: 0,
+				indicators: true,
+				hardwareAccelerated: true,
+				fixedBadAndorid: false,
+				preventDefaultException: {
+					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
+				},
+				momentum: true,
 
-			bounce: true,
-			bounceTime: 600,
-			bounceEasing: ease.circular.style,
+				bounce: true,
+				bounceTime: 600,
+				bounceEasing: ease.circular.style,
 
-			directionLockThreshold: 5,
+				directionLockThreshold: 5,
 
-		}, options, true);
+			}, options, true);
 
-		this.x = 0;
-		this.y = 0;
-		this.translateZ = this.options.hardwareAccelerated ? ' translateZ(0)' : '';
+			this.x = 0;
+			this.y = 0;
+			this.translateZ = this.options.hardwareAccelerated ? ' translateZ(0)' : '';
 
-		this.init();
-		this.refresh();
-		this.scrollTo(this.options.startX, this.options.startY);
-	};
-	Scroll.prototype.init = function() {
-		this._initPullRefresh();
-		this._initIndicators();
+			this._init();
+			this.refresh();
+			this.scrollTo(this.options.startX, this.options.startY);
+		},
+		_init: function() {
+			this._initIndicators();
+			this._initEvent();
+		},
+		_initIndicators: function() {
+			var self = this;
+			self.indicators = [];
+			if (!this.options.indicators) {
+				return;
+			}
+			var indicators = [],
+				indicator;
 
-		this.initEvent();
-	};
-	Scroll.prototype._initIndicators = function() {
-		var indicators = [],
-			indicator;
+			// Vertical scrollbar
+			if (self.options.scrollY) {
+				indicator = {
+					el: this._createScrollBar(CLASS_SCROLLBAR_VERTICAL),
+					listenX: false
+				};
 
-		var self = this;
+				this.wrapper.appendChild(indicator.el);
+				indicators.push(indicator);
+			}
 
-		self.indicators = [];
+			// Horizontal scrollbar
+			if (this.options.scrollX) {
+				indicator = {
+					el: this._createScrollBar(CLASS_SCROLLBAR_HORIZONTAL),
+					listenY: false
+				};
 
-		// Vertical scrollbar
-		if (self.options.scrollY) {
-			indicator = {
-				el: this.createScrollBar(CLASS_SCROLLBAR_VERTICAL),
-				listenX: false
-			};
+				this.wrapper.appendChild(indicator.el);
+				indicators.push(indicator);
+			}
 
-			this.wrapper.appendChild(indicator.el);
-			indicators.push(indicator);
-		}
+			for (var i = indicators.length; i--;) {
+				this.indicators.push(new Indicator(this, indicators[i]));
+			}
 
-		// Horizontal scrollbar
-		if (this.options.scrollX) {
-			indicator = {
-				el: this.createScrollBar(CLASS_SCROLLBAR_HORIZONTAL),
-				listenY: false
-			};
-
-			this.wrapper.appendChild(indicator.el);
-			indicators.push(indicator);
-		}
-
-		if (this.options.indicators) {
-			indicators = indicators.concat(this.options.indicators);
-		}
-
-		for (var i = indicators.length; i--;) {
-			this.indicators.push(new Indicator(this, indicators[i]));
-		}
-
-		this.wrapper.addEventListener('scrollend', function() {
-			self.indicators.map(function(indicator) {
-				indicator.fade();
+			this.wrapper.addEventListener('scrollend', function() {
+				self.indicators.map(function(indicator) {
+					indicator.fade();
+				});
 			});
-		});
 
-		this.wrapper.addEventListener('scrollstart', function() {
-			self.indicators.map(function(indicator) {
-				indicator.fade(1);
+			this.wrapper.addEventListener('scrollstart', function() {
+				self.indicators.map(function(indicator) {
+					indicator.fade(1);
+				});
 			});
-		});
 
-		this.wrapper.addEventListener('beforescrollstart', function() {
-			self.indicators.map(function(indicator) {
-				indicator.fade(1, true);
+			this.wrapper.addEventListener('beforescrollstart', function() {
+				self.indicators.map(function(indicator) {
+					indicator.fade(1, true);
+				});
 			});
-		});
 
-		this.wrapper.addEventListener('refresh', function() {
-			self.indicators.map(function(indicator) {
+			this.wrapper.addEventListener('refresh', function() {
+				self.indicators.map(function(indicator) {
+					indicator.refresh();
+				});
+			});
+		},
+		_initEvent: function() {
+			window.addEventListener('orientationchange', this);
+			window.addEventListener('resize', this);
+
+			this.scroller.addEventListener('webkitTransitionEnd', this);
+
+			this.wrapper.addEventListener('touchstart', this);
+			this.wrapper.addEventListener('touchcancel', this);
+			this.wrapper.addEventListener('touchend', this);
+			this.wrapper.addEventListener('drag', this);
+			this.wrapper.addEventListener('dragend', this);
+			this.wrapper.addEventListener('flick', this);
+			this.wrapper.addEventListener('scrollend', this);
+		},
+		handleEvent: function(e) {
+			switch (e.type) {
+				case 'touchstart':
+					this._start(e);
+					break;
+				case 'drag':
+					this._drag(e);
+					break;
+				case 'dragend':
+				case 'flick':
+					this._flick(e);
+					break;
+				case 'touchcancel':
+				case 'touchend':
+					this._end(e);
+					break;
+				case 'webkitTransitionEnd':
+					this._transitionEnd(e);
+					break;
+				case 'scrollend':
+					this._scrollend(e);
+					break;
+				case 'orientationchange':
+				case 'resize':
+					this._resize();
+					break;
+
+			}
+		},
+		_start: function(e) {
+			this.moved = this.needReset = false;
+
+			this._transitionTime();
+
+			if (this.isInTransition) {
+				this.needReset = true;
+				this.isInTransition = false;
+				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
+				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
+				$.trigger(this.wrapper, 'scrollend', this);
+			}
+			this.reLayout();
+			$.trigger(this.wrapper, 'beforescrollstart', this);
+		},
+		_drag: function(e) {
+			var detail = e.detail;
+
+			detail.gesture.preventDefault();
+			var deltaX = detail.deltaX - detail.lastDeltaX;
+			var deltaY = detail.deltaY - detail.lastDeltaY;
+			var absDeltaX = Math.abs(detail.deltaX);
+			var absDeltaY = Math.abs(detail.deltaY);
+			if (absDeltaX > absDeltaY + this.options.directionLockThreshold) {
+				deltaY = 0;
+			} else if (absDeltaY >= absDeltaX + this.options.directionLockThreshold) {
+				deltaX = 0;
+			}
+
+			deltaX = this.hasHorizontalScroll ? deltaX : 0;
+			deltaY = this.hasVerticalScroll ? deltaY : 0;
+			var newX = this.x + deltaX;
+			var newY = this.y + deltaY;
+			// Slow down if outside of the boundaries
+			if (newX > 0 || newX < this.maxScrollX) {
+				newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+			}
+			if (newY > 0 || newY < this.maxScrollY) {
+				newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+			}
+			if (!this.requestAnimationFrame) {
+				this._updateTranslate();
+			}
+			if (!this.moved) {
+				$.trigger(this.wrapper, 'scrollstart', this);
+			}
+			this.moved = true;
+			this.x = newX;
+			this.y = newY;
+			e.stopPropagation();
+
+		},
+		_flick: function(e) {
+			var detail = e.detail;
+			this._clearRequestAnimationFrame();
+			if (e.type === 'dragend' && detail.flick) { //dragend
+				return;
+			}
+
+			var newX = Math.round(this.x);
+			var newY = Math.round(this.y);
+
+			this.isInTransition = false;
+			// reset if we are outside of the boundaries
+			if (this.resetPosition(this.options.bounceTime)) {
+				return;
+			}
+
+			this.scrollTo(newX, newY); // ensures that the last position is rounded
+
+			if (e.type === 'dragend') { //dragend
+				$.trigger(this.wrapper, 'scrollend', this);
+				return;
+			}
+			var time = 0;
+			var easing = '';
+			// start momentum animation if needed
+			if (this.options.momentum && detail.flickTime < 300) {
+				momentumX = this.hasHorizontalScroll ? this._momentum(this.x, detail.flickDistanceX, detail.flickTime, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : {
+					destination: newX,
+					duration: 0
+				};
+				momentumY = this.hasVerticalScroll ? this._momentum(this.y, detail.flickDistanceY, detail.flickTime, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : {
+					destination: newY,
+					duration: 0
+				};
+				newX = momentumX.destination;
+				newY = momentumY.destination;
+				time = Math.max(momentumX.duration, momentumY.duration);
+				this.isInTransition = true;
+			}
+
+			if (newX != this.x || newY != this.y) {
+				if (newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY) {
+					easing = ease.quadratic;
+				}
+				this.scrollTo(newX, newY, time, easing);
+				return;
+			}
+
+			$.trigger(this.wrapper, 'scrollend', this);
+			e.stopPropagation();
+		},
+		_end: function(e) {
+			if (!this.moved && this.needReset) {
+				this.resetPosition(this.options.bounceTime);
+			}
+		},
+		_transitionEnd: function(e) {
+			if (e.target != this.scroller || !this.isInTransition) {
+				return;
+			}
+
+			this._transitionTime();
+			if (!this.resetPosition(this.options.bounceTime)) {
+				this.isInTransition = false;
+				$.trigger(this.wrapper, 'scrollend', this);
+			}
+		},
+		_scrollend: function(e) {
+			if (this.y <= this.maxScrollY) {
+				$.trigger(this.wrapper, 'scrollbottom', this);
+			}
+		},
+		_resize: function() {
+			var that = this;
+			clearTimeout(that.resizeTimeout);
+			that.resizeTimeout = setTimeout(function() {
+				that.refresh();
+			}, that.options.resizePolling);
+		},
+		_transitionTime: function(time) {
+			time = time || 0;
+			this.scrollerStyle['webkitTransitionDuration'] = time + 'ms';
+			if (this.options.fixedBadAndorid && !time && $.os.isBadAndroid) {
+				this.scrollerStyle['webkitTransitionDuration'] = '0.001s';
+			}
+			if (this.indicators) {
+				for (var i = this.indicators.length; i--;) {
+					this.indicators[i].transitionTime(time);
+				}
+			}
+		},
+		_transitionTimingFunction: function(easing) {
+			this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
+			if (this.indicators) {
+				for (var i = this.indicators.length; i--;) {
+					this.indicators[i].transitionTimingFunction(easing);
+				}
+			}
+		},
+		_translate: function(x, y) {
+			this.x = x;
+			this.y = y;
+		},
+		_clearRequestAnimationFrame: function() {
+			if (this.requestAnimationFrame) {
+				cancelAnimationFrame(this.requestAnimationFrame);
+				this.requestAnimationFrame = null;
+			}
+		},
+		_updateTranslate: function() {
+			var self = this;
+			if (self.x !== self.lastX || self.y !== self.lastY) {
+				self.setTranslate(self.x, self.y);
+			}
+			self.requestAnimationFrame = requestAnimationFrame(function() {
+				self._updateTranslate();
+			});
+		},
+		_createScrollBar: function(clazz) {
+			var scrollbar = document.createElement('div');
+			var indicator = document.createElement('div');
+			scrollbar.className = CLASS_SCROLLBAR + ' ' + clazz;
+			indicator.className = CLASS_INDICATOR;
+			scrollbar.appendChild(indicator);
+			if (clazz === CLASS_SCROLLBAR_VERTICAL) {
+				this.scrollbarY = scrollbar;
+				this.scrollbarIndicatorY = indicator;
+			} else if (clazz === CLASS_SCROLLBAR_HORIZONTAL) {
+				this.scrollbarX = scrollbar;
+				this.scrollbarIndicatorX = indicator;
+			}
+			this.wrapper.appendChild(scrollbar);
+			return scrollbar;
+		},
+		_preventDefaultException: function(el, exceptions) {
+			for (var i in exceptions) {
+				if (exceptions[i].test(el[i])) {
+					return true;
+				}
+			}
+			return false;
+		},
+		_reLayout: function() {
+			if (!this.hasHorizontalScroll) {
+				this.maxScrollX = 0;
+				this.scrollerWidth = this.wrapperWidth;
+			}
+
+			if (!this.hasVerticalScroll) {
+				this.maxScrollY = 0;
+				this.scrollerHeight = this.wrapperHeight;
+			}
+
+			this.indicators.map(function(indicator) {
 				indicator.refresh();
 			});
-		});
-	};
-
-	Scroll.prototype.initEvent = function() {
-		window.addEventListener('orientationchange', this);
-		window.addEventListener('resize', this);
-		this.wrapper.addEventListener('touchstart', this);
-		this.wrapper.addEventListener('touchcancel', this);
-		this.wrapper.addEventListener('touchend', this);
-		this.wrapper.addEventListener('drag', this);
-		this.wrapper.addEventListener('dragend', this);
-		this.wrapper.addEventListener('flick', this);
-		this.scroller.addEventListener('webkitTransitionEnd', this);
-		var that = this;
-		this.wrapper.addEventListener('scrollend', function() {
-			if (that.y <= that.maxScrollY) {
-				$.trigger(that.wrapper, 'scrollbottom', that);
-			}
-		});
-	};
-	Scroll.prototype.handleEvent = function(e) {
-
-		switch (e.type) {
-			case 'touchstart':
-				this._start(e);
-				break;
-			case 'touchcancel':
-			case 'touchend':
-				this._end(e);
-				break;
-			case 'drag':
-				this._drag(e);
-				break;
-			case 'dragend':
-			case 'flick':
-				this._flick(e);
-				break;
-			case 'orientationchange':
-			case 'resize':
-				this._resize();
-				break;
-			case 'webkitTransitionEnd':
-				this._transitionEnd(e);
-				break;
-		}
-	};
-	Scroll.prototype._transitionEnd = function(e) {
-		if (e.target != this.scroller || !this.isInTransition) {
-			return;
-		}
-
-		this._transitionTime();
-		if (!this.resetPosition(this.options.bounceTime)) {
-			this.isInTransition = false;
-			$.trigger(this.wrapper, 'scrollend', this);
-		}
-	};
-	Scroll.prototype.preventDefaultException = function(el, exceptions) {
-		for (var i in exceptions) {
-			if (exceptions[i].test(el[i])) {
-				return true;
-			}
-		}
-
-		return false;
-	};
-	Scroll.prototype.getComputedPosition = function() {
-		return $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
-	};
-	Scroll.prototype._start = function(e) {
-
-		this.moved = this.needReset = false;
-		if (!this.loading) {
-			this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
-		}
-
-		this._transitionTime();
-
-		if (this.isInTransition) {
-			this.needReset = true;
-			this.isInTransition = false;
-			var pos = this.getComputedPosition();
-			this._setTranslate(Math.round(pos.x), Math.round(pos.y));
-			$.trigger(this.wrapper, 'scrollend', this);
-		}
-		this.reset();
-		$.trigger(this.wrapper, 'beforescrollstart', this);
-	};
-	Scroll.prototype._end = function(e) {
-		if (!this.moved && this.needReset) {
-			this.resetPosition(this.options.bounceTime);
-		}
-	};
-	Scroll.prototype._drag = function(e) {
-		var detail = e.detail;
-
-		detail.gesture.preventDefault();
-		var deltaX = detail.deltaX - detail.lastDeltaX;
-		var deltaY = detail.deltaY - detail.lastDeltaY;
-		var absDeltaX = Math.abs(detail.deltaX);
-		var absDeltaY = Math.abs(detail.deltaY);
-		if (absDeltaX > absDeltaY + this.options.directionLockThreshold) {
-			deltaY = 0;
-		} else if (absDeltaY >= absDeltaX + this.options.directionLockThreshold) {
-			deltaX = 0;
-		}
-
-		deltaX = this.hasHorizontalScroll ? deltaX : 0;
-		deltaY = this.hasVerticalScroll ? deltaY : 0;
-		var newX = this.x + deltaX;
-		var newY = this.y + deltaY;
-		// Slow down if outside of the boundaries
-		if (newX > 0 || newX < this.maxScrollX) {
-			newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
-		}
-		if (newY > 0 || newY < this.maxScrollY) {
-			newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
-		}
-		if (!this.requestAnimationFrame) {
-			this._updateTranslate();
-		}
-		if (!this.moved) {
-			$.trigger(this.wrapper, 'scrollstart', this);
-		}
-		this.moved = true;
-		this.x = newX;
-		this.y = newY;
-		if (!this.pulldown && !this.loading && this.topPocket && detail.direction === 'down' && this.y >= 0) {
-			this.pulldown = true;
-			this.pullPocket = this.topPocket;
-			this.pullCaption = this.topCaption;
-			this.pullLoading = this.topLoading;
-		}
-		if (this.pulldown) {
-			this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
-		}
-	};
-	Scroll.prototype._flick = function(e) {
-		var detail = e.detail;
-		this._clearRequestAnimationFrame();
-		if (e.type === 'dragend' && detail.flick) { //dragend
-			return;
-		}
-
-		var newX = Math.round(this.x);
-		var newY = Math.round(this.y);
-
-		this.isInTransition = false;
-		// reset if we are outside of the boundaries
-		if (this.resetPosition(this.options.bounceTime)) {
-			return;
-		}
-
-		this.scrollTo(newX, newY); // ensures that the last position is rounded
-
-		if (e.type === 'dragend') { //dragend
-			$.trigger(this.wrapper, 'scrollend', this);
-			return;
-		}
-		var time = 0;
-		var easing = '';
-		// start momentum animation if needed
-		if (this.options.momentum && detail.flickTime < 300) {
-			momentumX = this.hasHorizontalScroll ? this.momentum(this.x, detail.flickDistanceX, detail.flickTime, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : {
-				destination: newX,
-				duration: 0
-			};
-			momentumY = this.hasVerticalScroll ? this.momentum(this.y, detail.flickDistanceY, detail.flickTime, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : {
-				destination: newY,
-				duration: 0
-			};
-			newX = momentumX.destination;
-			newY = momentumY.destination;
-			time = Math.max(momentumX.duration, momentumY.duration);
-			this.isInTransition = true;
-		}
-
-		if (newX != this.x || newY != this.y) {
-			if (newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY) {
-				easing = ease.quadratic;
-			}
-			this.scrollTo(newX, newY, time, easing);
-			return;
-		}
-
-		$.trigger(this.wrapper, 'scrollend', this);
-	};
-
-	Scroll.prototype._resize = function() {
-		var that = this;
-
-		clearTimeout(this.resizeTimeout);
-
-		this.resizeTimeout = setTimeout(function() {
-			that.refresh();
-		}, this.options.resizePolling);
-	};
-	Scroll.prototype.momentum = function(current, distance, time, lowerMargin, wrapperSize, deceleration) {
-		var speed = parseFloat(Math.abs(distance) / time),
-			destination,
-			duration;
-
-		deceleration = deceleration === undefined ? 0.0006 : deceleration;
-
-		destination = current + (speed * speed) / (2 * deceleration) * (distance < 0 ? -1 : 1);
-		duration = speed / deceleration;
-		if (destination < lowerMargin) {
-			destination = wrapperSize ? lowerMargin - (wrapperSize / 2.5 * (speed / 8)) : lowerMargin;
-			distance = Math.abs(destination - current);
-			duration = distance / speed;
-		} else if (destination > 0) {
-			destination = wrapperSize ? wrapperSize / 2.5 * (speed / 8) : 0;
-			distance = Math.abs(current) + destination;
-			duration = distance / speed;
-		}
-
-		return {
-			destination: Math.round(destination),
-			duration: duration
-		};
-	};
-	Scroll.prototype.resetPosition = function(time) {
-		var x = this.x,
-			y = this.y;
-
-		time = time || 0;
-		if (!this.hasHorizontalScroll || this.x > 0) {
-			x = 0;
-		} else if (this.x < this.maxScrollX) {
-			x = this.maxScrollX;
-		}
-		if (this.pulldown && this.y >= this.options.down.height) {
-			this.pulldownLoading(x, time);
-			return true;
-		}
-		if (!this.hasVerticalScroll || this.y > 0) {
-			y = 0;
-		} else if (this.y < this.maxScrollY) {
-			y = this.maxScrollY;
-		}
-
-		if (x == this.x && y == this.y) {
-			return false;
-		}
-		this.scrollTo(x, y, time, this.options.bounceEasing);
-
-		return true;
-	};
-	Scroll.prototype.reset = function() {
-		this.wrapper.offsetHeight;
-
-		var paddingLeft = parseFloat($.getStyles(this.wrapper, 'padding-left')) || 0;
-		var paddingRight = parseFloat($.getStyles(this.wrapper, 'padding-right')) || 0;
-		var paddingTop = parseFloat($.getStyles(this.wrapper, 'padding-top')) || 0;
-		var paddingBottom = parseFloat($.getStyles(this.wrapper, 'padding-bottom')) || 0;
-
-		var clientWidth = this.wrapper.clientWidth;
-		var clientHeight = this.wrapper.clientHeight;
-
-		this.scrollerWidth = this.scroller.offsetWidth;
-		this.scrollerHeight = this.scroller.offsetHeight;
-
-		this.wrapperWidth = clientWidth - paddingLeft - paddingRight;
-		this.wrapperHeight = clientHeight - paddingTop - paddingBottom;
-
-		this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
-		this.maxScrollY = Math.min(this.wrapperHeight - this.scrollerHeight, 0);
-		this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
-		this.hasVerticalScroll = (this.options.scrollY && this.maxScrollY < 0) || (this.topPocket ? true : false);
-
-		if (!this.hasHorizontalScroll) {
-			this.maxScrollX = 0;
-			this.scrollerWidth = this.wrapperWidth;
-		}
-
-		if (!this.hasVerticalScroll) {
-			this.maxScrollY = 0;
-			this.scrollerHeight = this.wrapperHeight;
-		}
-
-		this.indicators.map(function(indicator) {
-			indicator.refresh();
-		});
-	};
-	Scroll.prototype.refresh = function() {
-		this.reset();
-		$.trigger(this.wrapper, 'refresh', this);
-		this.resetPosition();
-	};
-
-	Scroll.prototype.createScrollBar = function(clazz) {
-		var scrollbar = document.createElement('div');
-		var indicator = document.createElement('div');
-		scrollbar.className = CLASS_SCROLLBAR + ' ' + clazz;
-		indicator.className = CLASS_INDICATOR;
-		scrollbar.appendChild(indicator);
-		if (clazz === CLASS_SCROLLBAR_VERTICAL) {
-			this.scrollbarY = scrollbar;
-			this.scrollbarIndicatorY = indicator;
-		} else if (clazz === CLASS_SCROLLBAR_HORIZONTAL) {
-			this.scrollbarX = scrollbar;
-			this.scrollbarIndicatorX = indicator;
-		}
-		this.wrapper.appendChild(scrollbar);
-		return scrollbar;
-	};
-	Scroll.prototype.scrollTo = function(x, y, time, easing) {
-		var easing = easing || ease.circular;
-		this.isInTransition = time > 0;
-		if (this.isInTransition) {
-			this._clearRequestAnimationFrame();
-			this._transitionTimingFunction(easing.style);
-			this._transitionTime(time);
-			this._setTranslate(x, y);
-		} else {
-			this._setTranslate(x, y);
-		}
-
-	};
-	Scroll.prototype._transitionTime = function(time) {
-		time = time || 0;
-		this.scrollerStyle['webkitTransitionDuration'] = time + 'ms';
-		if (!time && $.os.isBadAndroid) {
-			this.scrollerStyle['webkitTransitionDuration'] = '0.001s';
-		}
-		if (this.indicators) {
-			for (var i = this.indicators.length; i--;) {
-				this.indicators[i].transitionTime(time);
-			}
-		}
-	};
-
-	Scroll.prototype._transitionTimingFunction = function(easing) {
-		this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
-		if (this.indicators) {
-			for (var i = this.indicators.length; i--;) {
-				this.indicators[i].transitionTimingFunction(easing);
-			}
-		}
-	};
-
-	Scroll.prototype._translate = function(x, y) {
-		this.x = x;
-		this.y = y;
-	};
-	Scroll.prototype._clearRequestAnimationFrame = function() {
-		if (this.requestAnimationFrame) {
-			cancelAnimationFrame(this.requestAnimationFrame);
-			this.requestAnimationFrame = null;
-		}
-	};
-	Scroll.prototype._setTranslate = function(x, y) {
-		this.x = x;
-		this.y = y;
-		this.scrollerStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
-		if (this.indicators) {
-			for (var i = this.indicators.length; i--;) {
-				this.indicators[i].updatePosition();
-			}
-		}
-		this.lastX = this.x;
-		this.lastY = this.y;
-	};
-	Scroll.prototype._updateTranslate = function() {
-		var self = this;
-		if (self.x !== self.lastX || self.y !== self.lastY) {
-			self._setTranslate(self.x, self.y);
-		}
-		self.requestAnimationFrame = requestAnimationFrame(function() {
-			self._updateTranslate();
-		});
-	};
-	//pullrefreh
-
-	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
-	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
-	var CLASS_PULL = 'mui-pull';
-	var CLASS_PULL_LOADING = 'mui-pull-loading';
-	var CLASS_PULL_CAPTION = 'mui-pull-caption';
-
-	var CLASS_ICON = 'mui-icon';
-	var CLASS_PRELOADER = 'mui-preloader';
-	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
-	var CLASS_PRELOADER_SPIN = 'mui-preloader-spin';
-
-	var CLASS_IN = 'mui-in';
-	var CLASS_REVERSE = 'mui-reverse';
-
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
-
-	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{downCaption}</div>', '</div>'].join('');
-
-	var pullRefreshOptions = {
-		down: {
-			height: 50,
-			contentdown: '下拉可以刷新',
-			contentover: '释放立即刷新',
-			contentrefresh: '正在刷新...'
 		},
-		up: {
-			height: 50,
-			contentdown: '上拉显示更多',
-			contentrefresh: '正在加载...',
-			duration: 300
-		}
-	};
-	Scroll.prototype.pulldownLoading = function(x, time) {
-		x = x || 0;
-		this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
-		if (this.loading) {
-			return;
-		}
-		this._setCaption(this.options.down.contentrefresh);
-		this.loading = true;
-		this.indicators.map(function(indicator) {
-			indicator.fade(0);
-		});
-		var callback = this.options.down.callback;
-		var that = this;
-		callback && callback(function() {
-			that.scrollTo(x, 0, time, that.options.bounceEasing);
-			that.loading = false;
-			that._setCaption(that.options.down.contentdown);
-		});
-	};
-	Scroll.prototype.pullupLoading = function(x, time) {
-		x = x || 0;
-		this.scrollTo(x, this.maxScrollY, time, this.options.bounceEasing);
-		if (this.loading) {
-			return;
-		}
-		this._setCaption(this.options.up.contentrefresh);
-		this.indicators.map(function(indicator) {
-			indicator.fade(0);
-		});
-		this.loading = true;
-		var callback = this.options.up.callback;
-		var that = this;
-		callback && callback(function() {
-			that.loading = false;
-			that._setCaption(that.options.up.contentdown);
-		});
-	};
-	Scroll.prototype._initPullRefresh = function() {
-		this._initPocket();
-	};
-	Scroll.prototype._initPocket = function() {
-		var options = this.options;
-		if (options.down && options.down.hasOwnProperty('callback')) {
-			this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
-			if (!this.topPocket) {
-				this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down);
-				this.scroller.insertBefore(this.topPocket, this.scroller.firstChild);
+		_momentum: function(current, distance, time, lowerMargin, wrapperSize, deceleration) {
+			var speed = parseFloat(Math.abs(distance) / time),
+				destination,
+				duration;
 
-				this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+			deceleration = deceleration === undefined ? 0.0006 : deceleration;
 
+			destination = current + (speed * speed) / (2 * deceleration) * (distance < 0 ? -1 : 1);
+			duration = speed / deceleration;
+			if (destination < lowerMargin) {
+				destination = wrapperSize ? lowerMargin - (wrapperSize / 2.5 * (speed / 8)) : lowerMargin;
+				distance = Math.abs(destination - current);
+				duration = distance / speed;
+			} else if (destination > 0) {
+				destination = wrapperSize ? wrapperSize / 2.5 * (speed / 8) : 0;
+				distance = Math.abs(current) + destination;
+				duration = distance / speed;
 			}
-		}
-		if (options.up && options.up.hasOwnProperty('callback')) {
-			this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
-			if (!this.bottomPocket) {
-				this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up);
-				this.scroller.appendChild(this.bottomPocket);
 
-				this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
-			}
-			var that = this;
-			this.wrapper.addEventListener('scrollbottom', function() {
-				if (!that.pulldown && !that.loading) {
-					that.pullPocket = that.bottomPocket;
-					that.pullCaption = that.bottomCaption;
-					that.pullLoading = that.bottomLoading;
-					that.pullupLoading();
+			return {
+				destination: Math.round(destination),
+				duration: duration
+			};
+		},
+		//API
+		setTranslate: function(x, y) {
+			this.x = x;
+			this.y = y;
+			this.scrollerStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
+			if (this.indicators) {
+				for (var i = this.indicators.length; i--;) {
+					this.indicators[i].updatePosition();
 				}
-			});
-		}
-	};
-	Scroll.prototype._createPocket = function(clazz, options) {
-		var pocket = document.createElement('div');
-		pocket.className = clazz;
-		pocket.innerHTML = pocketHtml.replace('{downCaption}', options.contentdown);
-		return pocket;
-	};
-
-	Scroll.prototype._setCaption = function(title) {
-		if (this.loading) {
-			return;
-		}
-		var options = this.options;
-		var pocket = this.pullPocket;
-		if (pocket) {
-			if (title !== this.lastTitle) {
-				var caption = this.pullCaption;
-				var loading = this.pullLoading;
-				caption.innerHTML = title;
-				if (this.pulldown) {
-					//					if (title === options.down.contentrefresh) {
-					loading.className = CLASS_LOADING;
-					//					} else if (title === options.down.contentover) {
-					//						loading.className = CLASS_LOADING_UP;
-					//					} else if (title === options.down.contentdown) {
-					//						loading.className = CLASS_LOADING_DOWN;
-					//					}
-				} else {
-					if (title === options.up.contentrefresh) {
-						loading.className = CLASS_LOADING + ' ' + CLASS_IN;
-					} else {
-						loading.className = CLASS_LOADING;
-					}
-				}
-				this.lastTitle = title;
 			}
+			this.lastX = this.x;
+			this.lastY = this.y;
+		},
+		reLayout: function() {
+			this.wrapper.offsetHeight;
+
+			var paddingLeft = parseFloat($.getStyles(this.wrapper, 'padding-left')) || 0;
+			var paddingRight = parseFloat($.getStyles(this.wrapper, 'padding-right')) || 0;
+			var paddingTop = parseFloat($.getStyles(this.wrapper, 'padding-top')) || 0;
+			var paddingBottom = parseFloat($.getStyles(this.wrapper, 'padding-bottom')) || 0;
+
+			var clientWidth = this.wrapper.clientWidth;
+			var clientHeight = this.wrapper.clientHeight;
+
+			this.scrollerWidth = this.scroller.offsetWidth;
+			this.scrollerHeight = this.scroller.offsetHeight;
+
+			this.wrapperWidth = clientWidth - paddingLeft - paddingRight;
+			this.wrapperHeight = clientHeight - paddingTop - paddingBottom;
+
+			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
+			this.maxScrollY = Math.min(this.wrapperHeight - this.scrollerHeight, 0);
+			this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
+			this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
+
+			this._reLayout();
+		},
+		resetPosition: function(time) {
+			var x = this.x,
+				y = this.y;
+
+			time = time || 0;
+			if (!this.hasHorizontalScroll || this.x > 0) {
+				x = 0;
+			} else if (this.x < this.maxScrollX) {
+				x = this.maxScrollX;
+			}
+
+			if (!this.hasVerticalScroll || this.y > 0) {
+				y = 0;
+			} else if (this.y < this.maxScrollY) {
+				y = this.maxScrollY;
+			}
+
+			if (x == this.x && y == this.y) {
+				return false;
+			}
+			this.scrollTo(x, y, time, this.options.bounceEasing);
+
+			return true;
+		},
+		refresh: function() {
+			this.reLayout();
+			$.trigger(this.wrapper, 'refresh', this);
+			this.resetPosition();
+		},
+		scrollTo: function(x, y, time, easing) {
+			var easing = easing || ease.circular;
+			this.isInTransition = time > 0;
+			if (this.isInTransition) {
+				this._clearRequestAnimationFrame();
+				this._transitionTimingFunction(easing.style);
+				this._transitionTime(time);
+				this.setTranslate(x, y);
+			} else {
+				this.setTranslate(x, y);
+			}
+
 		}
-	};
+	});
 	//Indicator
 	var Indicator = function(scroller, options) {
 		this.wrapper = typeof options.el == 'string' ? document.querySelector(options.el) : options.el;
@@ -2334,7 +2209,7 @@ var mui = (function(document, undefined) {
 
 		if (this.options.fade) {
 			this.wrapperStyle['webkitTransform'] = this.scroller.translateZ;
-			this.wrapperStyle['webkitTransitionDuration'] = $.os.isBadAndroid ? '0.001s' : '0ms';
+			this.wrapperStyle['webkitTransitionDuration'] = this.options.fixedBadAndorid && $.os.isBadAndroid ? '0.001s' : '0ms';
 			this.wrapperStyle.opacity = '0';
 		}
 	}
@@ -2345,15 +2220,13 @@ var mui = (function(document, undefined) {
 		transitionTime: function(time) {
 			time = time || 0;
 			this.indicatorStyle['webkitTransitionDuration'] = time + 'ms';
-			if (!time && $.os.android) {
+			if (this.scroller.options.fixedBadAndorid && !time && $.os.isBadAndroid) {
 				this.indicatorStyle['webkitTransitionDuration'] = '0.001s';
 			}
 		},
-
 		transitionTimingFunction: function(easing) {
 			this.indicatorStyle['webkitTransitionTimingFunction'] = easing;
 		},
-
 		refresh: function() {
 			this.transitionTime();
 
@@ -2432,8 +2305,6 @@ var mui = (function(document, undefined) {
 			this.indicatorStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.scroller.translateZ;
 
 		},
-
-
 		fade: function(val, hold) {
 			if (hold && !this.visible) {
 				return;
@@ -2455,6 +2326,9 @@ var mui = (function(document, undefined) {
 			}).bind(this, val), delay);
 		}
 	};
+
+	$.Scroll = Scroll;
+
 	$.fn.scroll = function(options) {
 		this.each(function() {
 			var scroll = this.getAttribute('data-scroll');
@@ -2465,17 +2339,451 @@ var mui = (function(document, undefined) {
 			}
 		});
 	};
+})(mui, window, document);
+(function($, window, document, undefined) {
+	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
+	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
+	var CLASS_PULL = 'mui-pull';
+	var CLASS_PULL_LOADING = 'mui-pull-loading';
+	var CLASS_PULL_CAPTION = 'mui-pull-caption';
+
+	var CLASS_ICON = 'mui-icon';
+	var CLASS_PRELOADER = 'mui-preloader';
+	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
+	var CLASS_PRELOADER_SPIN = 'mui-preloader-spin';
+
+	var CLASS_IN = 'mui-in';
+	var CLASS_REVERSE = 'mui-reverse';
+
+	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
+	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
+	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
+
+	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{downCaption}</div>', '</div>'].join('');
+
+	var defaultOptions = {
+		scrollY: true,
+		scrollX: false,
+		indicators: true,
+		down: {
+			height: 50,
+			contentdown: '下拉可以刷新',
+			contentover: '释放立即刷新',
+			contentrefresh: '正在刷新...'
+		},
+		up: {
+			height: 50,
+			contentdown: '上拉显示更多',
+			contentrefresh: '正在加载...',
+			duration: 300
+		}
+	};
+	var PullRefresh = $.Scroll.extend({
+		init: function(element, options) {
+			this._super(element, $.extend(defaultOptions, options, true));
+		},
+		_init: function() {
+			this._super();
+			this._initPocket();
+		},
+		_initPocket: function() {
+			var options = this.options;
+			if (options.down && options.down.hasOwnProperty('callback')) {
+				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
+				if (!this.topPocket) {
+					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down);
+					this.scroller.insertBefore(this.topPocket, this.scroller.firstChild);
+
+					this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
+					this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+
+				}
+			}
+			if (options.up && options.up.hasOwnProperty('callback')) {
+				this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
+				if (!this.bottomPocket) {
+					this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up);
+					this.scroller.appendChild(this.bottomPocket);
+
+					this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+					this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
+				}
+				var that = this;
+				this.wrapper.addEventListener('scrollbottom', function() {
+					if (!that.pulldown && !that.loading) {
+						that.pullPocket = that.bottomPocket;
+						that.pullCaption = that.bottomCaption;
+						that.pullLoading = that.bottomLoading;
+						that.pullupLoading();
+					}
+				});
+			}
+		},
+		_createPocket: function(clazz, options) {
+			var pocket = document.createElement('div');
+			pocket.className = clazz;
+			pocket.innerHTML = pocketHtml.replace('{downCaption}', options.contentdown);
+			return pocket;
+		},
+		_setCaption: function(title) {
+			if (this.loading) {
+				return;
+			}
+			var options = this.options;
+			var pocket = this.pullPocket;
+			if (pocket) {
+				if (title !== this.lastTitle) {
+					var caption = this.pullCaption;
+					var loading = this.pullLoading;
+					caption.innerHTML = title;
+					if (this.pulldown) {
+						//					if (title === options.down.contentrefresh) {
+						loading.className = CLASS_LOADING;
+						//					} else if (title === options.down.contentover) {
+						//						loading.className = CLASS_LOADING_UP;
+						//					} else if (title === options.down.contentdown) {
+						//						loading.className = CLASS_LOADING_DOWN;
+						//					}
+					} else {
+						if (title === options.up.contentrefresh) {
+							loading.className = CLASS_LOADING + ' ' + CLASS_IN;
+						} else {
+							loading.className = CLASS_LOADING;
+						}
+					}
+					this.lastTitle = title;
+				}
+			}
+		},
+		_start: function(e) {
+			if (!this.loading) {
+				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
+			}
+			this._super(e);
+		},
+		_drag: function(e) {
+			this._super(e);
+			if (!this.pulldown && !this.loading && this.topPocket && e.detail.direction === 'down' && this.y >= 0) {
+				this.pulldown = true;
+				this.pullPocket = this.topPocket;
+				this.pullCaption = this.topCaption;
+				this.pullLoading = this.topLoading;
+			}
+			if (this.pulldown) {
+				this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
+			}
+		},
+		_reLayout: function() {
+			this.hasVerticalScroll = true;
+			this._super();
+		},
+		//API
+		resetPosition: function(time) {
+			if (this.pulldown && this.y >= this.options.down.height) {
+				this.pulldownLoading(0, time || 0);
+				return true;
+			}
+			return this._super(time);
+		},
+		pulldownLoading: function(x, time) {
+			x = x || 0;
+			this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
+			if (this.loading) {
+				return;
+			}
+			this._setCaption(this.options.down.contentrefresh);
+			this.loading = true;
+			this.indicators.map(function(indicator) {
+				indicator.fade(0);
+			});
+			var callback = this.options.down.callback;
+			var that = this;
+			callback && callback(function() {
+				that.scrollTo(x, 0, time, that.options.bounceEasing);
+				that.loading = false;
+				that._setCaption(that.options.down.contentdown);
+			});
+		},
+		pullupLoading: function(x, time) {
+			x = x || 0;
+			this.scrollTo(x, this.maxScrollY, time, this.options.bounceEasing);
+			if (this.loading) {
+				return;
+			}
+			this._setCaption(this.options.up.contentrefresh);
+			this.indicators.map(function(indicator) {
+				indicator.fade(0);
+			});
+			this.loading = true;
+			var callback = this.options.up.callback;
+			var that = this;
+			callback && callback(function() {
+				that.loading = false;
+				that._setCaption(that.options.up.contentdown);
+			});
+		}
+	});
 	$.fn.pullRefresh = function(options) {
 		this.each(function() {
 			var pullrefresh = this.getAttribute('data-pullrefresh');
 			if (!pullrefresh) {
 				var id = ++$.uuid;
-				$.data[id] = new Scroll(this, $.extend(pullRefreshOptions, options, true));
+				$.data[id] = new PullRefresh(this, options);
 				this.setAttribute('data-pullrefresh', id);
 			}
 		});
 	};
-})(mui, window, document, 'scroll');
+})(mui, window, document);
+(function($, window, document, undefined) {
+	var CLASS_SLIDER = 'mui-slider';
+	var CLASS_SLIDER_GROUP = 'mui-slider-group';
+	var CLASS_SLIDER_LOOP = 'mui-slider-loop';
+	var CLASS_SLIDER_INDICATOR = 'mui-slider-indicator';
+	var CLASS_ACTION_PREVIOUS = 'mui-action-previous';
+	var CLASS_ACTION_NEXT = 'mui-action-next';
+	var CLASS_SLIDER_ITEM = 'mui-slider-item';
+	var CLASS_SLIDER_ITEM_DUPLICATE = CLASS_SLIDER_ITEM + '-duplicate';
+
+	var CLASS_DISABLED = 'mui-disabled';
+
+	var SELECTOR_SLIDER_ITEM = '.' + CLASS_SLIDER_ITEM;
+	var SELECTOR_SLIDER_ITEM_DUPLICATE = '.' + CLASS_SLIDER_ITEM_DUPLICATE;
+	var SELECTOR_SLIDER_INDICATOR = '.' + CLASS_SLIDER_INDICATOR;
+	var SELECTOR_SLIDER_PROGRESS_BAR = '.mui-slider-progress-bar';
+
+	var defaultOptions = {
+		interval: 0, //设置为0，则不定时轮播
+		scrollY: false,
+		scrollX: true,
+		indicators: false,
+		bounceTime: 200,
+		startX: false
+	};
+	var Slider = $.Scroll.extend({
+		init: function(element, options) {
+			this._super(element, $.extend(defaultOptions, options, true));
+		},
+		_init: function() {
+			this.scroller = this.wrapper.querySelector('.' + CLASS_SLIDER_GROUP);
+			this.scrollerStyle = this.scroller.style;
+			this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
+			if (this.progressBar) {
+				this.progressBarWidth = this.progressBar.offsetWidth;
+				this.progressBarStyle = this.progressBar.style;
+			}
+
+			this.x = this._getScroll();
+			if (this.options.startX === false) {
+				this.options.startX = this.x;
+			}
+			this._super();
+			this._initTimer();
+		},
+		_initEvent: function() {
+			var self = this;
+			self._super();
+			self.wrapper.addEventListener('swiperight', $.stopPropagation);
+			self.wrapper.addEventListener('scrollend', function() {
+				self.slideNumber = self._getSlideNumber();
+				var slideNumber = self.slideNumber;
+				if (self.loop) {
+					if (self.slideNumber === 0) {
+						self.slideNumber = self.itemLength - 2;
+						self.setTranslate(-self.wrapperWidth * (self.itemLength - 2), 0);
+					} else if (self.slideNumber === (self.itemLength - 1)) {
+						self.slideNumber = 1;
+						self.setTranslate(-self.wrapperWidth, 0);
+					}
+					slideNumber = self.slideNumber - 1;
+				}
+				$.trigger(self.wrapper, 'slide', {
+					slideNumber: slideNumber
+				});
+			});
+			self.wrapper.addEventListener('slide', function(e) {
+				var detail = e.detail;
+				detail.slideNumber = detail.slideNumber || 0;
+				var indicators = self.wrapper.querySelectorAll('.mui-slider-indicator .mui-indicator');
+				if (indicators.length > 0) { //图片轮播
+					for (var i = 0, len = indicators.length; i < len; i++) {
+						indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
+					}
+				} else {
+					var number = self.wrapper.querySelector('.mui-slider-indicator .mui-number span');
+					if (number) { //图文表格
+						number.innerText = (detail.slideNumber + 1);
+					} else { //segmented controls
+						var controlItems = self.wrapper.querySelectorAll('.mui-control-item');
+						for (var i = 0, len = controlItems.length; i < len; i++) {
+							controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
+						}
+					}
+				}
+				e.stopPropagation();
+			});
+
+			self.wrapper.addEventListener($.eventName('shown', 'tab'), function(e) { //tab
+				self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
+			});
+			//indicator
+			var indicator = self.wrapper.querySelector(SELECTOR_SLIDER_INDICATOR);
+			if (indicator) {
+				indicator.addEventListener('tap', function(event) {
+					var target = event.target;
+					if (target.classList.contains(CLASS_ACTION_PREVIOUS) || target.classList.contains(CLASS_ACTION_NEXT)) {
+						self[target.classList.contains(CLASS_ACTION_PREVIOUS) ? 'prevItem' : 'nextItem']();
+						event.stopPropagation();
+					}
+				});
+			}
+		},
+		_initTimer: function() {
+			var self = this;
+			var slider = self.wrapper;
+			var interval = self.options.interval;
+			var slidershowTimer = slider.getAttribute('data-slidershowTimer');
+			slidershowTimer && window.clearTimeout(slidershowTimer);
+			if (interval) {
+				slidershowTimer = window.setTimeout(function() {
+					if (!slider) {
+						return;
+					}
+					//仅slider显示状态进行自动轮播
+					if (!!(slider.offsetWidth || slider.offsetHeight)) {
+						self.nextItem();
+						//下一个
+					}
+					self._initTimer();
+				}, interval);
+				slider.setAttribute('data-slidershowTimer', slidershowTimer);
+			}
+		},
+		_reLayout: function() {
+			this.hasHorizontalScroll = true;
+			this.loop = this.scroller.classList.contains(CLASS_SLIDER_LOOP);
+
+			this.itemLength = this.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM).length;
+			this.scrollerWidth = this.itemLength * this.scrollerWidth;
+			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
+			this.slideNumber = this._getSlideNumber();
+			this._super();
+		},
+		_getScroll: function() {
+			var result = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
+			return result ? result.x : 0;
+		},
+		_getSlideNumber: function() {
+			return Math.abs(Math.round(this.x / this.wrapperWidth));
+		},
+		_transitionEnd: function(e) {
+			if (e.target != this.scroller || !this.isInTransition) {
+				return;
+			}
+			this._transitionTime();
+			this.isInTransition = false;
+			$.trigger(this.wrapper, 'scrollend', this);
+		},
+		_flick: function(e) {
+			var detail = e.detail;
+			var direction = detail.direction;
+			this._clearRequestAnimationFrame();
+			this.isInTransition = true;
+			if (direction === 'up' || direction === 'down') {
+				this.resetPosition(this.options.bounceTime);
+				return;
+			}
+			if (e.type === 'flick') {
+				this.x = -(this.slideNumber + (direction === 'left' ? 1 : -1)) * this.wrapperWidth;
+				this.resetPosition(this.options.bounceTime);
+			} else if (e.type === 'dragend' && !detail.flick) {
+				this.resetPosition(this.options.bounceTime);
+			}
+			e.stopPropagation();
+		},
+		_gotoItem: function(slideNumber, time) {
+			this.scrollTo(-slideNumber * this.wrapperWidth, 0, time, this.options.bounceEasing);
+			this._initTimer();
+		},
+		_fixedSlideNumber: function(slideNumber) {
+			if (!this.loop) {
+				if (slideNumber < 0) {
+					slideNumber = 0;
+				} else if (slideNumber >= this.itemLength) {
+					slideNumber = this.itemLength - 1;
+				}
+			} else {
+				if (slideNumber === 0) {
+					slideNumber = this.itemLength - 2;
+				} else if (slideNumber === this.itemLength - 1) {
+					slideNumber = 1;
+				}
+			}
+			return slideNumber;
+		},
+		//API
+		setTranslate: function(x, y) {
+			this._super(x, y);
+			var progressBar = this.progressBar;
+			if (progressBar) {
+				this.progressBarStyle.webkitTransform = 'translate3d(' + (-x * (this.progressBarWidth / this.wrapperWidth)) + 'px,0,0)';
+			}
+		},
+		resetPosition: function(time) {
+			time = time || 0;
+			if (this.x > 0) {
+				this.x = 0;
+			} else if (this.x < this.maxScrollX) {
+				this.x = this.maxScrollX;
+			}
+			this._gotoItem(this._getSlideNumber(), time);
+			return true;
+		},
+		gotoItem: function(slideNumber, time) {
+			this._gotoItem(this._fixedSlideNumber(this.loop ? (slideNumber + 1) : slideNumber), time || this.options.bounceEasing);
+		},
+		nextItem: function() {
+			this._gotoItem(this._fixedSlideNumber(this.slideNumber + 1), this.options.bounceTime);
+		},
+		prevItem: function() {
+			this._gotoItem(this._fixedSlideNumber(this.slideNumber - 1), this.options.bounceTime);
+		},
+		refresh: function(options) {
+			if (options) {
+				$.extend(this.options, options);
+				this._super();
+				this._gotoItem(this._getSlideNumber() + 1, this.options.bounceTime);
+			} else {
+				this._super();
+			}
+		},
+	});
+	$.fn.slider = function(options) {
+		var slider = null;
+		this.each(function() {
+			var sliderElement = this;
+			if (!this.classList.contains(CLASS_SLIDER)) {
+				sliderElement = this.querySelector('.' + CLASS_SLIDER);
+			}
+			if (sliderElement) {
+				var id = sliderElement.getAttribute('data-slider');
+				if (!id) {
+					id = ++$.uuid;
+					$.data[id] = slider = new Slider(sliderElement, options);
+					sliderElement.setAttribute('data-slider', id);
+				} else {
+					slider = $.data[id];
+					if (slider && options) {
+						slider.refresh(options);
+					}
+				}
+			}
+		});
+		return slider;
+	};
+	$.ready(function() {
+		$('.mui-slider').slider();
+	});
+})(mui, window, document);
 /**
  * pulldownRefresh 5+
  * @param {type} $
@@ -3132,369 +3440,6 @@ var mui = (function(document, undefined) {
 })(mui, window, document, 'tab');
 
 /**
- * Slider (TODO resize)
- * @param {type} $
- * @param {type} window
- * @returns {undefined}
- */
-(function($, window) {
-	var CLASS_SLIDER = 'mui-slider';
-	var CLASS_SLIDER_GROUP = 'mui-slider-group';
-	var CLASS_SLIDER_LOOP = 'mui-slider-loop';
-	var CLASS_SLIDER_INDICATOR = 'mui-slider-indicator';
-	var CLASS_ACTION_PREVIOUS = 'mui-action-previous';
-	var CLASS_ACTION_NEXT = 'mui-action-next';
-	var CLASS_SLIDER_ITEM = 'mui-slider-item';
-	var CLASS_SLIDER_ITEM_DUPLICATE = CLASS_SLIDER_ITEM + '-duplicate';
-
-	var SELECTOR_SLIDER_ITEM = '.' + CLASS_SLIDER_ITEM;
-	var SELECTOR_SLIDER_ITEM_DUPLICATE = '.' + CLASS_SLIDER_ITEM_DUPLICATE;
-	var SELECTOR_SLIDER_INDICATOR = '.' + CLASS_SLIDER_INDICATOR;
-	var SELECTOR_SLIDER_PROGRESS_BAR = '.mui-slider-progress-bar';
-
-
-	var Slider = function(element, options) {
-		this.element = element;
-		this.options = $.extend({
-			slideshowDelay: 0, //设置为0，则不定时轮播
-			factor: 1
-		}, options);
-
-		this.init();
-	};
-	Slider.prototype.init = function() {
-		//		this.initDuplicate();
-		this.initEvent();
-		this.initTimer();
-	};
-	Slider.prototype.refresh = function(options) {
-		var newOptions = $.extend({
-			slideshowDelay: 0, //设置为0，则不定时轮播
-			factor: 1
-		}, options);
-		if (this.options.slideshowDelay != newOptions.slideshowDelay) {
-			this.options.slideshowDelay = newOptions.slideshowDelay;
-			if (this.options.slideshowDelay) {
-				this.nextItem();
-			}
-		}
-	};
-	//TODO 暂时不做自动clone
-	//	Slider.prototype.initDuplicate = function() {
-	//		var self = this;
-	//		var element = self.element;
-	//		if (element.classList.contains(CLASS_SLIDER_LOOP)) {
-	//			var duplicates = element.getElementsByClassName(CLASS_SLIDER_ITEM_DUPLICATE);
-	//		}
-	//	};
-	Slider.prototype.initEvent = function() {
-		var self = this;
-		var element = self.element;
-		var slider = element.parentNode;
-		self.translateX = 0;
-		self.sliderWidth = element.offsetWidth;
-		self.isLoop = element.classList.contains(CLASS_SLIDER_LOOP);
-		self.sliderLength = element.querySelectorAll(SELECTOR_SLIDER_ITEM).length;
-		self.progressBarWidth = 0;
-		self.progressBar = slider.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
-		if (self.progressBar) {
-			self.progressBarWidth = self.progressBar.offsetWidth;
-		}
-		//slider
-		var isDragable = false;
-		self.isSwipeable = false;
-		slider.addEventListener('dragstart', function(event) {
-			var detail = event.detail;
-			var direction = detail.direction;
-			if (direction === 'left' || direction === 'right') { //reset
-				isDragable = true;
-				self.translateX = self.lastTranslateX = 0;
-				self.scrollX = self.getScroll();
-				self.sliderWidth = element.offsetWidth;
-				self.isLoop = element.classList.contains(CLASS_SLIDER_LOOP);
-				self.sliderLength = element.querySelectorAll(SELECTOR_SLIDER_ITEM).length;
-				if (self.progressBar) {
-					self.progressBarWidth = self.progressBar.offsetWidth;
-				}
-				self.maxTranslateX = ((self.sliderLength - 1) * self.sliderWidth);
-				event.detail.gesture.preventDefault();
-				var isStopPropagation = true;
-				if (!self.isLoop) {
-					if (direction === 'right' && self.scrollX === 0) {
-						isStopPropagation = false;
-					} else if (direction === 'left' && self.scrollX === -self.maxTranslateX) {
-						isStopPropagation = false;
-					}
-				}
-				isStopPropagation && event.stopPropagation();
-			}
-		});
-		slider.addEventListener('drag', function(event) {
-			if (isDragable) {
-				self.dragItem(event);
-				event.stopPropagation();
-			}
-
-		});
-		slider.addEventListener('dragend', function(event) {
-			if (isDragable) {
-				self.gotoItem(self.getSlideNumber());
-				isDragable = self.isSwipeable = false;
-				event.stopPropagation();
-			}
-		});
-//		slider.addEventListener('flick', $.stopPropagation);
-		slider.addEventListener('swipeleft', function(event) {
-			if (self.isSwipeable) {
-				//stop dragend
-				$.gestures.stoped = true;
-				self.nextItem();
-				isDragable = self.isSwipeable = false;
-			}
-			event.stopPropagation();
-		});
-		slider.addEventListener('swiperight', function(event) {
-			if (self.isSwipeable) {
-				//stop dragend
-				$.gestures.stoped = true;
-				self.prevItem();
-				isDragable = self.isSwipeable = false;
-			}
-			event.stopPropagation();
-		});
-		slider.addEventListener('slide', function(e) {
-			var detail = e.detail;
-			detail.slideNumber = detail.slideNumber || 0;
-			var number = slider.querySelector('.mui-slider-indicator .mui-number span');
-			if (number) {
-				number.innerText = (detail.slideNumber + 1);
-			}
-
-			var indicators = slider.querySelectorAll('.mui-slider-indicator .mui-indicator');
-			for (var i = 0, len = indicators.length; i < len; i++) {
-				indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
-			}
-
-			var controlItems = slider.querySelectorAll('.mui-control-item');
-			for (var i = 0, len = controlItems.length; i < len; i++) {
-				controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
-			}
-		});
-		slider.addEventListener($.eventName('shown', 'tab'), function(e) { //tab
-			self.gotoItem(-(e.detail.tabNumber || 0));
-		});
-		//indicator
-		var indicator = element.parentNode.querySelector(SELECTOR_SLIDER_INDICATOR);
-		if (indicator) {
-			indicator.addEventListener('tap', function(event) {
-				var target = event.target;
-				if (target.classList.contains(CLASS_ACTION_PREVIOUS) || target.classList.contains(CLASS_ACTION_NEXT)) {
-					self[target.classList.contains(CLASS_ACTION_PREVIOUS) ? 'prevItem' : 'nextItem']();
-					event.stopPropagation();
-				}
-			});
-		}
-	};
-	Slider.prototype.dragItem = function(event) {
-		var self = this;
-		var detail = event.detail;
-
-		if (detail.deltaX !== detail.lastDeltaX) {
-			var translate = (detail.deltaX * self.options.factor + self.scrollX);
-			self.element.style['-webkit-transition-duration'] = '0';
-			var min = 0;
-			var max = -self.maxTranslateX;
-			if (self.isLoop) {
-				min = self.sliderWidth;
-				max = max + min;
-			}
-			if (translate > min || translate < max) {
-				self.isSwipeable = false;
-				return;
-			}
-			if (!self.requestAnimationFrame) {
-				self.updateTranslate();
-			}
-			self.isSwipeable = true;
-			self.translateX = translate;
-		}
-		if (self.timer) {
-			clearTimeout(self.timer);
-		}
-		self.timer = setTimeout(function() {
-			self.initTimer();
-		}, 100);
-
-	};
-	Slider.prototype.updateTranslate = function() {
-		var self = this;
-		if (self.lastTranslateX !== self.translateX) {
-			self.setTranslate(self.translateX);
-			self.lastTranslateX = self.translateX;
-		}
-		self.requestAnimationFrame = requestAnimationFrame(function() {
-			self.updateTranslate();
-		});
-	};
-	Slider.prototype.setTranslate = function(x) {
-		this.element.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
-		this.updateProcess(x);
-	}
-	Slider.prototype.updateProcess = function(translate) {
-		var progressBarWidth = this.progressBarWidth;
-		if (progressBarWidth) {
-			translate = Math.abs(translate);
-			this.setProcess(translate * (progressBarWidth / this.sliderWidth));
-		}
-	};
-	Slider.prototype.setProcess = function(translate) {
-		var progressBar = this.progressBar;
-		if (progressBar) {
-			progressBar.style.webkitTransform = 'translate3d(' + translate + 'px,0,0)';
-		}
-	};
-	/**
-	 * 下一个轮播
-	 * @returns {Number}
-	 */
-	Slider.prototype.nextItem = function() {
-		this.gotoItem(this.getCurrentSlideNumber('next') - 1);
-	};
-	/**
-	 * 上一个轮播
-	 * @returns {Number}
-	 */
-	Slider.prototype.prevItem = function() {
-		this.gotoItem(this.getCurrentSlideNumber('prev') + 1);
-	};
-	/**
-	 * 滑动到指定轮播
-	 * @param {type} slideNumber
-	 * @returns {undefined}
-	 */
-	Slider.prototype.gotoItem = function(slideNumber) {
-		if (!(slideNumber === 1 && this.getSlideNumber() === slideNumber)) {
-			slideNumber = slideNumber > 0 ? -slideNumber : slideNumber;
-		}
-		var self = this;
-		var slider = self.element;
-		var slideLength = self.sliderLength;
-		if (self.isLoop) { //循环轮播需减去2个过渡元素
-			slideLength = slideLength - 2;
-		} else {
-			slideLength = slideLength - 1;
-			slideNumber = Math.min(0, slideNumber);
-			slideNumber = Math.max(slideNumber, -slideLength);
-		}
-		if (self.requestAnimationFrame) {
-			cancelAnimationFrame(self.requestAnimationFrame);
-			self.requestAnimationFrame = null;
-		}
-		var offsetX = Math.max(slideNumber, -slideLength) * slider.offsetWidth;
-		slider.style['-webkit-transition-duration'] = '.2s';
-		self.setTranslate(offsetX);
-		//		slider.style.webkitTransform = 'translate3d(' + offsetX + 'px,0,0)';
-		//		self.updateProcess(offsetX);
-		var fixedLoop = function() {
-			slider.style['-webkit-transition-duration'] = '0';
-			slider.style.webkitTransform = 'translate3d(' + (slideNumber * slider.offsetWidth) + 'px,0,0)';
-			slider.removeEventListener('webkitTransitionEnd', fixedLoop);
-		};
-		slider.removeEventListener('webkitTransitionEnd', fixedLoop);
-		if (self.isLoop) { //循环轮播自动重新定位
-			if (slideNumber === 1 || slideNumber === -slideLength) {
-				slideNumber = slideNumber === 1 ? (-slideLength + 1) : 0;
-				slider.addEventListener('webkitTransitionEnd', fixedLoop);
-			}
-		}
-		$.trigger(slider.parentNode, 'slide', {
-			slideNumber: Math.abs(slideNumber)
-		});
-		this.initTimer();
-	};
-
-	/**
-	 * 计算轮播应该处于的位置(四舍五入)
-	 * @returns {Number}
-	 */
-	Slider.prototype.getSlideNumber = function() {
-		return (Math.round(this.getScroll() / this.sliderWidth));
-	};
-	/**
-	 * 当前所处位置
-	 * @param {type} type
-	 * @returns {unresolved}
-	 */
-	Slider.prototype.getCurrentSlideNumber = function(type) {
-		return (Math[type === 'next' ? 'ceil' : 'floor'](this.getScroll() / this.sliderWidth));
-	};
-	/**
-	 * 获取当前滚动位置
-	 * @returns {Number}
-	 */
-	Slider.prototype.getScroll = function() {
-		var slider = this.element;
-		var scroll = 0;
-		if ('webkitTransform' in slider.style) {
-			var result = $.parseTranslate(slider.style.webkitTransform);
-			scroll = result ? result.x : 0;
-		}
-		return scroll;
-	};
-	/**
-	 * 自动轮播
-	 * @returns {undefined}
-	 */
-	Slider.prototype.initTimer = function() {
-		var self = this;
-		var slideshowDelay = self.options.slideshowDelay;
-		if (slideshowDelay) {
-			var slider = self.element;
-			var slidershowTimer = slider.getAttribute('data-slidershowTimer');
-			slidershowTimer && window.clearTimeout(slidershowTimer);
-			slidershowTimer = window.setTimeout(function() {
-				if (!slider) {
-					return;
-				}
-				//仅slider显示状态进行自动轮播
-				if (!!(slider.offsetWidth || slider.offsetHeight)) {
-					self.nextItem();
-					//下一个
-				}
-				self.initTimer();
-			}, slideshowDelay);
-			slider.setAttribute('data-slidershowTimer', slidershowTimer);
-		}
-
-	};
-
-	$.fn.slider = function(options) {
-		//新增定时轮播 重要：remove该轮播时，请获取data-slidershowTimer然后手动clearTimeout
-		var slider = null;
-		this.each(function() {
-			var sliderGroup = this;
-			if (this.classList.contains(CLASS_SLIDER)) {
-				sliderGroup = this.querySelector('.' + CLASS_SLIDER_GROUP);
-			}
-			var id = sliderGroup.getAttribute('data-slider');
-			if (!id) {
-				id = ++$.uuid;
-				$.data[id] = slider = new Slider(sliderGroup, options);
-				sliderGroup.setAttribute('data-slider', id);
-			} else {
-				slider = $.data[id];
-				if (slider && options) {
-					slider.refresh(options);
-				}
-			}
-		});
-		return slider;
-	};
-	$.ready(function() {
-		$('.mui-slider-group').slider();
-	});
-})(mui, window);
-/**
  * Toggles switch
  * @param {type} $
  * @param {type} window
@@ -3549,11 +3494,8 @@ var mui = (function(document, undefined) {
 			isActive: slideOn
 		});
 		toggle.removeEventListener('dragstart', $.stopPropagation);
-<<<<<<< HEAD
-=======
 //		toggle.removeEventListener('flick', $.stopPropagation);
 		event.stopPropagation();
->>>>>>> FETCH_HEAD
 	};
 	var dragToggle = function(event) {
 		if (!toggle) {
@@ -3576,10 +3518,7 @@ var mui = (function(document, undefined) {
 		toggle = $.targets.toggle;
 		if (toggle) {
 			toggle.addEventListener('dragstart', $.stopPropagation);
-<<<<<<< HEAD
-=======
 //			toggle.addEventListener('flick', $.stopPropagation);
->>>>>>> FETCH_HEAD
 			handle = toggle.querySelector(SELECTOR_SWITCH_HANDLE);
 			toggleWidth = toggle.clientWidth;
 			handleWidth = handle.clientWidth;
@@ -3950,11 +3889,7 @@ var mui = (function(document, undefined) {
 					isDraging = true;
 				}
 			}
-<<<<<<< HEAD
-			if(isDraging){
-=======
 			if (isDraging) {
->>>>>>> FETCH_HEAD
 				event.stopPropagation();
 			}
 		},
@@ -3989,10 +3924,7 @@ var mui = (function(document, undefined) {
 				$.gestures.stoped = true;
 				endDraging(true, event.detail);
 			}
-<<<<<<< HEAD
-=======
 			event.stopPropagation();
->>>>>>> FETCH_HEAD
 		},
 		swipeleft: function(event) {
 			var isSwipeable = false;
