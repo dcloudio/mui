@@ -1890,7 +1890,7 @@ var mui = (function(document, undefined) {
 		_drag: function(e) {
 			var detail = e.detail;
 
-			detail.gesture.preventDefault();
+			detail.gesture && detail.gesture.preventDefault();
 			var deltaX = detail.deltaX - detail.lastDeltaX;
 			var deltaY = detail.deltaY - detail.lastDeltaY;
 			var absDeltaX = Math.abs(detail.deltaX);
@@ -2661,7 +2661,6 @@ var mui = (function(document, undefined) {
 		_reLayout: function() {
 			this.hasHorizontalScroll = true;
 			this.loop = this.scroller.classList.contains(CLASS_SLIDER_LOOP);
-
 			this.itemLength = this.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM).length;
 			this.scrollerWidth = this.itemLength * this.scrollerWidth;
 			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
@@ -2781,7 +2780,10 @@ var mui = (function(document, undefined) {
 		return slider;
 	};
 	$.ready(function() {
-		$('.mui-slider').slider();
+		setTimeout(function() {
+			$('.mui-slider').slider();
+		}, 500); //临时处理slider宽度计算不正确的问题(初步确认是scrollbar导致的)
+
 	});
 })(mui, window, document);
 /**
