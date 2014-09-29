@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-29 21:39:19 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-29 21:39:19 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-29 21:41:21 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-29 21:41:21 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -443,7 +443,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">});</span></code></pre></div>
   </article>
     <!-- 下拉刷新 -->
-      <article id="pullrefresh" class="component mui-active">
+      <article id="pullrefresh-down" class="component mui-active">
       <h3 class="component-title">下拉刷新</h3>
       <p class="component-description">下拉刷新涉及局部滚动，mui依然采用将下拉刷新页面分解为主页面和内容页面双webview的方式（参考<a href="#subpage">创建子页面</a>），解决卡头卡尾及区域滚动的问题；在android平台上，为解决拖动回弹动画的流畅度问题，mui使用原生下拉刷新；拖动时，拖动的不是div，而是一个完整的webview（内容页面），回弹动画使用原生动画；在iOS平台，H5的动画已经比较流畅，故使用纯H5方案，拖动的还是div区域。两个平台实现虽有差异，但mui经过封装，可使用一套代码实现下拉刷新。</p>
       <p class="component-description">主页面内容比较简单，只需要创建子页面即可：</p>
@@ -473,7 +473,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码；两个注意事项：</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码，两个注意事项：</span>
      <span class="c1">//1、若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
      <span class="c1">//2、注意this的作用域，若存在匿名函数，需将this复制后使用，参考hello mui中的代码示例；</span>
      <span class="k">this</span><span class="p">.</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
@@ -734,8 +734,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-29 21:39:19 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-29 21:39:19 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-29 21:41:21 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-29 21:41:21 +0800"></script>
 
     </div>
   </div>
