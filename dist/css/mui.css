@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.7 (https://github.com/dcloudio/mui)
+ * Mui v0.5.8 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -584,6 +584,19 @@ p {
   transform: translate(0px, 0px) translateZ(0px);
 }
 
+.mui-plus-pullrefresh .mui-scroll-wrapper {
+  position: static;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  width: auto;
+  overflow: auto;
+}
+.mui-plus-pullrefresh .mui-scroll {
+  position: static;
+  width: auto;
+}
+
 .mui-off-canvas-height-fixed {
   height: 100% !important;
 }
@@ -1160,6 +1173,17 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   background: none;
 }
 
+.mui-focusin .mui-bar {
+  position: absolute;
+}
+
+.mui-focusin .mui-bar-tab,
+.mui-focusin .mui-bar-footer,
+.mui-focusin .mui-bar-footer-secondary,
+.mui-focusin .mui-bar-footer-secondary-tab {
+  display: none;
+}
+
 .mui-bar .mui-btn {
   position: relative;
   top: 7px;
@@ -1506,11 +1530,31 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 .mui-table-view-cell.mui-collapse > .mui-navigate-right:after, .mui-table-view-cell.mui-collapse > .mui-push-right:after {
   content: '\e581';
 }
-.mui-table-view-cell.mui-collapse.mui-active .mui-table-view {
+.mui-table-view-cell.mui-collapse.mui-active .mui-table-view, .mui-table-view-cell.mui-collapse.mui-active .mui-collapse-content {
   display: block;
 }
 .mui-table-view-cell.mui-collapse.mui-active > .mui-navigate-right:after, .mui-table-view-cell.mui-collapse.mui-active > .mui-push-right:after {
   content: '\e580';
+}
+.mui-table-view-cell.mui-collapse .mui-collapse-content {
+  position: relative;
+  display: none;
+  padding: 8px 15px;
+  margin: 11px -15px -11px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #ddd;
+  -webkit-transition: height .35s ease;
+       -o-transition: height .35s ease;
+          transition: height .35s ease;
+}
+.mui-table-view-cell.mui-collapse .mui-collapse-content > .mui-input-group, .mui-table-view-cell.mui-collapse .mui-collapse-content > .mui-slider {
+  width: auto;
+  height: auto;
+  margin: -8px -15px;
+}
+.mui-table-view-cell.mui-collapse .mui-collapse-content > .mui-slider {
+  margin: -8px -16px;
 }
 .mui-table-view-cell.mui-collapse .mui-table-view {
   display: none;
@@ -2675,6 +2719,13 @@ select {
   display: inline-block;
 }
 
+.mui-plus-pullrefresh .mui-pull-bottom-pocket {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  z-index: auto;
+}
+
 .mui-pull {
   position: absolute;
   right: 0;
@@ -2958,7 +3009,7 @@ select {
   content: "\e464";
 }
 
-.mui-icon-spinner-cycle {
+.mui-icon-spinner-cycle:before {
   content: "\e465";
 }
 

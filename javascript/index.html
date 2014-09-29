@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-25 23:24:11 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-25 23:24:11 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-09-29 21:39:19 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-09-29 21:39:19 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -470,11 +470,13 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
 <p class="component-description">其次，根据具体业务编写刷新函数，需要注意的是，加载完新数据后，需要执行callback()方法；</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
-     <span class="nx">callback</span><span class="p">();</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码；两个注意事项：</span>
+     <span class="c1">//1、若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
+     <span class="c1">//2、注意this的作用域，若存在匿名函数，需将this复制后使用，参考hello mui中的代码示例；</span>
+     <span class="k">this</span><span class="p">.</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
     <!-- 上拉加载 -->
@@ -491,11 +493,13 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
 <p class="component-description">其次，根据具体业务编写加载函数，需要注意的是，加载完新数据后，需要执行callback()方法；</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码；若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
-     <span class="nx">callback</span><span class="p">();</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码，true表示没有更多数据了，两个注意事项：</span>
+     <span class="c1">//1、若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
+     <span class="c1">//2、注意this的作用域，若存在匿名函数，需将this复制后使用，参考hello mui中的代码示例；</span>
+     <span class="k">this</span><span class="p">.</span><span class="nx">endPullupToRefresh</span><span class="p">(</span><span class="kc">true</span><span class="o">|</span><span class="kc">false</span><span class="p">);</span>
 <span class="p">}</span></code></pre></div>
 <p class="component-description"><strong>注意：</strong>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载。</p>
   </article>
@@ -656,7 +660,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
 <span class="kd">var</span> <span class="nx">gallery</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">);</span>
 <span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">({</span>
-  <span class="nx">slideshowDelay</span><span class="o">:</span><span class="mi">5000</span><span class="c1">//自动轮播周期，若为0则不自动播放，默认为0；</span>
+  <span class="nx">interval</span><span class="o">:</span><span class="mi">5000</span><span class="c1">//自动轮播周期，若为0则不自动播放，默认为0；</span>
 <span class="p">});</span></code></pre></div>
   <p class="component-description">因此若希望图片轮播不要自动播放，而是用户手动滑动才切换，只需要通过如上方法，将slideshowDelay参数设为0即可。</p>
   <p class="component-description">若要跳转到第x张图片，则可以使用图片轮播插件的gotoItem方法，例如：</p>
@@ -681,13 +685,13 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-group mui-slider-loop&quot;</span><span class="nt">&gt;</span>
     <span class="c">&lt;!--支持循环，需要重复图片节点--&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;2.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;3.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;4.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
     <span class="c">&lt;!--支持循环，需要重复图片节点--&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>
 </article>
@@ -719,7 +723,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</p>
 
 	<ul class="docs-footer-links">
-		<li>最新版本 v0.5.7</li>
+		<li>最新版本 v0.5.8</li>
 		<li>&middot;</li>
 		<li><a href="https://github.com/dcloudio/mui/issues">Issues</a>
 		</li>
@@ -730,8 +734,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-25 23:24:11 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-25 23:24:11 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-09-29 21:39:19 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-09-29 21:39:19 +0800"></script>
 
     </div>
   </div>

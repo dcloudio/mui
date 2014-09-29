@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.7 (https://github.com/dcloudio/mui)
+ * Mui v0.5.8 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -443,6 +443,35 @@ var mui = (function(document, undefined) {
 	}, true);
 
 })(mui, window, 'click');
+(function($, document) {
+	$(function() {
+		if (!$.os.ios) {
+			return;
+		}
+		var CLASS_FOCUSIN = 'mui-focusin';
+		var CLASS_CONTENT = 'mui-content';
+		var content;
+		document.addEventListener('focusin', function(e) {
+			content = null;
+			var target = e.target;
+			for (; target && target !== document; target = target.parentNode) {
+				if (target.classList && target.classList.contains(CLASS_CONTENT)) {
+					content = target;
+					break;
+				}
+			}
+			if (content) {
+				document.body.classList.add(CLASS_FOCUSIN);
+			}
+
+		});
+		document.addEventListener('focusout', function(e) {
+			if (content) {
+				document.body.classList.remove(CLASS_FOCUSIN);
+			}
+		});
+	});
+})(mui, document);
 /**
  * mui namespace(optimization)
  * @param {type} $
@@ -825,7 +854,8 @@ var mui = (function(document, undefined) {
  */
 (function($, name) {
 	var handle = function(event, touch) {
-		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
+		//if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
+		if (event.type === $.EVENT_END) { //ignore touchcancel
 			var options = this.options;
 			if (touch.distance < options.tapMaxDistance && touch.touchTime < options.tapMaxTime) {
 				if ($.options.gestureConfig.doubletap && touch.lastTarget && (touch.lastTarget === event.target)) { //same target
@@ -966,8 +996,8 @@ var mui = (function(document, undefined) {
 	$.global = $.options = {
 		gestureConfig: {
 			tap: true,
-			doubletap: true,
-			longtap: true,
+			doubletap: false,
+			longtap: false,
 			flick: true,
 			swipe: true,
 			drag: true
@@ -1003,6 +1033,13 @@ var mui = (function(document, undefined) {
 	$.init.add = function(func) {
 		funcs.push(func);
 	};
+	$(function() {
+		if ($.os.ios) {
+			document.body.classList.add('mui-ios');
+		} else if ($.os.android) {
+			document.body.classList.add('mui-android');
+		}
+	});
 })(mui);
 /**
  * mui.init 5+
@@ -1175,7 +1212,6 @@ var mui = (function(document, undefined) {
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
 			nShow = webviewCache.show;
 			nShow = options.show?$.extend(nShow, options.show):nShow;
-			
 			webview.show(nShow.aniShow, nShow.duration, function() {
 				triggerPreload(webview);
 				trigger(webview,'pagebeforeshow',false);
@@ -1434,9 +1470,6 @@ var mui = (function(document, undefined) {
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
 		if (detail.angle > -15 && detail.angle < 15 && $.options.swipeBack === true) {
-			if ($.targets.toggle) {
-				return;
-			}
 			$.back();
 		}
 	});
@@ -1544,35 +1577,18 @@ var mui = (function(document, undefined) {
 		var options = $.options;
 		var pullRefreshOptions = options.pullRefresh || {};
 
-		//需要判断是否为plus，这个需要等一下；
-		setTimeout(function() {
-			if ($.os.plus && $.os.android) {
-				//只要是android手机，必须使用原生的下拉刷新；
-				if (pullRefreshOptions.down) {
-					$.plus_pulldownRefresh(pullRefreshOptions.down);
-				}
-				if (pullRefreshOptions.up) {
-					var container = pullRefreshOptions.container;
-					if (container) {
-						var $container = $(container);
-						if ($container.length === 1) {
-							$container.pullRefresh({
-								container: container,
-								up: pullRefreshOptions.up
-							});
-						}
-					}
-				}
-			} else {
-				var container = pullRefreshOptions.container;
-				if (container) {
-					var $container = $(container);
-					if ($container.length === 1) {
-						$container.pullRefresh(pullRefreshOptions);
-					}
+		if ($.os.plus && $.os.android) {
+			//只要是android手机，必须使用原生的下拉刷新和上拉加载；
+			$.plus_pullRefresh(pullRefreshOptions);
+		} else {
+			var container = pullRefreshOptions.container;
+			if (container) {
+				var $container = $(container);
+				if ($container.length === 1) {
+					$container.pullRefresh(pullRefreshOptions);
 				}
 			}
-		}, 1000);
+		}
 
 	});
 })(mui);
@@ -2408,15 +2424,21 @@ var mui = (function(document, undefined) {
 					this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
 					this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
 				}
-				var that = this;
-				this.wrapper.addEventListener('scrollbottom', function() {
-					if (!that.pulldown && !that.loading) {
-						that.pullPocket = that.bottomPocket;
-						that.pullCaption = that.bottomCaption;
-						that.pullLoading = that.bottomLoading;
-						that.pullupLoading();
-					}
-				});
+				this.wrapper.addEventListener('scrollbottom', this);
+			}
+		},
+		handleEvent: function(e) {
+			this._super(e);
+			if (e.type === 'scrollbottom') {
+				this._scrollbottom();
+			}
+		},
+		_scrollbottom: function() {
+			if (!this.pulldown && !this.loading) {
+				this.pullPocket = this.bottomPocket;
+				this.pullCaption = this.bottomCaption;
+				this.pullLoading = this.bottomLoading;
+				this.pullupLoading();
 			}
 		},
 		_createPocket: function(clazz, options) {
@@ -2497,12 +2519,15 @@ var mui = (function(document, undefined) {
 				indicator.fade(0);
 			});
 			var callback = this.options.down.callback;
-			var that = this;
-			callback && callback(function() {
-				that.scrollTo(x, 0, time, that.options.bounceEasing);
-				that.loading = false;
-				that._setCaption(that.options.down.contentdown);
-			});
+			callback && callback.call(this);
+		},
+		endPulldownToRefresh: function() {
+			if (this.topPocket) {
+				this.scrollTo(0, 0, this.options.bounceTime, this.options.bounceEasing);
+				this.loading = false;
+				this._setCaption(this.options.down.contentdown);
+			}
+
 		},
 		pullupLoading: function(x, time) {
 			x = x || 0;
@@ -2516,11 +2541,18 @@ var mui = (function(document, undefined) {
 			});
 			this.loading = true;
 			var callback = this.options.up.callback;
-			var that = this;
-			callback && callback(function() {
-				that.loading = false;
-				that._setCaption(that.options.up.contentdown);
-			});
+			callback && callback.call(this);
+		},
+		endPullupToRefresh: function(finished) {
+			if (this.bottomPocket) {
+				this.loading = false;
+				this._setCaption(this.options.up.contentdown);
+				if (finished) {
+					this.bottomPocket.classList.add('mui-hidden');
+					this.wrapper.removeEventListener('scrollbottom', this);
+
+				}
+			}
 		}
 	});
 	$.fn.pullRefresh = function(options) {
@@ -2787,52 +2819,119 @@ var mui = (function(document, undefined) {
 	});
 })(mui, window, document);
 /**
- * pulldownRefresh 5+
+ * pullRefresh 5+
  * @param {type} $
  * @returns {undefined}
  */
-(function($) {
-	var pulldownOptions = {
-		height : 50,
-		contentdown : '下拉可以刷新',
-		contentover : '释放立即刷新',
-		contentrefresh : '正在刷新...'
-	}
+(function($, document) {
 
-	$.plus_pulldownRefresh = function(options) {
-		options = $.extend(pulldownOptions, options, true);
+	var CLASS_PLUS_PULLREFRESH = 'mui-plus-pullrefresh';
+	var CLASS_CONTENT = 'mui-content';
+	var CLASS_IN = 'mui-in';
+
+	var SELECTOR_CONTENT = '.' + CLASS_CONTENT;
+
+	var defaultOptions = {
+		down: {
+			height: 50,
+			contentdown: '下拉可以刷新',
+			contentover: '释放立即刷新',
+			contentrefresh: '正在刷新...'
+		},
+		up: {
+			contentdown: '上拉显示更多',
+			contentrefresh: '正在加载...'
+		}
+	};
+	var PlusPullRefresh = function(options) {
+		options = $.extend(defaultOptions, options, true);
+
+		this.downOptions = options.down;
+		this.upOptions = options.up;
+		if (this.downOptions && this.downOptions.hasOwnProperty('callback')) {
+			this.initPulldownRefresh();
+		}
+		if (this.upOptions && this.upOptions.hasOwnProperty('callback')) {
+			this.initPullupRefresh();
+		}
+	};
+	PlusPullRefresh.prototype.initPulldownRefresh = function() {
+		var self = this;
+		var sw = $.currentWebview;
+		sw.setPullToRefresh({
+			support: true,
+			height: self.downOptions.height + 'px',
+			range: "200px",
+			contentdown: {
+				caption: self.downOptions.contentdown
+			},
+			contentover: {
+				caption: self.downOptions.contentover
+			},
+			contentrefresh: {
+				caption: self.downOptions.contentrefresh
+			}
+		}, function() {
+			self.downOptions.callback && self.downOptions.callback.call(self);
+		});
+	};
+	PlusPullRefresh.prototype.initPullupRefresh = function() {
+		var self = this;
+		var content = document.querySelector(SELECTOR_CONTENT);
+		if (content) {
+			self.bottomPocket = document.createElement('div');
+			self.bottomPocket.className = $.classNamePrefix + 'pull-bottom-pocket';
+			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'preloader"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
+			content.appendChild(self.bottomPocket);
+
+			self.pullLoading = self.bottomPocket.querySelector('.mui-pull-loading');
+			self.pullCaption = self.bottomPocket.querySelector('.mui-pull-caption');
+
+			self.isLoading = false;
+			document.addEventListener('plusscrollbottom', self);
+		}
+	};
+	PlusPullRefresh.prototype.handleEvent = function(event) {
+		if (event.type === 'plusscrollbottom') {
+			var self = this;
+			if (self.isLoading) return;
+			self.isLoading = true;
+			setTimeout(function() {
+				self.pullLoading.classList.add(CLASS_IN);
+				self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
+				self.pullCaption.innerHTML = self.upOptions.contentrefresh;
+				var callback = self.upOptions.callback;
+				callback && callback.call(self);
+			}, 300);
+		}
+	};
+	PlusPullRefresh.prototype.endPulldownToRefresh = function() {
+		$.currentWebview.endPullToRefresh();
+	};
+	PlusPullRefresh.prototype.endPullupToRefresh = function(finished) {
+		if (this.pullLoading) {
+			this.pullLoading.classList.remove(CLASS_IN);
+			this.pullCaption.innerHTML = this.upOptions.contentdown;
+			this.isLoading = false;
+			if (finished) {
+				this.bottomPocket.classList.add('mui-hidden');
+				document.removeEventListener('plusscrollbottom', this);
+			}
+		}
+	};
+	$.plus_pullRefresh = function(options) {
 		$.plusReady(function() {
 			var self = document.body;
 			var id = self.getAttribute('data-pullrefresh-plus');
-			if (!id) {//避免重复初始化5+ pullrefresh
+			if (!id) { //避免重复初始化5+ pullrefresh
+				self.classList.add(CLASS_PLUS_PULLREFRESH);
 				id = ++$.uuid;
+				$.data[id] = new PlusPullRefresh(options);
 				self.setAttribute('data-pullrefresh-plus', id);
-				var sw = $.currentWebview;
-				sw.setPullToRefresh({
-					support : true,
-					height : options.height + 'px',
-					range : "200px",
-					contentdown : {
-						caption : options.contentdown
-					},
-					contentover : {
-						caption : options.contentover
-					},
-					contentrefresh : {
-						caption : options.contentrefresh
-					}
-				}, function() {
-					options.callback && options.callback(function() {
-						sw.endPullToRefresh();
-					});
-				});
-
 			}
 		});
 	};
-})(mui);
-
-
+})(mui, document);
 /**
  * off-canvas
  * @param {type} $
@@ -3548,6 +3647,7 @@ var mui = (function(document, undefined) {
 	var CLASS_SELECTED = 'mui-selected';
 	var CLASS_GRID_VIEW = 'mui-grid-view';
 	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
+	var CLASS_COLLAPSE_CONTENT = 'mui-collapse-content';
 	var CLASS_DISABLED = 'mui-disabled';
 	var CLASS_TOGGLE = 'mui-switch';
 	var CLASS_BTN = 'mui-btn';
@@ -3776,6 +3876,9 @@ var mui = (function(document, undefined) {
 				if ((target.tagName === 'INPUT' && target.type !== 'radio' && target.type !== 'checkbox') || target.tagName === 'BUTTON' || classList.contains(CLASS_TOGGLE) || classList.contains(CLASS_BTN) || classList.contains(CLASS_DISABLED)) {
 					isDisabled = true;
 				}
+				if (classList.contains(CLASS_COLLAPSE_CONTENT)) { //collapse content
+					break;
+				}
 				if (classList.contains(CLASS_TABLE_VIEW_CELL)) {
 					cell = target;
 					var selected = cell.parentNode.querySelector('.' + CLASS_SELECTED);
@@ -3975,19 +4078,25 @@ var mui = (function(document, undefined) {
 		sliderHandle && toggleEvents(cell, true);
 	});
 	var radioOrCheckboxClick = function() {
-		var classList = cell.classList;
-		if (classList.contains('mui-radio')) {
-			var input = cell.querySelector('input[type=radio]');
-			if (input) {
-				input.click();
-			}
-		} else if (classList.contains('mui-checkbox')) {
-			var input = cell.querySelector('input[type=checkbox]');
-			if (input) {
-				input.click();
+			var classList = cell.classList;
+			if (classList.contains('mui-radio')) {
+				var input = cell.querySelector('input[type=radio]');
+				if (input) {
+					input.click();
+				}
+			} else if (classList.contains('mui-checkbox')) {
+				var input = cell.querySelector('input[type=checkbox]');
+				if (input) {
+					input.click();
+				}
 			}
 		}
-	}
+		//fixed hashchange(android)
+	window.addEventListener($.EVENT_CLICK, function(e) {
+		if (cell && cell.classList.contains('mui-collapse')) {
+			e.preventDefault();
+		}
+	});
 	window.addEventListener('doubletap', function(event) {
 		if (cell) {
 			radioOrCheckboxClick();
@@ -4000,6 +4109,7 @@ var mui = (function(document, undefined) {
 		var isExpand = false;
 		var classList = cell.classList;
 		if (classList.contains('mui-collapse')) {
+			event.detail.gesture.preventDefault();
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
 				var collapse = cell.parentNode.querySelector('.mui-collapse.mui-active');
 				if (collapse) {
