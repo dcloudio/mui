@@ -23,8 +23,8 @@
 
 	<body>
 
-<div class="mui-content">
-	<div class="mui-content-padded">
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
 		<ul id='list' class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell">
 				<a class="mui-navigate-right">
@@ -61,16 +61,16 @@
 </div>
 <script>
 	mui.init({
-		pullRefresh : {
-			container: '#list',
-			down : {
-				callback :pulldownRefresh
+		pullRefresh: {
+			container: '#pullrefresh',
+			down: {
+				callback: pulldownRefresh
 			}
 		}
 	});
 
-
-	function pulldownRefresh(callback) {
+	function pulldownRefresh() {
+		var self = this;
 		setTimeout(function() {
 			var table = document.body.querySelector('.mui-table-view');
 			var cells = document.body.querySelectorAll('.mui-table-view-cell');
@@ -81,10 +81,9 @@
 				table.insertBefore(li, table.firstChild);
 			}
 			//refresh completed 这行代码必须调用
-			callback();
+			self.endPulldownToRefresh();
 		}, 1000);
 	}
-
 </script>
 </body>
 </html>

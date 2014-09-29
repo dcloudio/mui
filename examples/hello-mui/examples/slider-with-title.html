@@ -38,7 +38,8 @@
 	</ul>
 	<div id="slider" class="mui-slider">
 		<div class="mui-slider-group mui-slider-loop">
-			<div class="mui-slider-item">
+			<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="#">
 					<img src="../images/yuantiao.jpg">
 					<p class="mui-slider-title">静静看这世界</p>
@@ -68,7 +69,8 @@
 					<p class="mui-slider-title">静静看这世界</p>
 				</a>
 			</div>
-			<div class="mui-slider-item">
+			<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+			<div class="mui-slider-item mui-slider-item-duplicate">
 				<a href="#">
 					<img src="../images/shuijiao.jpg">
 					<p class="mui-slider-title">幸福就是可以一起睡觉</p>
@@ -88,11 +90,11 @@
 	document.getElementById("switch").addEventListener('toggle', function(e) {
 		if (e.detail.isActive) {
 			slider.slider({
-				slideshowDelay: 5000
+				interval: 5000
 			});
 		} else {
 			slider.slider({
-				slideshowDelay: 0
+				interval: 0
 			});
 		}
 	});

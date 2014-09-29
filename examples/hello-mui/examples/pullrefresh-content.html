@@ -23,8 +23,8 @@
 
 	<body>
 
-<div class="mui-content">
-	<div class="mui-content-padded">
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
 		<ul class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell">
 				<a class="mui-navigate-right">
@@ -106,51 +106,54 @@
 </div>
 <script>
 	mui.init({
-	        swipeBack:false,
-	        pullRefresh: {
-	            container: '.mui-content-padded',
-	            down: {
-	                callback:pulldownRefresh
-	            },
-	            up: {
-	                contentrefresh: '正在加载...',
-	                callback: pullupRefresh
-	            }
-	        }
-	    });
-	    /**
-	     * 下拉刷新具体业务实现
-	     */
-	    function pulldownRefresh(callback){
-	    	 setTimeout(function() {
-	            var table = document.body.querySelector('.mui-table-view');
-	            var cells = document.body.querySelectorAll('.mui-table-view-cell');
-	            for (var i = cells.length, len = i + 3; i < len; i++) {
-	                var li = document.createElement('li');
-	                li.className = 'mui-table-view-cell';
-	                li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-	                //下拉刷新，新纪录插到最前面；
-	                table.insertBefore(li, table.firstChild);
-	            }
-	            callback(); //refresh completed
-	        }, 1500);
-	    }
-	    /**
-	     * 上拉加载具体业务实现
-	     */
-	    function pullupRefresh(callback){
-		   setTimeout(function() {
-		   	callback(); //refresh completed
-	        var table = document.body.querySelector('.mui-table-view');
-	        var cells = document.body.querySelectorAll('.mui-table-view-cell');
-	        for (var i = cells.length, len = i + 3; i < len; i++) {
-	            var li = document.createElement('li');
-	            li.className = 'mui-table-view-cell';
-	            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-	            table.appendChild(li);
-	        }
-	    }, 1500);
-	    }
+		swipeBack: false,
+		pullRefresh: {
+			container: '#pullrefresh',
+			down: {
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	/**
+	 * 下拉刷新具体业务实现
+	 */
+	function pulldownRefresh() {
+		var self = this;
+		setTimeout(function() {
+			var table = document.body.querySelector('.mui-table-view');
+			var cells = document.body.querySelectorAll('.mui-table-view-cell');
+			for (var i = cells.length, len = i + 3; i < len; i++) {
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell';
+				li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+				//下拉刷新，新纪录插到最前面；
+				table.insertBefore(li, table.firstChild);
+			}
+			self.endPulldownToRefresh(); //refresh completed
+		}, 1500);
+	}
+	var count = 0;
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		var self = this;
+		setTimeout(function() {
+			self.endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+			var table = document.body.querySelector('.mui-table-view');
+			var cells = document.body.querySelectorAll('.mui-table-view-cell');
+			for (var i = cells.length, len = i + 3; i < len; i++) {
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell';
+				li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+				table.appendChild(li);
+			}
+		}, 1500);
+	}
 </script>
 </body>
 </html>

@@ -31,16 +31,15 @@
 <script>
 	mui.plusReady(function() {
 		var popover = plus.webview.create('popovers-with-cross-webviews-popover.html', null, {
-			top : '45px',
-			bottom : 0
+			top: '45px',
+			bottom: 0
 		});
 		plus.webview.currentWebview().append(popover);
 		document.getElementById('M_Popover_Trigger').addEventListener('tap', function() {
 			//mui hack plus event
-			$.fire(popover, 'plus:togglePopover');
+			mui.fire(popover, 'plus:togglePopover');
 		});
 	});
-
 </script>
 </body>
 </html>

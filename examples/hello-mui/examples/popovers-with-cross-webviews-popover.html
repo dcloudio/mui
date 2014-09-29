@@ -81,18 +81,20 @@
 </div>
 <script>
 	mui.init({
-		back : function() {
-			var webview = plus.webview.currentWebview();
-			var parent = webview.parent();
-			if (parent) {
-				parent.hide('auto');
-				return false;
+			back: function() {
+				var webview = plus.webview.currentWebview();
+				var parent = webview.parent();
+				if (parent) {
+					parent.hide('auto');
+					return false;
+				}
 			}
-		}
-	})
-	document.addEventListener('plus:togglePopover', function() {
-		$('#popover').popover('toggle');
-	}); 
+		})
+		(function($) {
+			document.addEventListener('plus:togglePopover', function() {
+				$('#popover').popover('toggle');
+			});
+		})(mui);
 </script>
 </body>
 </html>

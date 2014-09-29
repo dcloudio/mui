@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.7 (https://github.com/dcloudio/mui)
+ * Mui v0.5.8 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /*!
@@ -3604,13 +3604,16 @@ Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(de
 						var element = null;
 						while (!!(element = div.firstElementChild)) {
 							this.parentNode.insertBefore(element, this);
+							if (oldPlugin) {
+								if (name === 'slider' && element.querySelector('.mui-slider-group')) {
+									$.ready(function() {
+										oldPluginApi = oldPlugin.call($(element), opts);
+									});
+								}
+							}
 						}
 						this.parentNode.removeChild(this);
-						if (oldPlugin) {
-							$.ready(function() {
-								oldPluginApi = oldPlugin.call($(element), opts);
-							});
-						}
+
 					}
 				});
 				if (opts.output === false) {

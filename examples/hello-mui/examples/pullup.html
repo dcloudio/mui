@@ -24,60 +24,111 @@
 	<body>
 
 <header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">上拉加载</h1>
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">上拉加载</h1>
 </header>
-<div class="mui-content">
-    <div class="mui-content-padded">
-        <ul class="mui-table-view mui-table-view-chevron">
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
                     Item 1
                 </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
                     Item 2
                 </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
                     Item 3
                 </a>
-            </li>
-           
-        </ul>
-    </div>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 4
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 5
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 6
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 7
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 8
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 9
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 10
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 11
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 12
+                </a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+                    Item 13
+                </a>
+			</li>
+			<li class="mui-table-view-cell"><a class="mui-navigate-right">Item 14</a></li>
+			<li class="mui-table-view-cell"><a class="mui-navigate-right">Item 15</a></li>
+		</ul>
+	</div>
 </div>
 <script>
-    mui.init({
-        swipeBack: false,
-        pullRefresh: {
-            container: '.mui-content-padded',
-            up: {
-                contentdown: '上拉显示更多',
-                contentover: '释放立即刷新',
-                contentrefresh: '正在加载...',
-                callback: pullupRefresh
-            }
-        }
-    });
-
-   	/**
-     * 上拉加载具体业务实现
-     */
-    function pullupRefresh(callback) {
-	    setTimeout(function() {
-	        callback(); //refresh completed
-	        var table = document.body.querySelector('.mui-table-view');
-	        var cells = document.body.querySelectorAll('.mui-table-view-cell');
-	        for (var i = cells.length, len = i + 3; i < len; i++) {
-	            var li = document.createElement('li');
-	            li.className = 'mui-table-view-cell';
-	            li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-	            table.appendChild(li);
-	        }
-	    }, 2000);
+	mui.init({
+		swipeBack: false,
+		pullRefresh: {
+			container: '#pullrefresh',
+			up: {
+				contentdown: '上拉显示更多',
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	var count = 0;
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		var self = this;
+		setTimeout(function() {
+			self.endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+			var table = document.body.querySelector('.mui-table-view');
+			var cells = document.body.querySelectorAll('.mui-table-view-cell');
+			for (var i = cells.length, len = i + 3; i < len; i++) {
+				var li = document.createElement('li');
+				li.className = 'mui-table-view-cell';
+				li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+				table.appendChild(li);
+			}
+		}, 600);
 	}
 </script>
 </body>
