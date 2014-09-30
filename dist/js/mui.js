@@ -1815,6 +1815,7 @@ var mui = (function(document, undefined) {
 
 				this.wrapper.appendChild(indicator.el);
 				indicators.push(indicator);
+				this.wrapper.addEventListener('swiperight', $.stopPropagation);
 			}
 
 			for (var i = indicators.length; i--;) {
@@ -2356,6 +2357,7 @@ var mui = (function(document, undefined) {
 		});
 	};
 })(mui, window, document);
+
 (function($, window, document, undefined) {
 	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
 	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
@@ -3595,7 +3597,7 @@ var mui = (function(document, undefined) {
 			isActive: slideOn
 		});
 		toggle.removeEventListener('dragstart', $.stopPropagation);
-//		toggle.removeEventListener('flick', $.stopPropagation);
+		toggle.removeEventListener('swiperight', $.stopPropagation);
 		event.stopPropagation();
 	};
 	var dragToggle = function(event) {
@@ -3619,7 +3621,7 @@ var mui = (function(document, undefined) {
 		toggle = $.targets.toggle;
 		if (toggle) {
 			toggle.addEventListener('dragstart', $.stopPropagation);
-//			toggle.addEventListener('flick', $.stopPropagation);
+			toggle.addEventListener('swiperight', $.stopPropagation);
 			handle = toggle.querySelector(SELECTOR_SWITCH_HANDLE);
 			toggleWidth = toggle.clientWidth;
 			handleWidth = handle.clientWidth;
