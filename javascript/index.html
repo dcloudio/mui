@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-10-17 12:25:38 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-10-17 12:25:38 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-10-17 16:43:37 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-10-17 16:43:37 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -501,7 +501,13 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
      <span class="c1">//2、注意this的作用域，若存在匿名函数，需将this复制后使用，参考hello mui中的代码示例；</span>
      <span class="k">this</span><span class="p">.</span><span class="nx">endPullupToRefresh</span><span class="p">(</span><span class="kc">true</span><span class="o">|</span><span class="kc">false</span><span class="p">);</span>
 <span class="p">}</span></code></pre></div>
-<p class="component-description"><strong>注意：</strong>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载。</p>
+<p class="component-description"><strong>注意：</strong>
+  <ul>
+    <li>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载</li>
+    <li>多次上拉加载后，若已没有更多数据可加载时，调用<code>this.endPullupToRefresh(true);</code>，将不再显示“上拉显示更多”的提示语，同时也不再触发滚动条滚动到底事件；若实际业务中，有重新触发上拉加载的需求（比如当前类别已无更多数据，但切换到另外一个类别后，应支持继续上拉加载），此时调用上拉加载的重置函数即可，例如：</li>
+  </ul></p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//pullup-container为在mui.init方法中配置的pullRefresh节点中的container参数；</span>
+<span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullup-container&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">refresh</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span></code></pre></div>
   </article>
     <!-- 下拉刷新 -->
       <article id="input" class="component mui-active">
@@ -734,8 +740,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-10-17 12:25:38 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-10-17 12:25:38 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-10-17 16:43:37 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-10-17 16:43:37 +0800"></script>
 
     </div>
   </div>
