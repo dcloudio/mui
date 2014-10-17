@@ -41,6 +41,13 @@
 </header>'
   end
   
+    snippet 'mHeader_withoutBack' do |cmd|
+      cmd.trigger = 'mheaderwithoutback'
+      cmd.expansion = '<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">标题$1</h1>
+</header>'
+  end
+  
   
   snippet 'mBody' do |cmd|
       cmd.trigger = 'mbody'
