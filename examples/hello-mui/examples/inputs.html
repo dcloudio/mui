@@ -28,7 +28,7 @@
 	<h1 class="mui-title">输入框（Input）</h1>
 </header>
 <div class="mui-content">
-	
+
 	<div class="mui-content-padded" style="margin: 5px;">
 		<h5>默认搜索框：</h5>
 		<div class="mui-input-row mui-search">
@@ -36,7 +36,7 @@
 		</div>
 		<h5>语音输入搜索框：</h5>
 		<div class="mui-input-row mui-search">
-			<input type="search" class="mui-input-speech mui-input-clear" placeholder="带语音输入的搜索框">
+			<input id="search" type="search" class="mui-input-speech mui-input-clear" placeholder="带语音输入的搜索框">
 		</div>
 		<form class="mui-input-group">
 			<div class="mui-input-row">
@@ -58,7 +58,7 @@
 			</div>
 		</form>
 		<div class="mui-input-row" style="margin: 10px 5px;">
-			<textarea rows="5" placeholder="多行文本框"></textarea>
+			<textarea id="textarea" rows="5" placeholder="多行文本框"></textarea>
 		</div>
 	</div>
 </div>
@@ -69,5 +69,11 @@
 		margin: 5px 7px;
 	}
 </style>
+<script>
+	//语音识别完成事件
+	document.getElementById("search").addEventListener('recognized', function(e) {
+		console.log(e.detail.value);
+	});
+</script>
 </body>
 </html>
