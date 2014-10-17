@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.8 (https://github.com/dcloudio/mui)
+ * Mui v0.5.9 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1185,15 +1185,15 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   background: none;
 }
 
-.mui-focusin .mui-bar {
+.mui-focusin > .mui-bar {
   position: absolute;
 }
 
-.mui-focusin .mui-bar-tab,
-.mui-focusin .mui-bar-footer,
-.mui-focusin .mui-bar-footer-secondary,
-.mui-focusin .mui-bar-footer-secondary-tab {
-  display: none;
+.mui-focusin > .mui-bar-tab,
+.mui-focusin > .mui-bar-footer,
+.mui-focusin > .mui-bar-footer-secondary,
+.mui-focusin > .mui-bar-footer-secondary-tab {
+  position: static;
 }
 
 .mui-bar .mui-btn {
@@ -1837,9 +1837,10 @@ select {
 .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-input-row .mui-input-speech ~ .mui-icon-speech {
   position: absolute;
   top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
+  right: 0;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
   font-size: 20px;
   color: #999;
   text-align: center;
@@ -2721,14 +2722,13 @@ select {
 .mui-pull-bottom-pocket {
   position: static;
   bottom: 0;
-  z-index: -1;
   height: 40px;
 }
 .mui-pull-bottom-pocket .mui-pull-loading {
-  display: none;
+  opacity: 0;
 }
 .mui-pull-bottom-pocket .mui-pull-loading.mui-in {
-  display: inline-block;
+  opacity: 1;
 }
 
 .mui-plus-pullrefresh .mui-pull-bottom-pocket {
