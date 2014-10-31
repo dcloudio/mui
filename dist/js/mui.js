@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.5.9 (https://github.com/dcloudio/mui)
+ * Mui v0.6.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -108,6 +108,12 @@ var mui = (function(document, undefined) {
 		return $.isObject(obj) && !$.isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype;
 	};
 	/**
+	 * mui isFunction
+	 */
+	$.isFunction = function(value) {
+		return $.type(value) == "function";
+	};
+	/**
 	 * mui querySelectorAll
 	 * @param {type} selector
 	 * @param {type} context
@@ -133,15 +139,40 @@ var mui = (function(document, undefined) {
 		return this;
 	};
 	/**
+	 * map
+	 */
+	$.map = function(elements, callback) {
+		var value, values = [],
+			i, key;
+		if (typeof elements.length == 'number') {
+			for (i = 0, len = elements.length; i < len; i++) {
+				value = callback(elements[i], i);
+				if (value != null) values.push(value);
+			}
+		} else {
+			for (key in elements) {
+				value = callback(elements[key], key);
+				if (value != null) values.push(value);
+			}
+		}
+		return values.length > 0 ? [].concat.apply([], values) : values;
+	};
+	/**
 	 * each
 	 * @param {type} array
 	 * @param {type} callback
 	 * @returns {_L8.$}
 	 */
-	$.each = function(array, callback) {
-		[].every.call(array, function(el, idx) {
-			return callback.call(el, idx, el) !== false;
-		});
+	$.each = function(elements, callback) {
+		if (typeof elements.length === 'number') {
+			[].every.call(elements, function(el, idx) {
+				return callback.call(el, idx, el) !== false;
+			});
+		} else {
+			for (key in elements) {
+				if (callback.call(elements[key], key, elements[key]) === false) return elements;
+			}
+		}
 		return this;
 	};
 	/**
@@ -242,6 +273,9 @@ var mui = (function(document, undefined) {
 	$.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
 		class2type["[object " + name + "]"] = name.toLowerCase();
 	});
+	if (window.JSON) {
+		$.parseJSON = JSON.parse;
+	}
 	/**
 	 * $.fn
 	 */
@@ -1260,8 +1294,7 @@ var mui = (function(document, undefined) {
 					id: id,
 					url: url,
 					preload: true
-
-				});
+				}, true);
 				webview = $.createWindow(options);
 			}
 			//每次show都需要传递动画参数；
@@ -1677,48 +1710,270 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @returns {undefined}
  */
-(function($) {
-    /**
-     * mui.get
-     * @param {type} url
-     * @param {type} successCallback
-     * @param {type} errorCallback
-     * @returns {undefined}
-     */
-    $.get = function(url, successCallback, errorCallback) {
-        ajax('GET', url, successCallback, errorCallback);
-    };
-    /**
-     * mui.post
-     * @param {type} url
-     * @param {type} successCallback
-     * @param {type} errorCallback
-     * @returns {undefined}
-     */
-    $.post = function(url, successCallback, errorCallback) {
-        ajax('POST', url, successCallback, errorCallback);
-    };
-    
-    var ajax = function(method, url, successCallback, errorCallback) {
-        var xhr = new XMLHttpRequest();
-        var protocol = /^([\w-]+:)\/\//.test(url) ? RegExp.$1 : window.location.protocol;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4)
-            {
-                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:'))
-                {
-                    successCallback && successCallback(xhr.responseText);
-                }
-                else
-                {
-                    errorCallback && errorCallback();
-                }
-            }
-        };
-        xhr.open(method, url, true);
-        xhr.send();
-    };
+(function($, window, undefined) {
 
+	var jsonType = 'application/json';
+	var htmlType = 'text/html';
+	var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+	var scriptTypeRE = /^(?:text|application)\/javascript/i;
+	var xmlTypeRE = /^(?:text|application)\/xml/i;
+	var blankRE = /^\s*$/;
+
+	$.ajaxSettings = {
+		type: 'GET',
+		success: $.noop,
+		error: $.noop,
+		complete: $.noop,
+		context: null,
+		xhr: function() {
+			return new window.XMLHttpRequest();
+		},
+		accepts: {
+			script: 'text/javascript, application/javascript, application/x-javascript',
+			json: jsonType,
+			xml: 'application/xml, text/xml',
+			html: htmlType,
+			text: 'text/plain'
+		},
+		timeout: 0,
+		processData: true,
+		cache: true
+	};
+
+	var ajaxSuccess = function(data, xhr, settings) {
+		settings.success.call(settings.context, data, 'success', xhr);
+		ajaxComplete('success', xhr, settings);
+	};
+	// type: "timeout", "error", "abort", "parsererror"
+	var ajaxError = function(error, type, xhr, settings, deferred) {
+		settings.error.call(settings.context, xhr, type, error);
+		ajaxComplete(type, xhr, settings);
+	};
+	// status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+	var ajaxComplete = function(status, xhr, settings) {
+		settings.complete.call(settings.context, xhr, status);
+	};
+
+	var serialize = function(params, obj, traditional, scope) {
+		var type, array = $.isArray(obj),
+			hash = $.isPlainObject(obj)
+		$.each(obj, function(key, value) {
+			type = $.type(value)
+			if (scope) key = traditional ? scope :
+				scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']'
+				// handle data in serializeArray() format
+			if (!scope && array) params.add(value.name, value.value)
+				// recurse into nested objects
+			else if (type == "array" || (!traditional && type == "object"))
+				serialize(params, value, traditional, key)
+			else params.add(key, value)
+		})
+	};
+	var serializeData = function(options) {
+		if (options.processData && options.data && typeof options.data != "string") {
+			options.data = $.param(options.data, options.traditional);
+		}
+		if (options.data && (!options.type || options.type.toUpperCase() == 'GET')) {
+			options.url = appendQuery(options.url, options.data);
+			options.data = undefined;
+		}
+	}
+	var appendQuery = function(url, query) {
+		if (query == '') return url;
+		return (url + '&' + query).replace(/[&?]{1,2}/, '?');
+	}
+	var mimeToDataType = function(mime) {
+		if (mime) mime = mime.split(';', 2)[0]
+		return mime && (mime == htmlType ? 'html' :
+			mime == jsonType ? 'json' :
+			scriptTypeRE.test(mime) ? 'script' :
+			xmlTypeRE.test(mime) && 'xml') || 'text'
+	}
+	var parseArguments = function(url, data, success, dataType) {
+		if ($.isFunction(data)) {
+			dataType = success, success = data, data = undefined;
+		}
+		if (!$.isFunction(success)) {
+			dataType = success, success = undefined;
+		}
+		return {
+			url: url,
+			data: data,
+			success: success,
+			dataType: dataType
+		};
+	}
+	$.ajax = function(url, options) {
+		if (typeof url === "object") {
+			options = url;
+			url = undefined;
+		}
+		var settings = options || {};
+		settings.url = url || settings.url;
+		for (key in $.ajaxSettings) {
+			if (settings[key] === undefined) {
+				settings[key] = $.ajaxSettings[key];
+			}
+		}
+		serializeData(settings);
+		var dataType = settings.dataType;
+
+		if (settings.cache === false || ((!options || options.cache !== true) && ('script' == dataType))) {
+			settings.url = appendQuery(settings.url, '_=' + Date.now());
+		}
+		var mime = settings.accepts[dataType];
+		var headers = {};
+		var setHeader = function(name, value) {
+			headers[name.toLowerCase()] = [name, value]
+		};
+		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+		var xhr = settings.xhr();
+		var nativeSetHeader = xhr.setRequestHeader;
+		var abortTimeout;
+
+		setHeader('X-Requested-With', 'XMLHttpRequest');
+		setHeader('Accept', mime || '*/*');
+		if (mime = settings.mimeType || mime) {
+			if (mime.indexOf(',') > -1) {
+				mime = mime.split(',', 2)[0]
+			}
+			xhr.overrideMimeType && xhr.overrideMimeType(mime);
+		}
+		if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET')) {
+			setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded')
+		}
+		if (settings.headers) {
+			for (name in settings.headers) setHeader(name, settings.headers[name])
+		}
+		xhr.setRequestHeader = setHeader;
+
+		xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					xhr.onreadystatechange = $.noop;
+					clearTimeout(abortTimeout)
+					var result, error = false;
+					if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
+						dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
+						result = xhr.responseText;
+						try {
+							// http://perfectionkills.com/global-eval-what-are-the-options/
+							if (dataType == 'script') {
+								(1, eval)(result);
+							} else if (dataType == 'xml') {
+								result = xhr.responseXML;
+							} else if (dataType == 'json') {
+								result = blankRE.test(result) ? null : $.parseJSON(result);
+							}
+						} catch (e) {
+							error = e
+						}
+
+						if (error) {
+							ajaxError(error, 'parsererror', xhr, settings);
+						} else {
+							ajaxSuccess(result, xhr, settings);
+						}
+					} else {
+						ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+					}
+				}
+			}
+			//		if (ajaxBeforeSend(xhr, settings) === false) {
+			//			xhr.abort();
+			//			ajaxError(null, 'abort', xhr, settings);
+			//			return xhr;
+			//		}
+
+		if (settings.xhrFields) {
+			for (name in settings.xhrFields) {
+				xhr[name] = settings.xhrFields[name];
+			}
+		}
+
+		var async = 'async' in settings ? settings.async : true;
+
+		xhr.open(settings.type, settings.url, async, settings.username, settings.password);
+
+		for (name in headers) {
+			nativeSetHeader.apply(xhr, headers[name]);
+		}
+		if (settings.timeout > 0) {
+			abortTimeout = setTimeout(function() {
+				xhr.onreadystatechange = $.noop;
+				xhr.abort();
+				ajaxError(null, 'timeout', xhr, settings, deferred)
+			}, settings.timeout);
+		}
+		xhr.send(settings.data ? settings.data : null);
+		return xhr;
+	};
+
+
+	$.param = function(obj, traditional) {
+		var params = [];
+		params.add = function(k, v) {
+			this.push(escape(k) + '=' + escape(v));
+		};
+		serialize(params, obj, traditional);
+		return params.join('&').replace(/%20/g, '+');
+	}
+	$.get = function( /* url, data, success, dataType */ ) {
+		return $.ajax(parseArguments.apply(null, arguments));
+	}
+
+	$.post = function( /* url, data, success, dataType */ ) {
+		var options = parseArguments.apply(null, arguments);
+		options.type = 'POST';
+		return $.ajax(options);
+	}
+
+	$.getJSON = function( /* url, data, success */ ) {
+		var options = parseArguments.apply(null, arguments);
+		options.dataType = 'json';
+		return $.ajax(options);
+	}
+
+	$.fn.load = function(url, data, success) {
+		if (!this.length) return this
+		var self = this,
+			parts = url.split(/\s/),
+			selector,
+			options = parseArguments(url, data, success),
+			callback = options.success;
+		if (parts.length > 1) options.url = parts[0], selector = parts[1];
+		options.success = function(response) {
+			if (selector) {
+				var div = document.createElement('div');
+				div.innerHTML = response.replace(rscript, "");
+				var selectorDiv = document.createElement('div');
+				var childs = div.querySelectorAll(selector);
+				if (childs && childs.length > 0) {
+					for (var i = 0, len = childs.length; i < len; i++) {
+						selectorDiv.appendChild(childs[i]);
+					}
+				}
+				self[0].innerHTML = selectorDiv.innerHTML;
+			} else {
+				self[0].innerHTML = response;
+			}
+			callback && callback.apply(self, arguments)
+		}
+		$.ajax(options);
+		return this;
+	}
+
+})(mui, window);
+/**
+ * 5+ ajax
+ */
+(function($) {
+	$.plusReady(function() {
+		$.ajaxSettings = $.extend($.ajaxSettings, {
+			xhr: function() {
+				return new plus.net.XMLHttpRequest();
+			}
+		});
+	});
 })(mui);
 /**
  * mui layout(offset[,position,width,height...])
@@ -2023,8 +2278,6 @@ var mui = (function(document, undefined) {
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
-			e.stopPropagation();
-
 		},
 		_flick: function(e) {
 			var detail = e.detail;
@@ -2189,7 +2442,6 @@ var mui = (function(document, undefined) {
 				duration;
 
 			deceleration = deceleration === undefined ? 0.0006 : deceleration;
-
 			destination = current + (speed * speed) / (2 * deceleration) * (distance < 0 ? -1 : 1);
 			duration = speed / deceleration;
 			if (destination < lowerMargin) {
@@ -2211,7 +2463,7 @@ var mui = (function(document, undefined) {
 		setTranslate: function(x, y) {
 			this.x = x;
 			this.y = y;
-			this.scrollerStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
+			this.scrollerStyle['webkitTransform'] = 'translate3d(' + x + 'px,' + y + 'px,0px)' + this.translateZ;
 			if (this.indicators) {
 				for (var i = this.indicators.length; i--;) {
 					this.indicators[i].updatePosition();
@@ -2241,7 +2493,6 @@ var mui = (function(document, undefined) {
 			this.maxScrollY = Math.min(this.wrapperHeight - this.scrollerHeight, 0);
 			this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
 			this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
-
 			this._reLayout();
 		},
 		resetPosition: function(time) {
@@ -2404,7 +2655,7 @@ var mui = (function(document, undefined) {
 			this.x = x;
 			this.y = y;
 
-			this.indicatorStyle['webkitTransform'] = 'translate(' + x + 'px,' + y + 'px)' + this.scroller.translateZ;
+			this.indicatorStyle['webkitTransform'] = 'translate3d(' + x + 'px,' + y + 'px,0px)' + this.scroller.translateZ;
 
 		},
 		fade: function(val, hold) {
@@ -2450,40 +2701,44 @@ var mui = (function(document, undefined) {
 	var CLASS_PULL_CAPTION = 'mui-pull-caption';
 
 	var CLASS_ICON = 'mui-icon';
-	var CLASS_PRELOADER = 'mui-preloader';
-	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
-	var CLASS_PRELOADER_SPIN = 'mui-preloader-spin';
+	//	var CLASS_PRELOADER = 'mui-preloader';
+	//	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
+	var CLASS_ICON_SPINNER = 'mui-icon-spinner-cycle';
+	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
+	var CLASS_SPIN = 'mui-spin';
 
 	var CLASS_IN = 'mui-in';
 	var CLASS_HIDDEN = 'mui-hidden';
 	var CLASS_REVERSE = 'mui-reverse';
 
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
+	//	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
+	//	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
+	//	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
+	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN + ' ' + CLASS_REVERSE;
+	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_SPINNER + ' ' + CLASS_SPIN;
 
 	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{downCaption}</div>', '</div>'].join('');
 
-	var defaultOptions = {
-		scrollY: true,
-		scrollX: false,
-		indicators: true,
-		down: {
-			height: 50,
-			contentdown: '下拉可以刷新',
-			contentover: '释放立即刷新',
-			contentrefresh: '正在刷新...'
-		},
-		up: {
-			height: 50,
-			contentdown: '上拉显示更多',
-			contentrefresh: '正在加载...',
-			duration: 300
-		}
-	};
 	var PullRefresh = $.Scroll.extend({
 		init: function(element, options) {
-			this._super(element, $.extend(defaultOptions, options, true));
+			this._super(element, $.extend({
+				scrollY: true,
+				scrollX: false,
+				indicators: true,
+				down: {
+					height: 50,
+					contentdown: '下拉可以刷新',
+					contentover: '释放立即刷新',
+					contentrefresh: '正在刷新...'
+				},
+				up: {
+					height: 50,
+					contentdown: '上拉显示更多',
+					contentrefresh: '正在加载...',
+					duration: 300
+				}
+			}, options, true));
 		},
 		_init: function() {
 			this._super();
@@ -2495,11 +2750,10 @@ var mui = (function(document, undefined) {
 				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
 				if (!this.topPocket) {
 					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down);
-					this.scroller.insertBefore(this.topPocket, this.scroller.firstChild);
+					this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
 
 					this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
 					this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
-
 				}
 			}
 			if (options.up && options.up.hasOwnProperty('callback')) {
@@ -2544,14 +2798,15 @@ var mui = (function(document, undefined) {
 					var caption = this.pullCaption;
 					var loading = this.pullLoading;
 					caption.innerHTML = title;
+					var isPulldown = this.pulldown;
 					if (this.pulldown) {
-						//					if (title === options.down.contentrefresh) {
-						loading.className = CLASS_LOADING;
-						//					} else if (title === options.down.contentover) {
-						//						loading.className = CLASS_LOADING_UP;
-						//					} else if (title === options.down.contentdown) {
-						//						loading.className = CLASS_LOADING_DOWN;
-						//					}
+						if (title === options.down.contentrefresh) {
+							loading.className = CLASS_LOADING;
+						} else if (title === options.down.contentover) {
+							loading.className = CLASS_LOADING_UP;
+						} else if (title === options.down.contentdown) {
+							loading.className = CLASS_LOADING_DOWN;
+						}
 					} else {
 						if (title === options.up.contentrefresh) {
 							loading.className = CLASS_LOADING + ' ' + CLASS_IN;
@@ -2705,17 +2960,17 @@ var mui = (function(document, undefined) {
 	var SELECTOR_SLIDER_INDICATOR = '.' + CLASS_SLIDER_INDICATOR;
 	var SELECTOR_SLIDER_PROGRESS_BAR = '.mui-slider-progress-bar';
 
-	var defaultOptions = {
-		interval: 0, //设置为0，则不定时轮播
-		scrollY: false,
-		scrollX: true,
-		indicators: false,
-		bounceTime: 200,
-		startX: false
-	};
+
 	var Slider = $.Scroll.extend({
 		init: function(element, options) {
-			this._super(element, $.extend(defaultOptions, options, true));
+			this._super(element, $.extend({
+				interval: 0, //设置为0，则不定时轮播
+				scrollY: false,
+				scrollX: true,
+				indicators: false,
+				bounceTime: 200,
+				startX: false
+			}, options, true));
 		},
 		_init: function() {
 			this.scroller = this.wrapper.querySelector('.' + CLASS_SLIDER_GROUP);
@@ -2791,6 +3046,10 @@ var mui = (function(document, undefined) {
 				});
 			}
 		},
+		_drag: function(e) {
+			this._super(e);
+			e.stopPropagation();
+		},
 		_initTimer: function() {
 			var self = this;
 			var slider = self.wrapper;
@@ -2804,7 +3063,7 @@ var mui = (function(document, undefined) {
 					}
 					//仅slider显示状态进行自动轮播
 					if (!!(slider.offsetWidth || slider.offsetHeight)) {
-						self.nextItem();
+						self.nextItem(true);
 						//下一个
 					}
 					self._initTimer();
@@ -2855,6 +3114,9 @@ var mui = (function(document, undefined) {
 		},
 		_gotoItem: function(slideNumber, time) {
 			this.scrollTo(-slideNumber * this.wrapperWidth, 0, time, this.options.bounceEasing);
+			if (time === 0) {
+				$.trigger(this.wrapper, 'scrollend', this);
+			}
 			this._initTimer();
 		},
 		_fixedSlideNumber: function(slideNumber) {
@@ -2863,12 +3125,6 @@ var mui = (function(document, undefined) {
 					slideNumber = 0;
 				} else if (slideNumber >= this.itemLength) {
 					slideNumber = this.itemLength - 1;
-				}
-			} else {
-				if (slideNumber === 0) {
-					slideNumber = this.itemLength - 2;
-				} else if (slideNumber === this.itemLength - 1) {
-					slideNumber = 1;
 				}
 			}
 			return slideNumber;
@@ -2894,8 +3150,15 @@ var mui = (function(document, undefined) {
 		gotoItem: function(slideNumber, time) {
 			this._gotoItem(this._fixedSlideNumber(this.loop ? (slideNumber + 1) : slideNumber), time || this.options.bounceEasing);
 		},
-		nextItem: function() {
-			this._gotoItem(this._fixedSlideNumber(this.slideNumber + 1), this.options.bounceTime);
+		nextItem: function(auto) {
+			var slideNumber = this._fixedSlideNumber(this.slideNumber + 1);
+			var bounceTime = this.options.bounceTime;
+			if (auto && !this.loop) {
+				if (this.slideNumber + 1 >= this.itemLength) {
+					bounceTime = slideNumber = 0;
+				}
+			}
+			this._gotoItem(slideNumber, bounceTime);
 		},
 		prevItem: function() {
 			this._gotoItem(this._fixedSlideNumber(this.slideNumber - 1), this.options.bounceTime);
@@ -3006,7 +3269,7 @@ var mui = (function(document, undefined) {
 		if (content) {
 			self.bottomPocket = document.createElement('div');
 			self.bottomPocket.className = $.classNamePrefix + 'pull-bottom-pocket';
-			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'preloader"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
+			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'icon ' + $.classNamePrefix + 'icon-spinner-cycle ' + $.classNamePrefix + 'spin"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
 			content.appendChild(self.bottomPocket);
 
 			self.pullLoading = self.bottomPocket.querySelector('.mui-pull-loading');
@@ -3529,16 +3792,20 @@ var mui = (function(document, undefined) {
 			if (popover) {
 				popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 				popover.classList.remove(CLASS_ACTIVE);
-				setTimeout(function() {
-					popover.parentNode.removeChild(backdrop);
-				}, 350);
-
+				removeBackdrop(popover);
 			}
 		});
 
 		return element;
 	}());
-
+	var removeBackdrop = function(popover) {
+		backdrop.setAttribute('style', 'opacity:0');
+		setTimeout(function() {
+			if (backdrop.parentNode && backdrop.parentNode === popover.parentNode) {
+				popover.parentNode.removeChild(backdrop);
+			}
+		}, 350);
+	};
 	window.addEventListener('tap', function(e) {
 		if (!$.targets.popover) {
 			return;
@@ -3555,9 +3822,7 @@ var mui = (function(document, undefined) {
 			_popover.classList.remove(CLASS_ACTIVE);
 			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 			fixedPopoverScroll(false);
-			setTimeout(function() {
-				_popover.parentNode.removeChild(backdrop);
-			}, 350);
+			removeBackdrop(_popover);
 			//同一个弹出则直接返回，解决同一个popover的toggle
 			if (popover === _popover) {
 				return;
@@ -3583,6 +3848,7 @@ var mui = (function(document, undefined) {
 		popover.style.display = 'block';
 		popover.offsetHeight
 		popover.classList.add(CLASS_ACTIVE);
+		backdrop.setAttribute('style', '');
 		popover.parentNode.appendChild(backdrop);
 		fixedPopoverScroll(true);
 
@@ -3617,17 +3883,16 @@ var mui = (function(document, undefined) {
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
-			event.preventDefault();//fixed hashchange
 			return target;
 		}
 		return false;
 	};
 
 	$.registerTarget({
-		name : name,
-		index : 80,
-		handle : handle,
-		target : false
+		name: name,
+		index: 80,
+		handle: handle,
+		target: false
 	});
 
 	window.addEventListener('tap', function(e) {
@@ -3662,11 +3927,11 @@ var mui = (function(document, undefined) {
 		if (!targetBody) {
 			return;
 		}
-		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) {//tab bar popover
+		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) { //tab bar popover
 			targetTab.classList[isLastActive ? 'remove' : 'add'](className);
 			return;
 		}
-		if (isLastActive) {//same
+		if (isLastActive) { //same
 			return;
 		}
 		activeBodies = targetBody.parentNode.getElementsByClassName(className);
@@ -3678,14 +3943,14 @@ var mui = (function(document, undefined) {
 		targetBody.classList.add(className);
 
 		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-		
+
 		$.trigger(targetBody, $.eventName('shown', name), {
-			tabNumber : Array.prototype.indexOf.call(contents, targetBody)
-		})
+			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
+		});
+		e.detail.gesture.preventDefault(); //fixed hashchange
 	});
 
 })(mui, window, document, 'tab');
-
 /**
  * Toggles switch
  * @param {type} $
@@ -4461,10 +4726,11 @@ var mui = (function(document, undefined) {
 			} else {
 				if (self.searchActionClass) {
 					self.searchAction = self.createAction(row, self.searchActionClass, self.searchActionSelector);
-					self.searchAction.addEventListener('tap', function() {
+					self.searchAction.addEventListener('tap', function(e) {
 						setTimeout(function() {
 							self.element.focus();
-						}, 0);
+						}, 10);
+						e.stopPropagation();
 					});
 				}
 				if (self.speechActionClass) {

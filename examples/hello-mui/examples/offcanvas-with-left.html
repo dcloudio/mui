@@ -23,6 +23,14 @@
 
 	<body>
 
+<style>
+	html,
+	body,
+	.mui-off-canvas-wrap {
+		height: 100%;
+		overflow: hidden;
+	}
+</style>
 <div class="mui-off-canvas-wrap mui-draggable">
 	<div class="mui-inner-wrap">
 		<header class="mui-bar mui-bar-nav">
@@ -52,86 +60,89 @@
 				</li>
 			</ul>
 		</aside>
-		<div class="mui-content">
-			<button id="offCanvasShow" class="mui-btn mui-btn-primary mui-btn-block">
-				显示侧滑菜单(js call)
-			</button>
-			<ul class="mui-table-view mui-table-view-chevron">
-				<li id="switch" class="mui-table-view-cell">
-					整体滑动
-					<div class="mui-switch mui-active">
-						<div class="mui-switch-handle"></div>
-					</div>
-				</li>
-			</ul>
-			<ul class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
+		
+		<div id="scroll" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<button id="offCanvasShow" class="mui-btn mui-btn-primary mui-btn-block">
+					显示侧滑菜单(js call)
+				</button>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li id="switch" class="mui-table-view-cell">
+						整体滑动
+						<div class="mui-switch mui-active">
+							<div class="mui-switch-handle"></div>
 						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-			</ul>
+					</li>
+				</ul>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-navigate-right">
+							<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+							<div class="mui-media-body">
+								Item 1
+								<p>
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+								</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 		<!-- off-canvas backdrop -->
 		<div class="mui-off-canvas-backdrop"></div>
@@ -141,6 +152,7 @@
 	mui.init({
 		swipeBack: false,
 	});
+	mui('#scroll').scroll();
 	var offCanvasContainer = document.querySelector('.mui-off-canvas-wrap');
 	var offCanvasInnerContainer = offCanvasContainer.querySelector('.mui-inner-wrap');
 	var offCanvas = mui('#offCanvas');

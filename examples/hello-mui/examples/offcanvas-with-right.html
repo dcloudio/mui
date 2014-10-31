@@ -138,7 +138,105 @@
 						</div>
 					</a>
 				</li>
-
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
+						<div class="mui-media-body">
+							Item 1
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
+							</p>
+						</div>
+					</a>
+				</li>
 			</ul>
 		</div>
 		<!-- off-canvas backdrop -->
@@ -147,15 +245,15 @@
 </div>
 <script>
 	mui.init({
-		swipeBack : false,
+		swipeBack: false,
 	});
 	var offCanvasContainer = document.querySelector('.mui-off-canvas-wrap');
 	var offCanvasInnerContainer = offCanvasContainer.querySelector('.mui-inner-wrap');
 	var offCanvas = mui('#offCanvas');
 	document.getElementById('switch').addEventListener('toggle', function(event) {
-		if (event.detail.isActive) {//整体滑动时，侧滑菜单在inner-wrap内
+		if (event.detail.isActive) { //整体滑动时，侧滑菜单在inner-wrap内
 			offCanvasInnerContainer.insertBefore(offCanvas[0], offCanvasInnerContainer.firstElementChild);
-		} else {//仅主内容滑动时，侧滑菜单在off-canvas-wrap内
+		} else { //仅主内容滑动时，侧滑菜单在off-canvas-wrap内
 			offCanvasContainer.insertBefore(offCanvas[0], offCanvasContainer.firstElementChild)
 		}
 	});
@@ -166,7 +264,7 @@
 	document.getElementById('offCanvasHide').addEventListener('tap', function() {
 		//offCanvas.offCanvas('toggle')//toggle or hide;
 		offCanvas.offCanvas('hide');
-	}); 
+	});
 </script>
 </body>
 </html>

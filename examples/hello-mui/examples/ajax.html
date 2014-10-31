@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+<style>
+	body,body .mui-content{
+		background-color: #fff !important;
+	}
+	code {
+		word-wrap: break-word;
+		word-break: normal;
+		font-size: 90%;
+		color: #c7254e;
+		background-color: #f9f2f4;
+		border-radius: 4px;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">AJAX</h1>
+</header>
+<div class="mui-content" >
+	
+	<div class="mui-content-padded" style="padding-bottom: 50px;">
+		<p style="text-indent: 22px;padding: 10px;">
+			mui基于html5plus的<a href="http://www.dcloud.io/docs/api/zh_cn/xhr.shtml">XMLHttpRequest</a>，封装了常用的ajax函数，支持Get、Post请求方式， 支持返回json、xml、html、text、script数据类型；本示例使用<a href="http://www.oschina.net/question/82993_78609">RunJS</a>的Echo Ajax功能演示网络请求。
+		</p>
+		<h4 class="mui-content-padded">发送请求：</h4>
+		<div class="mui-input-group">
+			<div class="mui-input-row">
+				<label>type:</label>
+				<select id="method">
+					<option value="get">GET</option>
+					<option value="post">POST</option>
+				</select>
+			</div>
+			<div class="mui-input-row">
+				<label>dataType:</label>
+				<select id="dataType">
+					<option value="html">HTML</option>
+					<option value="json">JSON</option>
+					<option value="xml">XML</option>
+				</select>
+			</div>
+			<div class="mui-button-row">
+				<button type="button" id="confirm" class="mui-btn mui-btn-primary">发送请求</button>
+			</div>
+		</div>
+		<h4 class="mui-content-padded">获得响应：</h4>
+		<code id="response" ></code>
+	</div>
+</div>
+<script>
+	(function($) {
+		var methodEl = document.getElementById("method");
+		var dataTypeEl = document.getElementById("dataType");
+		var respnoseEl = document.getElementById("response");
+		//成功响应的回调函数
+		var success = function(response) {
+			var dataType = dataTypeEl.value;
+			if (dataType === 'json') {
+				response = JSON.stringify(response);
+			} else if (dataType === 'xml') {
+				response = new XMLSerializer().serializeToString(response).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+			}
+			respnoseEl.innerHTML = response;
+		};
+		var ajax = function() {
+			//利用RunJS的Echo Ajax功能测试
+			var url = 'http://runjs.cn/action/echo/';
+			//请求方式，默认为Get；
+			var type = methodEl.value;
+			//预期服务器范围的数据类型
+			var dataType = dataTypeEl.value;
+			//发送数据
+			var data = {
+				name: "mui",
+				version: "pre-release",
+				author: "chb"
+			};
+			url = url + (dataType === 'html' ? 'text' : dataType);
+			respnoseEl.innerHTML = '正在请求中...';
+			if (type === 'get') {
+				if (dataType === 'json') {
+					$.getJSON(url, data, success);
+				} else {
+					$.get(url, data, success, dataType);
+				}
+			} else if (type === 'post') {
+				$.post(url, data, success, dataType);
+			}
+		};
+		//发送请求按钮的点击事件
+		document.getElementById("confirm").addEventListener('tap', function() {
+			ajax();
+		});
+		//点击描述中链接时，打开对应网页介绍；
+		$('body').on('tap', 'a', function(e) {
+			var href = this.getAttribute('href');
+			if (href) {
+				if (window.plus) {
+					plus.runtime.openURL(href);
+				} else {
+					location.href = href;
+				}
+			}
+		});
+	})(mui);
+</script>
+</body>
+</html>

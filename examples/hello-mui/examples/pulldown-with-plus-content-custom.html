@@ -24,20 +24,15 @@
 	<body>
 
 <script type="text/javascript" charset="utf-8">
-	var ws = null,
-		wo = null;
-	// 扩展API加载完毕，现在可以正常调用扩展API 
-	function plusReady() {
-			// 获取自身窗口
-			ws = plus.webview.currentWebview();
-			wo = ws.opener();
-		}
-		// 判断扩展API是否准备，否则监听"plusready"事件
-	if (window.plus) {
-		plusReady();
-	} else {
-		document.addEventListener("plusready", plusReady, false);
-	}
+	var ws = null,wo = null;
+	
+	mui.plusReady(function(){
+		// 获取自身窗口
+		ws = plus.webview.currentWebview();
+		wo = ws.opener();
+	});
+	
+	
 	// DOM构建完成获取列表元素
 	var list = null;
 	document.addEventListener("DOMContentLoaded", function() {
@@ -98,7 +93,6 @@
 </script>
 
 <div class="mui-content">
-	<div class="mui-content-padded">
 		<ul class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell">
 				<a class="mui-navigate-right">
@@ -131,7 +125,6 @@
 				</a>
 			</li>
 		</ul>
-	</div>
 </div>
 
 </body>

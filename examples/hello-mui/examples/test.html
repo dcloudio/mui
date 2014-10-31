@@ -167,6 +167,7 @@
 							callback: pullupRefresh
 						}
 					}).pullupLoading();
+					
 					//					//					}, 2000);
 					//
 					function pulldownRefresh() {
@@ -207,7 +208,13 @@
 						}, 2000);
 					}
 				});
-				
+				document.querySelector(".mui-bar").addEventListener('dragleft',function(e){
+					var detail = e.detail;
+					console.log(Math.abs(detail.deltaX));
+					if(Math.abs(detail.deltaX)>30){//deltaX=move.x-start.x;
+						//TODO
+					}
+				});
 			})(mui);
 		</script>
 	</body>
