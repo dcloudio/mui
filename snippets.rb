@@ -136,6 +136,29 @@
 	</a>
 </nav>"
   end
+   snippet 'mAccordion' do |cmd|
+    cmd.trigger = 'maccordion'
+    cmd.expansion = '<ul class="mui-table-view">
+    <li class="mui-table-view-cell mui-collapse">
+        <a class="mui-navigate-right" href="#">面板1$1</a>
+        <div class="mui-collapse-content">
+            <p>面板1子内容</p>
+        </div>
+    </li>
+    <li class="mui-table-view-cell mui-collapse">
+        <a class="mui-navigate-right" href="#">面板2</a>
+        <div class="mui-collapse-content">
+            <p>面板2子内容</p>
+        </div>
+    </li>
+    <li class="mui-table-view-cell mui-collapse">
+        <a class="mui-navigate-right" href="#">面板3</a>
+        <div class="mui-collapse-content">
+            <p>面板3子内容</p>
+        </div>
+    </li>
+</ul>'
+  end
   snippet 'mTabSegmented' do |cmd|
     cmd.trigger = 'mtabsegmented'
     cmd.expansion = "<div class=\"mui-segmented-control\">
