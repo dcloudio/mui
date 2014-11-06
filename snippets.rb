@@ -7,6 +7,13 @@
 
 ########## MUI代码块 begin ##########
 
+snippet 'mBody' do |cmd|
+    cmd.trigger = 'mbody'
+    cmd.expansion = '<div class="mui-content">
+    $1
+</div>'
+end
+
   snippet 'mButton' do |cmd|
     cmd.trigger = 'mbutton'
     cmd.expansion = "<button class=\"mui-btn\">按钮$1</button>"
@@ -32,6 +39,13 @@
     cmd.expansion = "<button class=\"mui-btn mui-btn-purple\">按钮$1</button>"
   end
   
+    snippet 'mCheckbox' do |cmd|
+        cmd.trigger = 'mcheckbox'
+        cmd.expansion = "<div class=\"mui-input-row mui-checkbox \">
+        <label>${1:Checkbox}</label>
+        <input name=\"$2\" type=\"checkbox\" checked>
+    </div>"
+    end
   
   snippet 'mHeader' do |cmd|
       cmd.trigger = 'mheader'
@@ -48,13 +62,6 @@
 </header>'
   end
   
-  
-  snippet 'mBody' do |cmd|
-      cmd.trigger = 'mbody'
-      cmd.expansion = '<div class="mui-content">
-	$1
-</div>'
-  end
   
   snippet 'mText' do |cmd|
     cmd.trigger = 'mtext'
@@ -80,13 +87,33 @@
 	<input name=\"$2\" type=\"radio\" checked>
 </div>"
   end
-  snippet 'mCheckbox' do |cmd|
-    cmd.trigger = 'mcheckbox'
-    cmd.expansion = "<div class=\"mui-input-row mui-checkbox \">
-	<label>${1:Checkbox}</label>
-	<input name=\"$2\" type=\"checkbox\" checked>
-</div>"
+
+  
+  
+    snippet 'mPopover' do |cmd|
+    cmd.trigger = 'mpopover'
+    cmd.expansion = '<div class="mui-popover">
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell"><a href="#">Item1$1</a></li>
+        <li class="mui-table-view-cell"><a href="#">Item2</a></li>
+        <li class="mui-table-view-cell"><a href="#">Item3</a></li>
+    </ul>
+</div>'
   end
+  
+   snippet 'mPopover-action-bottom' do |cmd|
+    cmd.trigger = 'mpopoveractionbottom'
+    cmd.expansion = '<div class="mui-popover mui-popover-action mui-popover-bottom">
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell"><a href="#">Item1$1</a></li>
+        <li class="mui-table-view-cell"><a href="#">Item2</a></li>
+        <li class="mui-table-view-cell"><a href="#">Item3</a></li>
+    </ul>
+</div>'
+  end
+  
+  
+  
   snippet 'mRange' do |cmd|
     cmd.trigger = 'mrange'
     cmd.expansion = "<div class=\"mui-input-row mui-input-range\">
@@ -166,6 +193,34 @@
 	<a class=\"mui-control-item\" href=\"#item2\">选项卡2</a>
 </div>"
   end
+  
+  snippet 'mTabSegmented-ViewPageIndicator' do |cmd|
+    cmd.trigger = 'mtabsegmentedviewpage'
+    cmd.expansion = '<div class="mui-slider">
+    <div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <a class="mui-control-item" href="#item1">选项卡1</a>
+        <a class="mui-control-item" href="#item2">选项卡2</a>
+    </div>
+    <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+    <div class="mui-slider-group">
+        <div id="item1" class="mui-slider-item mui-control-content mui-active">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">第1个选项卡子项</li>
+                <li class="mui-table-view-cell">第1个选项卡子项</li>
+            </ul>
+        </div>
+        <div id="item2mobile" class="mui-slider-item mui-control-content">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">第2个选项卡子项</li>
+                <li class="mui-table-view-cell">第2个选项卡子项</li>
+            </ul>
+        </div>
+    </div>
+</div>'
+  end
+  
+  
+  
   snippet 'mPagination' do |cmd|
     cmd.trigger = 'mpagination'
     cmd.expansion = "<ul class=\"mui-pagination\">
@@ -271,8 +326,8 @@
 	</ul>
 </div>"
   end
-  snippet 'mGrid-picture' do |cmd|
-    cmd.trigger = 'mgrid-picture'
+  snippet 'mGallery-Table' do |cmd|
+    cmd.trigger = 'mgallerytable'
     cmd.expansion = "<ul class=\"mui-table-view mui-grid-view\">
 	<li class=\"mui-table-view-cell mui-media mui-col-xs-6\">
 		<a href=\"#\">
