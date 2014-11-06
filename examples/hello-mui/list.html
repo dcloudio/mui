@@ -13,6 +13,7 @@
 		<style type="text/css">
 			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
+				
 				margin-top: -1px;
 			}
 		</style>
@@ -230,7 +231,7 @@
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/titlebar.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/titlebar.html">
 								默认样式
 							</a>
 						</li>
@@ -240,17 +241,17 @@
 						</a>
 						</li>-->
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/titlebar-with-buttons.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/titlebar-with-buttons.html">
 								导航条包含按钮
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/titlebar-with-icons.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/titlebar-with-icons.html">
 								导航条包含ICON
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/titlebar-with-text-and-icons.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/titlebar-with-text-and-icons.html">
 								导航条同时包含文字和图标
 							</a>
 						</li>
@@ -268,22 +269,22 @@
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/offcanvas-left-plus-main.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-left-plus-main.html">
 								右滑菜单
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/offcanvas-right-plus-main.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-right-plus-main.html">
 								左滑菜单
 							</a>
 						</li>
 						<li class="mui-table-view-cell ios-only">
-							<a class="mui-navigate-right" href="examples/offcanvas-with-left.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-with-left.html">
 								可拖动式右滑菜单
 							</a>
 						</li>
 						<li class="mui-table-view-cell ios-only">
-							<a class="mui-navigate-right" href="examples/offcanvas-with-right.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-with-right.html">
 								可拖动式左滑菜单
 							</a>
 						</li>
@@ -323,54 +324,10 @@
 						</li>-->
 					</ul>
 				</li>
-				<li class="mui-table-view-cell mui-collapse" id="pull-refresh-h5">
-					<a class="mui-navigate-right" href="#">
-						pull to refresh（下拉刷新）
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" open-type="common" href="examples/pullrefresh-main.html">
+						pull to refresh（下拉刷新&上拉加载）
 					</a>
-					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell ">
-							<a class="mui-navigate-right" href="examples/pullrefresh-down-main.html">
-								下拉刷新
-							</a>
-						</li>
-						<li class="mui-table-view-cell ">
-							<a class="mui-navigate-right" href="examples/pullup.html">
-								上拉加载
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/pullrefresh-main.html">
-								同时支持下拉和上拉
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li class="mui-table-view-cell mui-collapse" id="pull-refresh-pandora">
-					<a class="mui-navigate-right" href="#">
-						pull to refresh（下拉刷新）
-					</a>
-					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/pullrefresh-down-main.html">
-								下拉刷新默认样式
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/pulldown-with-plus-main-custom.html">
-								下拉刷新自定义样式
-							</a>
-						</li>
-						<li class="mui-table-view-cell ">
-							<a class="mui-navigate-right" href="examples/pullup.html">
-								上拉加载
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/pullrefresh-main.html">
-								同时支持下拉和上拉
-							</a>
-						</li>
-					</ul>
 				</li>
 
 				<li class="mui-table-view-cell">
@@ -419,7 +376,7 @@
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tab-webview-main.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/tab-webview-main.html">
 								webview模式
 							</a>
 						</li>
@@ -518,62 +475,35 @@
 			</ul>
 		</div>
 		<script>
-			var limit = 3,
-				count = 0;
-			mui.init({
-				preloadLimit: limit, //同时并存的预加载窗口数量
-				swipeBack: false,
-			});
 			(function($) {
+				mui.init({
+					preloadLimit: 3, //同时并存的预加载窗口数量
+					swipeBack: false,
+				});
 				$.plusReady(function() {
-					//初始化一级列表的预加载
-					$('#list>.mui-table-view-cell', document.body).each(function() {
-						//只预加载一级列表，二级列表在其展开时再预加载；
-						if (!this.classList.contains('mui-collapse')) {
-							var url = this.querySelector('a').getAttribute("href");
-							//预加载，默认使用url作为其id
-							$.preload({
-								url: url,
-							});
-							if (++count >= limit) {
-								return false;
-							}
-						}
-					});
-
-					//监听展开事件,预加载二级列表的前几个；
-					$('#list').on('expand', '.mui-collapse', function(e) {
-						count = 0;
-						$('.mui-table-view a', this).each(function() {
-							var url = this.getAttribute("href");
-							if (~url.indexOf('.html')) {
-								//单独处理侧滑导航的index
-								if (~url.indexOf('offcanvas-')) {
-									$.preload({
-										url: url,
-										styles: {
-											zindex: 9999
-										},
-									});
-								} else {
-									$.preload({
-										url: url,
-									});
-								}
-								if (++count >= limit) {
-									return false;
-								}
-							}
-						});
-					});
-
-					// 关闭启动界面
 					plus.navigator.closeSplashscreen();
-					//下拉刷新两个平台有区别；
-					if ($.os.ios) {
-						document.getElementById('pull-refresh-pandora').style.display = "none";
-					} else if ($.os.android) {
-						document.getElementById('pull-refresh-h5').style.display = "none";
+					//预加载下拉刷新
+					$.preload({
+						id:"examples/pullrefresh-main.html",
+						url:"examples/pullrefresh-main.html"
+					});
+
+					var template = plus.webview.create('examples/template.html', 'demoTemplate');
+					var subWebview = plus.webview.create('examples/accordion.html', 'template_sub', {
+						top: '48px',
+						bottom: '0px'
+					});
+					var waiting = null;
+					subWebview.addEventListener('loaded', function() {
+						setTimeout(function(){
+							subWebview.show();	
+						},50);
+					});
+								
+					subWebview.hide();
+					template.append(subWebview);
+					
+					if ($.os.android) {
 						var list = document.querySelectorAll('.ios-only');
 						if (list) {
 							for (var i = 0; i < list.length; i++) {
@@ -581,43 +511,50 @@
 							}
 						}
 					}
-				});
 
-				/**
-				 * 处理链接点击事件
-				 */
-				$.ready(function() {
-					$('body').on('tap', 'a', function(e) {
+					$('#list').on('tap', 'a', function() {
 						var id = this.getAttribute('href');
-						if (id) {
-							if (~id.indexOf('.html')) {
-								if (window.plus) {
-									//侧滑导航涉及Index问题，需要单独处理；
-									if (~id.indexOf('offcanvas-')) {
-										$.openWindow({
-											id: id,
-											url: this.href,
-											styles: {
-												zindex: 9999
-											},
-											preload: true
-										});
-									} else {
-										$.openWindow({
-											id: id,
-											url: this.href,
-											preload: true
-										});
+						var type = this.getAttribute("open-type");
+						if(type=="common"){
+							if (~id.indexOf('offcanvas-')) {
+								mui.openWindow({
+									id: id,
+									url: this.href,
+									styles: {
+										zindex: 9999
+									},
+									waiting:{
+										autoShow:false
 									}
-								} else {
-									document.location.href = this.href;
+								});
+							} else if(~id.indexOf('pullrefresh')){
+								mui.openWindow({
+									id: id,
+									url: id,
+									preload:true
+								});
+							}else{
+								mui.openWindow({
+									id: id,
+									url: this.href,
+									waiting:{
+										autoShow:false
+									}
+								});
+							}
+						}else{
+							if (id&&~id.indexOf('.html')) {
+								var title = this.innerText;
+								template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
+								if(subWebview.getURL()==this.href){
+									subWebview.show();
+								}else{
+									subWebview.loadURL(this.href);
 								}
-							} else {
-								if (typeof plus !== 'undefined') {
-									plus.runtime.openURL(id);
-								}
+								template.show('slide-in-right', 150);
 							}
 						}
+						
 					});
 				});
 			})(mui);

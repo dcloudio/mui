@@ -15,6 +15,12 @@
 			html,body {
 				background-color: #efeff4;
 			}
+			header.mui-bar{
+				display: none;
+			}
+			.mui-bar-nav~.mui-content{
+				padding: 0;
+			}
 		</style>
 		<script>
 			mui.init();
@@ -33,36 +39,16 @@
 	.mui-table-view .mui-table-view-cell {
 		padding-right: 0;
 	}
-	.oa-task-cell.mui-table .mui-table-cell, .oa-contact-cell.mui-table .mui-table-cell {
+	.mui-table .mui-table-cell, .oa-contact-cell.mui-table .mui-table-cell {
 		padding: 11px 0;
 		vertical-align: middle;
 	}
 
-	.oa-task-cell, .oa-contact-cell {
+	.oa-contact-cell {
 		position: relative;
 		margin: -11px 0;
 	}
-
-	.oa-task-time {
-		width: 15%;
-	}
-	.oa-task-status {
-		width: 30%;
-		-webkit-transition: width .4s;
-		transition: width .4s;
-	}
-	.oa-task-time span, .oa-task-status, .oa-task-action {
-		text-align: center;
-	}
-	.oa-task-cell.mui-table .mui-table-cell.oa-task-content {
-		width: 55%;
-		padding-left: 15px;
-	}
-	.oa-task-time-start, .oa-task-time-end {
-		display: block;
-		width: 50px;
-	}
-
+	
 	.oa-contact-avatar {
 		width: 75px;
 	}
@@ -80,11 +66,12 @@
 	}
 	/*左拖，右拖，超出该区域宽度后，释放触发slideleft,slideright事件*/
 	/*重要：该样式定制拉出的功能图标区域的width(必须)*/
-	.oa-task-action {
-		background-color: #527fdc;
-		color: white;
+	.mui-slider-cell .mui-swipe-delete{
+		color: #fff;
+		background-color: #ff3b30;
+		text-align: center;
+		line-height: 44px;
 		width: 25%;
-		line-height: 64px;
 	}
 	/*左拖拉出，右拖关闭菜单*/
 	/*重要：该样式定制拉出的功能菜单区域的margin-left(必须,该值是功能菜单距离mui-slider-cell左侧的位置)*/
@@ -105,6 +92,15 @@
 		width: 40%;
 	}
 	
+	.mui-slider-handle.mui-table{
+		margin: -11px 0;
+	}
+	
+	.mui-slider-handle .mui-table-cell{
+		line-height: 22px;
+	}
+	
+	
 	.mui-table-view-cell>.mui-slider-cell>.mui-slider-right {
 		top: 0px;
 		bottom: 0px;
@@ -115,145 +111,93 @@
 	<h1 class="mui-title">滑动触发列表项菜单</h1>
 </header>
 <div class="mui-content">
-	<h5 class="mui-content-padded">拖拽(滑动)显示功能按钮，点击按钮触发事件</h5>
-	<ul id="OA_task_1" class="mui-table-view mui-table-view-striped mui-table-view-slider">
+	<h5 class="mui-content-padded" style="margin: 35px 10px 15px 10px;">拖拽(滑动)显示功能按钮，点击按钮触发事件</h5>
+	<ul id="OA_task_1" class="mui-table-view mui-table-view-slider">
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-right oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-right mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
-					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">左拖(左滑)</h4>
-						<p class="mui-h6 mui-ellipsis">
-							一会议室
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						左滑显示删除按钮
 					</div>
 				</div>
 			</div>
 		</li>
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-left oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-left mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
-					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">右拖(右滑)</h4>
-						<p class="mui-h6 mui-ellipsis">
-							一会议室
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						右滑显示删除按钮
 					</div>
 				</div>
 			</div>
 		</li>
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-left oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-left mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-right oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-right mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
-					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">左右拖拽(滑动)</h4>
-						<p class="mui-h6 mui-ellipsis">
-							一会议室
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						左右滑动均可显示删除按钮
 					</div>
 				</div>
 			</div>
 		</li>
 	</ul>
-	<h5 class="mui-content-padded">拖拽显示功能图标，释放后还原，自动触发事件</h5>
-	<ul id="OA_task_2" class="mui-table-view mui-table-view-striped mui-table-view-slider">
+	<h5 class="mui-content-padded" style="margin: 15px 10px;">拖拽(滑动)显示操作图标，释放后还原，自动触发事件</h5>
+	<ul id="OA_task_2" class="mui-table-view mui-table-view-slider">
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-right mui-bounce oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-right mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						左滑自动触发删除
 					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">左拖</h4>
-						<p class="mui-h6 mui-ellipsis">
-							一会议室
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
-					</div>
+					
 				</div>
 			</div>
 		</li>
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-bounce oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-left mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">10:00</span><span class="oa-task-time-end mui-h6">10:30</span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						右滑自动触发删除
 					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">右拖</h4>
-						<p class="mui-h6 mui-ellipsis">
-							海淀区皂君庙乙2号院4号楼
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
-					</div>
+					
 				</div>
 			</div>
 		</li>
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-bounce oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-left mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-right mui-bounce oa-task-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-close"></span>
+				<div class="mui-slider-right mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
+					删除
 				</div>
-				<div class="mui-slider-handle oa-task-cell mui-table">
-					<div class="oa-task-time mui-table-cell">
-						<span class="oa-task-time-start">9:00</span><span class="oa-task-time-end mui-h6">10:00</span>
-					</div>
-					<div class="oa-task-content mui-table-cell">
-						<h4 class="mui-ellipsis">左右拖拽</h4>
-						<p class="mui-h6 mui-ellipsis">
-							一会议室
-						</p>
-					</div>
-					<div class="oa-task-status mui-table-cell">
-						<span class="mui-icon mui-icon-phone"></span>
+				<div class="mui-slider-handle mui-table">
+					<div class="mui-table-cell">
+						左右滑动均可自动触发删除
 					</div>
 				</div>
 			</div>
 		</li>
 	</ul>
-	<h5 class="mui-content-padded">左拖拉出，右拖关闭功能菜单</h5>
+	<h5 class="mui-content-padded" style="margin: 15px 10px;">左拖拉出，右拖关闭功能菜单</h5>
 	<ul id="OA_contact" class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 		<li class="mui-table-view-cell">
 			<div class="mui-slider-cell">
@@ -328,11 +272,13 @@
 </div>
 <script>
 	(function($) {
-		var btnArray = ['确认','取消'];
-		$('#OA_task_1').on('tap', '.oa-task-action', function() {
+		//第一个demo，拖拽后显示操作图标，点击操作图标删除元素；
+		$('#OA_task_1').on('tap', '.mui-swipe-delete', function() {
 			var cell = this.parentNode.parentNode;
 			cell.parentNode.removeChild(cell);
 		});
+		var btnArray = ['确认','取消'];
+		//第二个demo，向左拖拽后显示操作图标，释放后自动触发的业务逻辑
 		$('#OA_task_2').on('slideleft', '.mui-table-view-cell', function(event) {
 			var elem = this;
 			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
@@ -341,6 +287,7 @@
 				}
 			});
 		});
+		//第二个demo，向右拖拽后显示操作图标，释放后自动触发的业务逻辑
 		$('#OA_task_2').on('slideright', '.mui-table-view-cell', function(event) {
 			var elem = this;
 			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
@@ -351,5 +298,7 @@
 		});
 	})(mui); 
 </script>
+
 </body>
+
 </html>

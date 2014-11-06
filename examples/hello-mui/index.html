@@ -31,8 +31,20 @@
 					}
 				}]
 			});
+			var subWebview=null,template=null;
 			document.getElementById('info').addEventListener('tap', function() {
-				mui.openWindow({url:'examples/info.html', id:'info'});
+				if(subWebview==null){
+					subWebview = plus.webview.getWebviewById("template_sub");
+					template = plus.webview.getWebviewById("demoTemplate");
+				}
+
+//				subWebview.hide();
+				subWebview.loadURL('examples/info.html');
+				var title = "关于";
+				template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
+				template.show('slide-in-right', 150);
+				
+				
 			});
 			
 			mui.plusReady(function() {

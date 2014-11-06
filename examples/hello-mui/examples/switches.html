@@ -15,6 +15,12 @@
 			html,body {
 				background-color: #efeff4;
 			}
+			header.mui-bar{
+				display: none;
+			}
+			.mui-bar-nav~.mui-content{
+				padding: 0;
+			}
 		</style>
 		<script>
 			mui.init();
@@ -25,7 +31,7 @@
 
 <header class="mui-bar mui-bar-nav">
 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">开关（Toggles）</h1>
+	<h1 class="mui-title">开关（switch）</h1>
 </header>
 <div class="mui-content">
 	<div class="mui-content-padded">
@@ -97,5 +103,7 @@
 		});
 	}); 
 </script>
+
 </body>
+
 </html>

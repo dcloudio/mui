@@ -4,6 +4,35 @@
 		optimize: true,
 		swipeBack: true
 	});
+	var back = $.back;
+	var templateWebview = null;
+	var subWebview = null;
+	var getTemplateWebview = function() {
+		if (templateWebview == null) {
+			templateWebview = plus.webview.getWebviewById("demoTemplate");
+		}
+		return templateWebview;
+	}
+	var getSubWebview = function() {
+		if (subWebview == null) {
+			subWebview = plus.webview.getWebviewById("template_sub");
+		}
+		return subWebview;
+	}
+	$.back = function() {
+		var current = plus.webview.currentWebview();
+		if (current.id === 'demoTemplate') { //模板主页面
+			getTemplateWebview().hide('auto');
+			setTimeout(function() {
+				document.getElementById("title").className = 'mui-title mui-fadeout';
+				getSubWebview().hide("none");
+			}, 200);
+		} else if (current.id === 'template_sub') {
+			getTemplateWebview().evalJS('mui.back();');
+		} else {
+			back();
+		}
+	}
 })(mui);
 
 /**

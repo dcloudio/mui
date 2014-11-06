@@ -156,22 +156,26 @@
 	var offCanvasContainer = document.querySelector('.mui-off-canvas-wrap');
 	var offCanvasInnerContainer = offCanvasContainer.querySelector('.mui-inner-wrap');
 	var offCanvas = mui('#offCanvas');
+	//按下“整体滑动”开关后的执行逻辑
 	document.getElementById('switch').addEventListener('toggle', function(event) {
-		if (event.detail.isActive) { //整体滑动时，侧滑菜单在inner-wrap内
+		if (event.detail.isActive) { 
+			//整体滑动时，侧滑菜单在inner-wrap内
 			offCanvasInnerContainer.insertBefore(offCanvas[0], offCanvasInnerContainer.firstElementChild);
-		} else { //仅主内容滑动时，侧滑菜单在off-canvas-wrap内
+		} else { 
+			//仅主内容滑动时，侧滑菜单在off-canvas-wrap内
 			offCanvasContainer.insertBefore(offCanvas[0], offCanvasContainer.firstElementChild)
 		}
 	});
+	//按下“显示侧滑菜单”按钮后的执行逻辑
 	document.getElementById('offCanvasShow').addEventListener('tap', function() {
-		//offCanvas.offCanvas('toggle')//toggle or show;
 		offCanvas.offCanvas('show');
 	});
+	//按下“关闭侧滑菜单”按钮后的执行逻辑
 	document.getElementById('offCanvasHide').addEventListener('tap', function() {
-		//offCanvas.offCanvas('toggle')//toggle or hide;
 		offCanvas.offCanvas('hide');
 	});
 </script>
 
 </body>
+
 </html>
