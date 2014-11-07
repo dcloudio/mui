@@ -26,3 +26,10 @@ License
 
 mui遵循MIT License；
 
+开发工具
+-------
+### 我们将mui组件封装成了HBuilder(http://www.dcloud.io)代码块，只需要简单几个字符，就可以快速生成各个组件对应的HTML代码，因此和[Hbuilder](http://www.dcloud.io)一起使用，效果会更好
+
+<a href="http://www.dcloud.io/" target="_blank">
+<img src="http://www.dcloud.io/img/text-b.png" width="240" />
+</a>
