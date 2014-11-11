@@ -39,13 +39,20 @@ end
     cmd.expansion = "<button class=\"mui-btn mui-btn-purple\">按钮$1</button>"
   end
   
-    snippet 'mCheckbox' do |cmd|
-        cmd.trigger = 'mcheckbox'
-        cmd.expansion = "<div class=\"mui-input-row mui-checkbox \">
-        <label>${1:Checkbox}</label>
-        <input name=\"$2\" type=\"checkbox\" checked>
-    </div>"
-    end
+snippet 'mCheckbox' do |cmd|
+    cmd.trigger = 'mcheckbox'
+    cmd.expansion = "<div class=\"mui-input-row mui-checkbox \">
+    <label>${1:Checkbox}</label>
+    <input name=\"$2\" type=\"checkbox\">
+</div>"
+end
+snippet 'mCheckbox_checked' do |cmd|
+    cmd.trigger = 'mcheckboxchecked'
+    cmd.expansion = "<div class=\"mui-input-row mui-checkbox \">
+    <label>${1:Checkbox}</label>
+    <input name=\"$2\" type=\"checkbox\" checked>
+</div>"
+end
   
   snippet 'mHeader' do |cmd|
       cmd.trigger = 'mheader'
@@ -80,8 +87,15 @@ end
 	</div>
 </form>"
   end
-  snippet 'mRadio' do |cmd|
+snippet 'mRadio' do |cmd|
     cmd.trigger = 'mradio'
+    cmd.expansion = "<div class=\"mui-input-row mui-radio \">
+    <label>${1:Radio}</label>
+    <input name=\"$2\" type=\"radio\">
+</div>"
+  end
+  snippet 'mRadio_checked' do |cmd|
+    cmd.trigger = 'mradiochecked'
     cmd.expansion = "<div class=\"mui-input-row mui-radio \">
 	<label>${1:Radio}</label>
 	<input name=\"$2\" type=\"radio\" checked>
@@ -90,7 +104,7 @@ end
 
   
   
-    snippet 'mPopover' do |cmd|
+snippet 'mPopover' do |cmd|
     cmd.trigger = 'mpopover'
     cmd.expansion = '<div class="mui-popover">
     <ul class="mui-table-view">
@@ -117,17 +131,26 @@ end
   snippet 'mRange' do |cmd|
     cmd.trigger = 'mrange'
     cmd.expansion = "<div class=\"mui-input-row mui-input-range\">
-	<label>slider</label>
+	<label>Range</label>
 	<input type=\"range\" min=\"0\" max=\"100\">
 </div>"
   end
-  snippet 'mSwitch' do |cmd|
+snippet 'mSwitch' do |cmd|
     cmd.trigger = 'mswitch'
     cmd.expansion = "<div class=\"mui-input-row\">
 	<label>Switch</label>
-	<div class=\"mui-switch mui-active\">
+	<div class=\"mui-switch\">
 		<div class=\"mui-switch-handle\"></div>
 	</div>
+</div>"
+  end
+  snippet 'mSwitch_active' do |cmd|
+    cmd.trigger = 'mswitchactive'
+    cmd.expansion = "<div class=\"mui-input-row\">
+    <label>Switch</label>
+    <div class=\"mui-switch mui-active\">
+        <div class=\"mui-switch-handle\"></div>
+    </div>
 </div>"
   end
   snippet 'mSpeech' do |cmd|
