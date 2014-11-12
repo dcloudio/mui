@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.6.0 (https://github.com/dcloudio/mui)
+ * Mui v0.7.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1419,7 +1419,7 @@ var mui = (function(document, undefined) {
 		if (!options.preload) {
 			options.preload = true;
 		}
-		$.createWindow(options);
+		return $.createWindow(options);
 	}
 
 	/**
@@ -1687,7 +1687,7 @@ var mui = (function(document, undefined) {
 			var options = $.options;
 			var pullRefreshOptions = options.pullRefresh || {};
 
-			if (pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback') || pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback')) {
+			if ((pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback')) || (pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback'))) {
 				var container = pullRefreshOptions.container;
 				if (container) {
 					var $container = $(container);
@@ -1745,7 +1745,7 @@ var mui = (function(document, undefined) {
 		ajaxComplete('success', xhr, settings);
 	};
 	// type: "timeout", "error", "abort", "parsererror"
-	var ajaxError = function(error, type, xhr, settings, deferred) {
+	var ajaxError = function(error, type, xhr, settings) {
 		settings.error.call(settings.context, xhr, type, error);
 		ajaxComplete(type, xhr, settings);
 	};
@@ -1901,7 +1901,7 @@ var mui = (function(document, undefined) {
 			abortTimeout = setTimeout(function() {
 				xhr.onreadystatechange = $.noop;
 				xhr.abort();
-				ajaxError(null, 'timeout', xhr, settings, deferred)
+				ajaxError(null, 'timeout', xhr, settings);
 			}, settings.timeout);
 		}
 		xhr.send(settings.data ? settings.data : null);
@@ -1912,7 +1912,7 @@ var mui = (function(document, undefined) {
 	$.param = function(obj, traditional) {
 		var params = [];
 		params.add = function(k, v) {
-			this.push(escape(k) + '=' + escape(v));
+			this.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
 		};
 		serialize(params, obj, traditional);
 		return params.join('&').replace(/%20/g, '+');
@@ -2102,7 +2102,7 @@ var mui = (function(document, undefined) {
 				momentum: true,
 
 				bounce: true,
-				bounceTime: 600,
+				bounceTime: 300,
 				bounceEasing: ease.circular.style,
 
 				directionLockThreshold: 5,
@@ -2114,8 +2114,10 @@ var mui = (function(document, undefined) {
 			this.translateZ = this.options.hardwareAccelerated ? ' translateZ(0)' : '';
 
 			this._init();
-			this.refresh();
-			this.scrollTo(this.options.startX, this.options.startY);
+			if (this.scroller) {
+				this.refresh();
+				this.scrollTo(this.options.startX, this.options.startY);
+			}
 		},
 		_init: function() {
 			this._initIndicators();
@@ -2246,8 +2248,19 @@ var mui = (function(document, undefined) {
 		},
 		_drag: function(e) {
 			var detail = e.detail;
-
-			detail.gesture && detail.gesture.preventDefault();
+			var isPreventDefault = false;
+			if (detail.direction === 'left' || detail.direction === 'right') {
+				if (this.options.scrollX) {
+					isPreventDefault = true;
+				}
+			} else if (detail.direction === 'up' || detail.direction === 'down') {
+				if (this.options.scrollY) {
+					isPreventDefault = true;
+				}
+			}
+			if (isPreventDefault) {
+				detail.gesture && detail.gesture.preventDefault();
+			}
 			var deltaX = detail.deltaX - detail.lastDeltaX;
 			var deltaY = detail.deltaY - detail.lastDeltaY;
 			var absDeltaX = Math.abs(detail.deltaX);
@@ -2974,19 +2987,21 @@ var mui = (function(document, undefined) {
 		},
 		_init: function() {
 			this.scroller = this.wrapper.querySelector('.' + CLASS_SLIDER_GROUP);
-			this.scrollerStyle = this.scroller.style;
-			this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
-			if (this.progressBar) {
-				this.progressBarWidth = this.progressBar.offsetWidth;
-				this.progressBarStyle = this.progressBar.style;
-			}
+			if (this.scroller) {
+				this.scrollerStyle = this.scroller.style;
+				this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
+				if (this.progressBar) {
+					this.progressBarWidth = this.progressBar.offsetWidth;
+					this.progressBarStyle = this.progressBar.style;
+				}
 
-			this.x = this._getScroll();
-			if (this.options.startX === false) {
-				this.options.startX = this.x;
+				this.x = this._getScroll();
+				if (this.options.startX === false) {
+					this.options.startX = this.x;
+				}
+				this._super();
+				this._initTimer();
 			}
-			this._super();
-			this._initTimer();
 		},
 		_initEvent: function() {
 			var self = this;
@@ -3688,7 +3703,8 @@ var mui = (function(document, undefined) {
 		name : name,
 		index : 50,
 		handle : handle,
-		target : false
+		target : false,
+		isContinue: true
 	});
 
 })(mui, window, document, 'action');
@@ -4579,7 +4595,7 @@ var mui = (function(document, undefined) {
 })(mui, window);
 (function($, window) {
 	/**
-	 * 警告消息框
+	 * 确认消息框
 	 */
 	$.confirm = function(message,title,btnArray,callback) {
 		if ($.os.plus) {
@@ -4606,7 +4622,7 @@ var mui = (function(document, undefined) {
 })(mui, window);
 (function($, window) {
 	/**
-	 * 警告消息框
+	 * 输入对话框
 	 */
 	$.prompt = function(text,defaultText,title,btnArray,callback) {
 		if ($.os.plus) {
@@ -4639,7 +4655,7 @@ var mui = (function(document, undefined) {
 })(mui, window);
 (function($, window) {
 	/**
-	 * toast
+	 * 自动消失提示框
 	 */
 	$.toast = function(message) {
 		if($.os.plus&&$.os.android){

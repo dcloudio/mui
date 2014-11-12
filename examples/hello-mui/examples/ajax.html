@@ -21,6 +21,9 @@
 			.mui-bar-nav~.mui-content{
 				padding: 0;
 			}
+			.mui-content-padded{
+				padding: 10px;
+			}
 		</style>
 		<script>
 			mui.init();
@@ -49,7 +52,7 @@
 <div class="mui-content" >
 	
 	<div class="mui-content-padded" style="padding-bottom: 50px;">
-		<p style="text-indent: 22px;padding: 10px;">
+		<p style="text-indent: 22px;">
 			mui基于html5plus的<a href="http://www.dcloud.io/docs/api/zh_cn/xhr.shtml">XMLHttpRequest</a>，封装了常用的ajax函数，支持Get、Post请求方式， 支持返回json、xml、html、text、script数据类型；本示例使用<a href="http://www.oschina.net/question/82993_78609">RunJS</a>的Echo Ajax功能演示网络请求。
 		</p>
 		<h4 class="mui-content-padded">发送请求：</h4>
@@ -103,7 +106,8 @@
 			var data = {
 				name: "mui",
 				version: "pre-release",
-				author: "chb"
+				author: "chb",
+				description:"最接近原生APP体验的高性能前端框架"
 			};
 			url = url + (dataType === 'html' ? 'text' : dataType);
 			respnoseEl.innerHTML = '正在请求中...';
