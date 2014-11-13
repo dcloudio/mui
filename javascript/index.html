@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-11-11 17:53:15 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-11-11 17:53:15 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-11-14 00:06:22 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-11-14 00:06:22 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -305,7 +305,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <!-- 手势事件 -->
         <article id="gesture" class="component mui-active">
       <h3 class="component-title">手势事件</h3>
-      <p class="component-description">在开发移动端的应用时，经常会用到手势事件，比如滑动；mui内置了常用的手势事件，目前支持的手势事件见如下列表：</p>
+      <p class="component-description">在开发移动端的应用时，会用到很多的手势操作，比如滑动、长按等，为了方便开放者快速集成这些手势，mui内置了常用的手势事件，目前支持的手势事件见如下列表：</p>
       <table id="gestureList" style="border-style: solid; border-width: 0pt;" border="1" cellspacing="0" cellpadding="5px">
     <tbody>
         <tr>
@@ -378,15 +378,15 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       }
     </style>
       <h3 class="component-title">手势事件配置</h3>
-      <p class="component-description">mui默认会监听并触发所有手势事件，但为了节省资源，支持用户根据当前页面实际情况，通过mui.init方法中的gestureConfig参数，配置具体需要监听的手势事件，。</p>
+      <p class="component-description">除了不常用的双击和长按事件，mui默认会监听其它所有手势事件；为了开发出更高性能的moble App，mui支持用户根据实际业务需求，通过mui.init方法中的gestureConfig参数，配置具体需要监听的手势事件，。</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">gestureConfig</span><span class="o">:</span><span class="p">{</span>
-   <span class="nx">tap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-   <span class="nx">doubletap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-   <span class="nx">longtap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-   <span class="nx">swipe</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-   <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span>
+   <span class="nx">tap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为true</span>
+   <span class="nx">doubletap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为false</span>
+   <span class="nx">longtap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为false</span>
+   <span class="nx">swipe</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为true</span>
+   <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span> <span class="c1">//默认为true</span>
   <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
     <p class="component-note touch-only"><strong>注意:</strong>dragstart、drag、dragend共用drag开关，swipeleft、swiperight、swipeup、swipedown共用swipe开关</p>
@@ -741,8 +741,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-11-11 17:53:15 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-11-11 17:53:15 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-11-14 00:06:22 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-11-14 00:06:22 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
