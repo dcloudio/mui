@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.6.0 (https://github.com/dcloudio/mui)
+ * Mui v0.7.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1784,6 +1784,7 @@ select:focus {
 
 .mui-input-row {
   overflow: hidden;
+  clear: left;
 }
 .mui-input-row select {
   padding: 10px 15px 0 15px;
@@ -2355,11 +2356,13 @@ select:focus {
 .mui-pagination > li:first-child > a,
 .mui-pagination > li:first-child > span {
   margin-left: 0;
+  background-clip: padding-box;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
 }
 .mui-pagination > li:last-child > a,
 .mui-pagination > li:last-child > span {
+  background-clip: padding-box;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
@@ -2418,6 +2421,7 @@ select:focus {
   display: inline-block;
   padding: 5px 14px;
   background-color: #fff;
+  background-clip: padding-box;
   border: 1px solid #ddd;
   border-radius: 6px;
 }
@@ -2503,7 +2507,7 @@ select:focus {
   font-size: 14px;
   vertical-align: top;
 }
-.mui-slider .mui-slider-group .mui-slider-item a {
+.mui-slider .mui-slider-group .mui-slider-item > a {
   position: relative;
   display: block;
   line-height: 0;
@@ -2589,6 +2593,7 @@ select:focus {
   width: 74px;
   height: 30px;
   background-color: #fff;
+  background-clip: padding-box;
   border: 2px solid #ddd;
   border-radius: 20px;
   -webkit-transition-duration: .2s;
@@ -2604,6 +2609,7 @@ select:focus {
   width: 28px;
   height: 28px;
   background-color: #fff;
+  background-clip: padding-box;
   border-radius: 16px;
   -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
           box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
@@ -2623,7 +2629,6 @@ select:focus {
 }
 .mui-switch.mui-active {
   background-color: #4cd964;
-  background-clip: padding-box;
   border-color: #4cd964;
 }
 .mui-switch.mui-active .mui-switch-handle {
