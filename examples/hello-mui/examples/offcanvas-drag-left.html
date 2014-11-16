@@ -265,6 +265,24 @@
 		//offCanvas.offCanvas('toggle')//toggle or hide;
 		offCanvas.offCanvas('hide');
 	});
+	
+	//实现ios平台的侧滑关闭页面；
+	if(mui.os.ios){
+		var classList = offCanvasContainer.classList;
+		offCanvasContainer.addEventListener('webkitTransitionEnd', function(e) {
+			if (e.target && e.target.classList.contains('mui-inner-wrap')) {
+				if (classList.contains('mui-right') || classList.contains('mui-left')) {
+					//显示状态
+					mui.currentWebview.setStyle({'popGesture':'none'});
+				} else {
+					mui.currentWebview.setStyle({'popGesture':'close'});
+				}
+			}
+		});
+	}
+	
+	
+	
 </script>
 
 </body>

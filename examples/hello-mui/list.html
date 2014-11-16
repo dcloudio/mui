@@ -279,12 +279,12 @@
 							</a>
 						</li>
 						<li class="mui-table-view-cell ios-only">
-							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-with-left.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-right.html">
 								可拖动式右滑菜单
 							</a>
 						</li>
 						<li class="mui-table-view-cell ios-only">
-							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-with-right.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-left.html">
 								可拖动式左滑菜单
 							</a>
 						</li>
@@ -538,12 +538,13 @@
 						var type = this.getAttribute("open-type");
 						if(type=="common"){
 							if (~id.indexOf('offcanvas-')) {
+								var pop = ~id.indexOf('offcanvas-with-right')?"close":"none";
 								mui.openWindow({
 									id: id,
 									url: this.href,
 									styles: {
 										zindex: 9999,
-										popGesture:"none"
+										popGesture:pop
 									},
 									waiting:{
 										autoShow:false
