@@ -10,8 +10,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-11-14 00:06:22 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-11-14 00:06:22 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-11-16 16:03:08 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-11-16 16:03:08 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -92,11 +93,13 @@
     }
   </style>
   <!-- Components -->
-  <div class="docs-components column-group">
-    <div class="device-column column lg-units-5 mui-pull-right">
-      <!-- In phone examples -->
-      <!-- 暂时注释，右侧模拟器，这里需要使用导航代替 -->
-<!--       <div class="device js-device">
+  <div class="docs-components column-group"  >
+    <!-- 暂时注释，右侧模拟器，这里需要使用导航代替 -->
+     <!-- In phone examples -->
+    <!--  <div class="device-column column lg-units-5 mui-pull-right">
+    
+      
+     <div class="device js-device">
         <div class="device-content">
           <div id="iwindow">
             <header class="mui-bar mui-bar-nav">
@@ -104,8 +107,10 @@
             </header>
           </div>
         </div>
-      </div> -->
-    </div>
+      </div> 
+    </div>-->
+
+
 
     <div class="column lg-units-9 docs-content">
     <!-- 页面初始化 -->
@@ -142,7 +147,7 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
   <span class="p">});</span></code></pre></div>
 <p class="component-description"><strong>参数说明：</strong>styles表示窗口属性，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。</p>
       <p class="component-description"><strong>示例：</strong>Hello mui的首页其实就是index.html加list.html合并而成的，如下：</p>
-      <div id="subpage-demo">
+      <div id="subpage-demo" style="height:324px">
         <div>
           <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-index.png" alt="" style="border-color:blue;">
           <div class="pagename">index.html</div>  
@@ -155,7 +160,7 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
         <div class="subpage-tip">=</div>
         <div>
           <div id="hello-mui-index" style="border:1px solid blue;">
-          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="margin-top:38px;border-color:red;max-width:238px;"> 
+          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="margin-top:29px;border-color:red;max-width:190px;height:257px"> 
         </div>
         <div class="pagename">合并后的首页</div>  
         </div>
@@ -163,7 +168,7 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
 
       <style>
         #subpage img{
-          max-width: 240px;
+          max-width: 192px;
           height: auto;
           border:1px solid;
         }
@@ -173,16 +178,16 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
         .subpage-tip{
           font-size: 96px;
           margin: auto 25px;
-          height: 360px;
-          line-height: 360px;
+          height: 324px;
+          line-height: 324px;
         }
         .pagename{
-          width: 240px;
+          width: 192px;
           text-align: center;
           margin-top: 10px;
         }
       </style>
- <p class="component-description" style="clear:both">index.html的作用就是显示固定导航，list.html显示具体列表内容，列表项的滚动是在list.html所在webview中使用原生滚动，既保证了滚动条不会穿透顶部导航，符合app的体验，也保证了列表流畅滚动，解决了区域滚动卡顿的问题。 list.html就是index.html的子页面，创建代码比较简单，如下：</p>
+ <p class="component-description" style="clear:both;margin-top:25px;">index.html的作用就是显示固定导航，list.html显示具体列表内容，列表项的滚动是在list.html所在webview中使用原生滚动，既保证了滚动条不会穿透顶部导航，符合app的体验，也保证了列表流畅滚动，解决了区域滚动卡顿的问题。 list.html就是index.html的子页面，创建代码比较简单，如下：</p>
  <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
     <span class="nx">subpages</span><span class="o">:</span><span class="p">[{</span>
       <span class="nx">url</span><span class="o">:</span><span class="s1">&#39;list.html&#39;</span><span class="p">,</span>
@@ -741,16 +746,91 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	</ul>
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-11-14 00:06:22 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-11-14 00:06:22 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-11-16 16:03:08 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-11-16 16:03:08 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
 </script>
 
     </div>
+
+        <style>
+
+        @media (min-width: 768px){
+          .sidebar {
+            padding-left: 20px;
+          }
+        }
+          
+      .sidenav {
+        margin-top: 20px;
+       margin-bottom: 20px;
+      }
+
+      .sidebar .nav>li>a {
+        display: block;
+        padding: 4px 20px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #999;
+      }
+
+      .sidebar .nav>.active>a, 
+      .sidebar .nav>.active:hover>a, 
+      .sidebar .nav>.active:focus>a {
+        padding-left: 18px;
+        font-weight: 700;
+        color: #d64c28;
+        background-color: transparent;
+        border-left: 2px solid #d64c28;
+      }
+      .affix{
+        position: fixed;
+        top:10px;
+      }
+      .sidebar .nav .nav>li>a {
+        padding-top: 1px;
+        padding-bottom: 1px;
+        padding-left: 30px;
+        font-size: 12px;
+        font-weight: 400;
+        }
+    </style>
+
+  <div class="column lg-units-3" id="scrollspy">
+    <div class="sidebar hidden-print hidden-xs hidden-sm">
+       <ul class="nav sidenav" id="nav" data-spy="affix"  data-offset-top="250">
+            <li class="active"><a href="#pageinit">页面初始化</a></li>
+            <li><a href="#subpage">创建子页面</a></li>
+            <li><a href="#openwindow">打开新页面</a></li>
+            <li><a href="#closewindow">关闭页面</a></li>
+            <li><a href="#gesture">手势事件</a></li>
+            <li><a href="#preload">预加载</a></li>
+            <li><a href="#pullrefresh-down">下拉刷新</a></li>
+            <li><a href="#pullrefresh-up">上拉加载</a></li>
+            <li><a href="#input">输入增强</a></li>
+            <li><a href="#switch">开关事件</a></li>
+            <li><a href="#slide">slide事件</a></li>
+            <li><a href="#customevent">自定义事件</a></li>
+            <li><a href="#plugin-slider">图片轮播</a></li>
+            <li><a href="#plugin-popover">弹出菜单</a></li>
+        </ul>
+    </div>
+  </div>
   </div>
 </div>
+<script>
+  $(document).ready(function(){
+    $("body").attr("data-spy","scroll").attr("data-target","#scrollspy");
+    // $("#nav").affix({
+    //     offset: { 
+    //         top: 10
+    //   }
+    // });
+});
+</script>
 
   </body>
 </html>

@@ -884,6 +884,9 @@ hr {
 		max-width: 940px;
 		padding: 0;
 	}
+	.lg-units-3 {
+		width: 25%;
+	}
 	.lg-units-4 {
 		width: 33.333%;
 	}
@@ -895,6 +898,9 @@ hr {
 	}
 	.lg-units-8 {
 		width: 66.666%;
+	}
+	.lg-units-9 {
+		width: 75%;
 	}
 }
 @media screen and (min-width: 1200px) {
@@ -1153,6 +1159,6 @@ hr {
 #hello-mui-index {
 	background-image: url("../img/hello-mui-index.png");
 	background-size: contain;
-	width: 240px;
-	height: 360px;
+	width: 192px;
+	height: 288px;
 }
