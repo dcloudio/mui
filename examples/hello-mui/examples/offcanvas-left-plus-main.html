@@ -122,7 +122,8 @@
 		if (slideTogether) {
 			left = '-70%';
 		}
-		menu = mui.openWindow({
+		//侧滑菜单默认隐藏，这样可以节省内存；
+		menu = mui.preload({
 			id: 'offcanvas-plus-menu',
 			url: 'offcanvas-plus-menu.html',
 			styles: {
@@ -143,6 +144,17 @@
 		});
 	});
 	document.querySelector('.mui-icon-bars').addEventListener('tap', function() {
+		//控制侧滑菜单webview的显示、隐藏；
+		if(showMenu){
+			//侧滑菜单已显示，则等主窗体移动完毕后，再隐藏自己；
+			setTimeout(function () {
+				menu.hide();
+			},300);			
+		}else{
+			//侧滑菜单处于隐藏状态，则立即显示出来；
+			menu.show();
+		}
+		//主窗体开始侧滑；
 		mui.currentWebview.setStyle({
 			left: showMenu ? '0' : '70%',
 			transition: {

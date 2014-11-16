@@ -120,7 +120,7 @@
 		if(slideTogether){
 			left = '100%';
 		}
-		menu = mui.openWindow({
+		menu = mui.preload({
 			id: 'offcanvas-plus-menu',
 			url: 'offcanvas-plus-menu.html',
 			styles: {
@@ -148,6 +148,18 @@
 			document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = content_padding;
 		}
 		
+		//控制侧滑菜单webview的显示、隐藏；
+		if(showMenu){
+			//侧滑菜单已显示，则等主窗体移动完毕后，再隐藏自己；
+			setTimeout(function () {
+				menu.hide();
+			},300);
+		}else{
+			//侧滑菜单处于隐藏状态，则立即显示出来；
+			menu.show();
+		}
+		
+		//主窗体开始移动
 		mui.currentWebview.setStyle({
 			left: showMenu ? '0' : '-70%',
 			transition: {

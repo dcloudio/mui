@@ -490,11 +490,22 @@
 							popGesture:"hide"
 						}
 					});
-
-					var template = plus.webview.create('examples/template.html', 'demoTemplate',{popGesture:"hide"});
-					var subWebview = plus.webview.create('examples/accordion.html', 'template_sub', {
-						top: '48px',
-						bottom: '0px'
+					//预加载共用父webview
+					var template = $.preload({
+						url:'examples/template.html',
+						id:'demoTemplate',
+						styles:{
+							popGesture:"hide"
+						}
+					});
+					////预加载共用子webview
+					var subWebview = $.preload({
+						url:'examples/accordion.html',
+						id:'template_sub',
+						styles:{
+							top: '48px',
+							bottom: '0px'
+						}
 					});
 					var waiting = null;
 					subWebview.addEventListener('loaded', function() {
@@ -502,8 +513,15 @@
 							subWebview.show();	
 						},50);
 					});
-								
 					subWebview.hide();
+					
+					//iOS平台支持侧滑关闭，父窗体侧滑隐藏后，同时需要隐藏子窗体；
+					if($.os.ios){
+						template.addEventListener('hide',function () {
+							subWebview.hide("none");
+						});
+					}
+
 					template.append(subWebview);
 					
 					if ($.os.android) {
@@ -554,10 +572,6 @@
 								if(subWebview.getURL()==this.href){
 									subWebview.show();
 								}else{
-									//为了适应ios的侧滑关闭，需要手动隐藏；
-									if ($.os.ios){
-										subWebview.hide("none");
-									}
 									subWebview.loadURL(this.href);
 								}
 								template.show('slide-in-right', 150);
