@@ -485,10 +485,13 @@
 					//预加载下拉刷新
 					$.preload({
 						id:"examples/pullrefresh-main.html",
-						url:"examples/pullrefresh-main.html"
+						url:"examples/pullrefresh-main.html",
+						styles:{
+							popGesture:"hide"
+						}
 					});
 
-					var template = plus.webview.create('examples/template.html', 'demoTemplate');
+					var template = plus.webview.create('examples/template.html', 'demoTemplate',{popGesture:"hide"});
 					var subWebview = plus.webview.create('examples/accordion.html', 'template_sub', {
 						top: '48px',
 						bottom: '0px'
@@ -521,7 +524,8 @@
 									id: id,
 									url: this.href,
 									styles: {
-										zindex: 9999
+										zindex: 9999,
+										popGesture:"none"
 									},
 									waiting:{
 										autoShow:false
@@ -544,17 +548,21 @@
 							}
 						}else{
 							if (id&&~id.indexOf('.html')) {
+								
 								var title = this.innerText;
 								template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
 								if(subWebview.getURL()==this.href){
 									subWebview.show();
 								}else{
+									//为了适应ios的侧滑关闭，需要手动隐藏；
+									if ($.os.ios){
+										subWebview.hide("none");
+									}
 									subWebview.loadURL(this.href);
 								}
 								template.show('slide-in-right', 150);
 							}
 						}
-						
 					});
 				});
 			})(mui);
