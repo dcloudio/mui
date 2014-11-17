@@ -3260,8 +3260,7 @@ var mui = (function(document, undefined) {
 	};
 	PlusPullRefresh.prototype.initPulldownRefresh = function() {
 		var self = this;
-		var sw = $.currentWebview;
-		sw.setPullToRefresh({
+		plus.webview.currentWebview().setPullToRefresh({
 			support: true,
 			height: self.downOptions.height + 'px',
 			range: "200px",
