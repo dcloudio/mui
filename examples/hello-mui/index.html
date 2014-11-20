@@ -13,11 +13,11 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-bars mui-pull-left"></a>
 			<a id="info" class="mui-icon mui-icon-info-filled mui-pull-right" style="color: #999;"></a>
 			<h1 class="mui-title">Hello mui</h1>
 		</header>
 		<script>
-		
 			mui.init({
 				swipeBack : false,
 				subpages : [{
@@ -38,15 +38,14 @@
 					template = plus.webview.getWebviewById("demoTemplate");
 				}
 
-//				subWebview.hide();
 				subWebview.loadURL('examples/info.html');
 				var title = "关于";
 				template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
 				template.show('slide-in-right', 150);
-				
-				
+
 			});
 			
+			var menu = null,showMenu = false;
 			mui.plusReady(function() {
 				//首页返回键处理
 				//处理逻辑：1秒内，连续两次按返回键，则退出应用；
@@ -65,7 +64,46 @@
 						}
 					}
 				}, false);
+				
+				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
+				setTimeout(function () {
+					menu= mui.preload({
+						id: 'index-menu',
+						url: 'examples/index-menu.html',
+						styles: {
+							left: 0,
+							width: '70%',
+							zindex: -1
+						},
+						show:{
+							aniShow:'none'
+						}
+					});
+				},500);
+				
 			});
+			
+			document.querySelector('.mui-icon-bars').addEventListener('tap', toggleMenu);
+			function toggleMenu(){
+				//控制侧滑菜单webview的显示、隐藏；
+				if(showMenu){
+					//侧滑菜单已显示，则等主窗体移动完毕后，再隐藏自己；
+					setTimeout(function () {
+						menu.hide();
+					},300);			
+				}else{
+					//侧滑菜单处于隐藏状态，则立即显示出来；
+					menu.show();
+				}
+				//主窗体开始侧滑；
+				mui.currentWebview.setStyle({
+					left: showMenu ? '0' : '70%',
+					transition: {
+						duration: 200
+					}
+				});
+				showMenu = !showMenu;
+			}
 			
 		</script>
 	</body>
