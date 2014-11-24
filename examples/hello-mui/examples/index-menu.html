@@ -31,12 +31,12 @@
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="switches.html">
+				<a class="mui-navigate-right" open-type="common" href="inputs.html">
 					input（输入框）
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="switches.html">
+				<a class="mui-navigate-right" href="tableview-image-left.html">
 					media list（图文列表）
 				</a>
 			</li>
@@ -60,22 +60,35 @@
 		index = plus.webview.currentWebview().opener();
 	})
 	mui('.mui-table-view').on('tap', 'a', function() {
-		if(subWebview==null){
-			subWebview = plus.webview.getWebviewById("template_sub");
-			template = plus.webview.getWebviewById("demoTemplate");
-		}
-		
-		var title = this.innerText;
-		template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
-		if(subWebview.getURL()==this.href){
-			subWebview.show();
+		var id = this.getAttribute("href");
+		var type = this.getAttribute("open-type");
+		if(type=="common"){
+			mui.openWindow({
+				id: id,
+				url: this.href,
+				waiting:{
+					autoShow:false
+				}
+			});
 		}else{
-			subWebview.loadURL(this.href);
-		}
-		template.show('slide-in-right', 150);
+			if(subWebview==null){
+				subWebview = plus.webview.getWebviewById("template_sub");
+				template = plus.webview.getWebviewById("demoTemplate");
+			}
+			var title = this.innerText;
+			template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
+			if(subWebview.getURL()==this.href){
+				subWebview.show();
+			}else{
+				subWebview.loadURL(this.href);
+			}
+			template.show('slide-in-right', 150);
 		
+		
+		}
 		//然后要关闭侧滑菜单；
 		index.evalJS("toggleMenu()");
+		
 	});
   
 </script>
