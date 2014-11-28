@@ -2740,6 +2740,7 @@ select:focus {
 }
 .mui-pull-bottom-pocket .mui-pull-loading {
   opacity: 0;
+  margin-right: 10px; /* Added by J.Soon */
 }
 .mui-pull-bottom-pocket .mui-pull-loading.mui-in {
   opacity: 1;
@@ -2772,7 +2773,7 @@ select:focus {
   position: relative;
   display: inline-block;
   margin-top: 0;
-  margin-left: 10px;
+  /*margin-left: 10px;*/ /* Removed by J.Soon */
   overflow: visible;
   font-size: 15px;
   line-height: 24px;

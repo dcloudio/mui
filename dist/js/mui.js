@@ -3283,7 +3283,8 @@ var mui = (function(document, undefined) {
 		if (content) {
 			self.bottomPocket = document.createElement('div');
 			self.bottomPocket.className = $.classNamePrefix + 'pull-bottom-pocket';
-			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'icon ' + $.classNamePrefix + 'icon-spinner-cycle ' + $.classNamePrefix + 'spin"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
+			// Modified by J.Soon
+			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + CLASS_HIDDEN + ' ' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'icon ' + $.classNamePrefix + 'icon-spinner-cycle ' + $.classNamePrefix + 'spin"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
 			content.appendChild(self.bottomPocket);
 
 			self.pullLoading = self.bottomPocket.querySelector('.mui-pull-loading');
@@ -3306,6 +3307,7 @@ var mui = (function(document, undefined) {
 		if (self.isLoading) return;
 		self.isLoading = true;
 		setTimeout(function() {
+			self.pullLoading.classList.remove(CLASS_HIDDEN); // Added by J.Soon
 			self.pullLoading.classList.add(CLASS_IN);
 			self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
 			self.pullCaption.innerHTML = self.upOptions.contentrefresh;
@@ -3316,6 +3318,7 @@ var mui = (function(document, undefined) {
 	PlusPullRefresh.prototype.endPullupToRefresh = function(finished) {
 		if (this.pullLoading) {
 			this.pullLoading.classList.remove(CLASS_IN);
+			this.pullLoading.classList.add(CLASS_HIDDEN); // Added by J.Soon
 			this.pullCaption.innerHTML = this.upOptions.contentdown;
 			this.isLoading = false;
 			if (finished) {
