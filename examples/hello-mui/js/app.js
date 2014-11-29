@@ -1,34 +1,23 @@
 (function($) {
 	//全局配置(通常所有页面引用该配置，特殊页面使用mui.init({})来覆盖全局配置)
 	$.initGlobal({
-		optimize: true,
 		swipeBack: true
 	});
 	var back = $.back;
-	var templateWebview = null;
-	var subWebview = null;
-	var getTemplateWebview = function() {
-		if (templateWebview == null) {
-			templateWebview = plus.webview.getWebviewById("demoTemplate");
-		}
-		return templateWebview;
-	}
-	var getSubWebview = function() {
-		if (subWebview == null) {
-			subWebview = plus.webview.getWebviewById("template_sub");
-		}
-		return subWebview;
-	}
 	$.back = function() {
 		var current = plus.webview.currentWebview();
-		if (current.id === 'demoTemplate') { //模板主页面
-			getTemplateWebview().hide('auto');
+		if (current.mType === 'main') { //模板主页面
+			current.hide('auto');
 			setTimeout(function() {
 				document.getElementById("title").className = 'mui-title mui-fadeout';
-				getSubWebview().hide("none");
+				current.children()[0].hide("none");
 			}, 200);
-		} else if (current.id === 'template_sub') {
-			getTemplateWebview().evalJS('mui.back();');
+		} else if (current.mType === 'sub') {
+			if ($.targets._popover) {
+				$($.targets._popover).popover('hide');
+			} else {
+				current.parent().evalJS('mui.back();');
+			}
 		} else {
 			back();
 		}

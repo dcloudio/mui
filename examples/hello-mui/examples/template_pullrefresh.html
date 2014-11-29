@@ -22,10 +22,12 @@
 				width: 100%;
 				height: 60%;
 				color: #888;
-				font-size: 14px;
 				text-align: center;
 			}
 			.mui-fadein {
+				/*-webkit-animation: fadein 0.1s;
+				animation: fadein 0.1s;*/
+				
 				opacity: 1;
 			}
 			.mui-fadeout {
@@ -67,33 +69,21 @@
 	</head>
 
 	<body>
+
 		<header class="mui-bar mui-bar-nav">
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" style="display: none;"></a>
-			<h1 id="title" class="mui-title"></h1>
+			<h1 id="title" class="mui-title">下拉刷新</h1>
 		</header>
-		<div class="mui-loader">加载中...</div>
+		<div class="mui-content">
+			<div class="mui-loader"></div>
+		</div>
 	</body>
 	<script type="text/javascript">
-		var titleElem = document.getElementById("title")
-		var menu = document.getElementById("menu")
-
-		 window.addEventListener("updateHeader", function(e) {
-			var title = e.detail.title;
-			var showMenu = e.detail.showMenu;
+		var titleElem = document.getElementById("title");
+		window.addEventListener("updateHeader", function(e) {
+			var title = '下拉刷新';
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
-			var display = showMenu ? "" : "none";
-			if (showMenu) {
-				mui.options.keyEventBind.menubutton = true;
-			} else {
-				mui.options.keyEventBind.menubutton = false;
-			}
-			menu.style.display = display;
-		});
-
-		document.getElementById("menu").addEventListener('tap', function() {
-			plus.webview.currentWebview().children()[0].evalJS('mui("#topPopover").popover("toggle")');
 		});
 	</script>
 

@@ -15,12 +15,6 @@
 			html,body {
 				background-color: #efeff4;
 			}
-			/*header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding: 0;
-			}*/
 		</style>
 		<script>
 			mui.init();
@@ -29,69 +23,69 @@
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">输入框（Input）</h1>
-</header>
-<div class="mui-content">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">输入框（Input）</h1>
+		</header>
+		<div class="mui-content">
 
-	<div class="mui-content-padded" style="margin: 5px;">
-		<h5>默认搜索框：</h5>
-		<div class="mui-input-row mui-search">
-			<input type="search" class="mui-input-clear" placeholder="">
-		</div>
-		<h5>语音输入搜索框：</h5>
-		<div class="mui-input-row mui-search">
-			<input id="search" type="search" class="mui-input-speech mui-input-clear" placeholder="带语音输入的搜索框">
-		</div>
-		<div class="mui-input-row mui-input-range">
-				<label>slider</label>
-				<input type="range" min="0" max="100">
-			</div>
-			<div class="mui-input-row">
-				<label>Switch</label>
-				<div class="mui-switch mui-active">
-					<div class="mui-switch-handle"></div>
+			<div class="mui-content-padded" style="margin: 5px;">
+				<h5>默认搜索框：</h5>
+				<div class="mui-input-row mui-search">
+					<input type="search" class="mui-input-clear" placeholder="">
+				</div>
+				<h5>语音输入搜索框：</h5>
+				<div class="mui-input-row mui-search">
+					<input id="search" type="search" class="mui-input-speech mui-input-clear" placeholder="带语音输入的搜索框">
+				</div>
+				<div class="mui-input-row mui-input-range">
+					<label>slider</label>
+					<input type="range" min="0" max="100">
+				</div>
+				<div class="mui-input-row">
+					<label>Switch</label>
+					<div class="mui-switch mui-active">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<form class="mui-input-group">
+
+					<div class="mui-input-row">
+						<label>Input</label>
+						<input type="text" placeholder="普通输入框">
+					</div>
+					<div class="mui-input-row">
+						<label>Input</label>
+						<input type="text" class="mui-input-clear" placeholder="带清除按钮的输入框">
+					</div>
+
+					<div class="mui-input-row">
+						<label>Input</label>
+						<input type="text" class="mui-input-speech mui-input-clear" placeholder="语音输入">
+					</div>
+					<div class="mui-button-row">
+						<button class="mui-btn mui-btn-primary" onclick="return false;">确认</button>&nbsp;&nbsp;
+						<button class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 10px 5px;">
+					<textarea id="textarea" rows="5" placeholder="多行文本框"></textarea>
 				</div>
 			</div>
-		<form class="mui-input-group">
-			
-			<div class="mui-input-row">
-				<label>Input</label>
-				<input type="text" placeholder="普通输入框">
-			</div>
-			<div class="mui-input-row">
-				<label>Input</label>
-				<input type="text" class="mui-input-clear" placeholder="带清除按钮的输入框">
-			</div>
-
-			<div class="mui-input-row">
-				<label>Input</label>
-				<input type="text" class="mui-input-speech mui-input-clear" placeholder="语音输入">
-			</div>
-			<div class="mui-button-row">
-				<button class="mui-btn mui-btn-primary" onclick="return false;">确认</button>&nbsp;&nbsp;
-				<button class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
-			</div>
-		</form>
-		<div class="mui-input-row" style="margin: 10px 5px;">
-			<textarea id="textarea" rows="5" placeholder="多行文本框"></textarea>
 		</div>
-	</div>
-</div>
 
 
-<style type="text/css">
-	h5 {
-		margin: 5px 7px;
-	}
-</style>
-<script>
-	//语音识别完成事件
-	document.getElementById("search").addEventListener('recognized', function(e) {
-		console.log(e.detail.value);
-	});
-</script>
-</body>
+		<style type="text/css">
+			h5 {
+				margin: 5px 7px;
+			}
+		</style>
+		<script>
+			 //语音识别完成事件
+			document.getElementById("search").addEventListener('recognized', function(e) {
+				console.log(e.detail.value);
+			});
+		</script>
+	</body>
 
 </html>

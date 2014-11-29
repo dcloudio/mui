@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -21,6 +20,13 @@
 			.mui-bar-nav~.mui-content{
 				padding: 0;
 			}
+			
+			.title{
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+			
 		</style>
 		<script>
 			mui.init();
@@ -29,41 +35,57 @@
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">默认列表</h1>
-</header>
 <div class="mui-content">
-	<h5></h5>
-    <div class="mui-card">
-        <ul class="mui-table-view">
-            <li class="mui-table-view-cell mui-hidden">cared
-                <div id="M_Toggle" class="mui-switch mui-active">
-                    <div class="mui-switch-handle"></div>
-                </div>
-            </li>
-            <li class="mui-table-view-divider">右侧无导航箭头</li>
-            <li class="mui-table-view-cell">Item 1</li>
-            <li class="mui-table-view-cell">Item 2</li>
-            <li class="mui-table-view-cell">Item 3</li>
-            <li class="mui-table-view-divider">右侧有导航箭头</li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
-                    Item 1
-                </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
-                    Item 2
-                </a>
-            </li>
-            <li class="mui-table-view-cell">
-                <a class="mui-navigate-right">
-                    Item 3
-                </a>
-            </li>
-        </ul>
-    </div>
+	<div class="title">
+		右侧无导航箭头
+	</div>
+	<ul class="mui-table-view">
+		 <li class="mui-table-view-cell">Item 1</li>
+         <li class="mui-table-view-cell">Item 2</li>
+         <li class="mui-table-view-cell">Item 3</li>
+	</ul>
+	<div class="title">
+		右侧有导航箭头
+	</div>
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right">
+				Item 1
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right">
+				Item 2
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right">
+				Item 3
+			</a>
+		</li>
+	</ul>
+    <div class="title">
+		card（圆角列表）
+	</div>
+	<div class="mui-card">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 1
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 2
+				</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">
+					Item 3
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
 
 </body>

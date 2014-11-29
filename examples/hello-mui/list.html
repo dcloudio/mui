@@ -128,7 +128,7 @@
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/grid-pagination.html">
-								左右滑动分页样式
+								可左右滑动的9宫导航
 							</a>
 						</li>
 						<!--<li class="mui-table-view-cell">
@@ -169,30 +169,9 @@
 								列表带input类控件
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="examples/tableviews-with-switches.html">
-						右侧带开关
-						</a>
-						</li>-->
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/list-triplex-row.html">
 								三行列表
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tableview-image-left.html">
-								图文列表（缩略图居左）
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tableview-image-right.html">
-								图文列表（缩略图居右）
-							</a>
-						</li>
-
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tableview-with-images-and-chevrons.html">
-								图文列表（左缩略图+右箭头）
 							</a>
 						</li>
 
@@ -215,6 +194,11 @@
 
 					</ul>
 				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/media-list.html">
+						media list（图文列表）
+					</a>
+				</li>
 				<li class="mui-table-view-cell mui-collapse">
 					<a class="mui-navigate-right" href="#">
 						nav bar（导航栏）
@@ -225,11 +209,6 @@
 								默认样式
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="examples/titlebar-with-search.html">
-						（待确认）导航条包含搜索框
-						</a>
-						</li>-->
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" open-type="common" href="examples/titlebar-with-buttons.html">
 								导航条包含按钮
@@ -245,12 +224,6 @@
 								导航条同时包含文字和图标
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell"><a class="mui-navigate-right" href="examples/titlebar-with-webview-and-5+.html">Title bar with 5+(webview)</a></li>-->
-						<!--<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="examples/titlebar-with-html5-and-5+.html">
-						5+创建的导航条
-						</a>
-						</li>-->
 					</ul>
 				</li>
 				<li class="mui-table-view-cell mui-collapse">
@@ -259,12 +232,12 @@
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-left-plus-main.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-right-plus-main.html">
 								右滑菜单
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-right-plus-main.html">
+							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-left-plus-main.html">
 								左滑菜单
 							</a>
 						</li>
@@ -295,27 +268,15 @@
 								popover
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/popovers-with-js-call.html">
-
-								popover with js call
-
-							</a>
-						</li>-->
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/popovers-with-actionsheet.html">
 								popover with action sheet
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/popovers-with-cross-webviews.html">
-								Popovers with cross webviews
-							</a>
-						</li>-->
 					</ul>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" open-type="common" href="examples/pullrefresh-main.html">
+					<a class="mui-navigate-right" href="examples/pullrefresh.html">
 						pull to refresh（下拉刷新&上拉加载）
 					</a>
 				</li>
@@ -352,9 +313,6 @@
 						switch（开关）
 					</a>
 				</li>
-
-
-
 				<li class="mui-table-view-cell mui-collapse">
 					<a class="mui-navigate-right" href="#">
 						tab bar（选项卡）
@@ -447,11 +405,7 @@
 				iscroll 4
 				</a>
 				</li>
-				<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="examples/speech.html">
-				语音助手
-				</a>
-				</li>-->
+				-->
 				<!--<li class="mui-table-view-cell">
 				<a class="mui-navigate-right" href="examples/demo.html">
 				预加载(模板)
@@ -465,129 +419,159 @@
 			</ul>
 		</div>
 		<script>
-			(function($) {
-				mui.init({
-					preloadLimit: 3, //同时并存的预加载窗口数量
-					swipeBack: false,
-				});
-				$.plusReady(function() {
-					plus.navigator.closeSplashscreen();
-					//首页返回键处理
-					//处理逻辑：1秒内，连续两次按返回键，则退出应用；
-					var first = null;
-					plus.key.addEventListener('backbutton', function(){
-						//首次按键，提示‘再按一次退出应用’
-						if(!first){
-							first = new Date().getTime();
-							mui.toast('再按一次退出应用');
-							setTimeout(function(){
-								first = null;
-							},1000);
-						}else{
-							if(new Date().getTime()-first<1000){
-								plus.runtime.quit();
-							}
-						}
-					}, false);
-					//预加载下拉刷新
-					$.preload({
-						id:"examples/pullrefresh-main.html",
-						url:"examples/pullrefresh-main.html",
+			//只有ios支持的功能需要在Android平台隐藏；
+			if (mui.os.android) {
+				var list = document.querySelectorAll('.ios-only');
+				if (list) {
+					for (var i = 0; i < list.length; i++) {
+						list[i].style.display = 'none';
+					}
+				}
+			}
+			
+			
+			mui.init({
+				preloadLimit: 5, //同时并存的预加载窗口数量
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false
+				}
+			});
+			var templates = {};
+			var getTemplate = function(name, header, content, loading) {
+				var template = templates[name];
+				if (!template) {
+					//预加载共用父模板；
+					var headerWebview = mui.preload({
+						url:header,
+						id:name+"-main",
 						styles:{
 							popGesture:"hide"
+						},
+						extras:{
+							mType: 'main'
 						}
 					});
-					//预加载共用父webview
-					var template = $.preload({
-						url:'examples/template.html',
-						id:'demoTemplate',
-						styles:{
-							popGesture:"hide"
-						}
-					});
-					////预加载共用子webview
-					var subWebview = $.preload({
-						url:'examples/accordion.html',
-						id:'template_sub',
+					//预加载共用子webview
+					var subWebview = mui.preload({
+						url:!content?"":content,
+						id:name+"-sub",
 						styles:{
 							top: '48px',
 							bottom: '0px'
+						},
+						extras:{
+							mType: 'sub'
 						}
 					});
-					var waiting = null;
 					subWebview.addEventListener('loaded', function() {
-						setTimeout(function(){
-							subWebview.show();	
-						},50);
+						setTimeout(function() {
+							subWebview.show();
+						}, 50);
 					});
 					subWebview.hide();
-					
+					headerWebview.append(subWebview);
+
 					//iOS平台支持侧滑关闭，父窗体侧滑隐藏后，同时需要隐藏子窗体；
-					if($.os.ios){
-						template.addEventListener('hide',function () {
+					if (mui.os.ios) { //5+父窗体隐藏，子窗体还可以看到？不符合逻辑吧？
+						headerWebview.addEventListener('hide', function() {
 							subWebview.hide("none");
 						});
 					}
+					templates[name] = template = {
+						name: name,
+						header: headerWebview,
+						content: subWebview,
+						loaded: loading
+					};
+				}
+				
+				return template;
+			};
 
-					template.append(subWebview);
-					
-					if ($.os.android) {
-						var list = document.querySelectorAll('.ios-only');
-						if (list) {
-							for (var i = 0; i < list.length; i++) {
-								list[i].style.display = 'none';
+			var initTemplates = function() {
+				getTemplate('pullrefresh', 'examples/template_pullrefresh.html', 'examples/pullrefresh.html', true);
+				getTemplate('default', 'examples/template.html');
+			};
+			
+			mui.plusReady(function() {
+				//关闭splash页面；
+				plus.navigator.closeSplashscreen();
+				//初始化模板
+				initTemplates(); //预加载所有模板
+			});
+			
+			//主列表点击事件
+			mui('#list').on('tap', 'a', function() {
+				var id = this.getAttribute('href');
+				var type = this.getAttribute("open-type");
+				if (type == "common") {
+					if (~id.indexOf('offcanvas-')) {
+						var pop = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
+						mui.openWindow({
+							id: id,
+							url: this.href,
+							styles: {
+								zindex: 9999,
+								popGesture: pop
+							},
+							waiting: {
+								autoShow: false
 							}
-						}
+						});
+					} else {
+						mui.openWindow({
+							id: id,
+							url: this.href,
+							waiting: {
+								autoShow: false
+							}
+						});
 					}
-
-					$('#list').on('tap', 'a', function() {
-						var id = this.getAttribute('href');
-						var type = this.getAttribute("open-type");
-						if(type=="common"){
-							if (~id.indexOf('offcanvas-')) {
-								var pop = ~id.indexOf('offcanvas-with-right')?"close":"none";
-								mui.openWindow({
-									id: id,
-									url: this.href,
-									styles: {
-										zindex: 9999,
-										popGesture:pop
-									},
-									waiting:{
-										autoShow:false
-									}
-								});
-							} else if(~id.indexOf('pullrefresh')){
-								mui.openWindow({
-									id: id,
-									url: id,
-									preload:true
-								});
-							}else{
-								mui.openWindow({
-									id: id,
-									url: this.href,
-									waiting:{
-										autoShow:false
-									}
-								});
+				} else {
+					if (id && ~id.indexOf('.html')) {
+						var href = this.href;
+						//获得共用模板组
+						var template = ~href.indexOf('pullrefresh.html')?getTemplate('pullrefresh'):getTemplate('default');
+						//判断是否显示右上角menu图标；
+						var showMenu = ~href.indexOf('popovers.html')?true:false;
+						//获得共用父模板
+						var headerWebview = template.header;
+						//获得共用子webview
+						var contentWebview = template.content;
+						var title = this.innerText;
+						//通知模板修改标题，并显示隐藏右上角图标；
+						mui.fire(headerWebview,'updateHeader',{title:title,showMenu:showMenu});
+						var reload = true;
+						if (!template.loaded) {
+							if (contentWebview.getURL() != this.href) {
+								contentWebview.loadURL(this.href);
+							} else {
+								reload = false;
 							}
-						}else{
-							if (id&&~id.indexOf('.html')) {
-								
-								var title = this.innerText;
-								template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
-								if(subWebview.getURL()==this.href){
-									subWebview.show();
-								}else{
-									subWebview.loadURL(this.href);
-								}
-								template.show('slide-in-right', 150);
-							}
+						} else {
+							reload = false;
 						}
-					});
-				});
-			})(mui);
+						(!reload) && contentWebview.show();
+						
+						headerWebview.show('slide-in-right', 150);
+					}
+				}
+			});
+			
+			var index = null;//主页面
+			function openMenu () {
+				!index&&(index = mui.currentWebview.parent());
+				mui.fire(index,"menu:open");	
+			}
+
+			//监听右滑事件，若侧滑菜单未显示，右滑要显示菜单；
+			window.addEventListener("swiperight",function (e) {
+				//默认滑动角度在-45度到45度之间，都会触发右滑菜单，为避免误操作，可自定义限制滑动角度；
+				if(Math.abs(e.detail.angle)<9){
+					openMenu();
+				}
+			});
 		</script>
 	</body>
 

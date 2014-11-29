@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<style>
+			html,body {
+				background-color: #efeff4;
+			}
+			header.mui-bar{
+				display: none;
+			}
+			.mui-bar-nav~.mui-content{
+				padding: 0;
+			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+		<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 1</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 2</a>
+			</li>
+			<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 3</a>
+			</li>
+				<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 4</a>
+			</li>
+				<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 5</a>
+			</li>
+				<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 6</a>
+			</li>
+				<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 7
+			</li>
+				<li class="mui-table-view-cell">
+				<a class="mui-navigate-right">Item 8</a>
+			</li>
+		</ul>
+
+<style type="text/css">
+  html,body{
+  	background-color: #333;
+  }
+</style>
+<script type="text/javascript" charset="utf-8">
+	mui.init({
+		swipeBack:false
+	});
+	
+	//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
+	window.addEventListener("swiperight",function () {
+		mui.fire(mui.currentWebview.opener(),"menu:swiperight");
+	});
+	
+  
+</script>
+</body>
+
+</html>

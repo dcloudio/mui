@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -11,6 +12,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
 	</head>
+
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-icon mui-icon-bars mui-pull-left"></a>
@@ -18,40 +20,27 @@
 			<h1 class="mui-title">Hello mui</h1>
 		</header>
 		<script>
+			var menu = null,list=null,mask = null;
+			var showMenu = false;
 			mui.init({
-				swipeBack : false,
-				subpages : [{
-					id : 'list',
-					url : 'list.html',
-					styles : {
-						top : '48px',
-						bottom : 0,
-						bounce :'vertical'
-						//scrollIndicator : "none"
+				swipeBack: false,
+				subpages: [{
+					id: 'list',
+					url: 'list.html',
+					styles: {
+						top: '48px',
+						bottom: 0,
+						bounce: 'vertical'
 					}
 				}]
 			});
-			var subWebview=null,template=null;
-			document.getElementById('info').addEventListener('tap', function() {
-				if(subWebview==null){
-					subWebview = plus.webview.getWebviewById("template_sub");
-					template = plus.webview.getWebviewById("demoTemplate");
-				}
 
-				subWebview.loadURL('examples/info.html');
-				var title = "关于";
-				template.evalJS("with(document.getElementById('title')){innerHTML='" + title + "';className='mui-title mui-fadein';};");
-				template.show('slide-in-right', 150);
-
-			});
-			
-			var menu = null,showMenu = false;
 			mui.plusReady(function() {
 				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
 				setTimeout(function () {
 					menu= mui.preload({
 						id: 'index-menu',
-						url: 'examples/index-menu.html',
+						url: 'index-menu.html',
 						styles: {
 							left: 0,
 							width: '70%',
@@ -61,33 +50,119 @@
 							aniShow:'none'
 						}
 					});
+					mask = mui.preload({
+						id:"index-mask",
+						url:"index-mask.html",
+						styles:{
+							left:'70%',
+							width:'30%',
+							opacity:0.1
+						}
+					});
 				},500);
-				
 			});
 			
-			document.querySelector('.mui-icon-bars').addEventListener('tap', toggleMenu);
-			function toggleMenu(){
-				//控制侧滑菜单webview的显示、隐藏；
-				if(showMenu){
-					//侧滑菜单已显示，则等主窗体移动完毕后，再隐藏自己；
-					setTimeout(function () {
-						menu.hide();
-					},300);			
-				}else{
+			
+			
+			/**
+			 * 显示侧滑菜单
+			 */
+			function openMenu(){
+				if(!showMenu){
 					//侧滑菜单处于隐藏状态，则立即显示出来；
 					menu.show();
+					//显示遮罩
+					setTimeout(function () {
+						mask.show('none');	
+					},150);
+					//主窗体开始侧滑；
+					mui.currentWebview.setStyle({
+						left:'70%',
+						transition: {
+							duration: 150
+						}
+					});
+					showMenu = true;
 				}
-				//主窗体开始侧滑；
-				mui.currentWebview.setStyle({
-					left: showMenu ? '0' : '70%',
-					transition: {
-						duration: 200
-					}
-				});
-				showMenu = !showMenu;
 			}
+			/**
+			 * 关闭菜单
+			 */
+			function closeMenu(){
+				if(showMenu){
+					//关闭遮罩；
+					mask.hide();
+					//主窗体开始侧滑；
+					mui.currentWebview.setStyle({
+						left: showMenu ? '0' : '70%',
+						transition: {
+							duration: 200
+						}
+					});
+					showMenu = false;
+					//等动画结束后，隐藏菜单webview，节省资源；
+					setTimeout(function () {
+						menu.hide();
+					},300);	
+				}
+			}
+			//点击左上角侧滑图标，打开侧滑菜单；
+			document.querySelector('.mui-icon-bars').addEventListener('tap', openMenu);
+			//主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
+			window.addEventListener("swiperight",openMenu);
+			//主界面向左滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
+			window.addEventListener("swipeleft",closeMenu);
+			//侧滑菜单触发关闭菜单命令
+			window.addEventListener("menu:close",closeMenu);
+			window.addEventListener("menu:open",openMenu);
+			
+			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
+			mui.menu = function () {
+				if(showMenu){
+					closeMenu();
+				}else{
+					openMenu();
+				}
+			}
+			
+			//处理右上角关于图标的点击事件；
+			var subWebview = null,template = null;
+			document.getElementById('info').addEventListener('tap', function() {
+				if (subWebview == null) {
+					//获取共用父窗体
+					template = plus.webview.getWebviewById("default-main");
+					subWebview = template.children()[0];
+				}
+				subWebview.loadURL('examples/info.html');
+				//修改共用父模板的标题
+				mui.fire(template,'updateHeader',{title:'关于',showMenu:false});
+				template.show('slide-in-right', 150);
+			});
+			
+			//首页返回键处理
+			//处理逻辑：1秒内，连续两次按返回键，则退出应用；
+			var first = null;
+			mui.back = function() {
+				if(showMenu){
+					closeMenu();
+				}else{
+					//首次按键，提示‘再按一次退出应用’
+					if (!first) {
+						first = new Date().getTime();
+						mui.toast('再按一次退出应用');
+						setTimeout(function() {
+							first = null;
+						}, 1000);
+					} else {
+						if (new Date().getTime() - first < 1000) {
+							plus.runtime.quit();
+						}
+					}
+				}
+				
+			};
 			
 		</script>
 	</body>
-</html>
 
+</html>

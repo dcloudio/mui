@@ -30,6 +30,7 @@
 		</header>
 		<div id="scroll" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
+				<button id="mask" class="mui-btn mui-btn-block">打开遮罩</button>
 				<div id="tableview"></div>
 				<div id="tableview_tpl"></div>
 				<div id="slider"></div>
@@ -159,15 +160,27 @@
 					//						grid: slider,
 					//					});
 					//					setTimeout(function() {
-					$('#scroll').pullRefresh({
-						down: {
-							callback: pulldownRefresh
-						},
-						up: {
-							callback: pullupRefresh
-						}
-					}).pullupLoading();
-					
+					//					$('#scroll').pullRefresh({
+					//						down: {
+					//							callback: pulldownRefresh
+					//						},
+					//						up: {
+					//							callback: pullupRefresh
+					//						}
+					//					}).pullupLoading();
+					var pullRefreshApi = $('#scroll').scroll({
+						indicators: false
+					});
+					console.log(pullRefreshApi);
+//					setTimeout(function() {
+//						console.log('stopped is true');
+//						pullRefreshApi.setStopped(true);
+//						setTimeout(function() {
+//							console.log('stopped is false');
+//							pullRefreshApi.setStopped(false);
+//						}, 3000);
+//					}, 3000);
+
 					//					//					}, 2000);
 					//
 					function pulldownRefresh() {
@@ -208,12 +221,23 @@
 						}, 2000);
 					}
 				});
-				document.querySelector(".mui-bar").addEventListener('dragleft',function(e){
+				document.querySelector(".mui-bar").addEventListener('dragleft', function(e) {
 					var detail = e.detail;
 					console.log(Math.abs(detail.deltaX));
-					if(Math.abs(detail.deltaX)>30){//deltaX=move.x-start.x;
+					if (Math.abs(detail.deltaX) > 30) { //deltaX=move.x-start.x;
 						//TODO
 					}
+				});
+				var mask = mui.createMask(function() {
+					alert(1);
+				});
+				document.getElementById("mask").addEventListener('tap', function() {
+					mask.show();
+					setTimeout(function() {
+						mask.close();
+						mask.close();
+						mask.close();
+					}, 2000);
 				});
 			})(mui);
 		</script>
