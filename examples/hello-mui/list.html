@@ -186,12 +186,6 @@
 								滑动触发列表项菜单
 							</a>
 						</li>
-						<!--<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" href="examples/cards.html">
-						Carded table views
-						</a>
-						</li>-->
-
 					</ul>
 				</li>
 				<li class="mui-table-view-cell">
@@ -498,7 +492,11 @@
 				//关闭splash页面；
 				plus.navigator.closeSplashscreen();
 				//初始化模板
-				initTemplates(); //预加载所有模板
+				//延迟加载的原因：等待index页面先创建menu和mask，这样就可以保证页面的zindex顺序；
+				setTimeout(function () {
+					initTemplates(); //预加载所有模板	
+				},300);
+				
 			});
 			
 			//主列表点击事件
