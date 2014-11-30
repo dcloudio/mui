@@ -2456,6 +2456,7 @@ var mui = (function(document, undefined) {
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
+
 			if (this.isInTransition) {
 				this.needReset = true;
 				this.isInTransition = false;
@@ -2463,17 +2464,17 @@ var mui = (function(document, undefined) {
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
 				this.resetPosition(); //reset
 				$.trigger(this.wrapper, 'scrollend', this);
-				e.stopPropagation();
+				//				e.stopPropagation();
 				e.preventDefault();
 			}
 			this.reLayout();
 			$.trigger(this.wrapper, 'beforescrollstart', this);
 		},
 		_drag: function(e) {
-			if (this.needReset) {
-				e.stopPropagation(); //disable parent drag(nested scroller)
-				return;
-			}
+			//			if (this.needReset) {
+			//				e.stopPropagation(); //disable parent drag(nested scroller)
+			//				return;
+			//			}
 			var detail = e.detail;
 			//ios8 hack
 			if ($.os.ios && parseFloat($.os.version) >= 8) {
@@ -2537,9 +2538,14 @@ var mui = (function(document, undefined) {
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
+
+
 		},
 		_flick: function(e) {
-			if (!this.moved || this.needReset) {
+			//			if (!this.moved || this.needReset) {
+			//				return;
+			//			}
+			if (!this.moved) {
 				return;
 			}
 			var detail = e.detail;
