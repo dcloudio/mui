@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-01 13:54:18 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-01 13:54:18 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-01 18:04:24 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-01 18:04:24 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -493,6 +493,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="nx">container</span><span class="o">:</span><span class="nx">refreshContainer</span><span class="p">,</span><span class="c1">//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等</span>
     <span class="nx">up</span> <span class="o">:</span> <span class="p">{</span>
       <span class="nx">contentrefresh</span> <span class="o">:</span> <span class="s2">&quot;正在加载...&quot;</span><span class="p">,</span><span class="c1">//可选，正在加载状态时，上拉加载控件上显示的标题内容</span>
+      <span class="nx">contentnomore</span><span class="o">:</span><span class="s1">&#39;没有更多数据了&#39;</span><span class="p">,</span><span class="c1">//可选，请求完毕若没有更多数据时显示的提醒内容；</span>
       <span class="nx">callback</span> <span class="o">:</span><span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span> <span class="c1">//必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -509,7 +510,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <p class="component-description"><strong>注意：</strong>
   <ul>
     <li>因为使用的是滚动到底事件，因此若当前页面内容过少，没有滚动条的话，就不会触发上拉加载</li>
-    <li>多次上拉加载后，若已没有更多数据可加载时，调用<code>this.endPullupToRefresh(true);</code>，将不再显示“上拉显示更多”的提示语，同时也不再触发滚动条滚动到底事件；若实际业务中，有重新触发上拉加载的需求（比如当前类别已无更多数据，但切换到另外一个类别后，应支持继续上拉加载），此时调用上拉加载的重置函数即可，例如：</li>
+    <li>多次上拉加载后，若已没有更多数据可加载时，调用<code>this.endPullupToRefresh(true);</code>，之后滚动条滚动到底时，将不再显示“上拉显示更多”的提示语，而显示“没有更多数据了”的提示语；</li>
+     <li>若实际业务中，有重新触发上拉加载的需求（比如当前类别已无更多数据，但切换到另外一个类别后，应支持继续上拉加载），此时调用上拉加载的重置函数即可，如下代码：</li>
   </ul></p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//pullup-container为在mui.init方法中配置的pullRefresh节点中的container参数；</span>
 <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullup-container&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">refresh</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span></code></pre></div>
@@ -768,8 +770,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-01 13:54:18 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-01 13:54:18 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-01 18:04:24 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-01 18:04:24 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
