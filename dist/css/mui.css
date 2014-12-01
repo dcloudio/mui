@@ -1330,8 +1330,11 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   margin-top: 15px;
 }
 
-.mui-card .mui-input-group {
-  background: none;
+.mui-card .mui-input-group:before, .mui-card .mui-input-group:after {
+  height: 0;
+}
+.mui-card .mui-input-group .mui-input-row:last-child:before, .mui-card .mui-input-group .mui-input-row:last-child:after {
+  height: 0;
 }
 
 .mui-card .mui-table-view {
@@ -1349,20 +1352,12 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
 }
-
 .mui-card .mui-table-view:before, .mui-card .mui-table-view:after {
   height: 0;
 }
 
-.mui-card > .mui-table-view {
-  background-image: none;
-}
-.mui-card > .mui-table-view > .mui-table-view-cell:last-child {
-  background-image: none;
-}
-
-.mui-card .mui-input-group .mui-input-row:last-child {
-  background-image: none;
+.mui-card > .mui-table-view > .mui-table-view-cell:last-child:before, .mui-card > .mui-table-view > .mui-table-view-cell:last-child:after {
+  height: 0;
 }
 
 .mui-table-view {
@@ -1532,6 +1527,7 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 }
 
 .mui-table-view-divider {
+  position: relative;
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 15px;
@@ -2889,10 +2885,10 @@ select:focus {
   height: 40px;
 }
 .mui-pull-bottom-pocket .mui-pull-loading {
-  opacity: 0;
+  display: none;
 }
 .mui-pull-bottom-pocket .mui-pull-loading.mui-in {
-  opacity: 1;
+  display: inline-block;
 }
 
 .mui-pull {
@@ -2906,6 +2902,7 @@ select:focus {
 }
 
 .mui-pull-loading {
+  margin-right: 10px;
   vertical-align: middle;
   -webkit-transition: -webkit-transform .4s;
           transition:         transform .4s;
@@ -2924,7 +2921,6 @@ select:focus {
   position: relative;
   display: inline-block;
   margin-top: 0;
-  margin-left: 10px;
   overflow: visible;
   font-size: 15px;
   line-height: 24px;
