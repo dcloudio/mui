@@ -1522,9 +1522,8 @@ var mui = (function(document, undefined) {
 					}, 300);
 				}
 				//设置ios顶部状态栏颜色；
-				if ($.os.ios) {
-					var statusBarBackground = $.options.statusBarBackground ? $.options.statusBarBackground : '#f7f7f7';
-					plus.navigator.setStatusBarBackground(statusBarBackground);
+				if ($.os.ios&&$.options.statusBarBackground) {
+					plus.navigator.setStatusBarBackground($.options.statusBarBackground);
 				}
 			});
 		}
