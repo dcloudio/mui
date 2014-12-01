@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.7.0 (https://github.com/dcloudio/mui)
+ * Mui v0.8.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -80,7 +80,7 @@ var mui = (function(document, undefined) {
 	$.slice = [].slice;
 
 	$.type = function(obj) {
-		return obj == null ? String(obj) : class2type[{}.toString.call(obj)] || "object";
+		return obj === null ? String(obj) : class2type[{}.toString.call(obj)] || "object";
 	};
 	/**
 	 * mui isArray
@@ -93,25 +93,25 @@ var mui = (function(document, undefined) {
 	 * mui isWindow
 	 */
 	$.isWindow = function(obj) {
-		return obj != null && obj == obj.window;
+		return obj !== null && obj === obj.window;
 	};
 	/**
 	 * mui isObject
 	 */
 	$.isObject = function(obj) {
-		return $.type(obj) == "object";
+		return $.type(obj) === "object";
 	};
 	/**
 	 * mui isPlainObject
 	 */
 	$.isPlainObject = function(obj) {
-		return $.isObject(obj) && !$.isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype;
+		return $.isObject(obj) && !$.isWindow(obj) && Object.getPrototypeOf(obj) === Object.prototype;
 	};
 	/**
 	 * mui isFunction
 	 */
 	$.isFunction = function(value) {
-		return $.type(value) == "function";
+		return $.type(value) === "function";
 	};
 	/**
 	 * mui querySelectorAll
@@ -144,22 +144,22 @@ var mui = (function(document, undefined) {
 	$.map = function(elements, callback) {
 		var value, values = [],
 			i, key;
-		if (typeof elements.length == 'number') {
+		if (typeof elements.length === 'number') {
 			for (i = 0, len = elements.length; i < len; i++) {
 				value = callback(elements[i], i);
-				if (value != null) values.push(value);
+				if (value !== null) values.push(value);
 			}
 		} else {
 			for (key in elements) {
 				value = callback(elements[key], key);
-				if (value != null) values.push(value);
+				if (value !== null) values.push(value);
 			}
 		}
 		return values.length > 0 ? [].concat.apply([], values) : values;
 	};
 	/**
 	 * each
-	 * @param {type} array
+	 * @param {type} elements
 	 * @param {type} callback
 	 * @returns {_L8.$}
 	 */
@@ -169,7 +169,7 @@ var mui = (function(document, undefined) {
 				return callback.call(el, idx, el) !== false;
 			});
 		} else {
-			for (key in elements) {
+			for (var key in elements) {
 				if (callback.call(elements[key], key, elements[key]) === false) return elements;
 			}
 		}
@@ -364,7 +364,7 @@ var mui = (function(document, undefined) {
 	Object.setPrototypeOf = Object.setPrototypeOf || function(obj, proto) {
 		obj['__proto__'] = proto;
 		return obj;
-	}
+	};
 
 })();
 /**
@@ -507,7 +507,7 @@ var mui = (function(document, undefined) {
 			clickEvent.forwardedTouchEvent = true;
 			targetElement.dispatchEvent(clickEvent);
 		}
-	}
+	};
 	window.addEventListener('tap', dispatchEvent);
 	window.addEventListener('doubletap', dispatchEvent);
 	//捕获
@@ -534,7 +534,6 @@ var mui = (function(document, undefined) {
 			return;
 		}
 		var CLASS_FOCUSIN = 'mui-focusin';
-		var CLASS_CONTENT = 'mui-content';
 		var CLASS_BAR_TAB = 'mui-bar-tab';
 		var CLASS_BAR_FOOTER = 'mui-bar-footer';
 		var CLASS_BAR_FOOTER_SECONDARY = 'mui-bar-footer-secondary';
@@ -743,6 +742,9 @@ var mui = (function(document, undefined) {
 		if ($.gestures.stoped) {
 			return;
 		}
+		if (event.target != touch.target) {
+			return;
+		}
 		var now = Date.now();
 		var point = event.touches ? event.touches[0] : event;
 		touch.touchTime = now - touch.startTime;
@@ -769,6 +771,9 @@ var mui = (function(document, undefined) {
 		if ($.gestures.stoped) {
 			return;
 		}
+		if (event.target != touch.target) {
+			return;
+		}
 		var now = Date.now();
 		touch.touchTime = now - touch.startTime;
 		touch.flickTime = now - touch.flickStartTime;
@@ -785,7 +790,7 @@ var mui = (function(document, undefined) {
 	window.addEventListener($.EVENT_CANCEL, detectTouchEnd);
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
-		if ($.targets.popover || $.targets.tab || $.targets.offcanvas || $.targets.modal) {
+		if ($.targets.popover || ($.targets.tab && $.targets.tab.hash) || $.targets.offcanvas || $.targets.modal) {
 			e.preventDefault();
 		}
 	});
@@ -1077,7 +1082,6 @@ var mui = (function(document, undefined) {
  * @returns {undefined}
  */
 (function($) {
-	var funcs = [];
 	$.global = $.options = {
 		gestureConfig: {
 			tap: true,
@@ -1138,19 +1142,22 @@ var mui = (function(document, undefined) {
  */
 (function($) {
 	var defaultOptions = {
-		optimize: true,
 		swipeBack: false,
 		preloadPages: [], //5+ lazyLoad webview
-		preloadLimit: 10 //预加载窗口的数量限制(一旦超出，先进先出)
+		preloadLimit: 10, //预加载窗口的数量限制(一旦超出，先进先出)
+		keyEventBind: {
+			backbutton: true,
+			menubutton: true
+		}
 	};
 
 	//默认页面动画
 	var defaultShow = {
-			autoShow: true,
-			duration: $.os.ios ? 200 : 100,
-			aniShow: 'slide-in-right'
-		}
-		//若执行了显示动画初始化操作，则要覆盖默认配置
+		autoShow: true,
+		duration: $.os.ios ? 200 : 100,
+		aniShow: 'slide-in-right'
+	};
+	//若执行了显示动画初始化操作，则要覆盖默认配置
 	if ($.options.show) {
 		defaultShow = $.extend(defaultShow, $.options.show, true);
 	}
@@ -1158,8 +1165,8 @@ var mui = (function(document, undefined) {
 	$.currentWebview = null;
 	$.isHomePage = false;
 
-	$.extend($.global, defaultOptions);
-	$.extend($.options, defaultOptions);
+	$.extend($.global, defaultOptions, true);
+	$.extend($.options, defaultOptions, true);
 	/**
 	 * 等待动画配置
 	 * @param {type} options
@@ -1240,30 +1247,30 @@ var mui = (function(document, undefined) {
 		}
 	};
 	var trigger = function(webview, eventType, timeChecked) {
-			if (timeChecked) {
-				if (!webview[eventType + 'ed']) {
-					$.fire(webview, eventType);
-					var list = webview.children();
-					for (var i = 0; i < list.length; i++) {
-						$.fire(list[i], eventType);
-					}
-					webview[eventType + 'ed'] = true;
-				}
-			} else {
+		if (timeChecked) {
+			if (!webview[eventType + 'ed']) {
 				$.fire(webview, eventType);
 				var list = webview.children();
 				for (var i = 0; i < list.length; i++) {
 					$.fire(list[i], eventType);
 				}
+				webview[eventType + 'ed'] = true;
 			}
-
+		} else {
+			$.fire(webview, eventType);
+			var list = webview.children();
+			for (var i = 0; i < list.length; i++) {
+				$.fire(list[i], eventType);
+			}
 		}
-		/**
-		 * 打开新窗口
-		 * @param {string} url 要打开的页面地址
-		 * @param {string} id 指定页面ID
-		 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
-		 */
+
+	};
+	/**
+	 * 打开新窗口
+	 * @param {string} url 要打开的页面地址
+	 * @param {string} id 指定页面ID
+	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
+	 */
 	$.openWindow = function(url, id, options) {
 
 		if (!window.plus) {
@@ -1420,7 +1427,7 @@ var mui = (function(document, undefined) {
 			options.preload = true;
 		}
 		return $.createWindow(options);
-	}
+	};
 
 	/**
 	 *关闭当前webview打开的所有webview；
@@ -1441,7 +1448,7 @@ var mui = (function(document, undefined) {
 				}
 			}
 		}
-	}
+	};
 	$.closeAll = function(webview, aniShow) {
 		$.closeOpened(webview);
 		if (aniShow) {
@@ -1449,7 +1456,7 @@ var mui = (function(document, undefined) {
 		} else {
 			webview.close();
 		}
-	}
+	};
 
 	/**
 	 * 批量创建webview
@@ -1492,7 +1499,7 @@ var mui = (function(document, undefined) {
 	//$.currentWebview
 	$.plusReady(function() {
 		$.currentWebview = plus.webview.currentWebview();
-	})
+	});
 	$.registerInit({
 		name: '5+',
 		index: 100,
@@ -1506,7 +1513,7 @@ var mui = (function(document, undefined) {
 					$.appendWebview(subpage);
 				});
 				//判断是否首页
-				if ($.currentWebview == plus.webview.getWebviewById(plus.runtime.appid)) {
+				if ($.currentWebview === plus.webview.getWebviewById(plus.runtime.appid)) {
 					$.isHomePage = true;
 					//首页需要自己激活预加载；
 					//timeout因为子页面loaded之后才append的，防止子页面尚未append、从而导致其preload未触发的问题；
@@ -1585,7 +1592,7 @@ var mui = (function(document, undefined) {
 	});
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
-		if (detail.angle > -15 && detail.angle < 15 && $.options.swipeBack === true) {
+		if ($.options.swipeBack === true && detail.angle > -10 && detail.angle < 10) {
 			$.back();
 		}
 	});
@@ -1598,6 +1605,18 @@ var mui = (function(document, undefined) {
  * @returns {undefined}
  */
 (function($, window) {
+	if ($.os.plus && $.os.android) {
+		$.registerBack({
+			name: 'popover',
+			index: 5,
+			handle: function() {
+				if ($.targets._popover) {
+					$($.targets._popover).popover('hide');
+					return true;
+				}
+			}
+		});
+	}
 	/**
 	 * 5+ back
 	 */
@@ -1660,19 +1679,22 @@ var mui = (function(document, undefined) {
 				}
 			}
 		}
-	}
-
-	$.plusReady(function() {
-		plus.key.addEventListener('backbutton', function() {
-			$.back();
-		}, false);
-
-		plus.key.addEventListener('menubutton', function() {
-			$.menu();
-		}, false);
-
+	};
+	//处理按键监听事件
+	$.registerInit({
+		name: 'keyEventBind',
+		index: 1000,
+		handle: function() {
+			$.plusReady(function() {
+				if ($.options.keyEventBind.backbutton) {
+					plus.key.addEventListener('backbutton', $.back, false);
+				}
+				if ($.options.keyEventBind.menubutton) {
+					plus.key.addEventListener('menubutton', $.menu, false);
+				}
+			});
+		}
 	});
-
 })(mui, window);
 /**
  * mui.init pulldownRefresh
@@ -1686,15 +1708,37 @@ var mui = (function(document, undefined) {
 		handle: function() {
 			var options = $.options;
 			var pullRefreshOptions = options.pullRefresh || {};
-
-			if ((pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback')) || (pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback'))) {
+			var hasPulldown = pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback');
+			var hasPullup = pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback');
+			if (hasPulldown || hasPullup) {
 				var container = pullRefreshOptions.container;
 				if (container) {
 					var $container = $(container);
 					if ($container.length === 1) {
 						if ($.os.plus && $.os.android) { //android 5+
 							$.plusReady(function() {
-								$container.pullRefresh(pullRefreshOptions);
+								if (hasPullup) {
+									//当前页面初始化pullup
+									var upOptions = {};
+									upOptions.up = pullRefreshOptions.up;
+									$container.pullRefresh(upOptions);
+								}
+								if (hasPulldown) {
+									var webview = plus.webview.currentWebview();
+									var parent = webview.parent();
+									if (parent) {
+										if (!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
+											$container.pullRefresh();
+										}
+										var downOptions = {
+											webviewId: webview.id
+										};
+										downOptions.down = $.extend({}, pullRefreshOptions.down);
+										downOptions.down.callback = '_CALLBACK';
+										//父页面初始化pulldown
+										parent.evalJS("mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+									}
+								}
 							});
 						} else {
 							$container.pullRefresh(pullRefreshOptions);
@@ -1710,257 +1754,271 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @returns {undefined}
  */
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
-	var jsonType = 'application/json';
-	var htmlType = 'text/html';
-	var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
-	var scriptTypeRE = /^(?:text|application)\/javascript/i;
-	var xmlTypeRE = /^(?:text|application)\/xml/i;
-	var blankRE = /^\s*$/;
+    var jsonType = 'application/json';
+    var htmlType = 'text/html';
+    var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+    var scriptTypeRE = /^(?:text|application)\/javascript/i;
+    var xmlTypeRE = /^(?:text|application)\/xml/i;
+    var blankRE = /^\s*$/;
 
-	$.ajaxSettings = {
-		type: 'GET',
-		success: $.noop,
-		error: $.noop,
-		complete: $.noop,
-		context: null,
-		xhr: function() {
-			return new window.XMLHttpRequest();
-		},
-		accepts: {
-			script: 'text/javascript, application/javascript, application/x-javascript',
-			json: jsonType,
-			xml: 'application/xml, text/xml',
-			html: htmlType,
-			text: 'text/plain'
-		},
-		timeout: 0,
-		processData: true,
-		cache: true
-	};
+    $.ajaxSettings = {
+        type: 'GET',
+        success: $.noop,
+        error: $.noop,
+        complete: $.noop,
+        context: null,
+        xhr: function () {
+            return new window.XMLHttpRequest();
+        },
+        accepts: {
+            script: 'text/javascript, application/javascript, application/x-javascript',
+            json: jsonType,
+            xml: 'application/xml, text/xml',
+            html: htmlType,
+            text: 'text/plain'
+        },
+        timeout: 0,
+        processData: true,
+        cache: true
+    };
 
-	var ajaxSuccess = function(data, xhr, settings) {
-		settings.success.call(settings.context, data, 'success', xhr);
-		ajaxComplete('success', xhr, settings);
-	};
-	// type: "timeout", "error", "abort", "parsererror"
-	var ajaxError = function(error, type, xhr, settings) {
-		settings.error.call(settings.context, xhr, type, error);
-		ajaxComplete(type, xhr, settings);
-	};
-	// status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
-	var ajaxComplete = function(status, xhr, settings) {
-		settings.complete.call(settings.context, xhr, status);
-	};
+    var ajaxSuccess = function (data, xhr, settings) {
+        settings.success.call(settings.context, data, 'success', xhr);
+        ajaxComplete('success', xhr, settings);
+    };
+    // type: "timeout", "error", "abort", "parsererror"
+    var ajaxError = function (error, type, xhr, settings) {
+        settings.error.call(settings.context, xhr, type, error);
+        ajaxComplete(type, xhr, settings);
+    };
+    // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+    var ajaxComplete = function (status, xhr, settings) {
+        settings.complete.call(settings.context, xhr, status);
+    };
 
-	var serialize = function(params, obj, traditional, scope) {
-		var type, array = $.isArray(obj),
-			hash = $.isPlainObject(obj)
-		$.each(obj, function(key, value) {
-			type = $.type(value)
-			if (scope) key = traditional ? scope :
-				scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']'
-				// handle data in serializeArray() format
-			if (!scope && array) params.add(value.name, value.value)
-				// recurse into nested objects
-			else if (type == "array" || (!traditional && type == "object"))
-				serialize(params, value, traditional, key)
-			else params.add(key, value)
-		})
-	};
-	var serializeData = function(options) {
-		if (options.processData && options.data && typeof options.data != "string") {
-			options.data = $.param(options.data, options.traditional);
-		}
-		if (options.data && (!options.type || options.type.toUpperCase() == 'GET')) {
-			options.url = appendQuery(options.url, options.data);
-			options.data = undefined;
-		}
-	}
-	var appendQuery = function(url, query) {
-		if (query == '') return url;
-		return (url + '&' + query).replace(/[&?]{1,2}/, '?');
-	}
-	var mimeToDataType = function(mime) {
-		if (mime) mime = mime.split(';', 2)[0]
-		return mime && (mime == htmlType ? 'html' :
-			mime == jsonType ? 'json' :
-			scriptTypeRE.test(mime) ? 'script' :
-			xmlTypeRE.test(mime) && 'xml') || 'text'
-	}
-	var parseArguments = function(url, data, success, dataType) {
-		if ($.isFunction(data)) {
-			dataType = success, success = data, data = undefined;
-		}
-		if (!$.isFunction(success)) {
-			dataType = success, success = undefined;
-		}
-		return {
-			url: url,
-			data: data,
-			success: success,
-			dataType: dataType
-		};
-	}
-	$.ajax = function(url, options) {
-		if (typeof url === "object") {
-			options = url;
-			url = undefined;
-		}
-		var settings = options || {};
-		settings.url = url || settings.url;
-		for (key in $.ajaxSettings) {
-			if (settings[key] === undefined) {
-				settings[key] = $.ajaxSettings[key];
-			}
-		}
-		serializeData(settings);
-		var dataType = settings.dataType;
+    var serialize = function (params, obj, traditional, scope) {
+        var type, array = $.isArray(obj),
+                hash = $.isPlainObject(obj);
+        $.each(obj, function (key, value) {
+            type = $.type(value);
+            if (scope) {
+                key = traditional ? scope :
+                        scope + '[' + (hash || type === 'object' || type === 'array' ? key : '') + ']';
+            }
+            // handle data in serializeArray() format
+            if (!scope && array) {
+                params.add(value.name, value.value);
+            }
+            // recurse into nested objects
+            else if (type === "array" || (!traditional && type === "object")) {
+                serialize(params, value, traditional, key);
+            }
+            else {
+                params.add(key, value);
+            }
+        });
+    };
+    var serializeData = function (options) {
+        if (options.processData && options.data && typeof options.data !== "string") {
+            options.data = $.param(options.data, options.traditional);
+        }
+        if (options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
+            options.url = appendQuery(options.url, options.data);
+            options.data = undefined;
+        }
+    };
+    var appendQuery = function (url, query) {
+        if (query === '') {
+            return url;
+        }
+        return (url + '&' + query).replace(/[&?]{1,2}/, '?');
+    };
+    var mimeToDataType = function (mime) {
+        if (mime) {
+            mime = mime.split(';', 2)[0];
+        }
+        return mime && (mime === htmlType ? 'html' :
+                mime === jsonType ? 'json' :
+                scriptTypeRE.test(mime) ? 'script' :
+                xmlTypeRE.test(mime) && 'xml') || 'text';
+    };
+    var parseArguments = function (url, data, success, dataType) {
+        if ($.isFunction(data)) {
+            dataType = success, success = data, data = undefined;
+        }
+        if (!$.isFunction(success)) {
+            dataType = success, success = undefined;
+        }
+        return {
+            url: url,
+            data: data,
+            success: success,
+            dataType: dataType
+        };
+    };
+    $.ajax = function (url, options) {
+        if (typeof url === "object") {
+            options = url;
+            url = undefined;
+        }
+        var settings = options || {};
+        settings.url = url || settings.url;
+        for (key in $.ajaxSettings) {
+            if (settings[key] === undefined) {
+                settings[key] = $.ajaxSettings[key];
+            }
+        }
+        serializeData(settings);
+        var dataType = settings.dataType;
 
-		if (settings.cache === false || ((!options || options.cache !== true) && ('script' == dataType))) {
-			settings.url = appendQuery(settings.url, '_=' + Date.now());
-		}
-		var mime = settings.accepts[dataType];
-		var headers = {};
-		var setHeader = function(name, value) {
-			headers[name.toLowerCase()] = [name, value]
-		};
-		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-		var xhr = settings.xhr();
-		var nativeSetHeader = xhr.setRequestHeader;
-		var abortTimeout;
+        if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
+            settings.url = appendQuery(settings.url, '_=' + Date.now());
+        }
+        var mime = settings.accepts[dataType];
+        var headers = {};
+        var setHeader = function (name, value) {
+            headers[name.toLowerCase()] = [name, value];
+        };
+        var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+        var xhr = settings.xhr();
+        var nativeSetHeader = xhr.setRequestHeader;
+        var abortTimeout;
 
-		setHeader('X-Requested-With', 'XMLHttpRequest');
-		setHeader('Accept', mime || '*/*');
-		if (mime = settings.mimeType || mime) {
-			if (mime.indexOf(',') > -1) {
-				mime = mime.split(',', 2)[0]
-			}
-			xhr.overrideMimeType && xhr.overrideMimeType(mime);
-		}
-		if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET')) {
-			setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded')
-		}
-		if (settings.headers) {
-			for (name in settings.headers) setHeader(name, settings.headers[name])
-		}
-		xhr.setRequestHeader = setHeader;
+        setHeader('X-Requested-With', 'XMLHttpRequest');
+        setHeader('Accept', mime || '*/*');
+        if (!!(mime = settings.mimeType || mime)) {
+            if (mime.indexOf(',') > -1) {
+                mime = mime.split(',', 2)[0];
+            }
+            xhr.overrideMimeType && xhr.overrideMimeType(mime);
+        }
+        if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() !== 'GET')) {
+            setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
+        }
+        if (settings.headers) {
+            for (name in settings.headers)
+                setHeader(name, settings.headers[name]);
+        }
+        xhr.setRequestHeader = setHeader;
 
-		xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4) {
-					xhr.onreadystatechange = $.noop;
-					clearTimeout(abortTimeout)
-					var result, error = false;
-					if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
-						dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
-						result = xhr.responseText;
-						try {
-							// http://perfectionkills.com/global-eval-what-are-the-options/
-							if (dataType == 'script') {
-								(1, eval)(result);
-							} else if (dataType == 'xml') {
-								result = xhr.responseXML;
-							} else if (dataType == 'json') {
-								result = blankRE.test(result) ? null : $.parseJSON(result);
-							}
-						} catch (e) {
-							error = e
-						}
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                xhr.onreadystatechange = $.noop;
+                clearTimeout(abortTimeout);
+                var result, error = false;
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
+                    dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
+                    result = xhr.responseText;
+                    try {
+                        // http://perfectionkills.com/global-eval-what-are-the-options/
+                        if (dataType === 'script') {
+                            (1, eval)(result);
+                        } else if (dataType === 'xml') {
+                            result = xhr.responseXML;
+                        } else if (dataType === 'json') {
+                            result = blankRE.test(result) ? null : $.parseJSON(result);
+                        }
+                    } catch (e) {
+                        error = e;
+                    }
 
-						if (error) {
-							ajaxError(error, 'parsererror', xhr, settings);
-						} else {
-							ajaxSuccess(result, xhr, settings);
-						}
-					} else {
-						ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
-					}
-				}
-			}
-			//		if (ajaxBeforeSend(xhr, settings) === false) {
-			//			xhr.abort();
-			//			ajaxError(null, 'abort', xhr, settings);
-			//			return xhr;
-			//		}
+                    if (error) {
+                        ajaxError(error, 'parsererror', xhr, settings);
+                    } else {
+                        ajaxSuccess(result, xhr, settings);
+                    }
+                } else {
+                    ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+                }
+            }
+        };
+        //		if (ajaxBeforeSend(xhr, settings) === false) {
+        //			xhr.abort();
+        //			ajaxError(null, 'abort', xhr, settings);
+        //			return xhr;
+        //		}
 
-		if (settings.xhrFields) {
-			for (name in settings.xhrFields) {
-				xhr[name] = settings.xhrFields[name];
-			}
-		}
+        if (settings.xhrFields) {
+            for (name in settings.xhrFields) {
+                xhr[name] = settings.xhrFields[name];
+            }
+        }
 
-		var async = 'async' in settings ? settings.async : true;
+        var async = 'async' in settings ? settings.async : true;
 
-		xhr.open(settings.type, settings.url, async, settings.username, settings.password);
+        xhr.open(settings.type, settings.url, async, settings.username, settings.password);
 
-		for (name in headers) {
-			nativeSetHeader.apply(xhr, headers[name]);
-		}
-		if (settings.timeout > 0) {
-			abortTimeout = setTimeout(function() {
-				xhr.onreadystatechange = $.noop;
-				xhr.abort();
-				ajaxError(null, 'timeout', xhr, settings);
-			}, settings.timeout);
-		}
-		xhr.send(settings.data ? settings.data : null);
-		return xhr;
-	};
+        for (name in headers) {
+            nativeSetHeader.apply(xhr, headers[name]);
+        }
+        if (settings.timeout > 0) {
+            abortTimeout = setTimeout(function () {
+                xhr.onreadystatechange = $.noop;
+                xhr.abort();
+                ajaxError(null, 'timeout', xhr, settings);
+            }, settings.timeout);
+        }
+        xhr.send(settings.data ? settings.data : null);
+        return xhr;
+    };
 
 
-	$.param = function(obj, traditional) {
-		var params = [];
-		params.add = function(k, v) {
-			this.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
-		};
-		serialize(params, obj, traditional);
-		return params.join('&').replace(/%20/g, '+');
-	}
-	$.get = function( /* url, data, success, dataType */ ) {
-		return $.ajax(parseArguments.apply(null, arguments));
-	}
+    $.param = function (obj, traditional) {
+        var params = [];
+        params.add = function (k, v) {
+            this.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+        };
+        serialize(params, obj, traditional);
+        return params.join('&').replace(/%20/g, '+');
+    };
+    $.get = function ( /* url, data, success, dataType */ ) {
+        return $.ajax(parseArguments.apply(null, arguments));
+    };
 
-	$.post = function( /* url, data, success, dataType */ ) {
-		var options = parseArguments.apply(null, arguments);
-		options.type = 'POST';
-		return $.ajax(options);
-	}
+    $.post = function ( /* url, data, success, dataType */ ) {
+        var options = parseArguments.apply(null, arguments);
+        options.type = 'POST';
+        return $.ajax(options);
+    };
 
-	$.getJSON = function( /* url, data, success */ ) {
-		var options = parseArguments.apply(null, arguments);
-		options.dataType = 'json';
-		return $.ajax(options);
-	}
+    $.getJSON = function ( /* url, data, success */ ) {
+        var options = parseArguments.apply(null, arguments);
+        options.dataType = 'json';
+        return $.ajax(options);
+    };
 
-	$.fn.load = function(url, data, success) {
-		if (!this.length) return this
-		var self = this,
-			parts = url.split(/\s/),
-			selector,
-			options = parseArguments(url, data, success),
-			callback = options.success;
-		if (parts.length > 1) options.url = parts[0], selector = parts[1];
-		options.success = function(response) {
-			if (selector) {
-				var div = document.createElement('div');
-				div.innerHTML = response.replace(rscript, "");
-				var selectorDiv = document.createElement('div');
-				var childs = div.querySelectorAll(selector);
-				if (childs && childs.length > 0) {
-					for (var i = 0, len = childs.length; i < len; i++) {
-						selectorDiv.appendChild(childs[i]);
-					}
-				}
-				self[0].innerHTML = selectorDiv.innerHTML;
-			} else {
-				self[0].innerHTML = response;
-			}
-			callback && callback.apply(self, arguments)
-		}
-		$.ajax(options);
-		return this;
-	}
+    $.fn.load = function (url, data, success) {
+        if (!this.length)
+            return this;
+        var self = this,
+                parts = url.split(/\s/),
+                selector,
+                options = parseArguments(url, data, success),
+                callback = options.success;
+        if (parts.length > 1)
+            options.url = parts[0], selector = parts[1];
+        options.success = function (response) {
+            if (selector) {
+                var div = document.createElement('div');
+                div.innerHTML = response.replace(rscript, "");
+                var selectorDiv = document.createElement('div');
+                var childs = div.querySelectorAll(selector);
+                if (childs && childs.length > 0) {
+                    for (var i = 0, len = childs.length; i < len; i++) {
+                        selectorDiv.appendChild(childs[i]);
+                    }
+                }
+                self[0].innerHTML = selectorDiv.innerHTML;
+            } else {
+                self[0].innerHTML = response;
+            }
+            callback && callback.apply(self, arguments);
+        };
+        $.ajax(options);
+        return this;
+    };
 
 })(mui, window);
 /**
@@ -2062,6 +2120,162 @@ var mui = (function(document, undefined) {
 	};
 	$.Class = Class;
 })(mui);
+(function($, document, undefined) {
+	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
+	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
+	var CLASS_PULL = 'mui-pull';
+	var CLASS_PULL_LOADING = 'mui-pull-loading';
+	var CLASS_PULL_CAPTION = 'mui-pull-caption';
+
+	var CLASS_ICON = 'mui-icon';
+	var CLASS_SPINNER = 'mui-spinner';
+	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
+
+	var CLASS_IN = 'mui-in';
+	var CLASS_BLOCK = 'mui-block';
+	var CLASS_VISIBILITY = 'mui-visibility';
+
+	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
+
+	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
+
+	var PullRefresh = {
+		init: function(element, options) {
+			this._super(element, $.extend({
+				scrollY: true,
+				scrollX: false,
+				indicators: true,
+				down: {
+					height: 50,
+					contentdown: '下拉可以刷新',
+					contentover: '释放立即刷新',
+					contentrefresh: '正在刷新...'
+				},
+				up: {
+					height: 50,
+					contentdown: '上拉显示更多',
+					contentrefresh: '正在加载...',
+					duration: 300
+				}
+			}, options, true));
+		},
+		_init: function() {
+			this._super();
+			this._initPocket();
+		},
+		_initPulldownRefresh: function() {
+			this.pulldown = true;
+			this.pullPocket = this.topPocket;
+			this.pullPocket.classList.add(CLASS_BLOCK);
+			this.pullPocket.classList.add(CLASS_VISIBILITY);
+			this.pullCaption = this.topCaption;
+			this.pullLoading = this.topLoading;
+		},
+		_initPullupRefresh: function() {
+			this.pulldown = false;
+			this.pullPocket = this.bottomPocket;
+			this.pullPocket.classList.add(CLASS_BLOCK);
+			this.pullPocket.classList.add(CLASS_VISIBILITY);
+			this.pullCaption = this.bottomCaption;
+			this.pullLoading = this.bottomLoading;
+		},
+		_initPocket: function() {
+			var options = this.options;
+			if (options.down && options.down.hasOwnProperty('callback')) {
+				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
+				if (!this.topPocket) {
+					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down, CLASS_LOADING_DOWN);
+					this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
+
+					this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
+					this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+				}
+			}
+			if (options.up && options.up.hasOwnProperty('callback')) {
+				this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
+				if (!this.bottomPocket) {
+					this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up, CLASS_LOADING);
+					this.scroller.appendChild(this.bottomPocket);
+
+					this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+					this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
+				}
+				//TODO only for h5
+				this.wrapper.addEventListener('scrollbottom', this);
+			}
+		},
+		_createPocket: function(clazz, options, iconClass) {
+			var pocket = document.createElement('div');
+			pocket.className = clazz;
+			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentrefresh).replace('{icon}', iconClass);
+			return pocket;
+		},
+		_resetPullDownLoading: function() {
+			var loading = this.pullLoading;
+			if (loading) {
+				this.pullCaption.innerHTML = this.options.down.contentdown;
+				loading.style.webkitTransition = "";
+				loading.style.webkitTransform = "";
+				loading.style.webkitAnimation = "";
+				loading.className = CLASS_LOADING_DOWN;
+			}
+		},
+		_setCaption: function(title, reset) {
+			if (this.loading) {
+				return;
+			}
+			var options = this.options;
+			var pocket = this.pullPocket;
+			var caption = this.pullCaption;
+			var loading = this.pullLoading;
+			var isPulldown = this.pulldown;
+			if (pocket) {
+				if (reset) {
+					setTimeout(function() {
+						caption.innerHTML = title;
+						if (isPulldown) {
+							loading.className = CLASS_LOADING_DOWN;
+						} else {
+							loading.className = CLASS_LOADING;
+						}
+						loading.style.webkitAnimation = "";
+						loading.style.webkitTransition = "";
+						loading.style.webkitTransform = "";
+					}, 100);
+				} else {
+					if (title !== this.lastTitle) {
+						caption.innerHTML = title;
+						if (isPulldown) {
+							if (title === options.down.contentrefresh) {
+								loading.className = CLASS_LOADING;
+								loading.style.webkitAnimation = "spinner-spin 1s step-end infinite";
+							} else if (title === options.down.contentover) {
+								loading.className = CLASS_LOADING_UP;
+								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+								loading.style.webkitTransform = "rotate(180deg)";
+							} else if (title === options.down.contentdown) {
+								loading.className = CLASS_LOADING_DOWN;
+								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+								loading.style.webkitTransform = "rotate(0deg)";
+							}
+						} else {
+							if (title === options.up.contentrefresh) {
+								loading.className = CLASS_LOADING + ' ' + CLASS_IN;
+							} else {
+								loading.className = CLASS_LOADING;
+							}
+						}
+						this.lastTitle = title;
+					}
+				}
+
+			}
+		}
+	};
+	$.PullRefresh = PullRefresh;
+})(mui, document);
 (function($, window, document, undefined) {
 	var CLASS_SCROLLBAR = 'mui-scrollbar';
 	var CLASS_INDICATOR = 'mui-scrollbar-indicator';
@@ -2087,6 +2301,7 @@ var mui = (function(document, undefined) {
 			this.wrapper = this.element = element;
 			this.scroller = this.wrapper.children[0];
 			this.scrollerStyle = this.scroller.style;
+			this.stopped = false;
 
 			this.options = $.extend({
 				scrollY: true,
@@ -2094,6 +2309,7 @@ var mui = (function(document, undefined) {
 				startX: 0,
 				startY: 0,
 				indicators: true,
+				stopPropagation: false,
 				hardwareAccelerated: true,
 				fixedBadAndorid: false,
 				preventDefaultException: {
@@ -2170,11 +2386,11 @@ var mui = (function(document, undefined) {
 				});
 			});
 
-			this.wrapper.addEventListener('beforescrollstart', function() {
-				self.indicators.map(function(indicator) {
-					indicator.fade(1, true);
-				});
-			});
+			//			this.wrapper.addEventListener('beforescrollstart', function() {
+			//				self.indicators.map(function(indicator) {
+			//					indicator.fade(1, true);
+			//				});
+			//			});
 
 			this.wrapper.addEventListener('refresh', function() {
 				self.indicators.map(function(indicator) {
@@ -2200,15 +2416,21 @@ var mui = (function(document, undefined) {
 			}
 		},
 		handleEvent: function(e) {
+			if (this.stopped) {
+				this.resetPosition();
+				return;
+			}
 			switch (e.type) {
 				case 'touchstart':
 					this._start(e);
 					break;
 				case 'drag':
+					this.options.stopPropagation && e.stopPropagation();
 					this._drag(e);
 					break;
 				case 'dragend':
 				case 'flick':
+					this.options.stopPropagation && e.stopPropagation();
 					this._flick(e);
 					break;
 				case 'touchcancel':
@@ -2233,7 +2455,6 @@ var mui = (function(document, undefined) {
 		},
 		_start: function(e) {
 			this.moved = this.needReset = false;
-
 			this._transitionTime();
 
 			if (this.isInTransition) {
@@ -2241,25 +2462,52 @@ var mui = (function(document, undefined) {
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
+				this.resetPosition(); //reset
 				$.trigger(this.wrapper, 'scrollend', this);
+				//				e.stopPropagation();
+				e.preventDefault();
 			}
 			this.reLayout();
 			$.trigger(this.wrapper, 'beforescrollstart', this);
 		},
 		_drag: function(e) {
+			//			if (this.needReset) {
+			//				e.stopPropagation(); //disable parent drag(nested scroller)
+			//				return;
+			//			}
 			var detail = e.detail;
-			var isPreventDefault = false;
+			//ios8 hack
+			if ($.os.ios && parseFloat($.os.version) >= 8) {
+				if ((detail.gesture.touches[0].clientY + 10) > window.innerHeight) {
+					this.resetPosition(this.options.bounceTime);
+					return;
+				}
+			}
+			var isPreventDefault = isReturn = false;
 			if (detail.direction === 'left' || detail.direction === 'right') {
 				if (this.options.scrollX) {
 					isPreventDefault = true;
+				} else if (this.options.scrollY && !this.moved) {
+					isReturn = true;
 				}
 			} else if (detail.direction === 'up' || detail.direction === 'down') {
 				if (this.options.scrollY) {
 					isPreventDefault = true;
+				} else if (this.options.scrollX && !this.moved) {
+					isReturn = true;
 				}
 			}
 			if (isPreventDefault) {
+				e.stopPropagation(); //阻止冒泡(scroll类嵌套)
 				detail.gesture && detail.gesture.preventDefault();
+			}
+			if (isReturn) { //禁止非法方向滚动
+				return;
+			}
+			if (!this.moved) {
+				$.trigger(this.wrapper, 'scrollstart', this);
+			} else {
+				e.stopPropagation(); //move期间阻止冒泡(scroll嵌套)
 			}
 			var deltaX = detail.deltaX - detail.lastDeltaX;
 			var deltaY = detail.deltaY - detail.lastDeltaY;
@@ -2282,17 +2530,24 @@ var mui = (function(document, undefined) {
 			if (newY > 0 || newY < this.maxScrollY) {
 				newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
 			}
+
 			if (!this.requestAnimationFrame) {
 				this._updateTranslate();
 			}
-			if (!this.moved) {
-				$.trigger(this.wrapper, 'scrollstart', this);
-			}
+
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
+
+
 		},
 		_flick: function(e) {
+			//			if (!this.moved || this.needReset) {
+			//				return;
+			//			}
+			if (!this.moved) {
+				return;
+			}
 			var detail = e.detail;
 			this._clearRequestAnimationFrame();
 			if (e.type === 'dragend' && detail.flick) { //dragend
@@ -2344,15 +2599,15 @@ var mui = (function(document, undefined) {
 			e.stopPropagation();
 		},
 		_end: function(e) {
-			if (!this.moved && this.needReset) {
-				this.resetPosition(this.options.bounceTime);
+			this.needReset = false;
+			if ((!this.moved && this.needReset) || e.type === 'touchcancel') {
+				this.resetPosition();
 			}
 		},
 		_transitionEnd: function(e) {
 			if (e.target != this.scroller || !this.isInTransition) {
 				return;
 			}
-
 			this._transitionTime();
 			if (!this.resetPosition(this.options.bounceTime)) {
 				this.isInTransition = false;
@@ -2360,7 +2615,7 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_scrollend: function(e) {
-			if (this.y <= this.maxScrollY) {
+			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
 				$.trigger(this.wrapper, 'scrollbottom', this);
 			}
 		},
@@ -2473,6 +2728,9 @@ var mui = (function(document, undefined) {
 			};
 		},
 		//API
+		setStopped: function(stopped) {
+			this.stopped = !!stopped;
+		},
 		setTranslate: function(x, y) {
 			this.x = x;
 			this.y = y;
@@ -2549,6 +2807,10 @@ var mui = (function(document, undefined) {
 				this.setTranslate(x, y);
 			}
 
+		},
+		scrollToBottom: function(time, easing) {
+			time = time || this.options.bounceTime;
+			this.scrollTo(0, this.maxScrollY, time, easing);
 		}
 	});
 	//Indicator
@@ -2696,91 +2958,29 @@ var mui = (function(document, undefined) {
 	$.Scroll = Scroll;
 
 	$.fn.scroll = function(options) {
+		var scrollApis = [];
 		this.each(function() {
-			var id = this.getAttribute('data-scroll');
+			var scrollApi = null;
+			var self = this;
+			var id = self.getAttribute('data-scroll');
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = new Scroll(this, options);
-				this.setAttribute('data-scroll', id);
+				$.data[id] = scrollApi = new Scroll(self, options);
+				self.setAttribute('data-scroll', id);
+			} else {
+				scrollApi = $.data[id];
 			}
+			scrollApis.push(scrollApi);
 		});
+		return scrollApis.length === 1 ? scrollApis[0] : scrollApis;
 	};
 })(mui, window, document);
 (function($, window, document, undefined) {
-	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
-	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
-	var CLASS_PULL = 'mui-pull';
-	var CLASS_PULL_LOADING = 'mui-pull-loading';
-	var CLASS_PULL_CAPTION = 'mui-pull-caption';
 
-	var CLASS_ICON = 'mui-icon';
-	//	var CLASS_PRELOADER = 'mui-preloader';
-	//	var CLASS_PULLDOWN_ARROW = 'mui-pulldown-arrow';
-	var CLASS_ICON_SPINNER = 'mui-icon-spinner-cycle';
-	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
-	var CLASS_SPIN = 'mui-spin';
-
-	var CLASS_IN = 'mui-in';
+	var CLASS_VISIBILITY = 'mui-visibility';
 	var CLASS_HIDDEN = 'mui-hidden';
-	var CLASS_REVERSE = 'mui-reverse';
 
-	//	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW + ' ' + CLASS_REVERSE;
-	//	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_PULLDOWN_ARROW;
-	//	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_PRELOADER;
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN + ' ' + CLASS_REVERSE;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_SPINNER + ' ' + CLASS_SPIN;
-
-	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="' + CLASS_LOADING_DOWN + '"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{downCaption}</div>', '</div>'].join('');
-
-	var PullRefresh = $.Scroll.extend({
-		init: function(element, options) {
-			this._super(element, $.extend({
-				scrollY: true,
-				scrollX: false,
-				indicators: true,
-				down: {
-					height: 50,
-					contentdown: '下拉可以刷新',
-					contentover: '释放立即刷新',
-					contentrefresh: '正在刷新...'
-				},
-				up: {
-					height: 50,
-					contentdown: '上拉显示更多',
-					contentrefresh: '正在加载...',
-					duration: 300
-				}
-			}, options, true));
-		},
-		_init: function() {
-			this._super();
-			this._initPocket();
-		},
-		_initPocket: function() {
-			var options = this.options;
-			if (options.down && options.down.hasOwnProperty('callback')) {
-				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
-				if (!this.topPocket) {
-					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down);
-					this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
-
-					this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
-					this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
-				}
-			}
-			if (options.up && options.up.hasOwnProperty('callback')) {
-				this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
-				if (!this.bottomPocket) {
-					this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up);
-					this.scroller.appendChild(this.bottomPocket);
-
-					this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-					this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
-				}
-				this.wrapper.addEventListener('scrollbottom', this);
-			}
-		},
+	var PullRefresh = $.Scroll.extend($.extend({
 		handleEvent: function(e) {
 			this._super(e);
 			if (e.type === 'scrollbottom') {
@@ -2792,43 +2992,6 @@ var mui = (function(document, undefined) {
 				this.pulldown = false;
 				this._initPullupRefresh();
 				this.pullupLoading();
-			}
-		},
-		_createPocket: function(clazz, options) {
-			var pocket = document.createElement('div');
-			pocket.className = clazz;
-			pocket.innerHTML = pocketHtml.replace('{downCaption}', options.contentdown);
-			return pocket;
-		},
-		_setCaption: function(title) {
-			if (this.loading) {
-				return;
-			}
-			var options = this.options;
-			var pocket = this.pullPocket;
-			if (pocket) {
-				if (title !== this.lastTitle) {
-					var caption = this.pullCaption;
-					var loading = this.pullLoading;
-					caption.innerHTML = title;
-					var isPulldown = this.pulldown;
-					if (this.pulldown) {
-						if (title === options.down.contentrefresh) {
-							loading.className = CLASS_LOADING;
-						} else if (title === options.down.contentover) {
-							loading.className = CLASS_LOADING_UP;
-						} else if (title === options.down.contentdown) {
-							loading.className = CLASS_LOADING_DOWN;
-						}
-					} else {
-						if (title === options.up.contentrefresh) {
-							loading.className = CLASS_LOADING + ' ' + CLASS_IN;
-						} else {
-							loading.className = CLASS_LOADING;
-						}
-					}
-					this.lastTitle = title;
-				}
 			}
 		},
 		_start: function(e) {
@@ -2846,18 +3009,7 @@ var mui = (function(document, undefined) {
 				this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
 			}
 		},
-		_initPulldownRefresh: function() {
-			this.pulldown = true;
-			this.pullPocket = this.topPocket;
-			this.pullCaption = this.topCaption;
-			this.pullLoading = this.topLoading;
-		},
-		_initPullupRefresh: function() {
-			this.pulldown = false;
-			this.pullPocket = this.bottomPocket;
-			this.pullCaption = this.bottomCaption;
-			this.pullLoading = this.bottomLoading;
-		},
+
 		_reLayout: function() {
 			this.hasVerticalScroll = true;
 			this._super();
@@ -2888,12 +3040,15 @@ var mui = (function(document, undefined) {
 			callback && callback.call(this);
 		},
 		endPulldownToRefresh: function() {
-			if (this.topPocket) {
-				this.scrollTo(0, 0, this.options.bounceTime, this.options.bounceEasing);
-				this.loading = false;
-				this._setCaption(this.options.down.contentdown);
+			var self = this;
+			if (self.topPocket) {
+				self.scrollTo(0, 0, self.options.bounceTime, self.options.bounceEasing);
+				self.loading = false;
+				self._setCaption(self.options.down.contentdown, true);
+				setTimeout(function() {
+					self.loading || self.topPocket.classList.remove(CLASS_VISIBILITY);
+				}, 350);
 			}
-
 		},
 		pullupLoading: function(x, time) {
 			x = x || 0;
@@ -2913,12 +3068,18 @@ var mui = (function(document, undefined) {
 			callback && callback.call(this);
 		},
 		endPullupToRefresh: function(finished) {
-			if (this.bottomPocket) {
-				this.loading = false;
-				this._setCaption(this.options.up.contentdown);
+			var self = this;
+			if (self.bottomPocket) {
+				self.loading = false;
+				self._setCaption(self.options.up.contentdown);
 				if (finished) {
-					this.bottomPocket.classList.add(CLASS_HIDDEN);
-					this.wrapper.removeEventListener('scrollbottom', this);
+					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					self.bottomPocket.classList.add(CLASS_HIDDEN);
+					self.wrapper.removeEventListener('scrollbottom', self);
+				} else {
+					setTimeout(function() {
+						self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					}, 350);
 				}
 			}
 		},
@@ -2932,7 +3093,7 @@ var mui = (function(document, undefined) {
 			}
 			this._super();
 		},
-	});
+	}, $.PullRefresh));
 	$.fn.pullRefresh = function(options) {
 		if (this.length === 1) {
 			var self = this[0];
@@ -2956,7 +3117,7 @@ var mui = (function(document, undefined) {
 		}
 	};
 })(mui, window, document);
-(function($, window, document, undefined) {
+(function($, window) {
 	var CLASS_SLIDER = 'mui-slider';
 	var CLASS_SLIDER_GROUP = 'mui-slider-group';
 	var CLASS_SLIDER_LOOP = 'mui-slider-loop';
@@ -2964,12 +3125,8 @@ var mui = (function(document, undefined) {
 	var CLASS_ACTION_PREVIOUS = 'mui-action-previous';
 	var CLASS_ACTION_NEXT = 'mui-action-next';
 	var CLASS_SLIDER_ITEM = 'mui-slider-item';
-	var CLASS_SLIDER_ITEM_DUPLICATE = CLASS_SLIDER_ITEM + '-duplicate';
-
-	var CLASS_DISABLED = 'mui-disabled';
 
 	var SELECTOR_SLIDER_ITEM = '.' + CLASS_SLIDER_ITEM;
-	var SELECTOR_SLIDER_ITEM_DUPLICATE = '.' + CLASS_SLIDER_ITEM_DUPLICATE;
 	var SELECTOR_SLIDER_INDICATOR = '.' + CLASS_SLIDER_INDICATOR;
 	var SELECTOR_SLIDER_PROGRESS_BAR = '.mui-slider-progress-bar';
 
@@ -3008,6 +3165,7 @@ var mui = (function(document, undefined) {
 			self._super();
 			self.wrapper.addEventListener('swiperight', $.stopPropagation);
 			self.wrapper.addEventListener('scrollend', function() {
+				self.isInTransition = false;
 				self.slideNumber = self._getSlideNumber();
 				var slideNumber = self.slideNumber;
 				if (self.loop) {
@@ -3025,21 +3183,27 @@ var mui = (function(document, undefined) {
 				});
 			});
 			self.wrapper.addEventListener('slide', function(e) {
+				if (e.target !== self.wrapper) {
+					return;
+				}
 				var detail = e.detail;
 				detail.slideNumber = detail.slideNumber || 0;
-				var indicators = self.wrapper.querySelectorAll('.mui-slider-indicator .mui-indicator');
-				if (indicators.length > 0) { //图片轮播
-					for (var i = 0, len = indicators.length; i < len; i++) {
-						indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
-					}
-				} else {
-					var number = self.wrapper.querySelector('.mui-slider-indicator .mui-number span');
-					if (number) { //图文表格
-						number.innerText = (detail.slideNumber + 1);
-					} else { //segmented controls
-						var controlItems = self.wrapper.querySelectorAll('.mui-control-item');
-						for (var i = 0, len = controlItems.length; i < len; i++) {
-							controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
+				var indicatorWrap = self.wrapper.querySelector('.mui-slider-indicator');
+				if (indicatorWrap) {
+					var indicators = indicatorWrap.querySelectorAll('.mui-indicator');
+					if (indicators.length > 0) { //图片轮播
+						for (var i = 0, len = indicators.length; i < len; i++) {
+							indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
+						}
+					} else {
+						var number = indicatorWrap.querySelector('.mui-number span');
+						if (number) { //图文表格
+							number.innerText = (detail.slideNumber + 1);
+						} else { //segmented controls
+							var controlItems = self.wrapper.querySelectorAll('.mui-control-item');
+							for (var i = 0, len = controlItems.length; i < len; i++) {
+								controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove']('mui-active');
+							}
 						}
 					}
 				}
@@ -3063,7 +3227,10 @@ var mui = (function(document, undefined) {
 		},
 		_drag: function(e) {
 			this._super(e);
-			e.stopPropagation();
+			var direction = e.detail.direction;
+			if (direction === 'left' || direction === 'right') {
+				e.stopPropagation();
+			}
 		},
 		_initTimer: function() {
 			var self = this;
@@ -3089,7 +3256,14 @@ var mui = (function(document, undefined) {
 		_reLayout: function() {
 			this.hasHorizontalScroll = true;
 			this.loop = this.scroller.classList.contains(CLASS_SLIDER_LOOP);
-			this.itemLength = this.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM).length;
+			//以防slider类嵌套使用
+			var items = this.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			this.itemLength = 0;
+			for (var i = 0, len = items.length; i < len; i++) {
+				if (items[i].parentNode === this.scroller) {
+					this.itemLength++;
+				}
+			}
 			this.scrollerWidth = this.itemLength * this.scrollerWidth;
 			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
 			this.slideNumber = this._getSlideNumber();
@@ -3103,7 +3277,7 @@ var mui = (function(document, undefined) {
 			return Math.abs(Math.round(this.x / this.wrapperWidth));
 		},
 		_transitionEnd: function(e) {
-			if (e.target != this.scroller || !this.isInTransition) {
+			if (e.target !== this.scroller || !this.isInTransition) {
 				return;
 			}
 			this._transitionTime();
@@ -3174,6 +3348,9 @@ var mui = (function(document, undefined) {
 				}
 			}
 			this._gotoItem(slideNumber, bounceTime);
+//			if (!auto) { //TODO 这个设置后续还得仔细过一遍
+//				this.isInTransition = false;
+//			}
 		},
 		prevItem: function() {
 			this._gotoItem(this._fixedSlideNumber(this.slideNumber - 1), this.options.bounceTime);
@@ -3186,7 +3363,7 @@ var mui = (function(document, undefined) {
 			} else {
 				this._super();
 			}
-		},
+		}
 	});
 	$.fn.slider = function(options) {
 		var slider = null;
@@ -3217,7 +3394,7 @@ var mui = (function(document, undefined) {
 		}, 500); //临时处理slider宽度计算不正确的问题(初步确认是scrollbar导致的)
 
 	});
-})(mui, window, document);
+})(mui, window);
 /**
  * pullRefresh 5+
  * @param {type} $
@@ -3228,122 +3405,180 @@ var mui = (function(document, undefined) {
 		return;
 	}
 	var CLASS_PLUS_PULLREFRESH = 'mui-plus-pullrefresh';
-	var CLASS_CONTENT = 'mui-content';
 	var CLASS_IN = 'mui-in';
 	var CLASS_HIDDEN = 'mui-hidden';
+	var CLASS_BLOCK = 'mui-block';
 
-	var SELECTOR_CONTENT = '.' + CLASS_CONTENT;
-
-	var defaultOptions = {
-		down: {
-			height: 50,
-			contentdown: '下拉可以刷新',
-			contentover: '释放立即刷新',
-			contentrefresh: '正在刷新...'
+	var PlusPullRefresh = $.Class.extend({
+		init: function(element, options) {
+			this.element = element;
+			this.options = options;
+			this.wrapper = this.scroller = element;
+			this._init();
+			this._initPulldownRefreshEvent();
 		},
-		up: {
-			contentdown: '上拉显示更多',
-			contentrefresh: '正在加载...'
-		}
-	};
-	var PlusPullRefresh = function(options) {
-		options = $.extend(defaultOptions, options, true);
-
-		this.downOptions = options.down;
-		this.upOptions = options.up;
-		if (this.downOptions && this.downOptions.hasOwnProperty('callback')) {
-			this.initPulldownRefresh();
-		}
-		if (this.upOptions && this.upOptions.hasOwnProperty('callback')) {
-			this.initPullupRefresh();
-		}
-	};
-	PlusPullRefresh.prototype.initPulldownRefresh = function() {
-		var self = this;
-		var sw = $.currentWebview;
-		sw.setPullToRefresh({
-			support: true,
-			height: self.downOptions.height + 'px',
-			range: "200px",
-			contentdown: {
-				caption: self.downOptions.contentdown
-			},
-			contentover: {
-				caption: self.downOptions.contentover
-			},
-			contentrefresh: {
-				caption: self.downOptions.contentrefresh
+		_init: function() {
+			document.addEventListener('plusscrollbottom', this);
+		},
+		_initPulldownRefreshEvent: function() {
+			var self = this;
+			if (self.topPocket && self.options.webviewId) {
+				$.plusReady(function() {
+					var webview = plus.webview.getWebviewById(self.options.webviewId);
+					if (!webview) {
+						return;
+					}
+					self.options.webview = webview;
+					var downOptions = self.options.down;
+					var height = downOptions.height;
+					webview.addEventListener("dragBounce", function(e) {
+						if (!self.pulldown) {
+							self._initPulldownRefresh();
+						} else {
+							self.pullPocket.classList.add(CLASS_BLOCK);
+						}
+						switch (e.status) {
+							case "beforeChangeOffset": //下拉可刷新状态
+								self._setCaption(downOptions.contentdown);
+								break;
+							case "afterChangeOffset": //松开可刷新状态
+								self._setCaption(downOptions.contentover);
+								break;
+							case "dragEndAfterChangeOffset": //正在刷新状态
+								//执行下拉刷新所在webview的回调函数
+								webview.evalJS("mui.options.pullRefresh.down.callback()");
+								self._setCaption(downOptions.contentrefresh);
+								break;
+							default:
+								break;
+						}
+					}, false);
+					webview.setBounce({
+						position: {
+							top: height * 2 + 'px'
+						},
+						changeoffset: {
+							top: height + 'px'
+						}
+					});
+				});
 			}
-		}, function() {
-			self.downOptions.callback && self.downOptions.callback.call(self);
-		});
-	};
-	PlusPullRefresh.prototype.initPullupRefresh = function() {
-		var self = this;
-		var content = document.querySelector(SELECTOR_CONTENT);
-		if (content) {
-			self.bottomPocket = document.createElement('div');
-			self.bottomPocket.className = $.classNamePrefix + 'pull-bottom-pocket';
-			self.bottomPocket.innerHTML = '<div class="' + $.classNamePrefix + 'pull"><div class="' + $.classNamePrefix + 'pull-loading ' + $.classNamePrefix + 'icon ' + $.classNamePrefix + 'icon-spinner-cycle ' + $.classNamePrefix + 'spin"></div><div class="' + $.classNamePrefix + 'pull-caption">' + self.upOptions.contentdown + '</div></div>';
-			content.appendChild(self.bottomPocket);
-
-			self.pullLoading = self.bottomPocket.querySelector('.mui-pull-loading');
-			self.pullCaption = self.bottomPocket.querySelector('.mui-pull-caption');
-
-			self.isLoading = false;
-			document.addEventListener('plusscrollbottom', self);
-		}
-	};
-	PlusPullRefresh.prototype.handleEvent = function(event) {
-		if (event.type === 'plusscrollbottom') {
-			this.pullupLoading();
-		}
-	};
-	PlusPullRefresh.prototype.endPulldownToRefresh = function() {
-		$.currentWebview.endPullToRefresh();
-	};
-	PlusPullRefresh.prototype.pullupLoading = function() {
-		var self = this;
-		if (self.isLoading) return;
-		self.isLoading = true;
-		setTimeout(function() {
-			self.pullLoading.classList.add(CLASS_IN);
-			self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
-			self.pullCaption.innerHTML = self.upOptions.contentrefresh;
-			var callback = self.upOptions.callback;
-			callback && callback.call(self);
-		}, 300);
-	};
-	PlusPullRefresh.prototype.endPullupToRefresh = function(finished) {
-		if (this.pullLoading) {
-			this.pullLoading.classList.remove(CLASS_IN);
-			this.pullCaption.innerHTML = this.upOptions.contentdown;
-			this.isLoading = false;
-			if (finished) {
-				this.bottomPocket.classList.add(CLASS_HIDDEN);
-				document.removeEventListener('plusscrollbottom', this);
+		},
+		handleEvent: function(e) {
+			if (this.stopped) {
+				return;
+			}
+			if (e.type === 'plusscrollbottom') {
+				if (this.bottomPocket) {
+					this.pullupLoading();
+				}
 			}
 		}
-	};
-	PlusPullRefresh.prototype.refresh = function(isReset) {
-		if (isReset) {
-			var classList = this.bottomPocket.classList;
-			if (classList.contains(CLASS_HIDDEN)) {
-				classList.remove(CLASS_HIDDEN);
-				document.addEventListener('plusscrollbottom', this);
+	}).extend($.extend({
+		setStopped: function(stopped) { //该方法是子页面调用的
+			this.stopped = !!stopped;
+			//TODO 此处需要设置当前webview的bounce为none,目前5+有BUG
+			var webview = plus.webview.currentWebview();
+			if (this.stopped) {
+				webview.setStyle({
+					bounce: 'none'
+				});
+				webview.setBounce({
+					position: {
+						top: 'none'
+					}
+				});
+			} else {
+				var height = this.options.down.height;
+				webview.setStyle({
+					bounce: 'vertical'
+				});
+				webview.setBounce({
+					position: {
+						top: height * 2 + 'px'
+					},
+					changeoffset: {
+						top: height + 'px'
+					}
+				});
+			}
+		},
+		pulldownLoading: function() {
+			//TODO
+			throw new Error('暂不支持');
+		},
+		endPulldownToRefresh: function() { //该方法是子页面调用的
+			plus.webview.currentWebview().parent().evalJS("mui(document.querySelector('.mui-content')).pullRefresh()._endPulldownToRefresh()");
+		},
+		_endPulldownToRefresh: function() { //该方法是父页面调用的
+			var self = this;
+			if (self.topPocket && self.options.webview) {
+				self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
+				self.loading = false;
+				self._setCaption(self.options.down.contentdown, true);
+				setTimeout(function() {
+					self.loading || self.topPocket.classList.remove(CLASS_BLOCK);
+				}, 350);
+			}
+		},
+		pullupLoading: function() {
+			var self = this;
+			if (self.isLoading) return;
+			self.isLoading = true;
+			if (self.pulldown !== false) {
+				self._initPullupRefresh();
+			} else {
+				this.pullPocket.classList.add(CLASS_BLOCK);
+			}
+			setTimeout(function() {
+				self.pullLoading.classList.add(CLASS_IN);
+				self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
+				self.pullCaption.innerHTML = self.options.up.contentrefresh;
+				var callback = self.options.up.callback;
+				callback && callback.call(self);
+			}, 300);
+		},
+		endPullupToRefresh: function(finished) {
+			var self = this;
+			if (self.pullLoading) {
+				self.pullLoading.classList.remove(CLASS_IN);
+				self.pullCaption.innerHTML = self.options.up.contentdown;
+				self.isLoading = false;
+				if (finished) {
+					self.bottomPocket.classList.remove(CLASS_BLOCK);
+					self.bottomPocket.classList.add(CLASS_HIDDEN);
+					document.removeEventListener('plusscrollbottom', self);
+				} else { //初始化时隐藏，后续不再隐藏
+					//					setTimeout(function() {
+					//						self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
+					//					}, 350);
+				}
+			}
+		},
+		refresh: function(isReset) {
+			if (isReset) {
+				var classList = this.bottomPocket.classList;
+				if (classList.contains(CLASS_HIDDEN)) {
+					classList.remove(CLASS_HIDDEN);
+					document.addEventListener('plusscrollbottom', this);
+				}
 			}
 		}
-	};
+	}, $.PullRefresh));
+
 	//override h5 pullRefresh
 	$.fn.pullRefresh = function(options) {
 		if (this.length === 1) {
+			if (typeof options === 'string') {
+				options = $.parseJSON(options);
+			}
 			var self = this[0];
 			var pullRefreshApi = null;
 			var id = self.getAttribute('data-pullrefresh-plus');
 			if (!id) { //避免重复初始化5+ pullrefresh
 				document.body.classList.add(CLASS_PLUS_PULLREFRESH);
 				id = ++$.uuid;
-				$.data[id] = pullRefreshApi = new PlusPullRefresh(options);
+				$.data[id] = pullRefreshApi = new PlusPullRefresh(self, options);
 				self.setAttribute('data-pullrefresh-plus', id);
 			} else {
 				pullRefreshApi = $.data[id];
@@ -3360,7 +3595,7 @@ var mui = (function(document, undefined) {
  * @param {type} action
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
+(function($, window, document, name) {
 	var CLASS_OFF_CANVAS_LEFT = 'mui-off-canvas-left';
 	var CLASS_OFF_CANVAS_RIGHT = 'mui-off-canvas-right';
 	var CLASS_ACTION_BACKDEOP = 'mui-off-canvas-backdrop';
@@ -3385,7 +3620,7 @@ var mui = (function(document, undefined) {
 				}
 			}
 		}
-	}
+	};
 	var handle = function(event, target) {
 		if (target.classList && target.classList.contains(CLASS_ACTION_BACKDEOP)) { //backdrop
 			var container = findOffCanvasContainer(target);
@@ -3429,8 +3664,8 @@ var mui = (function(document, undefined) {
 			body.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED);
 			content && (content.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED));
 		}
-	}
-	var offCanvasTransitionEnd = function() {
+	};
+	var offCanvasTransitionEnd = function(e) {
 		var container = this.parentNode;
 		container.classList.remove(CLASS_SLIDING);
 		this.removeEventListener('webkitTransitionEnd', offCanvasTransitionEnd);
@@ -3457,7 +3692,7 @@ var mui = (function(document, undefined) {
 			}
 			container.classList.add(CLASS_SLIDING);
 		}
-	}
+	};
 	window.addEventListener('tap', function(event) {
 		if (!$.targets.offcanvas) {
 			return;
@@ -3485,15 +3720,13 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @param {type} window
  * @param {type} document
- * @param {type} action
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
+(function($, window, document, undefined) {
 	//仅android平台不支持拖拽,滑动
 	if ($.os.android) {
 		return;
 	}
-	var CLASS_SLIDER_HANDLE = 'mui-slider-handle';
 	var CLASS_OFF_CANVAS_LEFT = 'mui-off-canvas-left';
 	var CLASS_OFF_CANVAS_RIGHT = 'mui-off-canvas-right';
 	var CLASS_OFF_CANVAS_WRAP = 'mui-off-canvas-wrap';
@@ -3530,7 +3763,7 @@ var mui = (function(document, undefined) {
 					setTranslate(innerContainer, translateX);
 				}
 			} else if (direction === 'left' && translateX < 0) { //dragLeft
-				translateX = Math.max(translateX, -maxOffCanvasWidth)
+				translateX = Math.max(translateX, -maxOffCanvasWidth);
 				if (offCanvasTranslateX > 0) {
 					setTranslate(innerContainer, offCanvasTranslateX + translateX);
 				} else {
@@ -3552,22 +3785,22 @@ var mui = (function(document, undefined) {
 	 * TODO repeat with mui.offcanvas.js
 	 */
 	var fixedHeight = function(container, isShown) {
-			var content = container.querySelector('.mui-content');
-			var html = document.getElementsByTagName('html')[0];
-			var body = document.body;
-			if (isShown) {
-				html.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED);
-				body.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED);
-				content && (content.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED));
-			} else {
-				html.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED);
-				body.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED);
-				content && (content.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED));
-			}
+		var content = container.querySelector('.mui-content');
+		var html = document.getElementsByTagName('html')[0];
+		var body = document.body;
+		if (isShown) {
+			html.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED);
+			body.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED);
+			content && (content.classList.add(CLASS_OFF_CANVAS_HEIGHT_FIXED));
+		} else {
+			html.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED);
+			body.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED);
+			content && (content.classList.remove(CLASS_OFF_CANVAS_HEIGHT_FIXED));
 		}
-		/**
-		 * TODO repeat with mui.offcanvas.js
-		 */
+	};
+	/**
+	 * TODO repeat with mui.offcanvas.js
+	 */
 	var offCanvasTransitionEnd = function() {
 		var container = this.parentNode;
 		var classList = container.classList;
@@ -3679,35 +3912,32 @@ var mui = (function(document, undefined) {
 		}
 	});
 
-})(mui, window, document, 'offcanvas');
+})(mui, window, document);
 /**
  * actions
  * @param {type} $
- * @param {type} window
- * @param {type} document
- * @param {type} action
- * @param {type} undefined
+ * @param {type} name
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
-	var CLASS_ACTION = 'mui-action';
+(function ($, name) {
+    var CLASS_ACTION = 'mui-action';
 
-	var handle = function(event, target) {
-		if (target.className && ~target.className.indexOf(CLASS_ACTION)) {
-			return target;
-		}
-		return false;
-	};
+    var handle = function (event, target) {
+        if (target.className && ~target.className.indexOf(CLASS_ACTION)) {
+            return target;
+        }
+        return false;
+    };
 
-	$.registerTarget({
-		name : name,
-		index : 50,
-		handle : handle,
-		target : false,
-		isContinue: true
-	});
+    $.registerTarget({
+        name: name,
+        index: 50,
+        handle: handle,
+        target: false,
+        isContinue: true
+    });
 
-})(mui, window, document, 'action');
+})(mui, 'action');
 
 /**
  * Modals
@@ -3715,17 +3945,16 @@ var mui = (function(document, undefined) {
  * @param {type} window
  * @param {type} document
  * @param {type} name
- * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
+(function($, window, document, name) {
 	var CLASS_MODAL = 'mui-modal';
 
 	var handle = function(event, target) {
 		if (target.tagName === 'A' && target.hash) {
 			var modal = document.getElementById(target.hash.replace('#', ''));
 			if (modal && modal.classList.contains(CLASS_MODAL)) {
-				event.preventDefault();//fixed hashchange
+				event.preventDefault(); //fixed hashchange
 				return modal;
 			}
 		}
@@ -3733,12 +3962,12 @@ var mui = (function(document, undefined) {
 	};
 
 	$.registerTarget({
-		name : name,
-		index : 50,
-		handle : handle,
-		target : false,
-		isReset : false,
-		isContinue : true
+		name: name,
+		index: 50,
+		handle: handle,
+		target: false,
+		isReset: false,
+		isContinue: true
 	});
 
 	window.addEventListener('tap', function(event) {
@@ -3747,7 +3976,6 @@ var mui = (function(document, undefined) {
 		}
 	});
 })(mui, window, document, 'modal');
-
 /**
  * Popovers
  * @param {type} $
@@ -3757,15 +3985,19 @@ var mui = (function(document, undefined) {
  * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
+(function($, window, document, name) {
 
 	var CLASS_POPOVER = 'mui-popover';
-	var CLASS_BAR_POPOVER = 'mui-bar-popover';
+	var CLASS_POPOVER_ARROW = 'mui-popover-arrow';
 	var CLASS_ACTION_POPOVER = 'mui-popover-action';
 	var CLASS_BACKDROP = 'mui-backdrop';
+	var CLASS_BAR_POPOVER = 'mui-bar-popover';
 	var CLASS_BAR_BACKDROP = 'mui-bar-backdrop';
 	var CLASS_ACTION_BACKDROP = 'mui-backdrop-action';
 	var CLASS_ACTIVE = 'mui-active';
+	var CLASS_BOTTOM = 'mui-bottom';
+
+
 
 	var handle = function(event, target) {
 		if (target.tagName === 'A' && target.hash) {
@@ -3773,6 +4005,8 @@ var mui = (function(document, undefined) {
 			if ($.targets._popover && $.targets._popover.classList.contains(CLASS_POPOVER)) {
 				event.preventDefault(); //fixed hashchange
 				return target;
+			} else {
+				$.targets._popover = null;
 			}
 		}
 		return false;
@@ -3789,13 +4023,13 @@ var mui = (function(document, undefined) {
 
 	var fixedPopoverScroll = function(isPopoverScroll) {
 		if (isPopoverScroll) {
-			document.body.setAttribute('style', 'position:fixed;width:100%;height:100%;overflow:hidden;');
+			document.body.setAttribute('style', 'overflow:hidden;');
 		} else {
 			document.body.setAttribute('style', '');
 		}
 	};
-	var onPopoverHidden = function() {
-		this.style.display = 'none';
+	var onPopoverHidden = function(e) {
+		this.setAttribute('style', '');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		fixedPopoverScroll(false);
 	};
@@ -3803,12 +4037,14 @@ var mui = (function(document, undefined) {
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_BACKDROP);
+		element.addEventListener('touchmove', $.preventDefault);
 		element.addEventListener('tap', function(e) {
 			var popover = $.targets._popover;
 			if (popover) {
 				popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 				popover.classList.remove(CLASS_ACTIVE);
 				removeBackdrop(popover);
+				document.body.setAttribute('style', ''); //webkitTransitionEnd有时候不触发？
 			}
 		});
 
@@ -3816,8 +4052,9 @@ var mui = (function(document, undefined) {
 	}());
 	var removeBackdrop = function(popover) {
 		backdrop.setAttribute('style', 'opacity:0');
+		$.targets.popover = $.targets._popover = null; //reset
 		setTimeout(function() {
-			if (backdrop.parentNode && backdrop.parentNode === popover.parentNode) {
+			if (!popover.classList.contains(CLASS_ACTIVE) && backdrop.parentNode && backdrop.parentNode === popover.parentNode) {
 				popover.parentNode.removeChild(backdrop);
 			}
 		}, 350);
@@ -3834,13 +4071,13 @@ var mui = (function(document, undefined) {
 		backdrop.classList.remove(CLASS_ACTION_BACKDROP);
 		var _popover = document.querySelector('.mui-popover.mui-active');
 		if (_popover) {
-			_popover.style.display = 'none';
+			_popover.setAttribute('style', '');
 			_popover.classList.remove(CLASS_ACTIVE);
 			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 			fixedPopoverScroll(false);
-			removeBackdrop(_popover);
 			//同一个弹出则直接返回，解决同一个popover的toggle
 			if (popover === _popover) {
+				removeBackdrop(_popover);
 				return;
 			}
 		}
@@ -3849,28 +4086,122 @@ var mui = (function(document, undefined) {
 				backdrop.classList.add(CLASS_ACTION_BACKDROP);
 			} else { //bar popover
 				backdrop.classList.add(CLASS_BAR_BACKDROP);
-				if (anchor) {
-					if (anchor.parentNode) {
-						var offsetWidth = anchor.offsetWidth;
-						var offsetLeft = anchor.offsetLeft;
-						var innerWidth = window.innerWidth;
-						popover.style.left = (Math.min(Math.max(offsetLeft, 5), innerWidth - offsetWidth - 5)) + "px";
-					} else {
-						//TODO anchor is position:{left,top,bottom,right}
-					}
-				}
+				//				if (anchor) {
+				//					if (anchor.parentNode) {
+				//						var offsetWidth = anchor.offsetWidth;
+				//						var offsetLeft = anchor.offsetLeft;
+				//						var innerWidth = window.innerWidth;
+				//						popover.style.left = (Math.min(Math.max(offsetLeft, defaultPadding), innerWidth - offsetWidth - defaultPadding)) + "px";
+				//					} else {
+				//						//TODO anchor is position:{left,top,bottom,right}
+				//					}
+				//				}
 			}
 		}
-		popover.style.display = 'block';
 		popover.offsetHeight
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
 		popover.parentNode.appendChild(backdrop);
 		fixedPopoverScroll(true);
-
+		calPosition(popover, anchor); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 	};
+	var calPosition = function(popover, anchor) {
+		if (!popover || !anchor) {
+			return;
+		}
+		var pWidth = popover.offsetWidth;
+		var pHeight = popover.offsetHeight;
 
+		var aWidth = anchor.offsetWidth;
+		var aHeight = anchor.offsetHeight;
+		var offset = $.offset(anchor);
+
+		var arrow = popover.querySelector('.' + CLASS_POPOVER_ARROW);
+		var arrowSize = arrow && arrow.offsetWidth / 2 || 0;
+
+		var wWidth = window.innerWidth;
+		var wHeight = window.innerHeight;
+
+		var pTop = 0;
+		var pLeft = 0;
+		var diff = 0;
+		var arrowLeft = 0;
+		var defaultPadding = popover.classList.contains(CLASS_ACTION_POPOVER) ? 0 : 5;
+
+		var position = 'top';
+
+		if ((pHeight + arrowSize) < offset.top) { //top
+			pTop = offset.top - pHeight - arrowSize;
+		} else if ((pHeight + arrowSize) < (wHeight - offset.top - aHeight)) { //bottom
+			position = 'bottom';
+			pTop = offset.top + aHeight + arrowSize;
+		} else { //middle
+			position = 'middle';
+			pTop = aHeight / 2 + offset.top - pHeight / 2;
+			diff = pTop;
+			if (pTop < 0) {
+				pTop = defaultPadding;
+			} else if (pTop + pHeight > wHeight) {
+				pTop = wHeight - pHeight - defaultPadding;
+			}
+			diff = diff - pTop;
+		}
+		if (position === 'top' || position === 'bottom') {
+			pLeft = aWidth / 2 + offset.left - pWidth / 2;
+			diff = pLeft;
+			if (pLeft < defaultPadding) pLeft = defaultPadding;
+			if (pLeft + pWidth > wWidth) pLeft = wWidth - pWidth - defaultPadding;
+
+			if (arrow) {
+				if (position === 'top') {
+					arrow.classList.add(CLASS_BOTTOM);
+				} else {
+					arrow.classList.remove(CLASS_BOTTOM);
+				}
+				diff = diff - pLeft;
+				arrowLeft = (pWidth / 2 - arrowSize / 2 + diff);
+				arrowLeft = Math.max(Math.min(arrowLeft, pWidth - arrowSize * 2 - 6), 6);
+				arrow.setAttribute('style', 'left:' + arrowLeft + 'px');
+			}
+
+		} else if (position === 'middle') {
+			//TODO hide angle
+		}
+		popover.setAttribute('style', 'display:block;top:' + pTop + 'px;left:' + pLeft + 'px;');
+	};
+
+	$.createMask = function(callback) {
+		var element = document.createElement('div');
+		element.classList.add(CLASS_BACKDROP);
+		element.addEventListener('touchmove', $.preventDefault);
+		element.addEventListener('tap', function() {
+			callback && callback();
+			mask.close();
+		});
+		var mask = [element];
+		mask._show = false;
+		mask.show = function() {
+			this._show = true;
+			element.setAttribute('style', 'opacity:1');
+			document.body.appendChild(element);
+			return this;
+		};
+		mask._remove = function() {
+			if (this._show) {
+				this._show = false;
+				element.setAttribute('style', 'opacity:0');
+				setTimeout(function() {
+					document.body.removeChild(element);
+				}, 350);
+			}
+			return this;
+		};
+		mask.close = function() {
+			return this._remove();
+		};
+		return mask;
+	};
 	$.fn.popover = function() {
 		var args = arguments;
 		this.each(function() {
@@ -3899,7 +4230,9 @@ var mui = (function(document, undefined) {
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
+			//			if (target.hash) {
 			return target;
+			//			}
 		}
 		return false;
 	};
@@ -3950,10 +4283,11 @@ var mui = (function(document, undefined) {
 		if (isLastActive) { //same
 			return;
 		}
-		activeBodies = targetBody.parentNode.getElementsByClassName(className);
-
+		var parentNode = targetBody.parentNode;
+		activeBodies = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT + classSelector);
 		for (var i = 0; i < activeBodies.length; i++) {
-			activeBodies[i].classList.remove(className);
+			var activeBody = activeBodies[i];
+			activeBody.parentNode === parentNode && activeBody.classList.remove(className);
 		}
 
 		targetBody.classList.add(className);
@@ -3971,12 +4305,10 @@ var mui = (function(document, undefined) {
  * Toggles switch
  * @param {type} $
  * @param {type} window
- * @param {type} document
  * @param {type} name
- * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, name, undefined) {
+(function($, window, name) {
 
 	var CLASS_SWITCH = 'mui-switch';
 	var CLASS_SWITCH_HANDLE = 'mui-switch-handle';
@@ -4059,16 +4391,15 @@ var mui = (function(document, undefined) {
 	window.addEventListener('drag', dragToggle);
 	window.addEventListener('dragend', switchToggle);
 
-})(mui, window, document, 'toggle');
+})(mui, window, 'toggle');
 /**
  * Tableviews
  * @param {type} $
  * @param {type} window
  * @param {type} document
- * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, undefined) {
+(function($, window, document) {
 
 	var CLASS_ACTIVE = 'mui-active';
 	var CLASS_SELECTED = 'mui-selected';
@@ -4199,7 +4530,7 @@ var mui = (function(document, undefined) {
 				cell.classList.remove(CLASS_SELECTED);
 			}
 		}
-	}
+	};
 	var toggleSliderRightAction = function(show, trigger) {
 		if (sliderRight) { //显示
 			sliderRight.setAttribute('style', '');
@@ -4215,7 +4546,7 @@ var mui = (function(document, undefined) {
 				cell.classList.remove(CLASS_SELECTED);
 			}
 		}
-	}
+	};
 	var toggleSliderHandle = function(show) {
 		if (sliderHandle) {
 			if (show) {
@@ -4226,7 +4557,7 @@ var mui = (function(document, undefined) {
 				cell.classList.remove(CLASS_SELECTED);
 			}
 		}
-	}
+	};
 	var endDraging = function(isSwipe, detail) {
 		isDraging = false;
 		if (sliderRequestAnimationFrame) {
@@ -4309,7 +4640,7 @@ var mui = (function(document, undefined) {
 				if (classList.contains(CLASS_TABLE_VIEW_CELL)) {
 					cell = target;
 					var selected = cell.parentNode.querySelector('.' + CLASS_SELECTED);
-					if (selected && selected != cell) {
+					if (selected && selected !== cell) {
 						selected.classList.remove(CLASS_SELECTED);
 						var selectedSliderHandle = selected.querySelector(SELECTOR_SLIDER_HANDLE);
 						if (selectedSliderHandle) {
@@ -4477,7 +4808,7 @@ var mui = (function(document, undefined) {
 			}
 			event.stopPropagation();
 		}
-	}
+	};
 
 	function toggleEvents(element, isRemove) {
 		var method = !!isRemove ? 'removeEventListener' : 'addEventListener';
@@ -4505,20 +4836,20 @@ var mui = (function(document, undefined) {
 		sliderHandle && toggleEvents(cell, true);
 	});
 	var radioOrCheckboxClick = function() {
-			var classList = cell.classList;
-			if (classList.contains('mui-radio')) {
-				var input = cell.querySelector('input[type=radio]');
-				if (input) {
-					input.click();
-				}
-			} else if (classList.contains('mui-checkbox')) {
-				var input = cell.querySelector('input[type=checkbox]');
-				if (input) {
-					input.click();
-				}
+		var classList = cell.classList;
+		if (classList.contains('mui-radio')) {
+			var input = cell.querySelector('input[type=radio]');
+			if (input) {
+				input.click();
+			}
+		} else if (classList.contains('mui-checkbox')) {
+			var input = cell.querySelector('input[type=checkbox]');
+			if (input) {
+				input.click();
 			}
 		}
-		//fixed hashchange(android)
+	};
+	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		if (cell && cell.classList.contains('mui-collapse')) {
 			e.preventDefault();
@@ -4678,10 +5009,9 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @param {type} window
  * @param {type} document
- * @param {type} undefined
  * @returns {undefined}
  */
-(function($, window, document, undefined) {
+(function($, window, document) {
 	var CLASS_ICON = 'mui-icon';
 	var CLASS_ICON_CLEAR = 'mui-icon-clear';
 	var CLASS_ICON_SPEECH = 'mui-icon-speech';
@@ -4703,7 +5033,7 @@ var mui = (function(document, undefined) {
 			}
 		}
 		return null;
-	}
+	};
 	var Input = function(element, options) {
 		this.element = element;
 		this.options = options || {
@@ -4743,17 +5073,19 @@ var mui = (function(document, undefined) {
 				if (self.searchActionClass) {
 					self.searchAction = self.createAction(row, self.searchActionClass, self.searchActionSelector);
 					self.searchAction.addEventListener('tap', function(e) {
-						setTimeout(function() {
+						if($.os.ios){
+							setTimeout(function(){
+								self.element.focus();
+							},10);
+						}else{
 							self.element.focus();
-						}, 10);
+						}
 						e.stopPropagation();
 					});
 				}
 				if (self.speechActionClass) {
 					self.speechAction = self.createAction(row, self.speechActionClass, self.speechActionSelector);
-					self.speechAction.addEventListener('click', function(event) {
-						event.stopPropagation();
-					});
+					self.speechAction.addEventListener('click', $.stopPropagation);
 					self.speechAction.addEventListener('tap', function(event) {
 						self.speechActionClick(event);
 					});

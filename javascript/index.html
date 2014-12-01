@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-11-16 16:03:08 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-11-16 16:03:08 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-01 13:54:18 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-01 13:54:18 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -727,6 +727,27 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//传入toggle参数，用户也无需关心当前是显示还是隐藏状态，mui会自动识别处理；</span>
 <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-popover&#39;</span><span class="p">).</span><span class="nx">popover</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">);</span></code></pre></div>
 </article>
+    <!-- 遮罩蒙版 -->
+      <article id="mask" class="component mui-active">
+      <h3 class="component-title">遮罩蒙版</h3>
+      <p class="component-description">在popover、侧滑菜单等界面，经常会用到蒙版遮罩；比如popover弹出后，除popover控件外的其它区域都会遮罩一层蒙版，用户点击蒙版不会触发蒙版下方的逻辑，而会关闭popover同时关闭蒙版；再比如侧滑菜单界面，菜单划出后，除侧滑菜单之外的其它区域都会遮罩一层蒙版，用户点击蒙版会关闭侧滑菜单同时关闭蒙版。
+      </p>
+      <p class="component-description">遮罩蒙版常用的操作包括：创建、显示、关闭，如下代码：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">mask</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">.</span><span class="nx">createMask</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span><span class="c1">//callback为用户点击蒙版时自动执行的回调；</span>
+<span class="nx">mask</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="c1">//显示遮罩</span>
+<span class="nx">mask</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span><span class="c1">//关闭遮罩</span></code></pre></div>
+<p class="component-description"><strong>注意：</strong>关闭遮罩仅会关闭，不会销毁；关闭之后可以再次调用<code>mask.show();</code>打开遮罩；</p>
+<p class="component-description">mui默认的蒙版遮罩使用<code>.mui-backdrop</code>类定义（如下代码），若需自定义遮罩效果，只需覆盖定义<code>.mui-backdrop</code>即可；</p>
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.mui-backdrop</span> <span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">fixed</span><span class="p">;</span>
+    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">right</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">z-index</span><span class="o">:</span> <span class="m">998</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,.</span><span class="m">3</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+  </article>
   
       <!-- Footer -->
       <div class="docs-footer">
@@ -747,8 +768,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-11-16 16:03:08 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-11-16 16:03:08 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-01 13:54:18 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-01 13:54:18 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
@@ -816,6 +837,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
             <li><a href="#customevent">自定义事件</a></li>
             <li><a href="#plugin-slider">图片轮播</a></li>
             <li><a href="#plugin-popover">弹出菜单</a></li>
+            <li><a href="#mask">遮罩蒙版</a></li>
         </ul>
     </div>
   </div>
