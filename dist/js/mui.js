@@ -1592,7 +1592,7 @@ var mui = (function(document, undefined) {
 	});
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
-		if ($.options.swipeBack === true && detail.angle > -10 && detail.angle < 10) {
+		if ($.options.swipeBack === true && Math.abs(detail.angle)< 6) {
 			$.back();
 		}
 	});
@@ -2157,6 +2157,7 @@ var mui = (function(document, undefined) {
 					height: 50,
 					contentdown: '上拉显示更多',
 					contentrefresh: '正在加载...',
+					contentnomore: '没有更多数据了',
 					duration: 300
 				}
 			}, options, true));
@@ -3071,12 +3072,13 @@ var mui = (function(document, undefined) {
 			var self = this;
 			if (self.bottomPocket) {
 				self.loading = false;
-				self._setCaption(self.options.up.contentdown);
 				if (finished) {
-					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					self.bottomPocket.classList.add(CLASS_HIDDEN);
+					self._setCaption(self.options.up.contentnomore);
+					//					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					self.wrapper.removeEventListener('scrollbottom', self);
 				} else {
+					self._setCaption(self.options.up.contentdown);
 					setTimeout(function() {
 						self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
 					}, 350);
@@ -3085,11 +3087,12 @@ var mui = (function(document, undefined) {
 		},
 		refresh: function(isReset) {
 			if (isReset) {
-				var classList = this.bottomPocket.classList;
-				if (classList.contains(CLASS_HIDDEN)) {
-					classList.remove(CLASS_HIDDEN);
-					this.wrapper.addEventListener('scrollbottom', this);
-				}
+				//				var classList = this.bottomPocket.classList;
+				//				if (classList.contains(CLASS_HIDDEN)) {
+				//					classList.remove(CLASS_HIDDEN);
+				//				this._setCaption(self.options.up.contentdown);
+				this.wrapper.addEventListener('scrollbottom', this);
+				//				}
 			}
 			this._super();
 		},
@@ -3542,13 +3545,14 @@ var mui = (function(document, undefined) {
 			var self = this;
 			if (self.pullLoading) {
 				self.pullLoading.classList.remove(CLASS_IN);
-				self.pullCaption.innerHTML = self.options.up.contentdown;
 				self.isLoading = false;
 				if (finished) {
-					self.bottomPocket.classList.remove(CLASS_BLOCK);
-					self.bottomPocket.classList.add(CLASS_HIDDEN);
+					self.pullCaption.innerHTML = self.options.up.contentnomore;
+//					self.bottomPocket.classList.remove(CLASS_BLOCK);
+//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					document.removeEventListener('plusscrollbottom', self);
 				} else { //初始化时隐藏，后续不再隐藏
+					self.pullCaption.innerHTML = self.options.up.contentdown;
 					//					setTimeout(function() {
 					//						self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					}, 350);
@@ -3557,11 +3561,11 @@ var mui = (function(document, undefined) {
 		},
 		refresh: function(isReset) {
 			if (isReset) {
-				var classList = this.bottomPocket.classList;
-				if (classList.contains(CLASS_HIDDEN)) {
-					classList.remove(CLASS_HIDDEN);
-					document.addEventListener('plusscrollbottom', this);
-				}
+				//				var classList = this.bottomPocket.classList;
+				//				if (classList.contains(CLASS_HIDDEN)) {
+				//					classList.remove(CLASS_HIDDEN);
+				document.addEventListener('plusscrollbottom', this);
+				//				}
 			}
 		}
 	}, $.PullRefresh));
