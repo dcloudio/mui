@@ -37,6 +37,9 @@
 			});
 
 			mui.plusReady(function() {
+				if(mui.os.android){
+					plus.screen.lockOrientation("portrait-primary");
+				}
 				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
 				setTimeout(function () {
 					menu= mui.preload({
@@ -57,6 +60,7 @@
 						styles:{
 							left:'70%',
 							width:'30%',
+							zindex:1,
 							opacity:0.1
 						}
 					});

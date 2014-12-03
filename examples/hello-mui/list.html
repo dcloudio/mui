@@ -440,7 +440,8 @@
 						url:header,
 						id:name+"-main",
 						styles:{
-							popGesture:"hide"
+							popGesture:"hide",
+							zindex:2
 						},
 						extras:{
 							mType: 'main'
@@ -452,7 +453,8 @@
 						id:name+"-sub",
 						styles:{
 							top: '48px',
-							bottom: '0px'
+							bottom: '0px',
+							zindex:2
 						},
 						extras:{
 							mType: 'sub'
@@ -521,6 +523,9 @@
 						mui.openWindow({
 							id: id,
 							url: this.href,
+							styles:{
+								zindex:2
+							},
 							waiting: {
 								autoShow: false
 							}
