@@ -1129,6 +1129,8 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   table-layout: fixed;
   border-top: 0;
   border-bottom: 0;
+
+  -webkit-touch-callout: none;
 }
 .mui-bar-tab .mui-tab-item {
   display: table-cell;
@@ -2208,6 +2210,8 @@ select:focus {
   background-color: transparent;
   border: 1px solid #007aff;
   border-radius: 3px;
+
+  -webkit-touch-callout: none;
 }
 .mui-segmented-control .mui-control-item {
   display: table-cell;
