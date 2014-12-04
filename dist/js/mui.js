@@ -1591,7 +1591,7 @@ var mui = (function(document, undefined) {
 	});
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
-		if ($.options.swipeBack === true && Math.abs(detail.angle)< 6) {
+		if ($.options.swipeBack === true && Math.abs(detail.angle)< 3) {
 			$.back();
 		}
 	});
