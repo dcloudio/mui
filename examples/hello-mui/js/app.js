@@ -1,8 +1,9 @@
 (function($) {
+	//TODO 临时屏蔽右滑关闭，等识别更精确后再放开；
 	//全局配置(通常所有页面引用该配置，特殊页面使用mui.init({})来覆盖全局配置)
-	$.initGlobal({
-		swipeBack: true
-	});
+//	$.initGlobal({
+//		swipeBack: true
+//	});
 	var back = $.back;
 	$.back = function() {
 		var current = plus.webview.currentWebview();
