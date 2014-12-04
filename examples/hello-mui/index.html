@@ -54,6 +54,7 @@
 							aniShow:'none'
 						}
 					});
+					//创建遮罩页面；
 					mask = mui.preload({
 						id:"index-mask",
 						url:"index-mask.html",
@@ -61,7 +62,8 @@
 							left:'70%',
 							width:'30%',
 							zindex:1,
-							opacity:0.1
+							opacity:0.1,
+							popGesture:"none"
 						}
 					});
 				},200);
