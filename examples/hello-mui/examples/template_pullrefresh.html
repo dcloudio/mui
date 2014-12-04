@@ -72,7 +72,7 @@
 
 		<header class="mui-bar mui-bar-nav">
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">下拉刷新</h1>
+			<h1 id="title" class="mui-title">下拉刷新和上拉加载更多</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-loader"></div>
@@ -81,7 +81,7 @@
 	<script type="text/javascript">
 		var titleElem = document.getElementById("title");
 		window.addEventListener("updateHeader", function(e) {
-			var title = '下拉刷新';
+			var title = '下拉刷新和上拉加载更多';
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
 		});
