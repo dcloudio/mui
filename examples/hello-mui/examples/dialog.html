@@ -65,7 +65,8 @@
 	  	})
 	  });
 	  
-	  document.getElementById("promptBtn").addEventListener('tap',function(){
+	  //TODO iOS 8.x平台存在bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了，故临时使用click代替tap；
+	  document.getElementById("promptBtn").addEventListener('click',function(){
 	  	var btnArray = ['确定','取消'];
 	  	mui.prompt('请输入你对MUI的评语：','性能好','Hello MUI',btnArray,function(e){
 	  		if(e.index==0){
