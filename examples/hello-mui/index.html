@@ -54,18 +54,22 @@
 							aniShow:'none'
 						}
 					});
-					//创建遮罩页面；
-					mask = mui.preload({
-						id:"index-mask",
-						url:"index-mask.html",
-						styles:{
-							left:'70%',
-							width:'30%',
-							zindex:1,
-							opacity:0.1,
-							popGesture:"none"
-						}
-					});
+					//创建遮罩页面，使用透明webview解决index页面、list页面创建div遮罩不同步的问题；
+					//android 4.0以下版本不支持透明webview，故4.0以下暂不遮罩；
+					if(mui.os.android&&parseFloat(mui.os.version)>4.0){
+						mask = mui.preload({
+							id:"index-mask",
+							url:"index-mask.html",
+							styles:{
+								left:'70%',
+								width:'30%',
+								zindex:1,
+								opacity:0.1,
+								popGesture:"none"
+							}
+						});
+					}
+					
 				},200);
 			});
 			
@@ -80,7 +84,7 @@
 					menu.show();
 					//显示遮罩
 					setTimeout(function () {
-						mask.show('none');	
+						mask&&(mask.show('none'));	
 					},150);
 					//主窗体开始侧滑；
 					mui.currentWebview.setStyle({
@@ -98,7 +102,7 @@
 			function closeMenu(){
 				if(showMenu){
 					//关闭遮罩；
-					mask.hide();
+					mask&&(mask.hide());
 					//主窗体开始侧滑；
 					mui.currentWebview.setStyle({
 						left: showMenu ? '0' : '70%',

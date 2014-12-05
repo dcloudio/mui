@@ -78,8 +78,12 @@
 		</div>
 		
 		<script type="text/javascript" charset="utf-8">
+			//关于backbutton和menubutton两个按键的说明，在iOS平台不存在，故需隐藏
 			if(!mui.os.android){
-				document.getElementById("android-only").style.display = "none";
+				var span = document.getElementById("android-only")
+				if(span){
+					span.style.display = "none";
+				}
 			}
 			var subWebview=null,template=null,index=null;
 			mui.plusReady(function () {
