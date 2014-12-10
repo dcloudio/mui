@@ -7,19 +7,20 @@ mui框架有效的解决了这些问题，这是一个可以方便开发出高�
 
 参考文档
 ------
-mui官网文档使用[Jekyll](http://jekyllrb.com) 构建，发布在GitHub Pages上，大家可通过<http://dcloudio.github.io/mui/>查看使用文档。
+[mui官网](http://dcloudio.github.io/mui/)文档使用[Jekyll](http://jekyllrb.com) 构建，发布在GitHub Pages上，[立即查看](http://dcloudio.github.io/mui/)。
 
 快速体验
 --------
-从<http://www.dcloud.io/hellomui>下载Hello MUI并安装，可直接在手机上体验MUI的控件UI及能力展示；
+[在线下载](http://www.dcloud.io/hellomui)或扫描如下二维码下载Hello MUI，可在手机上体验MUI的控件UI及能力展示；
 
-若想详细了解Hello MUI的源码及工作原理，可从<http://www.dcloud.io>下载Hbuilder，选择新建“移动APP”，并选择“Hello MUI”工程模板，创建工程；然后通过数据线将手机连接上电脑，点击运行，也可以在手机上体验MUI的各项能力。
+<a href="http://www.dcloud.io/hellomui" target="_blank">
+<img src="http://dcloud.io/img/qrcode-m.png" width="85" />
+</a>
 
-若要使用MUI进行移动APP开发，可通过Hbuilder，新建“移动APP”，并选择“MUI”工程模板，该模板已内置MUI相关的资源文件。
 
 在线交流
 --------
-若你在使用过程中有任何经验、想法、疑惑，都可以通过 <http://ask.dcloud.net.cn/topic/mui> 发起文章，和mui用户一起交流；
+若你在使用过程中有任何经验、想法、疑惑，都可以在[问答社区](http://ask.dcloud.net.cn/topic/mui) 发起文章，和其它mui用户一起交流；
 
 License
 -------
