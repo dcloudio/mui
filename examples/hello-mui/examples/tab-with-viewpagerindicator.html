@@ -59,7 +59,7 @@
 				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
 				<div class="mui-slider-group">
 					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
-						<div id="scroll" class="mui-scroll-wrapper">
+						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul class="mui-table-view">
 									<li class="mui-table-view-cell">
@@ -127,16 +127,26 @@
 						</div>
 					</div>
 					<div id="item2mobile" class="mui-slider-item mui-control-content">
-						<div class="mui-loading">
-							<div class="mui-spinner">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
 							</div>
 						</div>
+
 					</div>
 					<div id="item3mobile" class="mui-slider-item mui-control-content">
-						<div class="mui-loading">
-							<div class="mui-spinner">
+						<div id="scroll3" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
@@ -168,7 +178,7 @@
 				swipeBack: false
 			});
 			(function($) {
-				$('#scroll').scroll({
+				$('.mui-scroll-wrapper').scroll({
 					indicators: true //是否显示滚动条
 				});
 				var html2 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第二个选项卡子项-1</li><li class="mui-table-view-cell">第二个选项卡子项-2</li><li class="mui-table-view-cell">第二个选项卡子项-3</li><li class="mui-table-view-cell">第二个选项卡子项-4</li><li class="mui-table-view-cell">第二个选项卡子项-5</li></ul>';
@@ -179,13 +189,13 @@
 					if (e.detail.slideNumber === 1) {
 						if (item2.querySelector('.mui-loading')) {
 							setTimeout(function() {
-								item2.innerHTML = html2;
+								item2.querySelector('.mui-scroll').innerHTML = html2;
 							}, 1000);
 						}
 					} else if (e.detail.slideNumber === 2) {
 						if (item3.querySelector('.mui-loading')) {
 							setTimeout(function() {
-								item3.innerHTML = html3;
+								item3.querySelector('.mui-scroll').innerHTML = html3;
 							}, 1000);
 						}
 					}

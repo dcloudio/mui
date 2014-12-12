@@ -16,23 +16,7 @@
 			body {
 				background-color: #efeff4;
 			}
-			/*header.mui-bar {
-				display: none;
-			}*/
-			
-			.mui-content {
-				padding: 10px;
-			}
-		</style>
-		<script>
-			mui.init();
-		</script>
-	</head>
-
-	<body>
-		<style>
 			/*跨webview需要手动指定位置*/
-			
 			#topPopover {
 				position: fixed;
 				top: 16px;
@@ -42,26 +26,7 @@
 				left: auto;
 				right: 6px;
 			}
-			#actionSheet .mui-table-view {
-				border-radius: 4px;
-			}
-			#actionSheet .mui-table-view-cell {
-				padding: 15px;
-				text-align: center;
-			}
-			#actionSheet .mui-table-view .mui-table-view-cell:first-child,
-			#actionSheet .mui-table-view .mui-table-view-cell:first-child>a:not(.mui-btn) {
-				border-top-right-radius: 4px;
-				border-top-left-radius: 4px;
-			}
-			#actionSheet .mui-table-view .mui-table-view-cell:last-child,
-			#actionSheet .mui-table-view .mui-table-view-cell:last-child>a:not(.mui-btn) {
-				border-bottom-right-radius: 4px;
-				border-bottom-left-radius: 4px;
-			}
-			.mui-backdrop-action.mui-backdrop {
-				bottom: 0;
-			}
+			
 			p {
 				text-indent: 22px;
 			}
@@ -74,7 +39,17 @@
 			.mui-popover {
 				height: 300px;
 			}
+			
+			.mui-content {
+				padding: 10px;
+			}
 		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
 		<header class="mui-bar mui-bar-footer">
 			<a href="#bottomPopover" class="mui-btn mui-btn-link mui-pull-right">菜单</a>
 		</header>

@@ -34,14 +34,6 @@
     <h1 class="mui-title">9宫格默认样式</h1>
 </header>
 <div class="mui-content">
-    <ul class="mui-table-view mui-hidden" style="margin-bottom:15px;">
-        <li class="mui-table-view-cell">cared
-            <div id="M_Toggle_Grid_Carded" class="mui-switch mui-active">
-                <div class="mui-switch-handle"></div>
-            </div>
-        </li>
-    </ul>
-    <div class="mui-card">
         <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
                     <span class="mui-icon mui-icon-home"></span>
@@ -71,26 +63,8 @@
                     <span class="mui-icon mui-icon-more"></span>
                     <div class="mui-media-body">more</div></a></li>
         </ul> 
-    </div>
 
 </div>
-<script>
-    var content = document.querySelector('.mui-content');
-    var toggle = document.getElementById('M_Toggle_Grid_Carded');
-    var card = document.querySelector('.mui-card');
-    var grid = document.querySelector('.mui-grid-view');
-    toggle.addEventListener('toggle', function(event) {
-        var isActive = event.detail.isActive;
-        if (isActive) {
-            card.appendChild(grid);
-            card.style.display = '';
-        } else {
-            content.appendChild(grid);
-            card.style.display = 'none';
-        }
-    });
-</script>
-
 </body>
 
 </html>

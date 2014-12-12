@@ -12,13 +12,14 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<style>
-			html,body {
+			html,
+			body {
 				background-color: #efeff4;
 			}
-			header.mui-bar{
+			header.mui-bar {
 				display: none;
 			}
-			.mui-bar-nav~.mui-content{
+			.mui-bar-nav~.mui-content {
 				padding: 0;
 			}
 		</style>
@@ -28,277 +29,158 @@
 	</head>
 
 	<body>
-
-<style>
-	.mui-h6, h5, h4 {
-		font-weight: 500;
-		margin: 0;
-		margin-left: 5px;
-		text-transform: none;
-	}
-	.mui-table-view .mui-table-view-cell {
-		padding-right: 0;
-	}
-	.mui-table .mui-table-cell, .oa-contact-cell.mui-table .mui-table-cell {
-		padding: 11px 0;
-		vertical-align: middle;
-	}
-
-	.oa-contact-cell {
-		position: relative;
-		margin: -11px 0;
-	}
-	
-	.oa-contact-avatar {
-		width: 75px;
-	}
-	.oa-contact-avatar img {
-		border-radius: 50%;
-	}
-	.oa-contact-content {
-		width: 100%;
-	}
-	.oa-contact-name {
-		margin-right: 20px;
-	}
-	.oa-contact-name, oa-contact-position {
-		float: left;
-	}
-	/*左拖，右拖，超出该区域宽度后，释放触发slideleft,slideright事件*/
-	/*重要：该样式定制拉出的功能图标区域的width(必须)*/
-	.mui-slider-cell .mui-swipe-delete{
-		color: #fff;
-		background-color: #ff3b30;
-		text-align: center;
-		line-height: 44px;
-		width: 25%;
-	}
-	/*左拖拉出，右拖关闭菜单*/
-	/*重要：该样式定制拉出的功能菜单区域的margin-left(必须,该值是功能菜单距离mui-slider-cell左侧的位置)*/
-	.oa-contact-action {
-		background-color: #527fdc;
-		margin-left: 75px;
-		height: 87px;
-	}
-	.oa-contact-action .mui-icon {
-		width: 20%;
-		color: white;
-		text-align: center;
-		line-height: 87px;
-		height: 87px;
-		float: left;
-	}
-	.oa-contact-action .mui-icon:first-child, .oa-contact-action .mui-icon:last-child {
-		width: 40%;
-	}
-	
-	.mui-slider-handle.mui-table{
-		margin: -11px 0;
-	}
-	
-	.mui-slider-handle .mui-table-cell{
-		line-height: 22px;
-	}
-	
-	
-	/*.mui-table-view-cell>.mui-slider-cell>.mui-slider-right {
-		top: 0px;
-		bottom: 0px;
-	}*/
-</style>
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">滑动触发列表项菜单</h1>
-</header>
-<div class="mui-content">
-	<h5 class="mui-content-padded" style="margin: 35px 10px 15px 10px;">拖拽(滑动)显示功能按钮，点击按钮触发事件</h5>
-	<ul id="OA_task_1" class="mui-table-view mui-table-view-slider">
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-right mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">滑动触发列表项菜单</h1>
+		</header>
+		<div class="mui-content">
+			<h5 class="mui-content-padded" style="margin: 35px 10px 15px 10px;">拖拽(滑动)显示功能按钮，点击按钮触发事件</h5>
+			<ul id="OA_task_1" class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red">delete</a>
+					</div>
+					<div class="mui-slider-handle">
 						左滑显示删除按钮
 					</div>
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-handle">
 						右滑显示删除按钮
 					</div>
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-right mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-handle">
 						左右滑动均可显示删除按钮
 					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<h5 class="mui-content-padded" style="margin: 15px 10px;">拖拽(滑动)显示操作图标，释放后还原，自动触发事件</h5>
-	<ul id="OA_task_2" class="mui-table-view mui-table-view-slider">
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-right mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
-						左滑自动触发删除
+				</li>
+			</ul>
+			<h5 class="mui-content-padded" style="margin: 15px 10px;">拖拽(滑动)显示操作图标，释放后还原，自动触发事件</h5>
+			<ul id="OA_task_2" class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
 					</div>
-					
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
+					<div class="mui-slider-handle mui-table">
+						<div class="mui-table-cell">
+							左滑自动触发删除
+						</div>
+
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-handle">
 						右滑自动触发删除
 					</div>
-					
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="mui-slider-left mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-right mui-bounce mui-table-cell mui-disabled mui-swipe-delete">
-					删除
-				</div>
-				<div class="mui-slider-handle mui-table">
-					<div class="mui-table-cell">
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red">删除</a>
+					</div>
+					<div class="mui-slider-handle">
 						左右滑动均可自动触发删除
 					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<h5 class="mui-content-padded" style="margin: 15px 10px;">左拖拉出，右拖关闭功能菜单</h5>
-	<ul id="OA_contact" class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="oa-contact-cell mui-table">
-					<div class="oa-contact-avatar mui-table-cell">
-						<img src="../images/60x60.gif"/>
+				</li>
+			</ul>
+			<h5 class="mui-content-padded" style="margin: 15px 10px;">拖拽(滑动)显示多功能菜单</h5>
+			<ul id="OA_task_2" class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-grey mui-icon mui-icon-person"></a>
+						<a class="mui-btn mui-btn-yellow mui-icon mui-icon-phone"></a>
+						<a class="mui-btn mui-btn-red mui-icon mui-icon-email"></a>
 					</div>
-					<div class="oa-contact-content mui-table-cell">
-						<div class="mui-clearfix">
-							<h4 class="oa-contact-name">李明明</h4>
-							<span class="oa-contact-position mui-h6">总经理</span>
+					<div class="mui-slider-handle mui-table">
+						<div class="mui-table-cell">
+							左滑显示多功能菜单
 						</div>
-						<p class="oa-contact-email mui-h6">
-							limingming@dh.cn
-						</p>
-					</div>
-				</div>
-				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-phone"></span>
-					<span class="mui-icon mui-icon-email"></span>
-					<span class="mui-icon mui-icon-chat"></span>
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="oa-contact-cell mui-table">
-					<div class="oa-contact-avatar mui-table-cell">
-						<img src="../images/60x60.gif"/>
-					</div>
-					<div class="oa-contact-content mui-table-cell">
-						<div class="mui-clearfix">
-							<h4 class="oa-contact-name">张聪聪</h4>
-							<span class="oa-contact-position mui-h6">理事长</span>
-						</div>
-						<p class="oa-contact-email mui-h6">
-							zcc@dh.cn
-						</p>
-					</div>
-				</div>
-				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-phone"></span>
-					<span class="mui-icon mui-icon-email"></span>
-					<span class="mui-icon mui-icon-chat"></span>
-				</div>
-			</div>
-		</li>
-		<li class="mui-table-view-cell">
-			<div class="mui-slider-cell">
-				<div class="oa-contact-cell mui-table">
-					<div class="oa-contact-avatar mui-table-cell">
-						<img src="../images/60x60.gif"/>
-					</div>
-					<div class="oa-contact-content mui-table-cell">
-						<div class="mui-clearfix">
-							<h4 class="oa-contact-name">吴丽丽</h4>
-							<span class="oa-contact-position mui-h6">理事长</span>
-						</div>
-						<p class="oa-contact-email mui-h6">
-							wulili@dh.cn
-						</p>
-					</div>
-				</div>
-				<div class="mui-slider-handle oa-contact-action mui-table-cell mui-disabled">
-					<span class="mui-icon mui-icon-phone"></span>
-					<span class="mui-icon mui-icon-email"></span>
-					<span class="mui-icon mui-icon-chat"></span>
-				</div>
-			</div>
-		</li>
-	</ul>
-</div>
-<script>
-	(function($) {
-		//第一个demo，拖拽后显示操作图标，点击操作图标删除元素；
-		$('#OA_task_1').on('tap', '.mui-swipe-delete', function() {
-			var cell = this.parentNode.parentNode;
-			cell.parentNode.removeChild(cell);
-		});
-		var btnArray = ['确认','取消'];
-		//第二个demo，向左拖拽后显示操作图标，释放后自动触发的业务逻辑
-		$('#OA_task_2').on('slideleft', '.mui-table-view-cell', function(event) {
-			var elem = this;
-			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
-				if(e.index==0){
-					elem.parentNode.removeChild(elem);
-				}
-			});
-		});
-		//第二个demo，向右拖拽后显示操作图标，释放后自动触发的业务逻辑
-		$('#OA_task_2').on('slideright', '.mui-table-view-cell', function(event) {
-			var elem = this;
-			mui.confirm('确认删除该条记录？','Hello MUI',btnArray,function(e){
-				if(e.index==0){
-					elem.parentNode.removeChild(elem);
-				}
-			});
-		});
-	})(mui); 
-</script>
 
-</body>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red mui-icon mui-icon-email"></a>
+						<a class="mui-btn mui-btn-yellow mui-icon mui-icon-phone"></a>
+						<a class="mui-btn mui-btn-grey mui-icon mui-icon-person"></a>
+					</div>
+					<div class="mui-slider-handle">
+						右滑显示多功能菜单
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-slider-left mui-disabled">
+						<a class="mui-btn mui-btn-red mui-icon mui-icon-email"></a>
+						<a class="mui-btn mui-btn-yellow mui-icon mui-icon-phone"></a>
+						<a class="mui-btn mui-btn-grey mui-icon mui-icon-person"></a>
+					</div>
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-grey mui-icon mui-icon-person"></a>
+						<a class="mui-btn mui-btn-yellow mui-icon mui-icon-phone"></a>
+						<a class="mui-btn mui-btn-red mui-icon mui-icon-email"></a>
+					</div>
+					<div class="mui-slider-handle">
+						左右滑动均可显示多功能菜单
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script>
+			(function($) {
+				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
+				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
+				//				setTimeout(function() {
+				//					$.swipeoutOpen(document.getElementById("OA_task_1").querySelector('li:last-child'), 'left');
+				//					setTimeout(function() {
+				//						$.swipeoutClose(document.getElementById("OA_task_1").querySelector('li:last-child'));
+				//					}, 1000);
+				//				}, 1000);
+				//第一个demo，拖拽后显示操作图标，点击操作图标删除元素；
+				$('#OA_task_1').on('tap', '.mui-btn', function(event) {
+					var elem = this;
+					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
+						if (e.index == 0) {
+							var li = elem.parentNode.parentNode;
+							li.parentNode.removeChild(li);
+						}
+					});
+				});
+				var btnArray = ['确认', '取消'];
+				//第二个demo，向左拖拽后显示操作图标，释放后自动触发的业务逻辑
+				$('#OA_task_2').on('slideleft', '.mui-table-view-cell', function(event) {
+					var elem = this;
+					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
+						if (e.index == 0) {
+							elem.parentNode.removeChild(elem);
+						}
+					});
+				});
+				//第二个demo，向右拖拽后显示操作图标，释放后自动触发的业务逻辑
+				$('#OA_task_2').on('slideright', '.mui-table-view-cell', function(event) {
+					var elem = this;
+					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
+						if (e.index == 0) {
+							elem.parentNode.removeChild(elem);
+						}
+					});
+				});
+			})(mui);
+		</script>
+
+	</body>
 
 </html>

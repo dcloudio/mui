@@ -16,79 +16,68 @@
 				background-color: #efeff4;
 			}
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
-
-<style>
-	.mui-control-content h3 {
-		padding-top: 100px;
-		text-align: center;
-	}
-</style>
-
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">选项卡（Tab）</h1>
-</header>
-<nav class="mui-bar mui-bar-tab">
-	<a id="defaultTab" class="mui-tab-item mui-active" href="tab-webview-subpage-phone.html">
-		<span class="mui-icon mui-icon-phone"></span>
-		<span class="mui-tab-label">电话咨询</span>
-	</a>
-	<a class="mui-tab-item" href="tab-webview-subpage-chat.html">
-		<span class="mui-icon mui-icon-email"></span>
-		<span class="mui-tab-label">短信咨询</span>
-	</a>
-	<a class="mui-tab-item" href="tab-webview-subpage-contact.html">
-		<span class="mui-icon mui-icon-contact"></span>
-		<span class="mui-tab-label">通讯录</span>
-	</a>
-	<a class="mui-tab-item" href="tab-webview-subpage-map.html">
-		<span class="mui-icon mui-icon-map"></span>
-		<span class="mui-tab-label">查看地图</span>
-	</a>
-</nav>
-<script type="text/javascript" charset="utf-8">
-
-	var subpages = ['tab-webview-subpage-phone.html','tab-webview-subpage-chat.html','tab-webview-subpage-contact.html','tab-webview-subpage-map.html'];
-	var subpage_style = {
-		top: '48px',
-		bottom: '50px'
-	};
-	//创建子页面，首个选项卡页面显示，其它均隐藏；
-	mui.plusReady(function(){
-		var self = plus.webview.currentWebview();
-		for(var i=0;i<4;i++){
-			var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
-			if(i>0){
-				sub.hide();
-			}
-			self.append(sub);
-		}
-	});
-	
-	//当前激活选项，默认为第一个；
-	var activeTab = subpages[0];
-	//选项卡点击事件
-	mui('.mui-bar-tab').on('tap', 'a', function(e) {
-		var targetTab = this.getAttribute('href');
-		if (targetTab == activeTab) {
-			return;
-		}
-		
-		//先隐藏当前的
-		plus.webview.hide(activeTab);
-		//再显示目标
-		plus.webview.show(targetTab);
-		//更改当前活跃的选项卡
-		activeTab = targetTab;
-	});
-</script>
-
-</body>
-
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">首页</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="defaultTab" class="mui-tab-item mui-active" href="tab-webview-subpage-about.html">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="tab-webview-subpage-chat.html">
+				<span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
+				<span class="mui-tab-label">消息</span>
+			</a>
+			<a class="mui-tab-item" href="tab-webview-subpage-contact.html">
+				<span class="mui-icon mui-icon-contact"></span>
+				<span class="mui-tab-label">通讯录</span>
+			</a>
+			<a class="mui-tab-item" href="tab-webview-subpage-setting.html">
+				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-tab-label">设置</span>
+			</a>
+		</nav>
+		<script type="text/javascript" charset="utf-8">
+			var subpages = ['tab-webview-subpage-about.html','tab-webview-subpage-chat.html','tab-webview-subpage-contact.html','tab-webview-subpage-setting.html'];
+			var subpage_style = {
+				top: '46px',
+				bottom: '50px'
+			};
+			
+			//创建子页面，首个选项卡页面显示，其它均隐藏；
+			mui.plusReady(function(){
+				var self = plus.webview.currentWebview();
+				for(var i=0;i<4;i++){
+					var sub = plus.webview.create(subpages[i],subpages[i],subpage_style);
+					if(i>0){
+						sub.hide();
+					}
+					self.append(sub);
+				}
+			});
+			
+			//当前激活选项
+			var activeTab = subpages[0];
+			var title = document.getElementById("title");
+			//选项卡点击事件
+			mui('.mui-bar-tab').on('tap', 'a', function(e) {
+				var targetTab = this.getAttribute('href');
+				if (targetTab == activeTab) {
+					return;
+				}
+				//更换标题
+				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+				//显示目标选项卡
+				plus.webview.show(targetTab);
+				//隐藏当前;
+				plus.webview.hide(activeTab);
+				//更改当前活跃的选项卡
+				activeTab = targetTab;
+			});
+		</script>
+	</body>
 </html>
