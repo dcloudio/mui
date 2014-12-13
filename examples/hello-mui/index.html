@@ -56,7 +56,7 @@
 					});
 					//创建遮罩页面，使用透明webview解决index页面、list页面创建div遮罩不同步的问题；
 					//android 4.0以下版本不支持透明webview，故4.0以下暂不遮罩；
-					if(mui.os.android&&parseFloat(mui.os.version)>4.0){
+					if(parseFloat(mui.os.version)>4.0){
 						mask = mui.preload({
 							id:"index-mask",
 							url:"index-mask.html",
@@ -81,19 +81,20 @@
 			function openMenu(){
 				if(!showMenu){
 					//侧滑菜单处于隐藏状态，则立即显示出来；
-					menu.show();
+					menu.show('none',0,function () {
+						//主窗体开始侧滑；
+						mui.currentWebview.setStyle({
+							left:'70%',
+							transition: {
+								duration: 150
+							}
+						});
+						showMenu = true;
+					});
 					//显示遮罩
 					setTimeout(function () {
 						mask&&(mask.show('none'));	
 					},150);
-					//主窗体开始侧滑；
-					mui.currentWebview.setStyle({
-						left:'70%',
-						transition: {
-							duration: 150
-						}
-					});
-					showMenu = true;
 				}
 			}
 			/**
@@ -118,7 +119,13 @@
 				}
 			}
 			//点击左上角侧滑图标，打开侧滑菜单；
-			document.querySelector('.mui-icon-bars').addEventListener('tap', openMenu);
+			document.querySelector('.mui-icon-bars').addEventListener('tap', function () {
+				if(showMenu){
+					closeMenu();
+				}else{
+					openMenu();
+				}
+			});
 			//主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
 			window.addEventListener("swiperight",openMenu);
 			//主界面向左滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；

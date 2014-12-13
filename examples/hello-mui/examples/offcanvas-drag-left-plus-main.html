@@ -178,26 +178,26 @@
 					}
 
 					//侧滑菜单处于隐藏状态，则立即显示出来；
-					menu.show();
-					//显示主窗体遮罩
-					mask.show();
-	
-					//主窗体开始移动
-					mui.currentWebview.setStyle({
-						left: '-70%',
-						transition: {
-							duration: 150
-						}
-					});
-					//若需整体移动，则需让menu窗口同时移动；
-					if (slideTogether) {
-						menu.setStyle({
-							left: '30%',
+					menu.show('none',0,function () {
+						//主窗体开始移动
+						mui.currentWebview.setStyle({
+							left: '-70%',
 							transition: {
 								duration: 150
 							}
 						});
-					}
+						//若需整体移动，则需让menu窗口同时移动；
+						if (slideTogether) {
+							menu.setStyle({
+								left: '30%',
+								transition: {
+									duration: 150
+								}
+							});
+						}
+					});
+					//显示主窗体遮罩
+					mask.show();
 					showMenu = true;
 				}
 			}

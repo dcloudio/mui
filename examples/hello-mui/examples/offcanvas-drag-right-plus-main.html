@@ -167,25 +167,26 @@
 			function openMenu () {
 				if(!showMenu){
 					//侧滑菜单处于隐藏状态，则立即显示出来；
-					menu.show();
-					//显示遮罩
-					mask.show();
-					//主窗体开始侧滑；
-					mui.currentWebview.setStyle({
-						left: '70%',
-						transition: {
-							duration: 150
-						}
-					});
-					//如果整体移动，则menu页面也需要移动；
-					if (slideTogether) {
-						menu.setStyle({
-							left: '0%',
+					menu.show('none',0,function () {
+						//主窗体开始侧滑；
+						mui.currentWebview.setStyle({
+							left: '70%',
 							transition: {
 								duration: 150
 							}
 						});
-					}
+						//如果整体移动，则menu页面也需要移动；
+						if (slideTogether) {
+							menu.setStyle({
+								left: '0%',
+								transition: {
+									duration: 150
+								}
+							});
+						}
+					});
+					//显示遮罩
+					mask.show();
 					showMenu = true;
 				}
 			}
