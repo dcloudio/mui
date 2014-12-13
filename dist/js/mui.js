@@ -869,7 +869,7 @@ var mui = (function(document, undefined) {
 		index: 5,
 		handle: handle,
 		options: {
-			flickMaxTime: 300,
+			flickMaxTime: 200,
 			flickMinDistince: 10
 		}
 	});
@@ -3322,7 +3322,7 @@ var mui = (function(document, undefined) {
 				return;
 			}
 			if (e.type === 'flick') {
-				if (detail.swipe) { //slider不用flick，太容易触发，校验是否是swipe
+				if (detail.touchTime < 200) { //flick，太容易触发，额外校验一下touchtime
 					this.x = -(this.slideNumber + (direction === 'left' ? 1 : -1)) * this.wrapperWidth;
 				}
 				this.resetPosition(this.options.bounceTime);
