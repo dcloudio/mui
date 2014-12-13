@@ -40,6 +40,8 @@
 		<button id='confirmBtn' class="mui-btn mui-btn-blue mui-btn-outlined">确认消息框</button>
 		<button id='promptBtn' class="mui-btn mui-btn-blue mui-btn-outlined">输入对话框</button>
 		<button id='toastBtn' class="mui-btn mui-btn-blue mui-btn-outlined">自动消失提示框</button>
+		<button id='pickDateBtn' class="mui-btn mui-btn-blue mui-btn-outlined">日期选择框</button>
+		<button id='pickTimeBtn' class="mui-btn mui-btn-blue mui-btn-outlined">时间选择框</button>
 		<div id="info">
 
 		</div>
@@ -79,6 +81,30 @@
 	  document.getElementById("toastBtn").addEventListener('tap',function(){
 	  	mui.toast('欢迎体验Hello MUI');
 	  });
+	  document.getElementById("pickDateBtn").addEventListener('tap',function () {
+	  	var dDate=new Date();
+		dDate.setFullYear(2014,7,16);
+		var minDate=new Date();
+		minDate.setFullYear(2010,0,1);
+		var maxDate=new Date();
+		maxDate.setFullYear(2016,11,31);
+		plus.nativeUI.pickDate( function(e) {
+			var d=e.date;
+			info.innerText = '您选择的日期是:'+d.getFullYear()+"-"+(d.getMonth()+1)+"-"+ d.getDate();
+		},function(e){
+			info.innerText = "您没有选择日期";
+		},{title:"请选择日期",date:dDate,minDate:minDate,maxDate:maxDate});
+	})
+	document.getElementById("pickTimeBtn").addEventListener('tap',function () {
+		var dTime=new Date();
+		dTime.setHours(6,0);
+		plus.nativeUI.pickTime(function(e){
+			var d=e.date;
+			info.innerText = "您选择的时间是："+d.getHours()+":"+d.getMinutes();
+		},function (e){
+			info.innerText = "您没有选择时间" 
+		},{title:"请选择时间",is24Hour:true,time:dTime});
+	});
 </script>
 <style type="text/css">
   .mui-btn{
