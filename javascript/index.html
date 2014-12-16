@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-01 19:07:11 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-01 19:07:11 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-16 17:23:30 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-16 17:23:30 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -287,15 +287,38 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     </article> 
     <!-- 关闭页面 -->
     <article id="closewindow" class="component mui-active">
-  <h3 class="component-title">关闭页面</h3>
-  <p class="component-description">mui框架已封装好窗口关闭逻辑，hbuilder中敲<code>mheader</code>自动生成的代码块，会自动生成带有返回导航箭头的标题栏，点击返回箭头可关闭当前页面。mui会监听包含<code>.mui-action-back</code>类的控件的点击事件，点击后会执行关闭窗口逻辑；因此，若希望在顶部导航栏之外的其它区域添加关闭页面的控件，只需要在对应控件上添加<code>.mui-action-back</code>类即可，如下为一个关闭按钮示例：</p>
+	<h3 class="component-title">关闭页面</h3>
+	<p class="component-description" style="margin-bottom:0.8em">mui框架将窗口关闭功能封装在<code>mui.back</code>方法中，具体执行逻辑是：</p>
+	<ul>
+		<li>若当前webview为预加载页面，则hide当前webview；</li>
+		<li>否则，close当前webview；</li>
+	</ul>
+	<p class="component-description" style="margin-bottom:0.8em">在mui框架中，有三种操作会触发页面关闭（执行mui.back方法）：</p>
+	<ul>
+		<li>点击包含<code>.mui-action-back</code>类的控件</li>
+		<li>在页面上，向右快速滑动</li>
+		<li>Android手机按下back按键</li>
+	</ul>
+  	<p class="component-description">hbuilder中敲<code>mheader</code>生成的代码块，会自动生成带有返回导航箭头的标题栏，点击返回箭头可关闭当前页面，原因就是因为该返回箭头包含<code>.mui-action-back</code>类，代码如下：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-action-back mui-icon mui-icon-left-nav mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+	<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>标题<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/header&gt;</span></code></pre></div>
+  	<p class="component-description">若希望在顶部导航栏之外的其它区域添加关闭页面的控件，只需要在对应控件上添加<code>.mui-action-back</code>类即可，如下为一个关闭按钮示例：</p>
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&#39;mui-btn mui-btn-danger mui-action-back&#39;</span><span class="nt">&gt;</span>关闭<span class="nt">&lt;/button&gt;</span></code></pre></div>
-<p class="component-description">另一方面，也可以直接调用<code>mui.back()</code>方法，执行mui已封装好的窗口关闭逻辑；</p>
-<p class="component-description">mui框架同时实现了页面的右滑关闭功能，默认未启用，若要使用右滑关闭功能，需要在<code>mui.init();</code>方法中设置swipeBack参数，如下：</p>
+<p class="component-description">mui框架封装的页面右滑关闭功能，默认未启用，若要使用右滑关闭功能，需要在<code>mui.init();</code>方法中设置swipeBack参数，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
 	<span class="nx">swipeBack</span><span class="o">:</span><span class="kc">true</span> <span class="c1">//启用右滑关闭功能</span>
 <span class="p">});</span></code></pre></div>
-<p class="component-description">若希望自定义关闭事件，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
+<p class="component-description">mui框架默认会监听Android手机的back按键，然后执行页面关闭逻辑；
+	若不希望mui自动处理back按键，可通过如下方式关闭mui的back按键监听；</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+	<span class="nx">keyEventBind</span><span class="o">:</span> <span class="p">{</span>
+		<span class="nx">backbutton</span><span class="o">:</span> <span class="kc">false</span>  <span class="c1">//关闭back按键监听</span>
+	<span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">除了如上三种操作外，也可以直接调用<code>mui.back()</code>方法，执行窗口关闭逻辑；</p>
+<p class="component-description">若希望自定义关闭逻辑，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;确定&quot;</span><span class="p">,</span><span class="s2">&quot;取消&quot;</span><span class="p">];</span>
@@ -305,7 +328,10 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">}</span></code></pre></div>
-
+	<p class="component-description">
+		<strong>注意：</strong>自定义关闭逻辑时，一定要重写mui.back，不能简单通过addEventListener增加back按键监听，
+		因为addEventListener只会增加新的执行逻辑，老的监听逻辑依然会执行；
+	</p>
 </article> 
     <!-- 手势事件 -->
         <article id="gesture" class="component mui-active">
@@ -756,7 +782,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
 	</p>
 	<ul class="docs-footer-links">
-		<li>最新版本 v0.8.0</li>
+		<li>最新版本 v0.9.0</li>
 		<li>&middot;</li>
 		<li><a href="http://ask.dcloud.net.cn">问答社区</a></li>
 		<li>&middot;</li>
@@ -770,8 +796,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-01 19:07:11 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-01 19:07:11 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-16 17:23:30 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-16 17:23:30 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));

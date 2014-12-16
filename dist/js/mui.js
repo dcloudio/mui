@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.8.0 (https://github.com/dcloudio/mui)
+ * Mui v0.9.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -543,8 +543,11 @@ var mui = (function(document, undefined) {
 		// 	document.body.insertBefore(content, document.body.firstElementChild);
 		// }
 		document.addEventListener('focusin', function(e) {
-			document.body.classList.add(CLASS_FOCUSIN);
 			var target = e.target;
+			if (target.tagName && target.tagName !== 'INPUT') {
+				return;
+			}
+			document.body.classList.add(CLASS_FOCUSIN);
 			var isFooter = false;
 			for (; target && target !== document; target = target.parentNode) {
 				var classList = target.classList;
@@ -562,10 +565,13 @@ var mui = (function(document, undefined) {
 			}
 		});
 		document.addEventListener('focusout', function(e) {
-			document.body.classList.remove(CLASS_FOCUSIN);
-			setTimeout(function() {
-				window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
-			}, 20);
+			var classList = document.body.classList;
+			if (classList.contains(CLASS_FOCUSIN)) {
+				classList.remove(CLASS_FOCUSIN);
+				setTimeout(function() {
+					window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
+				}, 20);
+			}
 		});
 	});
 })(mui, document);
@@ -863,7 +869,7 @@ var mui = (function(document, undefined) {
 		index: 5,
 		handle: handle,
 		options: {
-			flickMaxTime: 300,
+			flickMaxTime: 200,
 			flickMinDistince: 10
 		}
 	});
@@ -1506,26 +1512,45 @@ var mui = (function(document, undefined) {
 		handle: function() {
 			var options = $.options;
 			var subpages = options.subpages || [];
-			$.plusReady(function() {
-				//TODO  这里需要判断一下，最好等子窗口加载完毕后，再调用主窗口的show方法；
-				//或者：在openwindow方法中，监听实现；
-				$.each(subpages, function(index, subpage) {
-					$.appendWebview(subpage);
+			if($.os.plus){
+				$.plusReady(function() {
+					//TODO  这里需要判断一下，最好等子窗口加载完毕后，再调用主窗口的show方法；
+					//或者：在openwindow方法中，监听实现；
+					$.each(subpages, function(index, subpage) {
+						$.appendWebview(subpage);
+					});
+					//判断是否首页
+					if ($.currentWebview === plus.webview.getWebviewById(plus.runtime.appid)) {
+						$.isHomePage = true;
+						//首页需要自己激活预加载；
+						//timeout因为子页面loaded之后才append的，防止子页面尚未append、从而导致其preload未触发的问题；
+						setTimeout(function() {
+							triggerPreload($.currentWebview);
+						}, 300);
+					}
+					//设置ios顶部状态栏颜色；
+					if ($.os.ios&&$.options.statusBarBackground) {
+						plus.navigator.setStatusBarBackground($.options.statusBarBackground);
+					}
 				});
-				//判断是否首页
-				if ($.currentWebview === plus.webview.getWebviewById(plus.runtime.appid)) {
-					$.isHomePage = true;
-					//首页需要自己激活预加载；
-					//timeout因为子页面loaded之后才append的，防止子页面尚未append、从而导致其preload未触发的问题；
-					setTimeout(function() {
-						triggerPreload($.currentWebview);
-					}, 300);
+			}else{
+				if(subpages.length>0){
+					var err = document.createElement('div');
+					err.className = 'mui-error';
+					//文字描述
+					var span = document.createElement('span');
+					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考'; 
+					err.appendChild(span);
+					var a = document.createElement('a');
+					a.innerHTML = '"mui框架适用场景"';
+					a.href = 'http://ask.dcloud.net.cn/article/113';
+					err.appendChild(a);
+					document.body.appendChild(err);
+					console.log('在该浏览器下，不支持创建子页面');
 				}
-				//设置ios顶部状态栏颜色；
-				if ($.os.ios&&$.options.statusBarBackground) {
-					plus.navigator.setStatusBarBackground($.options.statusBarBackground);
-				}
-			});
+				
+			}
+			
 		}
 	});
 	window.addEventListener('preload', function() {
@@ -1591,7 +1616,7 @@ var mui = (function(document, undefined) {
 	});
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
-		if ($.options.swipeBack === true && Math.abs(detail.angle)< 6) {
+		if ($.options.swipeBack === true && Math.abs(detail.angle)< 3) {
 			$.back();
 		}
 	});
@@ -2420,6 +2445,7 @@ var mui = (function(document, undefined) {
 				this.resetPosition();
 				return;
 			}
+
 			switch (e.type) {
 				case 'touchstart':
 					this._start(e);
@@ -3276,7 +3302,7 @@ var mui = (function(document, undefined) {
 			return result ? result.x : 0;
 		},
 		_getSlideNumber: function() {
-			return Math.abs(Math.round(this.x / this.wrapperWidth));
+			return Math.abs(Math.round(Math.abs(this.x) / this.wrapperWidth));
 		},
 		_transitionEnd: function(e) {
 			if (e.target !== this.scroller || !this.isInTransition) {
@@ -3296,7 +3322,9 @@ var mui = (function(document, undefined) {
 				return;
 			}
 			if (e.type === 'flick') {
-				this.x = -(this.slideNumber + (direction === 'left' ? 1 : -1)) * this.wrapperWidth;
+				if (detail.touchTime < 200) { //flick，太容易触发，额外校验一下touchtime
+					this.x = -(this.slideNumber + (direction === 'left' ? 1 : -1)) * this.wrapperWidth;
+				}
 				this.resetPosition(this.options.bounceTime);
 			} else if (e.type === 'dragend' && !detail.flick) {
 				this.resetPosition(this.options.bounceTime);
@@ -3350,9 +3378,9 @@ var mui = (function(document, undefined) {
 				}
 			}
 			this._gotoItem(slideNumber, bounceTime);
-//			if (!auto) { //TODO 这个设置后续还得仔细过一遍
-//				this.isInTransition = false;
-//			}
+			//			if (!auto) { //TODO 这个设置后续还得仔细过一遍
+			//				this.isInTransition = false;
+			//			}
 		},
 		prevItem: function() {
 			this._gotoItem(this._fixedSlideNumber(this.slideNumber - 1), this.options.bounceTime);
@@ -3547,8 +3575,8 @@ var mui = (function(document, undefined) {
 				self.isLoading = false;
 				if (finished) {
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
-//					self.bottomPocket.classList.remove(CLASS_BLOCK);
-//					self.bottomPocket.classList.add(CLASS_HIDDEN);
+					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
+					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					document.removeEventListener('plusscrollbottom', self);
 				} else { //初始化时隐藏，后续不再隐藏
 					self.pullCaption.innerHTML = self.options.up.contentdown;
@@ -3571,23 +3599,28 @@ var mui = (function(document, undefined) {
 
 	//override h5 pullRefresh
 	$.fn.pullRefresh = function(options) {
-		if (this.length === 1) {
-			if (typeof options === 'string') {
-				options = $.parseJSON(options);
-			}
-			var self = this[0];
-			var pullRefreshApi = null;
-			var id = self.getAttribute('data-pullrefresh-plus');
-			if (!id) { //避免重复初始化5+ pullrefresh
-				document.body.classList.add(CLASS_PLUS_PULLREFRESH);
-				id = ++$.uuid;
-				$.data[id] = pullRefreshApi = new PlusPullRefresh(self, options);
-				self.setAttribute('data-pullrefresh-plus', id);
-			} else {
-				pullRefreshApi = $.data[id];
-			}
-			return pullRefreshApi;
+		var self;
+		if (this.length === 0) {
+			self = document.createElement('div');
+			self.className = 'mui-content';
+			document.body.appendChild(self);
+		} else {
+			self = this[0];
 		}
+		if (typeof options === 'string') {
+			options = $.parseJSON(options);
+		}
+		var pullRefreshApi = null;
+		var id = self.getAttribute('data-pullrefresh-plus');
+		if (!id) { //避免重复初始化5+ pullrefresh
+			document.body.classList.add(CLASS_PLUS_PULLREFRESH);
+			id = ++$.uuid;
+			$.data[id] = pullRefreshApi = new PlusPullRefresh(self, options);
+			self.setAttribute('data-pullrefresh-plus', id);
+		} else {
+			pullRefreshApi = $.data[id];
+		}
+		return pullRefreshApi;
 	};
 })(mui, document);
 /**
@@ -4025,11 +4058,11 @@ var mui = (function(document, undefined) {
 	});
 
 	var fixedPopoverScroll = function(isPopoverScroll) {
-		if (isPopoverScroll) {
-			document.body.setAttribute('style', 'overflow:hidden;');
-		} else {
-			document.body.setAttribute('style', '');
-		}
+		//		if (isPopoverScroll) {
+		//			document.body.setAttribute('style', 'overflow:hidden;');
+		//		} else {
+		//			document.body.setAttribute('style', '');
+		//		}
 	};
 	var onPopoverHidden = function(e) {
 		this.setAttribute('style', '');
@@ -4057,8 +4090,8 @@ var mui = (function(document, undefined) {
 		backdrop.setAttribute('style', 'opacity:0');
 		$.targets.popover = $.targets._popover = null; //reset
 		setTimeout(function() {
-			if (!popover.classList.contains(CLASS_ACTIVE) && backdrop.parentNode && backdrop.parentNode === popover.parentNode) {
-				popover.parentNode.removeChild(backdrop);
+			if (!popover.classList.contains(CLASS_ACTIVE) && backdrop.parentNode && backdrop.parentNode === document.body) {
+				document.body.removeChild(backdrop);
 			}
 		}, 350);
 	};
@@ -4074,18 +4107,21 @@ var mui = (function(document, undefined) {
 		backdrop.classList.remove(CLASS_ACTION_BACKDROP);
 		var _popover = document.querySelector('.mui-popover.mui-active');
 		if (_popover) {
-			_popover.setAttribute('style', '');
+			//			_popover.setAttribute('style', '');
+			_popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 			_popover.classList.remove(CLASS_ACTIVE);
-			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
-			fixedPopoverScroll(false);
+			//			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
+			//			fixedPopoverScroll(false);
 			//同一个弹出则直接返回，解决同一个popover的toggle
 			if (popover === _popover) {
 				removeBackdrop(_popover);
 				return;
 			}
 		}
+		var isActionSheet = false;
 		if (popover.classList.contains(CLASS_BAR_POPOVER) || popover.classList.contains(CLASS_ACTION_POPOVER)) { //navBar
 			if (popover.classList.contains(CLASS_ACTION_POPOVER)) { //action sheet popover
+				isActionSheet = true;
 				backdrop.classList.add(CLASS_ACTION_BACKDROP);
 			} else { //bar popover
 				backdrop.classList.add(CLASS_BAR_BACKDROP);
@@ -4101,30 +4137,41 @@ var mui = (function(document, undefined) {
 				//				}
 			}
 		}
-		popover.offsetHeight
+		popover.setAttribute('style', 'display:block'); //actionsheet transform
+		popover.offsetHeight;
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
-		popover.parentNode.appendChild(backdrop);
+		document.body.appendChild(backdrop);
 		fixedPopoverScroll(true);
-		calPosition(popover, anchor); //position
+		calPosition(popover, anchor, isActionSheet); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 	};
-	var calPosition = function(popover, anchor) {
+	var calPosition = function(popover, anchor, isActionSheet) {
 		if (!popover || !anchor) {
 			return;
 		}
+		var wWidth = window.innerWidth;
+		var wHeight = window.innerHeight;
+
 		var pWidth = popover.offsetWidth;
 		var pHeight = popover.offsetHeight;
-
+		if (isActionSheet) { //actionsheet
+			popover.setAttribute('style', 'display:block;top:' + (wHeight - pHeight + window.pageYOffset) + 'px;left:' + (wWidth - pWidth) / 2 + 'px;');
+			return;
+		}
 		var aWidth = anchor.offsetWidth;
 		var aHeight = anchor.offsetHeight;
 		var offset = $.offset(anchor);
 
 		var arrow = popover.querySelector('.' + CLASS_POPOVER_ARROW);
+		if (!arrow) {
+			arrow = document.createElement('div');
+			arrow.className = CLASS_POPOVER_ARROW;
+			popover.appendChild(arrow);
+		}
 		var arrowSize = arrow && arrow.offsetWidth / 2 || 0;
 
-		var wWidth = window.innerWidth;
-		var wHeight = window.innerHeight;
+
 
 		var pTop = 0;
 		var pLeft = 0;
@@ -4133,22 +4180,15 @@ var mui = (function(document, undefined) {
 		var defaultPadding = popover.classList.contains(CLASS_ACTION_POPOVER) ? 0 : 5;
 
 		var position = 'top';
-
-		if ((pHeight + arrowSize) < offset.top) { //top
+		if ((pHeight + arrowSize) < (offset.top - window.pageYOffset)) { //top
 			pTop = offset.top - pHeight - arrowSize;
-		} else if ((pHeight + arrowSize) < (wHeight - offset.top - aHeight)) { //bottom
+		} else if ((pHeight + arrowSize) < (wHeight - (offset.top - window.pageYOffset) - aHeight)) { //bottom
 			position = 'bottom';
 			pTop = offset.top + aHeight + arrowSize;
 		} else { //middle
 			position = 'middle';
-			pTop = aHeight / 2 + offset.top - pHeight / 2;
-			diff = pTop;
-			if (pTop < 0) {
-				pTop = defaultPadding;
-			} else if (pTop + pHeight > wHeight) {
-				pTop = wHeight - pHeight - defaultPadding;
-			}
-			diff = diff - pTop;
+			pTop = Math.max((wHeight - pHeight) / 2 + window.pageYOffset, 0);
+			pLeft = Math.max((wWidth - pWidth) / 2 + window.pageXOffset, 0);
 		}
 		if (position === 'top' || position === 'bottom') {
 			pLeft = aWidth / 2 + offset.left - pWidth / 2;
@@ -4167,9 +4207,8 @@ var mui = (function(document, undefined) {
 				arrowLeft = Math.max(Math.min(arrowLeft, pWidth - arrowSize * 2 - 6), 6);
 				arrow.setAttribute('style', 'left:' + arrowLeft + 'px');
 			}
-
 		} else if (position === 'middle') {
-			//TODO hide angle
+			arrow.setAttribute('style', 'display:none');
 		}
 		popover.setAttribute('style', 'display:block;top:' + pTop + 'px;left:' + pLeft + 'px;');
 	};
@@ -4413,21 +4452,25 @@ var mui = (function(document, undefined) {
 	var CLASS_TOGGLE = 'mui-switch';
 	var CLASS_BTN = 'mui-btn';
 
-	var CLASS_SLIDER_CELL = 'mui-slider-cell';
 	var CLASS_SLIDER_HANDLE = 'mui-slider-handle';
 	var CLASS_SLIDER_LEFT = 'mui-slider-left';
 	var CLASS_SLIDER_RIGHT = 'mui-slider-right';
-	var CLASS_BOUNCE = 'mui-bounce';
+	var CLASS_TRANSITIONING = 'mui-transitioning';
 
-	var SELECTOR_SLIDER_CELL = '.' + CLASS_SLIDER_CELL;
+
 	var SELECTOR_SLIDER_HANDLE = '.' + CLASS_SLIDER_HANDLE;
 	var SELECTOR_SLIDER_LEFT = '.' + CLASS_SLIDER_LEFT;
 	var SELECTOR_SLIDER_RIGHT = '.' + CLASS_SLIDER_RIGHT;
-	var bounceFactor = 0.4;
-	var drawerFactor = 1;
-	var factor = 1;
+	var SELECTOR_SELECTED = '.' + CLASS_SELECTED;
+	var SELECTOR_BUTTON = '.' + CLASS_BTN;
+	var overFactor = 0.8;
 	var cell, a;
-	var sliderCell, sliderHandle, sliderTranslateX, sliderHandleWidth, sliderHandleLeft, sliderLeft, sliderLeftBg, sliderLeftWidth, sliderRight, sliderRightBg, sliderRightWidth, isDraging, sliderRequestAnimationFrame, translateX, lastTranslateX;
+
+	var isMoved = isOpened = openedActions = progress = false;
+	var sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
+	var translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
+
+
 
 	var toggleActive = function(isActive) {
 		if (isActive) {
@@ -4447,65 +4490,38 @@ var mui = (function(document, undefined) {
 
 	var updateTranslate = function() {
 		if (translateX !== lastTranslateX) {
-			if (sliderLeft || sliderRight) {
-				if (sliderLeft && sliderRight) { //both
-					if (sliderTranslateX === 0) {
-						setTranslate(sliderHandle, translateX);
-					} else {
-						setTranslate(sliderHandle, sliderTranslateX + translateX);
-					}
-				} else if (sliderLeft) { //only left
-					if (sliderTranslateX === 0) {
-						setTranslate(sliderHandle, Math.max(translateX, 0));
-					} else {
-						setTranslate(sliderHandle, Math.max(sliderTranslateX + translateX, 0));
-					}
-				} else if (sliderRight) { //only right
-					if (sliderTranslateX === 0) {
-						setTranslate(sliderHandle, Math.min(translateX, 0));
-					} else {
-						setTranslate(sliderHandle, Math.min(sliderTranslateX + translateX, 0));
-					}
+			if (buttonsRight && buttonsRight.length > 0) {
+				progress = translateX / sliderActionRightWidth;
+				if (translateX < -sliderActionRightWidth) {
+					translateX = -sliderActionRightWidth - Math.pow(-translateX - sliderActionRightWidth, overFactor);
 				}
-				if (sliderLeft) { //left
-					if (sliderTranslateX === 0) {
-						if (translateX > sliderLeftWidth) {
-							sliderCell.style.backgroundColor = sliderLeftBg;
-							setTranslate(sliderLeft, Math.max((translateX - sliderLeftWidth), 0));
-						}
-					} else {
-						if (translateX > 0) {
-							sliderCell.style.backgroundColor = sliderLeftBg;
-						} else {
-							sliderCell.style.backgroundColor = '';
-						}
-						setTranslate(sliderLeft, Math.max(translateX, 0));
+				for (var i = 0, len = buttonsRight.length; i < len; i++) {
+					var buttonRight = buttonsRight[i];
+					if (typeof buttonRight._buttonOffset === 'undefined') {
+						buttonRight._buttonOffset = buttonRight.offsetLeft;
 					}
-				}
-				if (sliderRight) { //right
-					if (sliderTranslateX === 0) {
-						if (-translateX > sliderRightWidth) {
-							sliderCell.style.backgroundColor = sliderRightBg;
-							setTranslate(sliderRight, Math.min(-((-translateX) - sliderRightWidth), 0));
-						}
-					} else {
-						if (translateX > 0 && !sliderLeft) {
-							sliderCell.style.backgroundColor = '';
-						} else {
-							sliderCell.style.backgroundColor = sliderRightBg;
-						}
-						setTranslate(sliderRight, Math.min(translateX, 0));
-					}
-
-				}
-			} else if (sliderHandle) { //抽屉式功能菜单
-				//打开状态不允许translateX小于0，关闭状态不允许translateX大于0
-				if ((sliderTranslateX === 0 && translateX > 0) || (sliderTranslateX === sliderHandleWidth && translateX < 0)) {
-					if (Math.abs(translateX) <= sliderHandleWidth) {
-						setTranslate(sliderHandle, sliderTranslateX + translateX);
-					}
+					buttonOffset = buttonRight._buttonOffset;
+					setTranslate(buttonRight, (translateX - buttonOffset * (1 + Math.max(progress, -1))));
 				}
 			}
+			if (buttonsLeft && buttonsLeft.length > 0) {
+				progress = translateX / sliderActionLeftWidth;
+				if (translateX > sliderActionLeftWidth) {
+					translateX = sliderActionLeftWidth + Math.pow(translateX - sliderActionLeftWidth, overFactor);
+				}
+				for (i = 0, len = buttonsLeft.length; i < len; i++) {
+					var buttonLeft = buttonsLeft[i];
+					if (typeof buttonLeft._buttonOffset === 'undefined') {
+						buttonLeft._buttonOffset = sliderActionLeftWidth - buttonLeft.offsetLeft - buttonLeft.offsetWidth;
+					}
+					buttonOffset = buttonLeft._buttonOffset;
+					if (buttonsLeft.length > 1) {
+						buttonLeft.style.zIndex = buttonsLeft.length - i;
+					}
+					setTranslate(buttonLeft, (translateX + buttonOffset * (1 - Math.min(progress, 1))));
+				}
+			}
+			setTranslate(sliderHandle, translateX);
 			lastTranslateX = translateX;
 		}
 		sliderRequestAnimationFrame = requestAnimationFrame(function() {
@@ -4518,116 +4534,12 @@ var mui = (function(document, undefined) {
 		}
 	};
 
-	var toggleSliderLeftAction = function(show, trigger) {
-		if (sliderLeft) { //显示
-			sliderLeft.setAttribute('style', '');
-			sliderRight && sliderRight.setAttribute('style', '');
-			if (show) {
-				setTranslate(sliderHandle, sliderLeftWidth);
-				if (trigger) {
-					$.trigger(sliderHandle, 'slideright');
-				}
-				cell.classList.add(CLASS_SELECTED);
-			} else {
-				setTranslate(sliderHandle, 0);
-				cell.classList.remove(CLASS_SELECTED);
-			}
-		}
-	};
-	var toggleSliderRightAction = function(show, trigger) {
-		if (sliderRight) { //显示
-			sliderRight.setAttribute('style', '');
-			sliderLeft && sliderLeft.setAttribute('style', '');
-			if (show) {
-				setTranslate(sliderHandle, -sliderRightWidth);
-				if (trigger) {
-					$.trigger(sliderHandle, 'slideleft');
-				}
-				cell.classList.add(CLASS_SELECTED);
-			} else {
-				setTranslate(sliderHandle, 0);
-				cell.classList.remove(CLASS_SELECTED);
-			}
-		}
-	};
-	var toggleSliderHandle = function(show) {
-		if (sliderHandle) {
-			if (show) {
-				setTranslate(sliderHandle, 0);
-				cell.classList.add(CLASS_SELECTED);
-			} else {
-				setTranslate(sliderHandle, sliderHandleWidth);
-				cell.classList.remove(CLASS_SELECTED);
-			}
-		}
-	};
-	var endDraging = function(isSwipe, detail) {
-		isDraging = false;
-		if (sliderRequestAnimationFrame) {
-			cancelAnimationFrame(sliderRequestAnimationFrame);
-			sliderRequestAnimationFrame = null;
-		}
-		sliderCell.setAttribute('style', '');
-		var absTranslateX = Math.abs(translateX);
-		if (!isSwipe && (sliderLeft || sliderRight)) { //bounce
-			if (translateX > 0) { //dragright
-				var distance = sliderLeftWidth / 2;
-				if (sliderTranslateX !== 0) {
-					if (sliderRight) { //关闭
-						//trigger is false
-						toggleSliderRightAction(!(absTranslateX >= sliderRightWidth / 2), false);
-						distance = sliderLeftWidth / 2 + sliderRightWidth;
-					}
-				}
-				if (sliderLeft) {
-					var isShow = (absTranslateX >= distance);
-					if (sliderLeft.classList.contains(CLASS_BOUNCE)) { //bounce
-						sliderLeft.setAttribute('style', '');
-						setTranslate(sliderHandle, 0);
-						if (isShow && !detail.swipe) {
-							$.trigger(sliderHandle, 'slideright');
-						}
-					} else {
-						toggleSliderLeftAction(isShow, true);
-					}
-				}
-			} else {
-				var distance = sliderLeftWidth / 2;
-				if (sliderTranslateX !== 0) {
-					if (sliderLeft) { //关闭
-						//trigger is false
-						toggleSliderLeftAction(!(absTranslateX >= sliderLeftWidth / 2), false);
-						distance = sliderRightWidth / 2 + sliderLeftWidth;
-					}
-				}
-				if (sliderRight) { //显示
-					var isShow = (absTranslateX >= distance);
-					if (sliderRight.classList.contains(CLASS_BOUNCE)) { //bounce
-						sliderRight.setAttribute('style', '');
-						setTranslate(sliderHandle, 0);
-						if (isShow && !detail.swipe) {
-							$.trigger(sliderHandle, 'slideleft');
-						}
-					} else {
-						toggleSliderRightAction(isShow, true);
-					}
-				}
-			}
-		} else if (!(sliderLeft || sliderRight)) {
-			if (sliderTranslateX === 0) { //关闭
-				toggleSliderHandle(!(absTranslateX > (sliderHandleWidth / 2)));
-			} else { //拉开
-				toggleSliderHandle((absTranslateX > (sliderHandleWidth / 2)));
-			}
-		}
-	};
 	window.addEventListener('touchstart', function(event) {
 		if (cell) {
 			toggleActive(false);
 		}
-		cell = a = sliderHandle = sliderLeft = sliderRight = isDraging = sliderRequestAnimationFrame = false;
-		translateX = lastTranslateX = sliderTranslateX = sliderHandleWidth = sliderLeftWidth = sliderRightWidth = 0;
-		sliderLeftBg = sliderRightBg = '';
+		cell = a = false;
+		isMoved = isOpened = openedActions = false;
 
 		var target = event.target;
 		var isDisabled = false;
@@ -4642,25 +4554,12 @@ var mui = (function(document, undefined) {
 				}
 				if (classList.contains(CLASS_TABLE_VIEW_CELL)) {
 					cell = target;
-					var selected = cell.parentNode.querySelector('.' + CLASS_SELECTED);
+					//TODO swipe to delete close
+					var selected = cell.parentNode.querySelector(SELECTOR_SELECTED);
 					if (selected && selected !== cell) {
-						selected.classList.remove(CLASS_SELECTED);
-						var selectedSliderHandle = selected.querySelector(SELECTOR_SLIDER_HANDLE);
-						if (selectedSliderHandle) {
-							var selectedLeft = selected.querySelector(SELECTOR_SLIDER_LEFT);
-							if (selectedLeft) {
-								selectedLeft.setAttribute('style', '');
-							}
-							var selectedRight = selected.querySelector(SELECTOR_SLIDER_RIGHT);
-							if (selectedRight) {
-								selectedRight.setAttribute('style', '');
-							}
-							if (selectedLeft || selectedRight) {
-								setTranslate(selectedSliderHandle, 0);
-							} else {
-								setTranslate(selectedSliderHandle, selectedSliderHandle.offsetWidth);
-							}
-						}
+						$.swipeoutClose(selected);
+						cell = isDisabled = false;
+						return;
 					}
 					if (!cell.parentNode.classList.contains(CLASS_GRID_VIEW)) {
 						var link = cell.querySelector('a');
@@ -4668,36 +4567,10 @@ var mui = (function(document, undefined) {
 							a = link;
 						}
 					}
-					sliderCell = cell.querySelector(SELECTOR_SLIDER_CELL);
-					if (sliderCell && sliderCell.parentNode === cell) {
-						var handle = sliderCell.querySelector(SELECTOR_SLIDER_HANDLE);
-						if (handle) { //slider
-							toggleEvents(cell);
-							sliderHandle = handle;
-							sliderHandleWidth = sliderHandle.offsetWidth;
-							sliderHandleLeft = $.getStyles(sliderHandle, 'margin-left');
-							factor = drawerFactor;
-							var left = sliderCell.querySelector(SELECTOR_SLIDER_LEFT);
-							if (left) { //li>.left
-								sliderLeft = left;
-								sliderLeftBg = $.getStyles(left, 'background-color');
-								sliderLeftWidth = left.offsetWidth;
-							}
-							var right = sliderCell.querySelector(SELECTOR_SLIDER_RIGHT);
-							if (right) { //li>.right
-								sliderRight = right;
-								sliderRightBg = $.getStyles(right, 'background-color');
-								sliderRightWidth = right.offsetWidth;
-							}
-							if (sliderLeft || sliderRight) {
-								factor = bounceFactor;
-							}
-							var matrix = $.getStyles(sliderHandle, 'webkitTransform');
-							var result = $.parseTranslateMatrix(matrix);
-							sliderTranslateX = result ? result.x : 0;
-						}
+					if (cell.querySelector(SELECTOR_SLIDER_HANDLE)) {
+						toggleEvents(cell);
+						event.stopPropagation();
 					}
-
 					if (!isDisabled) {
 						toggleActive(true);
 					}
@@ -4713,14 +4586,14 @@ var mui = (function(document, undefined) {
 	var handleEvent = {
 		handleEvent: function(event) {
 			switch (event.type) {
-				case 'dragstart':
-					this.dragstart(event);
-					break;
 				case 'drag':
 					this.drag(event);
 					break;
 				case 'dragend':
 					this.dragend(event);
+					break;
+				case 'flick':
+					this.flick(event);
 					break;
 				case 'swiperight':
 					this.swiperight(event);
@@ -4730,99 +4603,238 @@ var mui = (function(document, undefined) {
 					break;
 			}
 		},
-		dragstart: function(event) {
+		drag: function(event) {
+			if (!cell) {
+				return;
+			}
+			if (!isMoved) { //init
+				sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
+				sliderHandle = cell.querySelector(SELECTOR_SLIDER_HANDLE);
+				if (sliderHandle) {
+					sliderActionLeft = cell.querySelector(SELECTOR_SLIDER_LEFT);
+					sliderActionRight = cell.querySelector(SELECTOR_SLIDER_RIGHT);
+					if (sliderActionLeft) {
+						sliderActionLeftWidth = sliderActionLeft.offsetWidth;
+						buttonsLeft = sliderActionLeft.querySelectorAll(SELECTOR_BUTTON);
+					}
+					if (sliderActionRight) {
+						sliderActionRightWidth = sliderActionRight.offsetWidth;
+						buttonsRight = sliderActionRight.querySelectorAll(SELECTOR_BUTTON);
+					}
+					cell.classList.remove(CLASS_TRANSITIONING);
+					isOpened = cell.classList.contains(CLASS_SELECTED);
+					if (isOpened) {
+						openedActions = cell.querySelector(SELECTOR_SLIDER_LEFT + SELECTOR_SELECTED) ? 'left' : 'right';
+					}
+				}
+			}
 			var detail = event.detail;
 			var direction = detail.direction;
 			var angle = detail.angle;
-			if (direction === 'left') {
-				if ((sliderRight || sliderHandle) && (angle > 150 || angle < -150)) {
-					if (!sliderRight && sliderLeft && sliderTranslateX === 0) { //仅有左侧按钮时不允许左拖
-						return;
-					}
-					if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === 0) { //抽屉式已展开，不允许左拖
-						return;
-					}
-					isDraging = true;
+			if (direction === 'left' && (angle > 150 || angle < -150)) {
+				if (buttonsRight || (buttonsLeft && isOpened)) { //存在右侧按钮或存在左侧按钮且是已打开状态
+					isMoved = true;
 				}
-			} else if (direction === 'right') {
-				if ((sliderLeft || sliderHandle) && angle > -30 && angle < 30) {
-					if (!sliderLeft && sliderRight && sliderTranslateX === 0) { //仅有右侧按钮时不允许右拖
-						return;
-					}
-					if (sliderHandle && !sliderRight && !sliderLeft && sliderTranslateX === sliderHandleWidth) { //抽屉式已关闭，不允许右拖
-						return;
-					}
-					isDraging = true;
+			} else if (direction === 'right' && (angle > -30 && angle < 30)) {
+				if (buttonsLeft || (buttonsRight && isOpened)) { //存在左侧按钮或存在右侧按钮且是已打开状态
+					isMoved = true;
 				}
 			}
-			if (isDraging) {
+			if (isMoved) {
 				event.stopPropagation();
-			}
-		},
-		drag: function(event) {
-			if (isDraging) {
+				event.detail.gesture.preventDefault();
+				var translate = event.detail.deltaX;
+				if (isOpened) {
+					if (openedActions === 'right') {
+						translate = translate - sliderActionRightWidth;
+					} else {
+						translate = translate + sliderActionLeftWidth;
+					}
+				}
+				if ((translate > 0 && !buttonsLeft) || (translate < 0 && !buttonsRight)) {
+					if (!isOpened) {
+						return;
+					}
+					translate = 0;
+				}
+				if (translate < 0) {
+					sliderDirection = 'toLeft';
+				} else if (translate > 0) {
+					sliderDirection = 'toRight';
+				} else {
+					if (!sliderDirection) {
+						sliderDirection = 'toLeft';
+					}
+				}
 				if (!sliderRequestAnimationFrame) {
 					updateTranslate();
 				}
-				translateX = event.detail.deltaX * factor;
-				event.detail.gesture.preventDefault();
+				translateX = translate;
 			}
 		},
-		dragend: function(event) {
-			if (isDraging) {
-				endDraging(false, event.detail);
+		flick: function(event) {
+			if (isMoved) {
+				event.stopPropagation();
+			}
+		},
+		swipeleft: function(event) {
+			if (isMoved) {
+				event.stopPropagation();
 			}
 		},
 		swiperight: function(event) {
-			var isSwipeable = false;
-			if (sliderLeft && !sliderLeft.classList.contains(CLASS_BOUNCE) && sliderTranslateX === 0) {
-				//left show
-				toggleSliderLeftAction(true, true);
-				isSwipeable = true;
-			} else if (sliderRight && sliderTranslateX < 0) {
-				//right hide
-				toggleSliderRightAction(false, false);
-				isSwipeable = true;
-			} else if (!sliderLeft && !sliderRight) {
-				isSwipeable = true;
+			if (isMoved) {
+				event.stopPropagation();
 			}
-			if (isSwipeable) {
-				$.gestures.stoped = true;
-				endDraging(true, event.detail);
-			}
-			event.stopPropagation();
 		},
-		swipeleft: function(event) {
-			var isSwipeable = false;
-			if (sliderRight && !sliderRight.classList.contains(CLASS_BOUNCE) && sliderTranslateX === 0) {
-				//right show
-				toggleSliderRightAction(true, true);
-				isSwipeable = true;
-			} else if (sliderLeft && sliderTranslateX > 0) {
-				//left hide
-				toggleSliderLeftAction(false, false);
-				isSwipeable = true;
-			} else if (!sliderLeft && !sliderRight) {
-				isSwipeable = true;
-			}
-			if (isSwipeable) {
-				$.gestures.stoped = true;
-				endDraging(true, event.detail);
+		dragend: function(event) {
+			if (!isMoved) {
+				return;
 			}
 			event.stopPropagation();
+			if (sliderRequestAnimationFrame) {
+				cancelAnimationFrame(sliderRequestAnimationFrame);
+				sliderRequestAnimationFrame = null;
+			}
+			var detail = event.detail;
+			isMoved = false;
+			var action = 'close';
+			var actionsWidth = sliderDirection === 'toLeft' ? sliderActionRightWidth : sliderActionLeftWidth;
+			var isToggle = detail.swipe || (Math.abs(translateX) > actionsWidth / 2);
+			if (isToggle) {
+				if (!isOpened) {
+					action = 'open';
+				} else if (detail.direction === 'left' && openedActions === 'right') {
+					action = 'open';
+				} else if (detail.direction === 'right' && openedActions === 'left') {
+					action = 'open';
+				}
+
+			}
+			cell.classList.add(CLASS_TRANSITIONING);
+			var buttons;
+			if (action === 'open') {
+				var newTranslate = sliderDirection === 'toLeft' ? -actionsWidth : actionsWidth;
+				setTranslate(sliderHandle, newTranslate);
+				buttons = sliderDirection === 'toLeft' ? buttonsRight : buttonsLeft;
+				if (typeof buttons !== 'undefined') {
+					var button = null;
+					for (i = 0; i < buttons.length; i++) {
+						button = buttons[i];
+						setTranslate(button, newTranslate);
+					}
+					button.parentNode.classList.add(CLASS_SELECTED);
+					cell.classList.add(CLASS_SELECTED);
+					if (!isOpened) {
+						$.trigger(cell, sliderDirection === 'toLeft' ? 'slideleft' : 'slideright');
+					}
+				}
+			} else {
+				setTranslate(sliderHandle, 0);
+				sliderActionLeft && sliderActionLeft.classList.remove(CLASS_SELECTED);
+				sliderActionRight && sliderActionRight.classList.remove(CLASS_SELECTED);
+				cell.classList.remove(CLASS_SELECTED);
+			}
+			var buttonOffset;
+			if (buttonsLeft && buttonsLeft.length > 0 && buttonsLeft !== buttons) {
+				for (var i = 0, len = buttonsLeft.length; i < len; i++) {
+					var buttonLeft = buttonsLeft[i];
+					buttonOffset = buttonLeft._buttonOffset;
+					if (typeof buttonOffset === 'undefined') {
+						buttonLeft._buttonOffset = sliderActionLeftWidth - buttonLeft.offsetLeft - buttonLeft.offsetWidth;
+					}
+					setTranslate(buttonLeft, buttonOffset);
+				}
+			}
+			if (buttonsRight && buttonsRight.length > 0 && buttonsRight !== buttons) {
+				for (var i = 0, len = buttonsRight.length; i < len; i++) {
+					var buttonRight = buttonsRight[i];
+					buttonOffset = buttonRight._buttonOffset;
+					if (typeof buttonOffset === 'undefined') {
+						buttonRight._buttonOffset = buttonRight.offsetLeft;
+					}
+					setTranslate(buttonRight, -buttonOffset);
+				}
+			}
 		}
 	};
 
 	function toggleEvents(element, isRemove) {
 		var method = !!isRemove ? 'removeEventListener' : 'addEventListener';
-		element[method]('dragstart', handleEvent);
 		element[method]('drag', handleEvent);
 		element[method]('dragend', handleEvent);
 		element[method]('swiperight', handleEvent);
 		element[method]('swipeleft', handleEvent);
-	}
-
-
+		element[method]('flick', handleEvent);
+	};
+	/**
+	 * 打开滑动菜单
+	 * @param {Object} el
+	 * @param {Object} direction
+	 */
+	$.swipeoutOpen = function(el, direction) {
+		if (!el) return;
+		var classList = el.classList;
+		if (classList.contains(CLASS_SELECTED)) return;
+		if (!direction) {
+			if (el.querySelector(SELECTOR_SLIDER_RIGHT)) {
+				direction = 'right';
+			} else {
+				direction = 'left';
+			}
+		}
+		var swipeoutAction = el.querySelector($.classSelector(".slider-" + direction));
+		if (!swipeoutAction) return;
+		swipeoutAction.classList.add(CLASS_SELECTED);
+		classList.add(CLASS_SELECTED);
+		classList.remove(CLASS_TRANSITIONING);
+		var buttons = swipeoutAction.querySelectorAll(SELECTOR_BUTTON);
+		var swipeoutWidth = swipeoutAction.offsetWidth;
+		var translate = (direction === 'right') ? -swipeoutWidth : swipeoutWidth;
+		var length = buttons.length;
+		var button;
+		for (var i = 0; i < length; i++) {
+			button = buttons[i];
+			if (direction === 'right') {
+				setTranslate(button, -button.offsetLeft);
+			} else {
+				setTranslate(button, (swipeoutWidth - button.offsetWidth - button.offsetLeft));
+			}
+		}
+		classList.add(CLASS_TRANSITIONING);
+		for (var i = 0; i < length; i++) {
+			setTranslate(buttons[i], translate);
+		}
+		setTranslate(el.querySelector(SELECTOR_SLIDER_HANDLE), translate);
+	};
+	/**
+	 * 关闭滑动菜单
+	 * @param {Object} el
+	 */
+	$.swipeoutClose = function(el) {
+		if (!el) return;
+		var classList = el.classList;
+		if (!classList.contains(CLASS_SELECTED)) return;
+		var direction = el.querySelector(SELECTOR_SLIDER_RIGHT + SELECTOR_SELECTED) ? 'right' : 'left';
+		var swipeoutAction = el.querySelector($.classSelector(".slider-" + direction));
+		if (!swipeoutAction) return;
+		swipeoutAction.classList.remove(CLASS_SELECTED);
+		classList.remove(CLASS_SELECTED);
+		classList.add(CLASS_TRANSITIONING);
+		var buttons = swipeoutAction.querySelectorAll(SELECTOR_BUTTON);
+		var swipeoutWidth = swipeoutAction.offsetWidth;
+		var length = buttons.length;
+		var button;
+		setTranslate(el.querySelector(SELECTOR_SLIDER_HANDLE), 0);
+		for (var i = 0; i < length; i++) {
+			button = buttons[i];
+			if (direction === 'right') {
+				setTranslate(button, (-button.offsetLeft));
+			} else {
+				setTranslate(button, (swipeoutWidth - button.offsetWidth - button.offsetLeft));
+			}
+		}
+	};
 
 	window.addEventListener('touchend', function(event) { //使用touchend来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
 		if (!cell) {
@@ -4869,7 +4881,7 @@ var mui = (function(document, undefined) {
 		}
 		var isExpand = false;
 		var classList = cell.classList;
-		if (classList.contains('mui-collapse')) {
+		if (classList.contains('mui-collapse') && !cell.parentNode.classList.contains('mui-unfold')) {
 			event.detail.gesture.preventDefault();
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
 				var collapse = cell.parentNode.querySelector('.mui-collapse.mui-active');
