@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-16 17:23:30 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-16 17:23:30 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-16 22:11:50 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-16 22:11:50 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -449,29 +449,28 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="p">}</span>
   <span class="p">]</span>
 <span class="p">});</span></code></pre></div>
-
-    <p class="component-note touch-only"><strong>Note:</strong> 若预加载的目标窗口包含子页面，也可以直接在preloadPages参数中中配置subpages，mui框架会自动预加载子页面；subpages参数参考<a href="#subpage">创建子页面</a>。</p>
+    <p class="component-description">该种方案使用简单、可预加载多个页面，但不会返回预加载每个页面的引用，若要获得对应webview引用，还需要通过<code>plus.webview.getWebviewById</code>方式获得；另外，因为mui.init是异步执行，执行完mui.init方法后立即获得对应webview引用，可能会失败，例如如下代码：
+    </p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">preloadPages</span><span class="o">:</span><span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">url</span><span class="o">:</span><span class="s1">&#39;list.html&#39;</span><span class="p">,</span>
+      <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;list&#39;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">getWebviewByid</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">);</span><span class="c1">//这里可能返回空；</span></code></pre></div>
     <p class="component-description">方式二：通过mui.preload方法预加载.</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">preload</span><span class="p">({</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">.</span><span class="nx">preload</span><span class="p">({</span>
     <span class="nx">url</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">url</span><span class="p">,</span>
     <span class="nx">id</span><span class="o">:</span><span class="k">new</span><span class="o">-</span><span class="nx">page</span><span class="o">-</span><span class="nx">id</span><span class="p">,</span><span class="c1">//默认使用当前页面的url作为id</span>
     <span class="nx">styles</span><span class="o">:</span><span class="p">{},</span><span class="c1">//窗口参数</span>
     <span class="nx">extras</span><span class="o">:</span><span class="p">{}</span><span class="c1">//自定义扩展参数</span>
-<span class="p">})</span></code></pre></div>
-<p class="component-description">示例：Hello mui首页显示后，用户点击badge（数字角标）、checkbox（复选框）、dialog（消息框）三个页面时，不会出现waiting等待框，而是立即打开了新页面；但点击icon（图标）页面时，则会先显示waiting等待框，再进入新页面；这种效果就是因为使用了预加载技术，Hello mui设置首页最多允许预加载3个页面（preloadLimit为3），然后在首页plusReady事件后，预加载了前3个一级列表页面，，故有前面所述的体验效果；实现代码如下：</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#list&gt;.mui-table-view-cell&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">//只预加载一级列表，二级列表在其展开时再预加载；</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="s1">&#39;mui-collapse&#39;</span><span class="p">))</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">);</span>
-    <span class="c1">//预加载，默认使用url作为其id</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">preload</span><span class="p">({</span>
-      <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span>
-    <span class="p">});</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">++</span><span class="nx">count</span> <span class="o">&gt;=</span> <span class="nx">limit</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
+<p class="component-description">通过<code>mui.preload()</code>方法预加载，可立即返回对应webview的引用，但一次仅能预加载一个页面；若需加载多个webview，则需多次调用<code>mui.preload()</code>方法；
+</p>
+<p class="component-description">如上两种方案，各有优劣，需根据具体业务场景灵活选择；
+</p>
   </article>
     <!-- 下拉刷新 -->
       <article id="pullrefresh-down" class="component mui-active">
@@ -796,8 +795,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-16 17:23:30 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-16 17:23:30 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-16 22:11:50 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-16 22:11:50 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
