@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-16 22:11:50 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-16 22:11:50 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-23 15:57:26 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-23 15:57:26 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -475,7 +475,9 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <!-- 下拉刷新 -->
       <article id="pullrefresh-down" class="component mui-active">
       <h3 class="component-title">下拉刷新</h3>
-      <p class="component-description">下拉刷新涉及局部滚动，mui依然采用将下拉刷新页面分解为主页面和内容页面双webview的方式（参考<a href="#subpage">创建子页面</a>），解决卡头卡尾及区域滚动的问题；在android平台上，为解决拖动回弹动画的流畅度问题，mui使用原生下拉刷新；拖动时，拖动的不是div，而是一个完整的webview（内容页面），回弹动画使用原生动画；在iOS平台，H5的动画已经比较流畅，故使用纯H5方案，拖动的还是div区域。两个平台实现虽有差异，但mui经过封装，可使用一套代码实现下拉刷新。</p>
+      <p class="component-description">
+        为实现下拉刷新功能，大多H5框架都是通过DIV模拟下拉回弹动画，在低端android手机上，DIV动画经常出现卡顿现象（特别是图文列表的情况）；
+        mui通过双webview解决这个DIV的拖动流畅度问题；拖动时，拖动的不是div，而是一个完整的webview（子webview），回弹动画使用原生动画；在iOS平台，H5的动画已经比较流畅，故依然使用H5方案。两个平台实现虽有差异，但mui经过封装，可使用一套代码实现下拉刷新。</p>
       <p class="component-description">主页面内容比较简单，只需要创建子页面即可：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
     <span class="nx">subpages</span><span class="o">:</span><span class="p">[{</span>
@@ -487,10 +489,21 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       <span class="p">}</span>
     <span class="p">}]</span>
   <span class="p">});</span></code></pre></div>
-<p class="component-description">内容页面需要做两件事情，首先、通过mui.init方法中pullRefresh参数配置下拉刷新各项参数，如下：</p>
+<p class="component-description">
+  内容页面需按照如下DOM结构构建：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!--下拉刷新容器--&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;refreshContainer&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-content mui-scroll-wrapper&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--数据列表--&gt;</span>
+    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;mui-table-view mui-table-view-chevron&quot;</span><span class="nt">&gt;</span>
+      
+    <span class="nt">&lt;/ul&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<p class="component-description">其次，通过mui.init方法中pullRefresh参数配置下拉刷新各项参数，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">pullRefresh</span> <span class="o">:</span> <span class="p">{</span>
-    <span class="nx">container</span><span class="o">:</span><span class="nx">refreshContainer</span><span class="p">,</span><span class="c1">//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等</span>
+    <span class="nx">container</span><span class="o">:</span><span class="s2">&quot;#refreshContainer&quot;</span><span class="p">,</span><span class="c1">//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等</span>
     <span class="nx">down</span> <span class="o">:</span> <span class="p">{</span>
       <span class="nx">contentdown</span> <span class="o">:</span> <span class="s2">&quot;下拉可以刷新&quot;</span><span class="p">,</span><span class="c1">//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容</span>
       <span class="nx">contentover</span> <span class="o">:</span> <span class="s2">&quot;释放立即刷新&quot;</span><span class="p">,</span><span class="c1">//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容</span>
@@ -499,14 +512,13 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
-<p class="component-description">其次，根据具体业务编写刷新函数，需要注意的是，加载完新数据后，需要执行endPulldownToRefresh()方法；</p>
+<p class="component-description">
+  最后，根据具体业务编写刷新函数，需要注意的是，加载完新数据后，需要执行endPulldownToRefresh()方法；</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">pullfresh</span><span class="o">-</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
-     <span class="c1">//注意，加载完新数据后，必须执行如下代码，两个注意事项：</span>
-     <span class="c1">//1、若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
-     <span class="c1">//2、注意this的作用域，若存在匿名函数，需将this复制后使用，参考hello mui中的代码示例；</span>
-     <span class="k">this</span><span class="p">.</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
+     <span class="c1">//注意，加载完新数据后，必须执行如下代码，注意：若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
+     <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullrefreshContainer&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
     <!-- 上拉加载 -->
@@ -795,8 +807,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-16 22:11:50 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-16 22:11:50 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-23 15:57:26 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-23 15:57:26 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
