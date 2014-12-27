@@ -543,6 +543,11 @@
 				mui.fire(index,"menu:open");	
 			}
 
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragright', function(e) {
+				e.detail.gesture.preventDefault();
+			});
+
 			//监听右滑事件，若侧滑菜单未显示，右滑要显示菜单；
 			window.addEventListener("swiperight",function (e) {
 				//默认滑动角度在-45度到45度之间，都会触发右滑菜单，为避免误操作，可自定义限制滑动角度；
