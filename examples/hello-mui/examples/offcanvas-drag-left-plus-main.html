@@ -241,6 +241,13 @@
 			
 			//点击侧滑图标，打开侧滑菜单；
 			document.querySelector('.mui-action-menu').addEventListener('tap', openMenu);
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragright', function(e) {
+				e.detail.gesture.preventDefault();
+			});
+			window.addEventListener('dragleft', function(e) {
+				e.detail.gesture.preventDefault();
+			});
 			//主界面向左滑动，若菜单未显示，则显示菜单；否则不做任何操作；
 			window.addEventListener("swipeleft",openMenu);
 			//主界面向右滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
