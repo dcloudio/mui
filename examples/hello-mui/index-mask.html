@@ -20,6 +20,10 @@
 				mui.fire(index,"menu:close");
 			}
 			window.addEventListener('tap',closeMenu);
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragleft', function(e) {
+				e.detail.gesture.preventDefault();
+			});
 			window.addEventListener('swipeleft',closeMenu);
 		</script>
 	</head>

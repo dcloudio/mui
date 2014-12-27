@@ -130,7 +130,11 @@
 			}
 			
 			//点击“关闭侧滑菜单”按钮处理逻辑
-			document.getElementById("close-btn").addEventListener("tap",close)
+			document.getElementById("close-btn").addEventListener("tap",close);
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragleft', function(e) {
+				e.detail.gesture.preventDefault();
+			});
 			//监听左滑事件，若菜单已展开，左滑要关闭菜单；
 			window.addEventListener("swipeleft",function (e) {
 				if(Math.abs(e.detail.angle)>170){

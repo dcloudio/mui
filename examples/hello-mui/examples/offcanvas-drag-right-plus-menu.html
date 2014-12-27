@@ -80,6 +80,10 @@
 	mui.init({
 		swipeBack:false
 	});
+	//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+	window.addEventListener('dragleft', function(e) {
+		e.detail.gesture.preventDefault();
+	});
 	//优化显示出来的侧滑菜单，只需监听该菜单的左滑事件，然后将其关闭即可；在菜单上右滑，不做任何操作；
 	window.addEventListener("swipeleft",function () {
 		mui.fire(mui.currentWebview.opener(),"menu:swipeleft");

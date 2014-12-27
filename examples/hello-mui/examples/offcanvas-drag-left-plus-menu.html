@@ -64,6 +64,10 @@
 	mui.init({
 		swipeBack:false
 	});
+	//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+	window.addEventListener('dragright', function(e) {
+		e.detail.gesture.preventDefault();
+	});
 	
 	//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
 	window.addEventListener("swiperight",function () {
