@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-30 14:09:32 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-30 14:09:32 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-30 14:26:09 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-30 14:26:09 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -716,7 +716,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <p class="component-description">若要跳转到第x张图片，则可以使用图片轮播插件的gotoItem方法，例如：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
 <span class="kd">var</span> <span class="nx">gallery</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">);</span>
-<span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">.</span><span class="nx">gotoItem</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span><span class="c1">//跳转到第index张图片，index从0开始；</span></code></pre></div>
+<span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">().</span><span class="nx">gotoItem</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span><span class="c1">//跳转到第index张图片，index从0开始；</span></code></pre></div>
 <p class="component-description">图片轮播涉及的另外一个问题：是否支持循环播放，比如有1、2、3、4四张图片，从第1张图片起，依次向左滑动切换图片，当切换到第4张图片时，继续向左滑动，接下来会有两种效果：
   <ul>
     <li>支持循环：左滑，直接切换到第1张图片；</li>
@@ -807,8 +807,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-30 14:09:32 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-30 14:09:32 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-30 14:26:09 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-30 14:26:09 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
