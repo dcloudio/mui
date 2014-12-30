@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-30 14:26:09 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-30 14:26:09 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-30 21:40:57 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-30 21:40:57 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -332,6 +332,148 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		<strong>注意：</strong>自定义关闭逻辑时，一定要重写mui.back，不能简单通过addEventListener增加back按键监听，
 		因为addEventListener只会增加新的执行逻辑，老的监听逻辑依然会执行；
 	</p>
+</article> 
+    <!-- AJAX -->
+    <article class="component mui-active" id="ajax">
+	<h3 class="component-title">Ajax</h3>
+	<p class="component-description">mui框架基于htm5plus的<a href="http://www.html5plus.org/#specification#/specification/XMLHttpRequest.html">XMLHttpRequest</a>，封装了常用的Ajax函数，支持GET、POST请求方式，支持返回json、xml、html、text、script数据类型；
+		本着极简的设计原则，mui提供了mui.ajax方法，并在mui.ajax方法基础上，进一步简化出最常用的mui.get()、mui.getJSON()、mui.post()三个方法。
+	</p>
+	<p class="component-description">
+		mui.ajax()方法通过HTTP请求加载远程数据，是mui框架底层Ajax的实现方法，使用方法：<code>mui.ajax(url[,setting])</code>，其中url表示请求发送的目标地址，setting是一个json对象，支持的参数主要包括：
+		<table class='param-desc'>
+			<tr>
+				<td width='100px'>参数</td>
+				<td width='100px'>类型</td>
+				<td>描述</td>
+			</tr>
+			<tr>
+				<td>data</td>
+				<td>Object</td>
+				<td>发送到服务器的数据，可以是json对象或字符串</td>
+			</tr>
+			<tr>
+				<td>dataType</td>
+				<td>String</td>
+				<td>预期服务器返回的数据类型；如果不指定，mui将自动根据HTTP包的MIME头信息自动判断；支持设置的dataType可选值：
+					<ul>
+						<li>"xml": 返回XML文档</li>
+						<li>"html": 返回纯文本HTML信息；</li>
+						<li>"script": 返回纯文本JavaScript代码</li>
+						<li>"json": 返回JSON数据 </li>
+						<li>"text": 返回纯文本字符串</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>error</td>
+				<td>Function</td>
+				<td>请求失败时触发的函数，该函数接收三个参数：
+					<ul>
+						<li>xhr：xhr实例对象，类型是XMLHttpRequest</li>
+						<li>type：错误描述，类型是String，可取值除了'null'外，其它可能值："timeout", "error", "abort", "parsererror"</li>
+						<li>errorThrown：可捕获的异常对象，类型是String</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>success</td>
+				<td>Function</td>
+				<td>请求成功时触发的回调函数，该函数接收三个参数：
+					<ul>
+						<li>data：服务器返回的响应数据，类型可以是json对象、xml对象、字符串等；</li>
+						<li>textStatus：状态描述，参数类型是String，默认值为'success'</li>
+						<li>xhr：xhr实例对象，类型是XMLHttpRequest</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td>timeout</td>
+				<td>Number</td>
+				<td>请求超时时间（毫秒），默认值为0，表示永不超时；若超过设置的超时时间(非0的情况)，依然未收到服务器响应，则触发error回调</td>
+			</tr>
+			<tr>
+				<td>type</td>
+				<td>String</td>
+				<td>请求方式，目前仅支持'GET'和'POST'，默认为'GET'方式</td>
+			</tr>
+		</table>
+		<p class="component-description" style="margin-top:20px">
+			代码示例：如下为通过post方式向某服务器发送鉴权登录的代码片段
+		</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="s1">&#39;http://server-name/login.php&#39;</span><span class="p">,{</span>
+	<span class="nx">data</span><span class="o">:</span><span class="p">{</span>
+		<span class="nx">username</span><span class="o">:</span><span class="s1">&#39;username&#39;</span><span class="p">,</span>
+		<span class="nx">password</span><span class="o">:</span><span class="s1">&#39;password&#39;</span>
+	<span class="p">},</span>
+	<span class="nx">dataType</span><span class="o">:</span><span class="s1">&#39;json&#39;</span><span class="p">,</span><span class="c1">//服务器返回json格式数据</span>
+	<span class="nx">type</span><span class="o">:</span><span class="s1">&#39;post&#39;</span><span class="p">,</span><span class="c1">//HTTP请求类型</span>
+	<span class="nx">timeout</span><span class="o">:</span><span class="mi">10000</span><span class="p">,</span><span class="c1">//超时时间设置为10秒；</span>
+	<span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+		<span class="c1">//服务器返回响应，根据响应结果，分析是否登录成功；</span>
+		<span class="p">...</span>
+	<span class="p">},</span>
+	<span class="nx">error</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span><span class="nx">type</span><span class="p">,</span><span class="nx">errorThrown</span><span class="p">){</span>
+		<span class="c1">//异常处理；</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">type</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">
+			<code>mui.post()</code>方法是对<code>mui.ajax()</code>的一个简化方法，直接使用POST请求方式向服务器发送数据、且不处理timeout和异常（若需处理异常及超时，请使用<code>mui.ajax()</code>方法），使用方法：
+		<code>mui.post(url[,data][,success][,dataType])</code>，如上登录鉴权代码换成<code>mui.post()</code>后，代码更为简洁，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://server-name/login.php&#39;</span><span class="p">,{</span>
+		<span class="nx">username</span><span class="o">:</span><span class="s1">&#39;username&#39;</span><span class="p">,</span>
+		<span class="nx">password</span><span class="o">:</span><span class="s1">&#39;password&#39;</span>
+	<span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+		<span class="c1">//服务器返回响应，根据响应结果，分析是否登录成功；</span>
+		<span class="p">...</span>
+	<span class="p">},</span><span class="s1">&#39;json&#39;</span>
+<span class="p">});</span></code></pre></div>	
+	<p class="component-description"><code>mui.get()</code>方法和<code>mui.post()</code>方法类似，只不过是直接使用GET请求方式向服务器发送数据、且不处理timeout和异常（若需处理异常及超时，请使用<code>mui.ajax()</code>方法），使用方法：
+		<code>mui.get(url[,data][,success][,dataType])</code>，如下为获得某服务器新闻列表的代码片段，服务器以json格式返回数据列表
+		</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;http://server-name/list.php&#39;</span><span class="p">,{</span><span class="nx">category</span><span class="o">:</span><span class="s1">&#39;news&#39;</span><span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+	<span class="c1">//获得服务器响应</span>
+	<span class="p">...</span>
+	<span class="p">},</span><span class="s1">&#39;json&#39;</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">
+			如上<code>mui.get()</code>方法和如下<code>mui.ajax()</code>方法效果是一致的：</p>
+		</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="s1">&#39;http://server-name/list.php&#39;</span><span class="p">,{</span>
+	<span class="nx">data</span><span class="o">:</span><span class="p">{</span>
+		<span class="nx">category</span><span class="o">:</span><span class="s1">&#39;news&#39;</span>
+	<span class="p">},</span>
+	<span class="nx">dataType</span><span class="o">:</span><span class="s1">&#39;json&#39;</span><span class="p">,</span><span class="c1">//服务器返回json格式数据</span>
+	<span class="nx">type</span><span class="o">:</span><span class="s1">&#39;get&#39;</span><span class="p">,</span><span class="c1">//HTTP请求类型</span>
+	<span class="nx">success</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+		<span class="c1">//获得服务器响应</span>
+		<span class="p">...</span>
+	<span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+	
+		<p class="component-description" ><code>mui.getJSON()</code>方法是在<code>mui.get()</code>方法基础上的更进一步简化，限定返回json格式的数据，其它参数和<code>mui.get()</code>方法一致，使用方法：
+		<code>mui.get(url[,data][,success])</code>，如上获得新闻列表的代码换成<code>mui.getJSON()</code>方法后，更为简洁，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;http://server-name/list.php&#39;</span><span class="p">,{</span><span class="nx">category</span><span class="o">:</span><span class="s1">&#39;news&#39;</span><span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+	<span class="c1">//获得服务器响应</span>
+	<span class="p">...</span>
+	<span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+		
+	
+
+		<style>
+			.param-desc tr{
+				border-bottom: 1px solid #999;
+			}
+			.param-desc tr:first-child{
+				text-align: center;
+				font-weight: bold;
+			}
+			.param-desc ul>li{
+				font-size: 16px;
+			}
+		</style>
 </article> 
     <!-- 手势事件 -->
         <article id="gesture" class="component mui-active">
@@ -807,8 +949,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-30 14:26:09 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-30 14:26:09 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-30 21:40:57 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-30 21:40:57 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
@@ -866,6 +1008,7 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
             <li><a href="#subpage">创建子页面</a></li>
             <li><a href="#openwindow">打开新页面</a></li>
             <li><a href="#closewindow">关闭页面</a></li>
+            <li><a href="#ajax">AJAX</a></li>
             <li><a href="#gesture">手势事件</a></li>
             <li><a href="#preload">预加载</a></li>
             <li><a href="#pullrefresh-down">下拉刷新</a></li>
