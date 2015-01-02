@@ -16,6 +16,15 @@
 			body {
 				background-color: #efeff4;
 			}
+			p {
+				text-indent: 22px;
+			}
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
 		</style>
 	</head>
 
@@ -27,134 +36,81 @@
 			<h1 class="mui-title">off canvas（侧滑导航）</h1>
 		</header>
 		<div class="mui-content">
-			<ul class="mui-table-view mui-table-view-chevron mui-hidden">
-				<li id="switch" class="mui-table-view-cell">
-					整体滑动
-					<div class="mui-switch">
-						<div class="mui-switch-handle"></div>
-					</div>
-				</li>
-			</ul>
-			<ul class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-navigate-right">
-						<img class="mui-media-object mui-pull-left" src="../images/42x42.gif">
-						<div class="mui-media-body">
-							Item 1
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-							</p>
-						</div>
-					</a>
-				</li>
-			</ul>
+			<div class="mui-content-padded">
+				<p>这是webview模式右滑导航示例，主页面和菜单在不同的webview中，
+					优点是支持菜单内容在多页面的复用，缺点是不支持拖动手势（跟手）；
+					当前页面为主界面，你可以在主界面放置任何内容；
+					 打开侧滑菜单有多种方式：
+					 1、在当前页面快速向左滑动（swipe）； 
+					 2、点击页面右上角的
+					<span class="mui-icon mui-icon-bars"></span> 图标；
+					 3、通过JS API触发（例如点击如下蓝色按钮体验）；
+					 <span class="android-only">4、Android手机按menu键；</span>
+				</p>
+				<p style="padding: 5px 20px;margin-bottom: 5px;">
+					<button id="show-btn" class="mui-btn mui-btn-primary mui-btn-block" style="padding: 10px;">
+						显示侧滑菜单
+					</button>
+				</p>
+				<p class="mui-hidden">侧滑菜单的移动动画，支持多种效果，切换如下选项体验不动动画效果：</p>
+
+			</div>
+			<form class="mui-input-group mui-hidden" style="margin-bottom: 15px;">
+				<div class="mui-input-row mui-radio">
+					<label>主界面移动、菜单不动</label>
+					<input name="style" type="radio" checked="" value="main-move">
+				</div>
+				<div class="mui-input-row mui-radio">
+					<label>主界面不动、菜单移动</label>
+					<input name="style" type="radio" value="menu-move">
+				</div>
+				<div class="mui-input-row mui-radio mui-hidden" id="move-togger">
+					<label>整体移动</label>
+					<input name="style" type="radio" value="all-move">
+				</div>
+			</form>
 		</div>
 		<script>
-			var menu, mask = mui.createMask(closeMenu);
-			var showMenu = false,slideTogether = false;
-			
+			var main,menu, mask = mui.createMask(closeMenu);
+			var showMenu = false,
+				mode = 'main-move';
+
 			 //整体滑动暂不支持android手机，因为两个页面的移动动画，无法保证同步性；
 			if (!mui.os.android) {
-				var switchElem = document.getElementById("switch");
-				switchElem.parentNode.classList.remove('mui-hidden');
-				//整体切换开关事件，按下时，需变换menu界面的初始化位置；
-				switchElem.addEventListener('toggle', function(event) {
-					if (event.detail.isActive) {
-						//切换为整体移动
-						//首先改变移动标志
-						slideTogether = true;
-						//变换menu界面初始化位置，整体移动时，Menu界面left需要在100%的地方；
-						menu.setStyle({
-							left: '100%'
-						});
-					} else {
-						slideTogether = false;
-						menu.setStyle({
-							left: '30%'
-						});
-					}
-				});
+				//整体滑动暂不支持android手机，因为两个页面的移动动画，无法保证同步性；
+				document.getElementById("move-togger").classList.remove('mui-hidden');
+				var spans = document.querySelectorAll('.android-only');
+				for (var i=0,len=spans.length;i<len;i++) {
+					spans[i].style.display = "none";
+				}
 			}
-			
+
 			mui.init({
 				swipeBack: false,
-				back:back
+				back: back
 			});
-			function back () {
-				if(showMenu){
-					//菜单处于显示状态，返回键应该先关闭菜单,阻止主窗口执行mui.back逻辑；
-					closeMenu();
-					return false;
-				}else{
-					//菜单处于隐藏状态，执行返回时，要先close菜单页面，然后继续执行mui.back逻辑关闭主窗口；
-					menu.close('none');
-					return true;
-				}	
-			}
-			//plusReady事件后，自动创建menu窗口；
-			mui.plusReady(function () {
-				menu = mui.preload({
+
+			function back() {
+					if (showMenu) {
+						//菜单处于显示状态，返回键应该先关闭菜单,阻止主窗口执行mui.back逻辑；
+						closeMenu();
+						return false;
+					} else {
+						//菜单处于隐藏状态，执行返回时，要先close菜单页面，然后继续执行mui.back逻辑关闭主窗口；
+						menu.close('none');
+						return true;
+					}
+				}
+				//plusReady事件后，自动创建menu窗口；
+			mui.plusReady(function() {
+				main = plus.webview.currentWebview();
+				menu = mui.openWindow({
 					id: 'offcanvas-drag-left-plus-menu',
 					url: 'offcanvas-drag-left-plus-menu.html',
 					styles: {
 						left: "30%",
 						width: '70%',
-						zindex: 9998
+						zindex: 9997
 					},
 					show: {
 						aniShow: 'none'
@@ -164,72 +120,122 @@
 					}
 				});
 			});
-			
+
 			/*
 			 * 显示菜单菜单
 			 */
-			function openMenu () {
-				if(!showMenu){
-					//解决android 4.4以下版本webview移动时，导致fixed定位元素错乱的bug;
-					if (mui.os.android && parseFloat(mui.os.version) < 4.4) {
-						document.querySelector("header.mui-bar").style.position = "static";
-						//同时需要修改以下.mui-contnt的padding-top，否则会多出空白；
-						document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = "0px";
-					}
-
-					//侧滑菜单处于隐藏状态，则立即显示出来；
-					menu.show('none',0,function () {
-						//主窗体开始移动
-						mui.currentWebview.setStyle({
-							left: '-70%',
-							transition: {
-								duration: 150
-							}
-						});
-						//若需整体移动，则需让menu窗口同时移动；
-						if (slideTogether) {
-							menu.setStyle({
-								left: '30%',
-								transition: {
-									duration: 150
-								}
-							});
+			function openMenu() {
+					if (!showMenu) {
+						//解决android 4.4以下版本webview移动时，导致fixed定位元素错乱的bug;
+						if (mui.os.android && parseFloat(mui.os.version) < 4.4) {
+							document.querySelector("header.mui-bar").style.position = "static";
+							//同时需要修改以下.mui-contnt的padding-top，否则会多出空白；
+							document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = "0px";
 						}
-					});
-					//显示主窗体遮罩
-					mask.show();
-					showMenu = true;
+						
+						
+						
+						//侧滑菜单处于隐藏状态，则立即显示出来；
+//						menu.show('none', 0, function() {
+						switch (mode){
+							case 'main-move':
+								menu.show('none',0,function () {
+								
+								});
+								//主窗体开始侧滑；
+								main.setStyle({
+									left: '-70%',
+									transition: {
+										duration: 150
+									}
+								});
+//								console.log('main:'+menu.getStyle().left+','+menu.getStyle().zindex);
+								break;
+							case 'menu-move':
+//								console.log('menu-1:'+menu.getStyle().left+','+menu.getStyle().zindex);
+								
+								menu.show('none',0,function () {
+									menu.setStyle({
+										left: '30%',
+										transition: {
+											duration: 150
+										}
+									});
+								});
+								console.log('menu-2:'+menu.getStyle().left+','+menu.getStyle().zindex);
+								break;
+							case 'all-move':
+								main.setStyle({
+									left: '-70%',
+									transition: {
+										duration: 150
+									}
+								});
+								menu.setStyle({
+									left: '30%',
+									transition: {
+										duration: 150
+									}
+								});
+								break;
+						}
+//						});
+						//显示主窗体遮罩
+						mask.show();
+						showMenu = true;
+					}
 				}
-			}
-			/**
-			 * 关闭侧滑菜单
-			 */
-			function closeMenu () {
-				if(showMenu){
+				/**
+				 * 关闭侧滑菜单
+				 */
+
+			function closeMenu() {
+				if (showMenu) {
 					//解决android 4.4以下版本webview移动时，导致fixed定位元素错乱的bug;
 					if (mui.os.android && parseFloat(mui.os.version) < 4.4) {
 						document.querySelector("header.mui-bar").style.position = "fixed";
 						//同时需要修改以下.mui-contnt的padding-top，否则会多出空白；
 						document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = "44px";
 					}
-	
+
 					//关闭遮罩
 					mask.close();
-					//主窗体开始移动
-					mui.currentWebview.setStyle({
-						left: '0',
-						transition: {
-							duration: 150
-						}
-					});
-					//若整体移动，则同时移动menu窗口；
-					if (slideTogether) {
-						menu.setStyle({
-							left: '100%',
-							transition: {
-								duration: 150
-							}
-						});
+					switch (mode){
+						case 'main-move':
+							//主窗体开始侧滑；
+							main.setStyle({
+								left: '0',
+								transition: {
+									duration: 150
+								}
+							});
+							break;
+						case 'menu-move':
+							//主窗体开始侧滑；
+							menu.setStyle({
+								left: '100%',
+								transition: {
+									duration: 150
+								}
+							});
+							break;
+						case 'all-move':
+							//主窗体开始侧滑；
+							main.setStyle({
+								left: '0',
+								transition: {
+									duration: 150
+								}
+							});
+							//menu页面同时移动
+							menu.setStyle({
+								left: '100%',
+								transition: {
+									duration: 150
+								}
+							});
+							
+							break;
 					}
 					//等窗体动画结束后，隐藏菜单webview，节省资源；
 					setTimeout(function() {
@@ -239,31 +245,59 @@
 				}
 			}
 			
-			//点击侧滑图标，打开侧滑菜单；
+			//变换侧滑动画移动效果；
+			mui('.mui-input-group').on('change', 'input', function() {
+				if (this.checked) {
+					switch (this.value) {
+						case 'main-move':
+							//仅主窗口移动的时候，menu页面的zindex值要低一点；
+							menu.setStyle({left:'30%',zindex:9997});
+//							menu.hide();
+							mode = 'main-move';
+							break;
+						case 'menu-move':
+							menu.setStyle({left:'100%',zindex:9999});
+							mode = 'menu-move';
+							break;
+						case 'all-move':
+							//切换为整体移动
+							//变换menu界面初始化位置，整体移动时，Menu界面left需要在-70%的地方；
+							menu.setStyle({
+								left: '100%'
+							});
+							mode = 'all-move';
+							break;
+					}
+				}
+			});
+			
+			
+			document.getElementById("show-btn").addEventListener('tap',openMenu);
+			 //点击侧滑图标，打开侧滑菜单；
 			document.querySelector('.mui-action-menu').addEventListener('tap', openMenu);
-			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			 //在android4.4中的swipe事件，需要preventDefault一下，否则触发不正常
+			 //故，在dragleft，dragright中preventDefault
 			window.addEventListener('dragright', function(e) {
 				e.detail.gesture.preventDefault();
 			});
 			window.addEventListener('dragleft', function(e) {
 				e.detail.gesture.preventDefault();
 			});
-			//主界面向左滑动，若菜单未显示，则显示菜单；否则不做任何操作；
-			window.addEventListener("swipeleft",openMenu);
-			//主界面向右滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
-			window.addEventListener("swiperight",closeMenu);
-			//menu页面向右滑动，关闭菜单；
-			window.addEventListener("menu:swiperight",closeMenu);
-			
-			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
-			mui.menu = function () {
-				if(showMenu){
+			 //主界面向左滑动，若菜单未显示，则显示菜单；否则不做任何操作；
+			window.addEventListener("swipeleft", openMenu);
+			 //主界面向右滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
+			window.addEventListener("swiperight", closeMenu);
+			 //menu页面向右滑动，关闭菜单；
+			window.addEventListener("menu:swiperight", closeMenu);
+
+			 //重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
+			mui.menu = function() {
+				if (showMenu) {
 					closeMenu();
-				}else{
+				} else {
 					openMenu();
 				}
 			}
-
 		</script>
 
 	</body>

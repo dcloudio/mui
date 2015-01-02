@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.9.0 (https://github.com/dcloudio/mui)
+ * Mui v1.0.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -621,24 +621,26 @@ p {
   width: auto;
 }
 
-.mui-off-canvas-height-fixed {
-  height: 100% !important;
-}
-
-.mui-android .mui-off-canvas-wrap .mui-inner-wrap .mui-bar {
-  position: absolute;
+.mui-off-canvas-wrap .mui-bar {
+  position: absolute !important;
 }
 
 .mui-off-canvas-wrap {
   position: relative;
+  z-index: 1;
   width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 .mui-off-canvas-wrap .mui-inner-wrap {
   position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
-  -webkit-transition: -webkit-transform 400ms ease;
-          transition:         transform 400ms ease;
+}
+.mui-off-canvas-wrap .mui-inner-wrap.mui-transitioning {
+  -webkit-transition: -webkit-transform 200ms ease;
+          transition:         transform 200ms ease;
 }
 .mui-off-canvas-wrap .mui-inner-wrap .mui-off-canvas-left {
   -webkit-transform: translate3d(-100%, 0, 0);
@@ -648,14 +650,11 @@ p {
   -webkit-transform: translate3d(100%, 0, 0);
           transform: translate3d(100%, 0, 0);
 }
-.mui-off-canvas-wrap.mui-sliding, .mui-off-canvas-wrap.mui-left, .mui-off-canvas-wrap.mui-right {
+.mui-off-canvas-wrap.mui-active {
   height: 100%;
   overflow: hidden;
 }
-.mui-off-canvas-wrap.mui-sliding .mui-off-canvas-left, .mui-off-canvas-wrap.mui-sliding .mui-off-canvas-right, .mui-off-canvas-wrap.mui-left .mui-off-canvas-left, .mui-off-canvas-wrap.mui-left .mui-off-canvas-right, .mui-off-canvas-wrap.mui-right .mui-off-canvas-left, .mui-off-canvas-wrap.mui-right .mui-off-canvas-right {
-  display: block;
-}
-.mui-off-canvas-wrap.mui-left .mui-off-canvas-backdrop, .mui-off-canvas-wrap.mui-right .mui-off-canvas-backdrop {
+.mui-off-canvas-wrap.mui-active .mui-off-canvas-backdrop {
   position: absolute;
   top: 0;
   right: 0;
@@ -665,32 +664,37 @@ p {
   display: block;
   background: rgba(255, 255, 255, .2);
   box-shadow: -4px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
-  transition: background 300ms ease;
+  transition: background 200ms ease;
 
   -webkit-backface-visibility: hidden;
   -webkit-tap-highlight-color: transparent;
 }
-.mui-off-canvas-wrap.mui-left .mui-inner-wrap {
-  -webkit-transform: translate3d(-80%, 0, 0);
-          transform: translate3d(-80%, 0, 0);
+.mui-off-canvas-wrap.mui-slide-in .mui-off-canvas-right {
+  z-index: 10000 !important;
+  -webkit-transform: translate3d(100%, 0px, 0px);
 }
-.mui-off-canvas-wrap.mui-right .mui-inner-wrap {
-  -webkit-transform: translate3d(80%, 0, 0);
-          transform: translate3d(80%, 0, 0);
+.mui-off-canvas-wrap.mui-slide-in .mui-off-canvas-left {
+  z-index: 10000 !important;
+  -webkit-transform: translate3d(-100%, 0px, 0px);
 }
 
 .mui-off-canvas-left, .mui-off-canvas-right {
   position: absolute;
   top: 0;
   bottom: 0;
-  display: none;
-  width: 80%;
+  z-index: -1;
+  width: 70%;
   min-height: 100%;
   box-sizing: content-box;
   -webkit-overflow-scrolling: touch;
+  visibility: hidden;
   background: #333;
 
   -webkit-backface-visibility: hidden;
+}
+.mui-off-canvas-left.mui-transitioning, .mui-off-canvas-right.mui-transitioning {
+  -webkit-transition: -webkit-transform 200ms ease;
+          transition:         transform 200ms ease;
 }
 
 .mui-off-canvas-left {
@@ -2745,6 +2749,10 @@ select:focus {
           transform: translate3d(0, 0, 0);
 }
 
+.mui-android .mui-modal .mui-bar {
+  position: static;
+}
+
 .mui-slider {
   position: relative;
   width: 100%;
@@ -2864,6 +2872,8 @@ select:focus {
   background-clip: padding-box;
   border: 2px solid #ddd;
   border-radius: 20px;
+  -webkit-transition-timing-function: ease-in-out;
+          transition-timing-function: ease-in-out;
   -webkit-transition-duration: .2s;
           transition-duration: .2s;
   -webkit-transition-property: background-color, border;
@@ -2881,10 +2891,10 @@ select:focus {
   border-radius: 16px;
   -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
           box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
-  -webkit-transition-duration: .2s;
-          transition-duration: .2s;
-  -webkit-transition-property: -webkit-transform, width;
-          transition-property:         transform, width;
+  -webkit-transition: .2s ease-in-out;
+          transition: .2s ease-in-out;
+  -webkit-transition-property: -webkit-transform, width,left;
+          transition-property:         transform, width,left;
 }
 .mui-switch:before {
   position: absolute;
@@ -2895,13 +2905,24 @@ select:focus {
   text-transform: uppercase;
   content: "Off";
 }
+.mui-switch.mui-dragging {
+  background-color: rgba(247, 247, 247, .98);
+  border-color: rgba(247, 247, 247, .98);
+}
+.mui-switch.mui-dragging .mui-switch-handle {
+  width: 38px;
+}
+.mui-switch.mui-dragging.mui-active .mui-switch-handle {
+  left: -11px;
+  width: 38px;
+}
 .mui-switch.mui-active {
   background-color: #4cd964;
   border-color: #4cd964;
 }
 .mui-switch.mui-active .mui-switch-handle {
-  -webkit-transform: translate3d(45px, 0, 0);
-          transform: translate3d(45px, 0, 0);
+  -webkit-transform: translate3d(43px, 0, 0);
+          transform: translate3d(43px, 0, 0);
 }
 .mui-switch.mui-active:before {
   right: auto;
@@ -2920,8 +2941,8 @@ select:focus {
   display: none;
 }
 .mui-switch-mini.mui-active .mui-switch-handle {
-  -webkit-transform: translate3d(18px, 0, 0);
-          transform: translate3d(18px, 0, 0);
+  -webkit-transform: translate3d(16px, 0, 0);
+          transform: translate3d(16px, 0, 0);
 }
 
 .mui-switch-blue.mui-active {
@@ -3456,5 +3477,6 @@ select:focus {
 }
 .mui-fullscreen .mui-slider-item > a {
   top: 50%;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }

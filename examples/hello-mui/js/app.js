@@ -42,18 +42,3 @@ window.addEventListener('toggle', function(event) {
 		}
 	}
 });
-//简单处理label点击触发radio或checkbox
-window.addEventListener('tap', function(event) {
-	var target = event.target;
-	for (; target && target !== document; target = target.parentNode) {
-		if (target.tagName && target.tagName === 'LABEL') {
-			var parent = target.parentNode;
-			if (parent.classList && (parent.classList.contains('mui-radio') || parent.classList.contains('mui-checkbox'))) {
-				var input = parent.querySelector('input');
-				if (input) {
-					input.click();
-				}
-			}
-		}
-	}
-});

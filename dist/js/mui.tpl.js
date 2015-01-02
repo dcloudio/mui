@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v0.9.0 (https://github.com/dcloudio/mui)
+ * Mui v1.0.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /*!
@@ -3112,458 +3112,832 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
 		});
 	}
 })(Handlebars);
-Handlebars.registerPartial("badge", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<span class=\"mui-badge";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.style : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\">";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.text : depth0), {"name":"if","hash":{},"fn":this.program(4, data),"inverse":this.program(6, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</span>\r";
-},"2":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = " mui-badge-";
-  stack1 = ((helper = (helper = helpers.style || (depth0 != null ? depth0.style : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"style","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer;
-},"4":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing;
-  stack1 = ((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"text","hash":{},"data":data}) : helper));
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"6":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda;
-  stack1 = lambda(depth0, depth0);
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
-  stack1 = ((helper = (helper = helpers.badge || (depth0 != null ? depth0.badge : depth0)) != null ? helper : helperMissing),(options={"name":"badge","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.badge) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"useData":true}));
+Handlebars.registerPartial("badge", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var stack1, helper, options, functionType="function", self=this, blockHelperMissing=helpers.blockHelperMissing;
 
-Handlebars.registerPartial("btn", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<button class=\"mui-btn";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.style : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n<span class=\"mui-badge";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.style), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\">";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.text : depth0), {"name":"if","hash":{},"fn":this.program(4, data),"inverse":this.program(6, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</button>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = " mui-btn-";
-  stack1 = ((helper = (helper = helpers.style || (depth0 != null ? depth0.style : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"style","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.text), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span>\r";
   return buffer;
-},"4":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing;
-  stack1 = ((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"text","hash":{},"data":data}) : helper));
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"6":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda;
-  stack1 = lambda(depth0, depth0);
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
-  stack1 = ((helper = (helper = helpers.btn || (depth0 != null ? depth0.btn : depth0)) != null ? helper : helperMissing),(options={"name":"btn","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.btn) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"useData":true}));
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " mui-badge-";
+  if (helper = helpers.style) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.style); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer;
+  }
 
-Handlebars.registerPartial("checkbox", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<input name=\""
-    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\" type=\"checkbox\" value=\""
-    + escapeExpression(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"value","hash":{},"data":data}) : helper)))
+function program4(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+function program6(depth0,data) {
+  
+  var stack1;
+  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers.badge) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.badge); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.badge) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }));
+
+Handlebars.registerPartial("btn", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var stack1, helper, options, functionType="function", self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n<button class=\"mui-btn";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.style), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.text), {hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</button>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " mui-btn-";
+  if (helper = helpers.style) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.style); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+function program6(depth0,data) {
+  
+  var stack1;
+  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers.btn) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.btn); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.btn) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }));
+
+Handlebars.registerPartial("checkbox", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n<input name=\"";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"checkbox\" value=\"";
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\"> ";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = ((helper = (helper = helpers.checkbox || (depth0 != null ? depth0.checkbox : depth0)) != null ? helper : helperMissing),(options={"name":"checkbox","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.checkbox) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n";
-},"useData":true}));
-
-Handlebars.registerPartial("grid", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<ul class=\"mui-table-view mui-grid-view\">\n";
-  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.grid : depth0), {"name":"each","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</ul>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "	<li class=\"mui-table-view-cell mui-media mui-col-xs-6\">\n		<a href=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\">\n			<img class=\"mui-media-object\" src=\""
-    + escapeExpression(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"src","hash":{},"data":data}) : helper)))
-    + "\">\n			<div class=\"mui-media-body\">";
-  stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</div>\n		</a>\n	</li>\n";
-},"3":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return escapeExpression(((helper = (helper = helpers.href || (depth0 != null ? depth0.href : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"href","hash":{},"data":data}) : helper)));
-  },"5":function(depth0,helpers,partials,data) {
-  return "#";
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = blockHelperMissing.call(depth0, lambda(depth0, depth0), {"name":"this","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
   return buffer;
-},"useData":true}));
+  }
 
-Handlebars.registerPartial("media", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, buffer = " ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.src : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers.checkbox) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.checkbox); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.checkbox) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("grid", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n<ul class=\"mui-table-view mui-grid-view\">\n	";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.grid), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n	<li class=\"mui-table-view-cell mui-media mui-col-xs-6\">\n		<a href=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.href), {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n			<img class=\"mui-media-object\" src=\"";
+  if (helper = helpers.src) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.src); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n			<div class=\"mui-media-body\">";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</div>\n		</a>\n	</li>\n	";
+  return buffer;
+  }
+function program3(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.href) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.href); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  return escapeExpression(stack1);
+  }
+
+function program5(depth0,data) {
+  
+  
+  return "#";
+  }
+
+  stack1 = ((stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0)),blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("media", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
   buffer += " ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.desc : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + " ";
-},"2":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "\n<img class=\"mui-media-object ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.position : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.program(5, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\" src=\""
-    + escapeExpression(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"src","hash":{},"data":data}) : helper)))
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.src), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.desc), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n<img class=\"mui-media-object ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.position), {hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" src=\"";
+  if (helper = helpers.src) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.src); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\">";
-},"3":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "mui-pull-"
-    + escapeExpression(((helper = (helper = helpers.position || (depth0 != null ? depth0.position : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"position","hash":{},"data":data}) : helper)));
-},"5":function(depth0,helpers,partials,data) {
+  return buffer;
+  }
+function program3(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "mui-pull-";
+  if (helper = helpers.position) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.position); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1);
+  return buffer;
+  }
+
+function program5(depth0,data) {
+  
+  
   return "mui-pull-left";
-  },"7":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "\n<div class=\"mui-media-body\">\n	";
-  stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n<div class=\"mui-media-body\">\n	";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	<p class='";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.ellipsis : depth0), {"name":"if","hash":{},"fn":this.program(8, data),"inverse":this.program(10, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.ellipsis), {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "'>";
-  stack1 = ((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"desc","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</p>\n</div>\n";
-},"8":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "mui-ellipsis-"
-    + escapeExpression(((helper = (helper = helpers.ellipsis || (depth0 != null ? depth0.ellipsis : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"ellipsis","hash":{},"data":data}) : helper)));
-},"10":function(depth0,helpers,partials,data) {
+  if (helper = helpers.desc) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.desc); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</p>\n</div>\n";
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "mui-ellipsis-";
+  if (helper = helpers.ellipsis) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.ellipsis); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1);
+  return buffer;
+  }
+
+function program10(depth0,data) {
+  
+  
   return "mui-ellipsis";
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = blockHelperMissing.call(depth0, lambda(depth0, depth0), {"name":"this","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n";
-},"useData":true}));
+  }
 
-Handlebars.registerPartial("radio", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<input name=\""
-    + escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"name","hash":{},"data":data}) : helper)))
-    + "\" type=\"radio\" value=\""
-    + escapeExpression(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"value","hash":{},"data":data}) : helper)))
+  stack1 = ((stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0)),blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("radio", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n<input name=\"";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" type=\"radio\" value=\"";
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\"> ";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = ((helper = (helper = helpers.radio || (depth0 != null ? depth0.radio : depth0)) != null ? helper : helperMissing),(options={"name":"radio","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.radio) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n";
-},"useData":true}));
+  return buffer;
+  }
 
-Handlebars.registerPartial("slider", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.id : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers.radio) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.radio); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.radio) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("slider", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<div";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.id), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += " class=\"mui-slider\">\n	<div class=\"mui-slider-group";
-  stack1 = ((helper = (helper = helpers.loop || (depth0 != null ? depth0.loop : depth0)) != null ? helper : helperMissing),(options={"name":"loop","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}
+  if (helper = helpers.loop) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.loop); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\">\n		";
-  stack1 = ((helper = (helper = helpers.loop || (depth0 != null ? depth0.loop : depth0)) != null ? helper : helperMissing),(options={"name":"loop","hash":{},"fn":this.program(6, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}
+  if (helper = helpers.loop) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.loop); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += " ";
-  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.slider : depth0), {"name":"each","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.slider), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += " ";
-  stack1 = ((helper = (helper = helpers.loop || (depth0 != null ? depth0.loop : depth0)) != null ? helper : helperMissing),(options={"name":"loop","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n	</div>\n";
-  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 != null ? depth0.slider : depth0)) != null ? stack1['0'] : stack1)) != null ? stack1.src : stack1), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.program(17, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "	</div>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return " id=\""
-    + escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
+  options={hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data}
+  if (helper = helpers.loop) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.loop); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.loop) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</div>\n	";
+  stack1 = helpers['if'].call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.slider)),stack1 == null || stack1 === false ? stack1 : stack1[0])),stack1 == null || stack1 === false ? stack1 : stack1.src), {hash:{},inverse:self.program(17, program17, data),fn:self.program(13, program13, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</div>\n	";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\" ";
-},"4":function(depth0,helpers,partials,data) {
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  
   return " mui-slider-loop";
-  },"6":function(depth0,helpers,partials,data) {
-  var stack1, helperMissing=helpers.helperMissing, buffer = " ";
-  stack1 = ((helpers.last || (depth0 && depth0.last) || helperMissing).call(depth0, (depth0 != null ? depth0.slider : depth0), {"name":"last","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data}));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + " ";
-},"7":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n		<div class=\"mui-slider-item mui-slider-item-duplicate\">\n";
-  stack1 = this.invokePartial(partials.slideritem, '			', 'slideritem', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "		</div>\n		";
-},"9":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n		<div class=\"mui-slider-item\">\n";
-  stack1 = this.invokePartial(partials.slideritem, '			', 'slideritem', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "		</div>\n		";
-},"11":function(depth0,helpers,partials,data) {
-  var stack1, buffer = " ";
-  stack1 = helpers['with'].call(depth0, ((stack1 = (depth0 != null ? depth0.slider : depth0)) != null ? stack1['0'] : stack1), {"name":"with","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + " ";
-},"13":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "	<div class=\"mui-slider-indicator mui-text-right\">\n";
-  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.slider : depth0), {"name":"each","hash":{},"fn":this.program(14, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "	</div>\n";
-},"14":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "		<div class=\"mui-indicator";
-  stack1 = helpers['if'].call(depth0, (data && data.first), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\"></div>\n";
-},"15":function(depth0,helpers,partials,data) {
-  return " mui-active";
-  },"17":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return "	<div class=\"mui-slider-indicator\" style=\"position: static;background-color: #fff;\">\n		<span class=\"mui-action mui-action-previous mui-icon mui-icon-back\"></span>\n		<div class=\"mui-number\">\n			<span>1</span> / "
-    + escapeExpression(lambda(((stack1 = (depth0 != null ? depth0.slider : depth0)) != null ? stack1.length : stack1), depth0))
-    + "\n		</div>\n		<span class=\"mui-action mui-action-next mui-icon mui-icon-forward\"></span>\n	</div>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = blockHelperMissing.call(depth0, lambda(depth0, depth0), {"name":"this","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer;
-},"usePartial":true,"useData":true}));
+  }
 
-Handlebars.registerPartial("slideritem", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<a href=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(4, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\">\n	<img src=\""
-    + escapeExpression(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"src","hash":{},"data":data}) : helper)))
+function program6(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += " ";
+  stack1 = (helper = helpers.last || (depth0 && depth0.last),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.slider), options) : helperMissing.call(depth0, "last", (depth0 && depth0.slider), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  return buffer;
+  }
+function program7(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n		<div class=\"mui-slider-item mui-slider-item-duplicate\">\n			";
+  stack1 = self.invokePartial(partials.slideritem, 'slideritem', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		</div>\n		";
+  return buffer;
+  }
+
+function program9(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n		<div class=\"mui-slider-item\">\n			";
+  stack1 = self.invokePartial(partials.slideritem, 'slideritem', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		</div>\n		";
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += " ";
+  stack1 = helpers['with'].call(depth0, ((stack1 = (depth0 && depth0.slider)),stack1 == null || stack1 === false ? stack1 : stack1[0]), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  return buffer;
+  }
+
+function program13(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<div class=\"mui-slider-indicator mui-text-right\">\n		";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.slider), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</div>\n	";
+  return buffer;
+  }
+function program14(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n		<div class=\"mui-indicator";
+  stack1 = helpers['if'].call(depth0, (data == null || data === false ? data : data.first), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\"></div>\n		";
+  return buffer;
+  }
+function program15(depth0,data) {
+  
+  
+  return " mui-active";
+  }
+
+function program17(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<div class=\"mui-slider-indicator\" style=\"position: static;background-color: #fff;\">\n		<span class=\"mui-action mui-action-previous mui-icon mui-icon-back\"></span>\n		<div class=\"mui-number\">\n			<span>1</span> / "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.slider)),stack1 == null || stack1 === false ? stack1 : stack1.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n		</div>\n		<span class=\"mui-action mui-action-next mui-icon mui-icon-forward\"></span>\n	</div>\n	";
+  return buffer;
+  }
+
+  stack1 = ((stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0)),blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("slideritem", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<a href=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.href), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n	<img src=\"";
+  if (helper = helpers.src) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.src); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\">";
-  stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(options={"name":"title","hash":{},"fn":this.program(6, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.title) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</a>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return escapeExpression(((helper = (helper = helpers.href || (depth0 != null ? depth0.href : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"href","hash":{},"data":data}) : helper)));
-  },"4":function(depth0,helpers,partials,data) {
+  options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}
+  if (helper = helpers.title) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.title) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</a>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var stack1, helper;
+  if (helper = helpers.href) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.href); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  return escapeExpression(stack1);
+  }
+
+function program4(depth0,data) {
+  
+  
   return "#";
-  },"6":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, buffer = "\n	<p class=\"mui-slider-title\">";
-  stack1 = lambda(depth0, depth0);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</p>\n";
-},"8":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "<ul class=\"mui-table-view mui-grid-view\">\n";
-  stack1 = helpers.each.call(depth0, depth0, {"name":"each","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</ul>\n";
-},"9":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "	<li class=\"mui-table-view-cell mui-media mui-col-xs-6\">\n		<a href=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(4, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\">\n			<img class=\"mui-media-object\" src=\""
-    + escapeExpression(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"src","hash":{},"data":data}) : helper)))
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<p class=\"mui-slider-title\">";
+  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</p>\n	";
+  return buffer;
+  }
+
+function program8(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n<ul class=\"mui-table-view mui-grid-view\">\n	";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n";
+  return buffer;
+  }
+function program9(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n	<li class=\"mui-table-view-cell mui-media mui-col-xs-6\">\n		<a href=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.href), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n			<img class=\"mui-media-object\" src=\"";
+  if (helper = helpers.src) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.src); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\">\n			<div class=\"mui-media-body\">";
-  stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</div>\n		</a>\n	</li>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.src : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(8, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</div>\n		</a>\n	</li>\n	";
   return buffer;
-},"useData":true}));
+  }
 
-Handlebars.registerPartial("switch", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"mui-switch";
-  stack1 = ((helper = (helper = helpers.style || (depth0 != null ? depth0.style : depth0)) != null ? helper : helperMissing),(options={"name":"style","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.style) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.size || (depth0 != null ? depth0.size : depth0)) != null ? helper : helperMissing),(options={"name":"size","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.size) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.active || (depth0 != null ? depth0.active : depth0)) != null ? helper : helperMissing),(options={"name":"active","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.active) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\">\n	<div class=\"mui-switch-handle\"></div>\n</div>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return " mui-switch-"
-    + escapeExpression(lambda(depth0, depth0));
-},"4":function(depth0,helpers,partials,data) {
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.src), {hash:{},inverse:self.program(8, program8, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("switch", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<div class=\"mui-switch";
+  options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}
+  if (helper = helpers.style) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.style); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.style) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}
+  if (helper = helpers.size) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.size); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.size) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}
+  if (helper = helpers.active) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.active); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.active) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n	<div class=\"mui-switch-handle\"></div>\n</div>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "";
+  buffer += " mui-switch-"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0));
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  
   return " mui-active";
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
-  stack1 = ((helper = (helper = helpers['switch'] || (depth0 != null ? depth0['switch'] : depth0)) != null ? helper : helperMissing),(options={"name":"switch","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers['switch']) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { return stack1; }
-  else { return ''; }
-  },"useData":true}));
+  }
 
-Handlebars.registerPartial("tableview", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "<ul";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.id : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers['switch']) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0['switch']); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers['switch']) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }));
+
+Handlebars.registerPartial("tableview", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<ul";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.id), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += " class=\"mui-table-view";
-  stack1 = ((helper = (helper = helpers.chevron || (depth0 != null ? depth0.chevron : depth0)) != null ? helper : helperMissing),(options={"name":"chevron","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.chevron) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.striped || (depth0 != null ? depth0.striped : depth0)) != null ? helper : helperMissing),(options={"name":"striped","hash":{},"fn":this.program(6, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.striped) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.inverted || (depth0 != null ? depth0.inverted : depth0)) != null ? helper : helperMissing),(options={"name":"inverted","hash":{},"fn":this.program(8, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.inverted) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}
+  if (helper = helpers.chevron) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.chevron); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.chevron) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}
+  if (helper = helpers.striped) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.striped); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.striped) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data}
+  if (helper = helpers.inverted) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.inverted); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.inverted) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\">\n	";
-  stack1 = ((helper = (helper = helpers.tableview || (depth0 != null ? depth0.tableview : depth0)) != null ? helper : helperMissing),(options={"name":"tableview","hash":{},"fn":this.program(10, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.tableview) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n</ul>\n";
-},"2":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return " id=\""
-    + escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"id","hash":{},"data":data}) : helper)))
+  options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data}
+  if (helper = helpers.tableview) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.tableview); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.tableview) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\"";
-},"4":function(depth0,helpers,partials,data) {
-  return " mui-table-view-chevron";
-  },"6":function(depth0,helpers,partials,data) {
-  return " mui-table-view-striped";
-  },"8":function(depth0,helpers,partials,data) {
-  return " mui-table-view-inverted";
-  },"10":function(depth0,helpers,partials,data) {
-  var stack1, buffer = " ";
-  stack1 = this.invokePartial(partials.tableviewcell, '', 'tableviewcell', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + " ";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing, buffer = "";
-  stack1 = blockHelperMissing.call(depth0, lambda(depth0, depth0), {"name":"this","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
   return buffer;
-},"usePartial":true,"useData":true}));
+  }
 
-Handlebars.registerPartial("tableviewcell", Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing, buffer = "<li class=\"mui-table-view-";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.divider : depth0), {"name":"if","hash":{},"fn":this.program(2, data),"inverse":this.program(4, data),"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.radio || (depth0 != null ? depth0.radio : depth0)) != null ? helper : helperMissing),(options={"name":"radio","hash":{},"fn":this.program(6, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.radio) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.checkbox || (depth0 != null ? depth0.checkbox : depth0)) != null ? helper : helperMissing),(options={"name":"checkbox","hash":{},"fn":this.program(8, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.checkbox) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helper = (helper = helpers.position || (depth0 != null ? depth0.position : depth0)) != null ? helper : helperMissing),(options={"name":"position","hash":{},"fn":this.program(10, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.position) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.tableview : depth0), {"name":"if","hash":{},"fn":this.program(12, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\">\n	";
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), "||", (depth0 != null ? depth0.src : depth0), {"name":"ifCond","hash":{},"fn":this.program(14, data),"inverse":this.program(26, data),"data":data}));
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.tableview : depth0), {"name":"if","hash":{},"fn":this.program(28, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n</li>\n";
-},"2":function(depth0,helpers,partials,data) {
-  return "divider";
-  },"4":function(depth0,helpers,partials,data) {
-  return "cell";
-  },"6":function(depth0,helpers,partials,data) {
-  return " mui-radio";
-  },"8":function(depth0,helpers,partials,data) {
-  return " mui-checkbox";
-  },"10":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return " mui-"
-    + escapeExpression(lambda(depth0, depth0));
-},"12":function(depth0,helpers,partials,data) {
-  return " mui-collapse";
-  },"14":function(depth0,helpers,partials,data) {
-  var stack1, helperMissing=helpers.helperMissing, buffer = " ";
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data}));
-  if (stack1 != null) { buffer += stack1; }
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.src : depth0), "||", (depth0 != null ? depth0.desc : depth0), {"name":"ifCond","hash":{},"fn":this.program(20, data),"inverse":this.program(22, data),"data":data}));
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials.badge, '		', 'badge', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials.btn, '		', 'btn', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials['switch'], '		', 'switch', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials.radio, '		', 'radio', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials.checkbox, '		', 'checkbox', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = this.invokePartial(partials.media, '		', 'media', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n";
-  stack1 = ((helpers.ifCond || (depth0 && depth0.ifCond) || helperMissing).call(depth0, (depth0 != null ? depth0.navigate : depth0), "||", (depth0 != null ? depth0.href : depth0), {"name":"ifCond","hash":{},"fn":this.program(24, data),"inverse":this.noop,"data":data}));
-  if (stack1 != null) { buffer += stack1; }
+function program4(depth0,data) {
+  
+  
+  return " mui-table-view-chevron";
+  }
+
+function program6(depth0,data) {
+  
+  
+  return " mui-table-view-striped";
+  }
+
+function program8(depth0,data) {
+  
+  
+  return " mui-table-view-inverted";
+  }
+
+function program10(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += " ";
+  stack1 = self.invokePartial(partials.tableviewcell, 'tableviewcell', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
   return buffer;
-},"15":function(depth0,helpers,partials,data) {
-  var stack1, buffer = "\n	<a class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.navigate : depth0), {"name":"if","hash":{},"fn":this.program(16, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
+  }
+
+  stack1 = ((stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0)),blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }));
+
+Handlebars.registerPartial("tableviewcell", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<li class=\"mui-table-view-";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.divider), {hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}
+  if (helper = helpers.radio) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.radio); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.radio) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data}
+  if (helper = helpers.checkbox) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.checkbox); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.checkbox) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data}
+  if (helper = helpers.position) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.position); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.position) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.tableview), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n	";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond),options={hash:{},inverse:self.program(26, program26, data),fn:self.program(14, program14, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), "||", (depth0 && depth0.src), options) : helperMissing.call(depth0, "ifCond", (depth0 && depth0.title), "||", (depth0 && depth0.src), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " \n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.tableview), {hash:{},inverse:self.noop,fn:self.program(28, program28, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</li>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  return "divider";
+  }
+
+function program4(depth0,data) {
+  
+  
+  return "cell";
+  }
+
+function program6(depth0,data) {
+  
+  
+  return " mui-radio";
+  }
+
+function program8(depth0,data) {
+  
+  
+  return " mui-checkbox";
+  }
+
+function program10(depth0,data) {
+  
+  var buffer = "";
+  buffer += " mui-"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0));
+  return buffer;
+  }
+
+function program12(depth0,data) {
+  
+  
+  return " mui-collapse";
+  }
+
+function program14(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += " ";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond),options={hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.navigate), "||", (depth0 && depth0.href), options) : helperMissing.call(depth0, "ifCond", (depth0 && depth0.navigate), "||", (depth0 && depth0.href), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond),options={hash:{},inverse:self.program(22, program22, data),fn:self.program(20, program20, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.src), "||", (depth0 && depth0.desc), options) : helperMissing.call(depth0, "ifCond", (depth0 && depth0.src), "||", (depth0 && depth0.desc), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials.badge, 'badge', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials.btn, 'btn', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials['switch'], 'switch', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials.radio, 'radio', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials.checkbox, 'checkbox', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = self.invokePartial(partials.media, 'media', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n		";
+  stack1 = (helper = helpers.ifCond || (depth0 && depth0.ifCond),options={hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.navigate), "||", (depth0 && depth0.href), options) : helperMissing.call(depth0, "ifCond", (depth0 && depth0.navigate), "||", (depth0 && depth0.href), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	";
+  return buffer;
+  }
+function program15(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<a class=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.navigate), {hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.href : depth0), {"name":"if","hash":{},"fn":this.program(18, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + ">\n";
-},"16":function(depth0,helpers,partials,data) {
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.href), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n		";
+  return buffer;
+  }
+function program16(depth0,data) {
+  
+  
   return "mui-navigate-right";
-  },"18":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return " href=\""
-    + escapeExpression(((helper = (helper = helpers.href || (depth0 != null ? depth0.href : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"href","hash":{},"data":data}) : helper)))
+  }
+
+function program18(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += " href=\"";
+  if (helper = helpers.href) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.href); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\" ";
-},"20":function(depth0,helpers,partials,data) {
-  return "";
-},"22":function(depth0,helpers,partials,data) {
-  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, buffer = "		";
-  stack1 = ((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"title","hash":{},"data":data}) : helper));
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n";
-},"24":function(depth0,helpers,partials,data) {
-  return "\n		</a>\n";
-  },"26":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, buffer = "	";
-  stack1 = lambda(depth0, depth0);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n";
-},"28":function(depth0,helpers,partials,data) {
-  var stack1, buffer = " ";
-  stack1 = this.invokePartial(partials.tableview, '', 'tableview', depth0, undefined, helpers, partials, data);
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + " ";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, blockHelperMissing=helpers.blockHelperMissing;
-  stack1 = blockHelperMissing.call(depth0, lambda(depth0, depth0), {"name":"this","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { return stack1; }
+  return buffer;
+  }
+
+function program20(depth0,data) {
+  
+  
+  return "\n		";
+  }
+
+function program22(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n		";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		";
+  return buffer;
+  }
+
+function program24(depth0,data) {
+  
+  
+  return "\n\n		</a>\n	";
+  }
+
+function program26(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	";
+  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+
+function program28(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += " ";
+  stack1 = self.invokePartial(partials.tableview, 'tableview', depth0, helpers, partials, data);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  return buffer;
+  }
+
+  stack1 = ((stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0)),blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}));
+  if(stack1 || stack1 === 0) { return stack1; }
   else { return ''; }
-  },"usePartial":true,"useData":true}));
+  }));
 (function($, document) {
 
 	var isArray = Array.isArray ||

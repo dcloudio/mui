@@ -57,11 +57,9 @@
 		</nav>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<p>Actionsheet一般从底部弹出，显示一系列可选择的操作按钮，供用户选择；
-					ActionSheet可从任意位置触发，
-					点击本页面左下角<span class="mui-icon mui-icon-trash"></span>会弹出删除信息确认框；
-					点击本页面右下角<span class="mui-icon mui-icon-undo"></span>会弹出转发确认框；
-					你也可点击如下按钮，打开照片选择框：
+				<p>Actionsheet一般从底部弹出，显示一系列可选择的操作按钮，供用户选择； ActionSheet可从任意位置触发， 点击本页面左下角
+					<span class="mui-icon mui-icon-trash"></span>会弹出删除信息确认框； 点击本页面右下角
+					<span class="mui-icon mui-icon-undo"></span>会弹出转发确认框； 你也可点击如下按钮，打开照片选择框：
 				</p>
 				<p>
 					<a href="#picture" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开Actionsheet</a>
@@ -69,8 +67,8 @@
 			</div>
 		</div>
 
-		
-		
+
+
 		<div id="delete" class="mui-popover mui-popover-action mui-popover-bottom">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
@@ -118,5 +116,13 @@
 		</div>
 
 	</body>
+	<script>
+		mui('body').on('shown', '.mui-popover', function(e) {
+			//console.log('shown', e.detail.id);//detail为当前popover元素
+		});
+		mui('body').on('hidden', '.mui-popover', function(e) {
+			//console.log('hidden', e.detail.id);//detail为当前popover元素
+		});
+	</script>
 
 </html>

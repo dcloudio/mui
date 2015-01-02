@@ -17,6 +17,7 @@
 				background-color: #efeff4;
 			}
 			/*跨webview需要手动指定位置*/
+			
 			#topPopover {
 				position: fixed;
 				top: 16px;
@@ -26,7 +27,6 @@
 				left: auto;
 				right: 6px;
 			}
-			
 			p {
 				text-indent: 22px;
 			}
@@ -39,7 +39,6 @@
 			.mui-popover {
 				height: 300px;
 			}
-			
 			.mui-content {
 				padding: 10px;
 			}
@@ -163,6 +162,12 @@
 		</div>
 		<script>
 			mui('.mui-scroll-wrapper').scroll();
+			mui('body').on('shown', '.mui-popover', function(e) {
+				//console.log('shown', e.detail.id);//detail为当前popover元素
+			});
+			mui('body').on('hidden', '.mui-popover', function(e) {
+				//console.log('hidden', e.detail.id);//detail为当前popover元素
+			});
 		</script>
 	</body>
 
