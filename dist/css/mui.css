@@ -662,7 +662,7 @@ p {
   left: 0;
   z-index: 998;
   display: block;
-  background: rgba(255, 255, 255, .2);
+  background: rgba(0, 0, 0, .4);
   box-shadow: -4px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
   transition: background 200ms ease;
 
