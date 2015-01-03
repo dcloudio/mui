@@ -16,19 +16,10 @@
 				background-color: #efeff4;
 			}
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
-
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">输入框（Input）</h1>
-		</header>
 		<div class="mui-content">
-
 			<div class="mui-content-padded" style="margin: 5px;">
 				<h5>默认搜索框：</h5>
 				<div class="mui-input-row mui-search">
@@ -81,6 +72,7 @@
 			}
 		</style>
 		<script>
+			mui.init();
 			 //语音识别完成事件
 			document.getElementById("search").addEventListener('recognized', function(e) {
 				console.log(e.detail.value);

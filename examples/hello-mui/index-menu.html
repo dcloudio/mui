@@ -55,7 +55,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" open-type="common" href="examples/inputs.html">
+					<a class="mui-navigate-right" href="examples/inputs.html">
 						输入框（input）
 					</a>
 				</li>
@@ -92,34 +92,20 @@
 			})
 			mui('.mui-table-view').on('tap', 'a', function() {
 				var id = this.getAttribute("href");
-				var type = this.getAttribute("open-type");
-				if(type=="common"){
-					mui.openWindow({
-						id: id,
-						url: this.href,
-						styles:{
-							zindex:2
-						},
-						waiting:{
-							autoShow:false
-						}
-					});
-				}else{
-					if (subWebview == null) {
-						template = plus.webview.getWebviewById("default-main");
-						subWebview = template.children()[0];
-					}
-					//判断是否显示右上角menu图标；
-					var showMenu = ~id.indexOf('popovers.html')?true:false;
-					var title = this.innerText;
-					mui.fire(template,'updateHeader',{title:title,showMenu:showMenu});
-					if(subWebview.getURL()==this.href){
-						subWebview.show();
-					}else{
-						subWebview.loadURL(this.href);
-					}
-					template.show('slide-in-right', 150);
+				if (subWebview == null) {
+					template = plus.webview.getWebviewById("default-main");
+					subWebview = template.children()[0];
 				}
+				//判断是否显示右上角menu图标；
+				var showMenu = ~id.indexOf('popovers.html')?true:false;
+				var title = this.innerText;
+				mui.fire(template,'updateHeader',{title:title,showMenu:showMenu});
+				if(subWebview.getURL()==this.href){
+					subWebview.show();
+				}else{
+					subWebview.loadURL(this.href);
+				}
+				template.show('slide-in-right', 150);
 			});
 			
 			/**
