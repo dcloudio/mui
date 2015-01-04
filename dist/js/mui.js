@@ -1778,19 +1778,20 @@ var mui = (function(document, undefined) {
 									//当前页面初始化pullup
 									var upOptions = {};
 									upOptions.up = pullRefreshOptions.up;
-									upOptions.webviewId = webview.id;
+									upOptions.webviewId = webview.id || webview.getURL();
 									$container.pullRefresh(upOptions);
 								}
 								if (hasPulldown) {
 									var parent = webview.parent();
+									var id = webview.id || webview.getURL();
 									if (parent) {
 										if (!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
 											$container.pullRefresh({
-												webviewId: webview.id
+												webviewId: id
 											});
 										}
 										var downOptions = {
-											webviewId: webview.id
+											webviewId: id
 										};
 										downOptions.down = $.extend({}, pullRefreshOptions.down);
 										downOptions.down.callback = '_CALLBACK';
@@ -3706,7 +3707,7 @@ var mui = (function(document, undefined) {
 		}
 		//一个父需要支持多个子下拉刷新
 		options = options || {
-			webviewId: plus.webview.currentWebview().id
+			webviewId: plus.webview.currentWebview().id || plus.webview.currentWebview().getURL()
 		}
 		if (typeof options === 'string') {
 			options = $.parseJSON(options);
@@ -3823,6 +3824,8 @@ var mui = (function(document, undefined) {
 									this.scroller = this.offCanvasRight;
 								} else if (detail.direction === 'right' && this.offCanvasLeft) {
 									this.scroller = this.offCanvasLeft;
+								} else {
+									this.scroller = null;
 								}
 							}
 						}
@@ -3886,16 +3889,14 @@ var mui = (function(document, undefined) {
 							} else {
 								ratio = (this.offCanvasLeftWidth && (x / this.offCanvasLeftWidth)) || 0;
 							}
-							if (ratio === 1 || ratio === -1) {
-								this._dispatchEvent();
-								return;
-							}
 							if (ratio >= 0.5 && direction === 'left') {
 								this.openPercentage(0);
 							} else if (ratio > 0 && ratio <= 0.5 && direction === 'left') {
 								this.openPercentage(-100);
 							} else if (ratio >= 0.5 && direction === 'right') {
 								this.openPercentage(0);
+							} else if (ratio >= -0.5 && ratio < 0 && direction === 'left') {
+								this.openPercentage(100);
 							} else if (ratio > 0 && ratio <= 0.5 && direction === 'right') {
 								this.openPercentage(-100);
 							} else if (ratio <= -0.5 && direction === 'right') {
@@ -3905,12 +3906,13 @@ var mui = (function(document, undefined) {
 							} else if (ratio <= -0.5 && direction === 'left') {
 								this.openPercentage(0);
 							} else if (ratio >= -0.5 && direction === 'left') {
-								this.openPercentage(100);
+								this.openPercentage(-100);
 							} else {
 								this.openPercentage(0);
 							}
-							if (ratio === 1 || ratio === -1) { //此处不触发webkitTransitionEnd,所以手动dispatch
+							if (ratio === 1 || ratio === -1 || ratio === 0) {
 								this._dispatchEvent();
+								return;
 							}
 
 						}
@@ -3966,13 +3968,13 @@ var mui = (function(document, undefined) {
 				if (this.offCanvasLeft && percentage >= 0) {
 					p = p === 0 ? -1 : 0;
 					this.updateTranslate(this.offCanvasLeftWidth * p);
-					this.offCanvasLeft.classList[p === 0 ? 'add' : 'remove'](CLASS_ACTIVE);
+					this.offCanvasLeft.classList[percentage !== 0 ? 'add' : 'remove'](CLASS_ACTIVE);
 				} else if (this.offCanvasRight && percentage <= 0) {
 					p = p === 0 ? 1 : 0;
 					this.updateTranslate(this.offCanvasRightWidth * p);
-					this.offCanvasRight.classList[p === 0 ? 'add' : 'remove'](CLASS_ACTIVE);
+					this.offCanvasRight.classList[percentage !== 0 ? 'add' : 'remove'](CLASS_ACTIVE);
 				}
-				this.classList[p === 0 ? 'add' : 'remove'](CLASS_ACTIVE);
+				this.classList[percentage !== 0 ? 'add' : 'remove'](CLASS_ACTIVE);
 			}
 
 		},
