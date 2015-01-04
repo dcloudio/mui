@@ -70,8 +70,9 @@
 				if(!showMenu){
 					//侧滑菜单处于隐藏状态，则立即显示出来；
 					menu.show('none',0,function () {
-						//主窗体开始侧滑；
-						mui.currentWebview.setStyle({
+						//主窗体开始侧滑并显示遮罩
+						main.setStyle({
+							mask:'rgba(0,0,0,0.4)',
 							left:'70%',
 							transition: {
 								duration: 150
@@ -79,13 +80,7 @@
 						});
 						showMenu = true;
 					});
-					//显示遮罩
-					main.setStyle({
-						mask:'rgba(0,0,0,0.4)'
-					});
-//					setTimeout(function () {
-//						
-//					},150);
+					
 				}
 			}
 			/**
