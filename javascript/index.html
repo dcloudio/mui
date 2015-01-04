@@ -6,15 +6,15 @@
 <title>javascript &middot; MUI</title>
 <meta name="description" content="MUI: 最接近原生APP体验的高性能前端框架">
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-<link rel="shortcut icon" href="http://dcloudio.github.io/mui/favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2014-12-30 21:40:57 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2014-12-30 21:40:57 +0800">
+<link rel="stylesheet" href="/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/dist/css/mui.min.css?v=2015-01-04 17:19:11 +0800">
+<link rel="stylesheet" href="/assets/css/docs.css?v=2015-01-04 17:19:11 +0800">
 
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/img/apple-touch-icon-114x114.png">
 
 
   </head>
@@ -34,16 +34,16 @@
   <div class="container">
     <div class="column">
       <h1 class="docs-title">
-        <a href="http://dcloudio.github.io/mui/" >MUI</a>
+        <a href="/" >MUI</a>
       </h1>
       <nav class="docs-nav mui-clearfix">
         <a class="docs-nav-trigger mui-icon mui-icon-bars mui-pull-right js-docs-nav-trigger" href="#"></a>
         <div class="docs-nav-group">
-          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/" >首页</a>
-          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/getting-started" >新手指南</a>
-          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/components" >CSS组件</a>
-          <a class="docs-nav-item" href="http://dcloudio.github.io/mui/javascript" >JavaScript</a>
-          <!-- <a class="docs-nav-item" href="http://dcloudio.github.io/mui/about" >关于</a> -->
+          <a class="docs-nav-item" href="/" >首页</a>
+          <a class="docs-nav-item" href="/getting-started" >新手指南</a>
+          <a class="docs-nav-item" href="/components" >CSS组件</a>
+          <a class="docs-nav-item" href="/javascript" >JavaScript</a>
+          <!-- <a class="docs-nav-item" href="/about" >关于</a> -->
           <a class="docs-nav-item" href="https://github.com/dcloudio/mui" >GitHub地址</a>
         </div>
       </nav>
@@ -94,27 +94,34 @@
   </style>
   <!-- Components -->
   <div class="docs-components column-group"  >
-    <!-- 暂时注释，右侧模拟器，这里需要使用导航代替 -->
-     <!-- In phone examples -->
-    <!--  <div class="device-column column lg-units-5 mui-pull-right">
     
-      
-     <div class="device js-device">
-        <div class="device-content">
-          <div id="iwindow">
-            <header class="mui-bar mui-bar-nav">
-              <h1 class="mui-title">Title</h1>
-            </header>
-          </div>
-        </div>
-      </div> 
-    </div>-->
+    <div class="column col-xs-2 lg-units-3" id="scrollspy">
+      <div class="sidebar hidden-print hidden-xs hidden-sm">
+         <ul class="nav sidenav" id="nav" data-spy="affix"  data-offset-top="250">
+              <li class="active"><a href="#pageinit">页面初始化</a></li>
+              <li><a href="#subpage">创建子页面</a></li>
+              <li><a href="#openwindow">打开新页面</a></li>
+              <li><a href="#closewindow">关闭页面</a></li>
+              <li><a href="#ajax">AJAX</a></li>
+              <li><a href="#gesture">手势事件</a></li>
+              <li><a href="#preload">预加载</a></li>
+              <li><a href="#pullrefresh-down">下拉刷新</a></li>
+              <li><a href="#pullrefresh-up">上拉加载</a></li>
+              <li><a href="#input">输入增强</a></li>
+              <li><a href="#switch">开关事件</a></li>
+              <li><a href="#slide">slide事件</a></li>
+              <li><a href="#customevent">自定义事件</a></li>
+              <li><a href="#plugin-slider">图片轮播</a></li>
+              <li><a href="#plugin-offcanvas">侧滑菜单</a></li>
+              <li><a href="#plugin-popover">弹出菜单</a></li>
+              <li><a href="#mask">遮罩蒙版</a></li>
+          </ul>
+      </div>
+    </div>
 
-
-
-    <div class="column lg-units-9 docs-content">
-    <!-- 页面初始化 -->
-    <article class="component mui-active" id="pageinit">
+    <div class="column col-xs-10 lg-units-9 docs-content" style="float:right">
+      <!-- 页面初始化 -->
+      <article class="component mui-active" id="pageinit">
 	<h3 class="component-title">页面初始化</h3>
 	<p class="component-description">mui框架将很多功能配置都集中在mui.init方法中，要使用某项功能，只需要在mui.init方法中完成对应参数配置即可，目前支持在mui.init方法中配置的功能包括：<a href="#subpage">创建子页面</a>、<a href="#closewindow">关闭页面</a>、<a href="#gesture">手势事件配置</a>、<a href="#preload">预加载</a>、<a href="#pullrefresh-down">下拉刷新</a>、<a href="#pullrefresh-up">上拉加载</a>。</p>
 	<p class="component-description">在app开发中，若要使用<a href="http://www.html5plus.org/#specification">HTML5+扩展api</a>，必须等plusready事件发生后才能正常使用，mui将该事件封装成了<code>mui.plusReady()</code>方法，涉及到HTML5+的api，建议都写在mui.plusReady方法中。如下为打印当前页面URL的示例：</p>
@@ -124,8 +131,8 @@
 <span class="p">});</span></code></pre></div>
 
 </article> 
-    <!-- 打开新页面 -->
-        <article id="subpage" class="component mui-active">
+      <!-- 打开新页面 -->
+          <article id="subpage" class="component mui-active">
       <h3 class="component-title">创建子页面</h3>
       <p class="component-description">
 在mobile app开发过程中，经常遇到卡头卡尾的页面，此时若使用局部滚动，在android手机上会出现滚动不流畅的问题；
@@ -149,18 +156,18 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
       <p class="component-description"><strong>示例：</strong>Hello mui的首页其实就是index.html加list.html合并而成的，如下：</p>
       <div id="subpage-demo" style="height:324px">
         <div>
-          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-index.png" alt="" style="border-color:blue;">
+          <img src="/assets/img/hello-mui-index.png" alt="" style="border-color:blue;">
           <div class="pagename">index.html</div>  
         </div>
         <div class="subpage-tip" >+</div>
         <div>
-        <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="border-color:red;margin-top:36px;">  
+        <img src="/assets/img/hello-mui-list.png" alt="" style="border-color:red;margin-top:36px;">  
         <div class="pagename">list.html</div>  
         </div>
         <div class="subpage-tip">=</div>
         <div>
           <div id="hello-mui-index" style="border:1px solid blue;">
-          <img src="http://dcloudio.github.io/mui/assets/img/hello-mui-list.png" alt="" style="margin-top:29px;border-color:red;max-width:190px;height:257px"> 
+          <img src="/assets/img/hello-mui-list.png" alt="" style="margin-top:29px;border-color:red;max-width:190px;height:257px"> 
         </div>
         <div class="pagename">合并后的首页</div>  
         </div>
@@ -199,8 +206,8 @@ mui的解决思路是：将需要滚动的区域通过单独的webview实现，�
     <span class="p">}]</span>
   <span class="p">});</span></code></pre></div>
     </article> 
-    <!-- 打开新页面 -->
-        <article id="openwindow" class="component mui-active" >
+      <!-- 打开新页面 -->
+          <article id="openwindow" class="component mui-active" >
       <h3 class="component-title">打开新页面</h3>
       <p class="component-description">
 做web app，一个无法避开的问题就是转场动画；web是基于链接构建的，从一个页面点击链接跳转到另一个页面，如果通过有刷新的打开方式，用户要面对一个空白的页面等待；如果通过无刷新的方式，用Javascript移入DOM节点（常见的SPA解决方案），会碰到很高的性能挑战：DOM节点繁多，页面太大，转场动画不流畅甚至导致浏览器崩溃；
@@ -285,8 +292,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">});</span>
 <span class="p">}</span></code></pre></div>
     </article> 
-    <!-- 关闭页面 -->
-    <article id="closewindow" class="component mui-active">
+      <!-- 关闭页面 -->
+      <article id="closewindow" class="component mui-active">
 	<h3 class="component-title">关闭页面</h3>
 	<p class="component-description" style="margin-bottom:0.8em">mui框架将窗口关闭功能封装在<code>mui.back</code>方法中，具体执行逻辑是：</p>
 	<ul>
@@ -333,8 +340,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		因为addEventListener只会增加新的执行逻辑，老的监听逻辑依然会执行；
 	</p>
 </article> 
-    <!-- AJAX -->
-    <article class="component mui-active" id="ajax">
+      <!-- AJAX -->
+      <article class="component mui-active" id="ajax">
 	<h3 class="component-title">Ajax</h3>
 	<p class="component-description">mui框架基于htm5plus的<a href="http://www.html5plus.org/#specification#/specification/XMLHttpRequest.html">XMLHttpRequest</a>，封装了常用的Ajax函数，支持GET、POST请求方式，支持返回json、xml、html、text、script数据类型；
 		本着极简的设计原则，mui提供了mui.ajax方法，并在mui.ajax方法基础上，进一步简化出最常用的mui.get()、mui.getJSON()、mui.post()三个方法。
@@ -475,8 +482,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 			}
 		</style>
 </article> 
-    <!-- 手势事件 -->
-        <article id="gesture" class="component mui-active">
+      <!-- 手势事件 -->
+          <article id="gesture" class="component mui-active">
       <h3 class="component-title">手势事件</h3>
       <p class="component-description">在开发移动端的应用时，会用到很多的手势操作，比如滑动、长按等，为了方便开放者快速集成这些手势，mui内置了常用的手势事件，目前支持的手势事件见如下列表：</p>
       <table id="gestureList" style="border-style: solid; border-width: 0pt;" border="1" cellspacing="0" cellpadding="5px">
@@ -574,8 +581,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">});</span></code></pre></div>
 
   </article>
-    <!-- 预加载 -->
-      <article id="preload" class="component mui-active">
+      <!-- 预加载 -->
+        <article id="preload" class="component mui-active">
       <h3 class="component-title">预加载</h3>
       <p class="component-description">所谓的预加载技术就是在用户尚未触发页面跳转时，提前创建目标页面，这样当用户跳转时，就可以立即进行页面切换，节省创建新页面的时间，提升app使用体验。mui提供两种方式实现页面预加载。</p>
       <p class="component-description">方式一：通过mui.init方法中的preloadPages参数进行配置.</p>
@@ -614,8 +621,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <p class="component-description">如上两种方案，各有优劣，需根据具体业务场景灵活选择；
 </p>
   </article>
-    <!-- 下拉刷新 -->
-      <article id="pullrefresh-down" class="component mui-active">
+      <!-- 下拉刷新 -->
+        <article id="pullrefresh-down" class="component mui-active">
       <h3 class="component-title">下拉刷新</h3>
       <p class="component-description">
         为实现下拉刷新功能，大多H5框架都是通过DIV模拟下拉回弹动画，在低端android手机上，DIV动画经常出现卡顿现象（特别是图文列表的情况）；
@@ -663,8 +670,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
      <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullrefreshContainer&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
-    <!-- 上拉加载 -->
-      <article id="pullrefresh-up" class="component mui-active">
+      <!-- 上拉加载 -->
+        <article id="pullrefresh-up" class="component mui-active">
       <h3 class="component-title">上拉加载</h3>
       <p class="component-description">mui的上拉加载实现比较简单，检测5+ runtime提供的滚动条滚动到底事件（plusscrollbottom），显示“正在加载”提示-->开始加载业务数据-->隐藏"正在加载"提示。使用方式类似下拉刷新，首先、通过mui.init方法中pullRefresh参数配置上拉加载各项参数，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
@@ -695,14 +702,14 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//pullup-container为在mui.init方法中配置的pullRefresh节点中的container参数；</span>
 <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullup-container&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">refresh</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span></code></pre></div>
   </article>
-    <!-- 下拉刷新 -->
-      <article id="input" class="component mui-active">
+      <!-- 下拉刷新 -->
+        <article id="input" class="component mui-active">
       <h3 class="component-title">输入增强</h3>
       <p class="component-description">mui目前提供的输入增强包括：快速删除和语音输入两项功能。要删除输入框中的内容，使用输入法键盘上的删除按键，只能逐个删除字符，mui提供了快速删除能力，只需要在对应input控件上添加<code>.mui-input-clear</code>类，当input控件中有内容时，右侧会有一个删除图标，点击会清空当前input的内容；另外，为了方便快速输入，mui集成了HTML5+的语音输入，只需要在对应input控件上添加<code>.mui-input-speech</code>类，就会在该控件右侧显示一个语音输入的图标，点击会启用科大讯飞语音输入界面。</p>
 
   </article>
-    <!-- 开关事件 -->
-      <article id="switch" class="component mui-active">
+      <!-- 开关事件 -->
+        <article id="switch" class="component mui-active">
       <h3 class="component-title">开关事件</h3>
       <p class="component-description">mui提供了开关控件样式，点击滑动两种手势都可以对开关控件进行操作，在开关控件进行切换时，会触发toggle事件,通过事件的detail.isActive属性可以判断当前开关状态。可通过监听toggle事件，在开关切换时执行特定业务逻辑。如下为使用示例：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;mySwitch&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;toggle&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
@@ -728,8 +735,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="c1">//也可以直接使用toggle方法自动处理打开或关闭</span>
 <span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span></code></pre></div>
   </article>
-    <!-- slide事件 -->
-        <article id="slide" class="component mui-active">
+      <!-- slide事件 -->
+          <article id="slide" class="component mui-active">
       <h3 class="component-title">slide事件</h3>
       <p class="component-description">mui提供了图片轮播、可拖动式图文表格、可拖动式选项卡、左右滑动9宫格组件，这些组件都用到了mui框架的slide插件，有较多共同点。首先，Dom内容构造基本相同，都必须有一个<code>.mui-slider</code>的父容器；其次，当拖动切换显示内容时，均会触发slide事件（可拖动式选项卡在点击选项卡标题时，也会触发slide事件），通过该事件的detail.slideNumber参数可以获得当前显示项的索引（第一项索引为0，第二项为1，以此类推），利用该事件，可在显示内容切换时，动态处理一些业务逻辑。</p>
         <p class="component-description">如下为一个可拖动式选项卡示例，为提高页面加载速度，页面加载时，仅显示第一个选项卡的内容，第二、第三选项卡内容为空。</p>
@@ -783,8 +790,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">).</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;你正在看第&quot;</span><span class="o">+</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">slideNumber</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;张图片&quot;</span><span class="p">;</span>
 <span class="p">});</span></code></pre></div>
   </article>
-    <!-- 自定义事件 -->
-        <article id="customevent" class="component mui-active">
+      <!-- 自定义事件 -->
+          <article id="customevent" class="component mui-active">
       <h3 class="component-title">自定义事件</h3>
       <p class="component-description">用户开发应用中会大量使用事件功能。除了浏览器内置的事件及mui框架内置的事件（比如手势事件）外，mui同时支持用户触发和绑定自定义事件。通过自定义事件，用户可以轻松实现页面间数据传递。</p>
         <p class="component-description"><strong>监听自定义事件</strong></p>
@@ -845,8 +852,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="p">.....</span>
 <span class="p">});</span></code></pre></div>
   </article>
-    <!-- 图片轮播插件 -->
-    <article id="plugin-slider" class="component mui-active">
+      <!-- 图片轮播插件 -->
+      <article id="plugin-slider" class="component mui-active">
   <h3 class="component-title">图片轮播</h3>
   <p class="component-description">mui框架内置了图片轮播插件，通过该插件封装的JS API，用户可以设定是否自动轮播及轮播周期，如下为代码示例：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
@@ -887,8 +894,108 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>
 </article>
-    <!-- 弹出菜单 -->
-    <article id="plugin-popover" class="component mui-active">
+      <!-- 侧滑菜单 -->
+      <article id="plugin-offcanvas" class="component mui-active">
+  <h3 class="component-title">侧滑导航</h3>
+  <p class="component-description">mui提供了两种侧滑导航实现：webview模式和div模式，两种模式各有优劣，适用于不同的场景。</p>
+
+  <h4 class="component-title">webview模式</h4>
+  <p class="component-description">主页面和菜单内容在不同的webview中，两个页面根据内容需求分别组织DOM结构，mui对其DOM结构无特殊要求，故其有如下优点：</p>
+    <ul>
+      <li>菜单内容是单独的webview，故可被多个页面复用；</li>
+      <li>菜单内容在单独的webview中，菜单区域的滚动不影响主界面，故可使用原生滚动，滚动更为流畅；</li>
+    </ul>
+  <p class="component-description">另一方面，webview模式也有其缺点：</p>
+    <ul>
+      <li>不支持拖动手势（跟手拖动）；</li>
+      <li>主页面、菜单不同webview实现，因此若需交互（如：点击菜单触发主页面内容变化），需使用<a href="#customevent">自定义事件</a>实现跨webview通讯；</li>
+    </ul>
+  <h4 class="component-title">div模式</h4>
+  <p class="component-description">
+    主页面和菜单内容在同一个webview下，嵌套在特定结构的div中，通过div的移动动画模拟菜单移动；故该模式有如下优点： 
+  </p>
+  <ul>
+    <li>支持拖动手势（跟手拖动）；</li>
+    <li>主页面、菜单在一个页面中，可通过JS轻松实现两者交互（如：点击菜单触发主页面内容变化），没有跨webview通讯的烦恼；</li>
+  </ul>
+  <p class="component-description">另一方面，div模式也有其缺点：</p>
+  <ul>
+    <li>不支持菜单内容在多页面的复用，需每个页面都生成对应的菜单节点；</li>
+    <li>主界面和菜单内容的滚动互不影响，因此会使用div区域滚动，在低端Android手机且滚动内容较多时，可能会稍显卡顿；</li>
+  </ul>
+  <p class="component-description">div模式支持不同的动画效果，每种动画效果需遵从不同的DOM构造；下面我们以右滑菜单为例（左滑菜单仅需将菜单父节点上的<code>mui-off-canvas-left</code>换成<code>mui-off-canvas-right</code>即可），说明每种动画对应的DOM结构。</p>
+  <strong>动画1：主界面移动、菜单不动</strong>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- 侧滑导航根容器 --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-wrap mui-draggable&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- 菜单容器 --&gt;</span>
+  <span class="nt">&lt;aside</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-left&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll-wrapper&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- 菜单具体展示内容 --&gt;</span>
+        ...
+      <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/aside&gt;</span>
+  <span class="c">&lt;!-- 主页面容器 --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-inner-wrap&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 主页面标题 --&gt;</span>
+    <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-action-menu mui-icon-bars mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+      <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>标题<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content mui-scroll-wrapper&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- 主界面具体展示内容 --&gt;</span>
+        ...
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>  
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+<strong>动画2：主界面不动、菜单移动</strong>
+  <p class="component-description">该种动画要求的DOM结构和动画1的DOM结构基本相同，唯一差别就是需在侧滑导航根容器class上增加一个<code>mui-slide-in</code>类</p>
+  <strong>动画3：主界面、菜单同时移动</strong>
+  <p class="component-description">该种动画要求的DOM结构较特殊，需将菜单容器放在主页面容器之下</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- 侧滑导航根容器 --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-wrap mui-draggable&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- 主页面容器 --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-inner-wrap&quot;</span><span class="nt">&gt;</span>
+     <span class="c">&lt;!-- 菜单容器 --&gt;</span>
+    <span class="nt">&lt;aside</span> <span class="na">class=</span><span class="s">&quot;mui-off-canvas-left&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll-wrapper&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll&quot;</span><span class="nt">&gt;</span>
+          <span class="c">&lt;!-- 菜单具体展示内容 --&gt;</span>
+          ...
+        <span class="nt">&lt;div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/aside&gt;</span>
+    <span class="c">&lt;!-- 主页面标题 --&gt;</span>
+    <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;mui-bar mui-bar-nav&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;mui-icon mui-action-menu mui-icon-bars mui-pull-left&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+      <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>标题<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;/header&gt;</span>
+    <span class="c">&lt;!-- 主页面内容容器 --&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-content mui-scroll-wrapper&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-scroll&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- 主界面具体展示内容 --&gt;</span>
+        ...
+      <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>  
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></div>
+ 
+ <p class="component-description">mui支持多种方式显示div模式的侧滑菜单：1、在主界面向右拖动（drag）；2、点击含有<code>mui-action-menu</code>类的控件；3、Android手机按menu键；4、通过JS API触发，如下：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-off-canvas-wrap&#39;</span><span class="p">).</span><span class="nx">offCanvas</span><span class="p">(</span><span class="s1">&#39;show&#39;</span><span class="p">);</span></code></pre></div>
+<p class="component-description">同样，mui支持多种方式关闭div模式的侧滑菜单：1、在手机屏幕上任意位置向左拖动（drag）；2、点击主界面内任意位置；3、Android手机按menu键；4、Android手机按back键；5、通过JS API触发，如下：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-off-canvas-wrap&#39;</span><span class="p">).</span><span class="nx">offCanvas</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">);</span></code></pre></div>
+<style>
+  .docs-content h4{
+    font-size: 1.15em;
+  }
+</style>
+
+</article>
+      <!-- 弹出菜单 -->
+      <article id="plugin-popover" class="component mui-active">
   <h3 class="component-title">弹出菜单</h3>
   <p class="component-description">mui框架内置了弹出菜单插件，弹出菜单显示内容不限，但必须包裹在一个含<code>.mui-popover</code>类的div中，如下即为一个弹出菜单内容：</p>
 <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;popover&quot;</span> <span class="na">class=</span><span class="s">&quot;mui-popover&quot;</span><span class="nt">&gt;</span>
@@ -908,8 +1015,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//传入toggle参数，用户也无需关心当前是显示还是隐藏状态，mui会自动识别处理；</span>
 <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-popover&#39;</span><span class="p">).</span><span class="nx">popover</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">);</span></code></pre></div>
 </article>
-    <!-- 遮罩蒙版 -->
-      <article id="mask" class="component mui-active">
+      <!-- 遮罩蒙版 -->
+        <article id="mask" class="component mui-active">
       <h3 class="component-title">遮罩蒙版</h3>
       <p class="component-description">在popover、侧滑菜单等界面，经常会用到蒙版遮罩；比如popover弹出后，除popover控件外的其它区域都会遮罩一层蒙版，用户点击蒙版不会触发蒙版下方的逻辑，而会关闭popover同时关闭蒙版；再比如侧滑菜单界面，菜单划出后，除侧滑菜单之外的其它区域都会遮罩一层蒙版，用户点击蒙版会关闭侧滑菜单同时关闭蒙版。
       </p>
@@ -929,7 +1036,6 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="k">background-color</span><span class="o">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,.</span><span class="m">3</span><span class="p">);</span>
 <span class="p">}</span></code></pre></div>
   </article>
-  
       <!-- Footer -->
       <div class="docs-footer">
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
@@ -947,10 +1053,10 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		<li>&middot;</li>
 	</ul>
 </div>
-<script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2014-12-30 21:40:57 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2014-12-30 21:40:57 +0800"></script>
+<script src="/dist/js/jquery-2.1.1.js"></script>
+<script src="/dist/js/bootstrap.min.js"></script>
+<script src="/dist/js/mui.min.js?v=2015-01-04 17:19:11 +0800"></script>
+<script src="/assets/js/docs.min.js?v=2015-01-04 17:19:11 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
@@ -958,82 +1064,13 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 
     </div>
 
-        <style>
-
-        @media (min-width: 768px){
-          .sidebar {
-            padding-left: 20px;
-          }
-        }
-          
-      .sidenav {
-        margin-top: 20px;
-       margin-bottom: 20px;
-      }
-
-      .sidebar .nav>li>a {
-        display: block;
-        padding: 4px 20px;
-        font-size: 13px;
-        font-weight: 500;
-        color: #999;
-      }
-
-      .sidebar .nav>.active>a, 
-      .sidebar .nav>.active:hover>a, 
-      .sidebar .nav>.active:focus>a {
-        padding-left: 18px;
-        font-weight: 700;
-        color: #d64c28;
-        background-color: transparent;
-        border-left: 2px solid #d64c28;
-      }
-      .affix{
-        position: fixed;
-        top:10px;
-      }
-      .sidebar .nav .nav>li>a {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 30px;
-        font-size: 12px;
-        font-weight: 400;
-        }
-    </style>
-
-  <div class="column lg-units-3" id="scrollspy">
-    <div class="sidebar hidden-print hidden-xs hidden-sm">
-       <ul class="nav sidenav" id="nav" data-spy="affix"  data-offset-top="250">
-            <li class="active"><a href="#pageinit">页面初始化</a></li>
-            <li><a href="#subpage">创建子页面</a></li>
-            <li><a href="#openwindow">打开新页面</a></li>
-            <li><a href="#closewindow">关闭页面</a></li>
-            <li><a href="#ajax">AJAX</a></li>
-            <li><a href="#gesture">手势事件</a></li>
-            <li><a href="#preload">预加载</a></li>
-            <li><a href="#pullrefresh-down">下拉刷新</a></li>
-            <li><a href="#pullrefresh-up">上拉加载</a></li>
-            <li><a href="#input">输入增强</a></li>
-            <li><a href="#switch">开关事件</a></li>
-            <li><a href="#slide">slide事件</a></li>
-            <li><a href="#customevent">自定义事件</a></li>
-            <li><a href="#plugin-slider">图片轮播</a></li>
-            <li><a href="#plugin-popover">弹出菜单</a></li>
-            <li><a href="#mask">遮罩蒙版</a></li>
-        </ul>
-    </div>
-  </div>
+    
   </div>
 </div>
 <script>
   $(document).ready(function(){
     $("body").attr("data-spy","scroll").attr("data-target","#scrollspy");
-    // $("#nav").affix({
-    //     offset: { 
-    //         top: 10
-    //   }
-    // });
-});
+  });
 </script>
 
   </body>
