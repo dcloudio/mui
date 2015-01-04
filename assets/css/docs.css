@@ -907,6 +907,12 @@ hr {
 	.container {
 		max-width: 1170px;
 	}
+	.col-xs-2 {
+		width: 16.67%;
+	}
+	.col-xs-10 {
+		width: 83.33%;
+	}
 }
 @-webkit-keyframes fadeintext {
 	0% {
@@ -1162,3 +1168,44 @@ hr {
 	width: 192px;
 	height: 288px;
 }
+
+
+ @media (min-width: 768px){
+	  .sidebar {
+	    padding-left: 20px;
+	  }
+	}
+          
+.sidenav {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+  .sidebar .nav>li>a {
+    display: block;
+    padding: 4px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #999;
+  }
+
+  .sidebar .nav>.active>a, 
+  .sidebar .nav>.active:hover>a, 
+  .sidebar .nav>.active:focus>a {
+    padding-left: 18px;
+    font-weight: 700;
+    color: #d64c28;
+    background-color: transparent;
+    border-right: 3px solid #d64c28;
+  }
+  .affix{
+    position: fixed;
+    top:20px;
+  }
+  .sidebar .nav .nav>li>a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: 400;
+    }
