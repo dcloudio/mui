@@ -294,6 +294,13 @@ var mui = (function(document, undefined) {
 				return callback.call(el, idx, el) !== false;
 			});
 			return this;
+		},
+		/**
+		 * transfer HTMLElements to Array
+		 * @returns {Array}
+		 */
+		toArray: function() {
+			return [].slice.call(this);
 		}
 	};
 	return $;
