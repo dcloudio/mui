@@ -305,6 +305,11 @@ var mui = (function(document, undefined) {
 	};
 	return $;
 })(document);
+
+// static variable for header and footer height
+mui.HEADER_HEIGHT = '48px';
+mui.FOOTER_HEIGHT = '50px';
+
 //window.mui = mui;
 //'$' in window || (window.$ = mui);
 /**
