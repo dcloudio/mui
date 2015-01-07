@@ -2012,7 +2012,8 @@ select:focus {
   clear: left;
 }
 .mui-input-row select {
-  padding: 10px 15px 0 15px;
+  height: 37px;
+  padding: 0;
   font-size: 17px;
 }
 
@@ -2174,7 +2175,7 @@ select:focus {
   right: 21px;
   font-family: Muiicons;
   color: rgba(170, 170, 170, .6);
-  content: '\e651';
+  content: '\e581';
 }
 
 .mui-input-row .mui-switch {
@@ -2780,7 +2781,7 @@ select:focus {
   font-size: 14px;
   vertical-align: top;
 }
-.mui-slider .mui-slider-group .mui-slider-item > a {
+.mui-slider .mui-slider-group .mui-slider-item > a:not(.mui-control-item) {
   position: relative;
   display: block;
   line-height: 0;
