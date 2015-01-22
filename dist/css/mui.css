@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.0.0 (https://github.com/dcloudio/mui)
+ * Mui v1.1.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1842,7 +1842,8 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   background-color: #eee;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell > a:not(.mui-btn) {
-  padding: 15px;
+  padding: 10px 0;
+  margin: 0;
 }
 .mui-grid-view.mui-grid-9 .mui-media {
   color: #797979;
@@ -2328,13 +2329,25 @@ select:focus {
 
   -webkit-touch-callout: none;
 }
+.mui-segmented-control.mui-scroll-wrapper {
+  height: 38px;
+}
+.mui-segmented-control.mui-scroll-wrapper .mui-scroll {
+  width: auto;
+  height: 40px;
+  white-space: nowrap;
+}
+.mui-segmented-control.mui-scroll-wrapper .mui-control-item {
+  display: inline-block;
+  width: auto;
+  padding: 0 20px;
+  border: 0;
+}
 .mui-segmented-control .mui-control-item {
   display: table-cell;
   width: 1%;
-  padding-top: 6px;
-  padding-bottom: 7px;
   overflow: hidden;
-  line-height: 1;
+  line-height: 38px;
   color: #007aff;
   text-align: center;
   text-overflow: ellipsis;
@@ -2754,6 +2767,10 @@ select:focus {
   position: static;
 }
 
+.mui-android .mui-modal .mui-bar-nav ~ .mui-content {
+  padding-top: 0;
+}
+
 .mui-slider {
   position: relative;
   width: 100%;
@@ -2821,7 +2838,6 @@ select:focus {
 .mui-slider-indicator.mui-segmented-control {
   position: relative;
   bottom: auto;
-  padding-top: 10px;
 }
 .mui-slider-indicator .mui-indicator {
   display: inline-block;
@@ -3475,6 +3491,13 @@ select:focus {
 }
 .mui-fullscreen .mui-slider-group {
   height: 100%;
+}
+.mui-fullscreen .mui-segmented-control ~ .mui-slider-group {
+  position: absolute;
+  top: 40px;
+  bottom: 0;
+  width: 100%;
+  height: auto;
 }
 .mui-fullscreen .mui-slider-item > a {
   top: 50%;

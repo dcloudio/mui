@@ -69,7 +69,9 @@
 	 * 检查升级数据
 	 */
 	function checkUpdateData( j ){
+		//当前客户端版本号
 		var curVer=plus.runtime.version,
+		
 		inf = j[plus.os.name];
 		if ( inf ){
 			var srvVer = inf.version;
@@ -97,37 +99,26 @@
 	}
 	
 	/**
-	 * 从服务器获取升级数据
+	 * 从服务器获取升级数据，并存储到本地；
 	 */
 	function getUpdateData(){
-		var xhr = new plus.net.XMLHttpRequest();
-		xhr.onreadystatechange = function () {
-	        switch ( xhr.readyState ) {
-	            case 4:
-	                if ( xhr.status == 200 ) {
-	                	// 保存到本地文件中
-	                	dir.getFile( localFile, {create:true}, function(fentry){
-	                		fentry.createWriter( function(writer){
-	                			writer.onerror = function(){
-	                				console.log( "获取升级数据，保存文件失败！" );
-	                			}
-	                			writer.write( xhr.responseText );
-	                		}, function(e){
-	                			console.log( "获取升级数据，创建写文件对象失败："+e.message );
-	                		} );
-	                	}, function(e){
-	                		console.log( "获取升级数据，打开保存文件失败："+e.message );
-	                	});
-	                } else {
-	                	console.log( "获取升级数据，联网请求失败："+xhr.status );
-	                }
-	                break;
-	            default :
-	                break;
-	        }
-		}
-		xhr.open( "GET", server );
-		xhr.send();
+		mui.getJSON(server,{},function (data) {
+			if(data.appid==plus.runtime.appid){
+				// 保存到本地文件中
+	            	dir.getFile( localFile, {create:true}, function(fentry){
+	            		fentry.createWriter( function(writer){
+	            			writer.onerror = function(){
+	            				console.log( "获取升级数据，保存文件失败！" );
+	            			}
+	            			writer.write(data);
+	            		}, function(e){
+	            			console.log( "获取升级数据，创建写文件对象失败："+e.message );
+	            		} );
+	            	}, function(e){
+	            		console.log( "获取升级数据，打开保存文件失败："+e.message );
+	            	});
+			}
+		});
 	}
 	
 	/**
@@ -155,11 +146,7 @@
 			return true;
 		}
 	}
-	
-	if ( w.plus ) {
-		initUpdate();
-	} else {
-		document.addEventListener("plusready", initUpdate, false );
-	}
+		
+	mui.plusReady(initUpdate);
 
 })(window);

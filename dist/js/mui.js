@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.0.0 (https://github.com/dcloudio/mui)
+ * Mui v1.1.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -52,21 +52,56 @@ var mui = (function(document, undefined) {
 	 * @param {type} deep
 	 * @returns {unresolved}
 	 */
-	$.extend = function(target, source, deep) {
-		if (!target) {
+	$.extend = function() { //from jquery2
+		var options, name, src, copy, copyIsArray, clone,
+			target = arguments[0] || {},
+			i = 1,
+			length = arguments.length,
+			deep = false;
+
+		if (typeof target === "boolean") {
+			deep = target;
+
+			target = arguments[i] || {};
+			i++;
+		}
+
+		if (typeof target !== "object" && !$.isFunction(target)) {
 			target = {};
 		}
-		if (!source) {
-			source = {};
+
+		if (i === length) {
+			target = this;
+			i--;
 		}
-		for (var key in source)
-			if (source[key] !== undefined) {
-				if (deep && typeof target[key] === 'object') {
-					$.extend(target[key], source[key], deep);
-				} else {
-					target[key] = source[key];
+
+		for (; i < length; i++) {
+			if ((options = arguments[i]) != null) {
+				for (name in options) {
+					src = target[name];
+					copy = options[name];
+
+					if (target === copy) {
+						continue;
+					}
+
+					if (deep && copy && ($.isPlainObject(copy) || (copyIsArray = $.isArray(copy)))) {
+						if (copyIsArray) {
+							copyIsArray = false;
+							clone = src && $.isArray(src) ? src : [];
+
+						} else {
+							clone = src && $.isPlainObject(src) ? src : {};
+						}
+
+						target[name] = $.extend(deep, clone, copy);
+
+					} else if (copy !== undefined) {
+						target[name] = copy;
+					}
 				}
 			}
+		}
 
 		return target;
 	};
@@ -164,6 +199,9 @@ var mui = (function(document, undefined) {
 	 * @returns {_L8.$}
 	 */
 	$.each = function(elements, callback) {
+		if (!elements) {
+			return this;
+		}
 		if (typeof elements.length === 'number') {
 			[].every.call(elements, function(el, idx) {
 				return callback.call(el, idx, el) !== false;
@@ -547,7 +585,9 @@ var mui = (function(document, undefined) {
 
 	var handle = function(event, target) {
 		if (target.type && (target.type === 'radio' || target.type === 'checkbox')) {
-			return target;
+			if (!target.disabled) { //disabled
+				return target;
+			}
 		}
 		return false;
 	};
@@ -610,24 +650,23 @@ var mui = (function(document, undefined) {
 		// }
 		document.addEventListener('focusin', function(e) {
 			var target = e.target;
-			if (target.tagName && target.tagName !== 'INPUT') {
-				return;
-			}
-			document.body.classList.add(CLASS_FOCUSIN);
-			var isFooter = false;
-			for (; target && target !== document; target = target.parentNode) {
-				var classList = target.classList;
-				if (classList && classList.contains(CLASS_BAR_TAB) || classList.contains(CLASS_BAR_FOOTER) || classList.contains(CLASS_BAR_FOOTER_SECONDARY) || classList.contains(CLASS_BAR_FOOTER_SECONDARY_TAB)) {
-					isFooter = true;
-					break;
+			if (target.tagName && target.tagName === 'INPUT' && target.type === 'text') {
+				document.body.classList.add(CLASS_FOCUSIN);
+				var isFooter = false;
+				for (; target && target !== document; target = target.parentNode) {
+					var classList = target.classList;
+					if (classList && classList.contains(CLASS_BAR_TAB) || classList.contains(CLASS_BAR_FOOTER) || classList.contains(CLASS_BAR_FOOTER_SECONDARY) || classList.contains(CLASS_BAR_FOOTER_SECONDARY_TAB)) {
+						isFooter = true;
+						break;
+					}
 				}
-			}
-			if (isFooter) {
-				var scrollTop = document.body.scrollHeight;
-				var scrollLeft = document.body.scrollLeft;
-				setTimeout(function() {
-					window.scrollTo(scrollLeft, scrollTop);
-				}, 20);
+				if (isFooter) {
+					var scrollTop = document.body.scrollHeight;
+					var scrollLeft = document.body.scrollLeft;
+					setTimeout(function() {
+						window.scrollTo(scrollLeft, scrollTop);
+					}, 20);
+				}
 			}
 		});
 		document.addEventListener('focusout', function(e) {
@@ -863,10 +902,10 @@ var mui = (function(document, undefined) {
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		//TODO 应该判断当前target是不是在targets.popover内部，而不是非要相等
-		if (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab && $.targets.tab.hash && e.target === $.targets.tab) || $.targets.offcanvas || $.targets.modal) {
+		if (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal) {
 			e.preventDefault();
 		}
-	});
+	}, true);
 
 	/**
 	 * mui delegate events
@@ -1125,7 +1164,7 @@ var mui = (function(document, undefined) {
 	 * @returns {undefined}
 	 */
 	$.initGlobal = function(options) {
-		$.options = $.extend($.global, options, true);
+		$.options = $.extend(true, $.global, options);
 		return this;
 	};
 	var inits = {};
@@ -1145,7 +1184,7 @@ var mui = (function(document, undefined) {
 	 */
 	$.init = function(options) {
 		isInitialized = true;
-		$.options = $.extend($.global, options || {}, true);
+		$.options = $.extend(true, $.global, options || {});
 		$.ready(function() {
 			$.each($.inits, function(index, init) {
 				var isInit = !!(!inits[init.name] || init.repeat);
@@ -1197,14 +1236,14 @@ var mui = (function(document, undefined) {
 	};
 	//若执行了显示动画初始化操作，则要覆盖默认配置
 	if ($.options.show) {
-		defaultShow = $.extend(defaultShow, $.options.show, true);
+		defaultShow = $.extend(true, defaultShow, $.options.show);
 	}
 
 	$.currentWebview = null;
 	$.isHomePage = false;
 
-	$.extend($.global, defaultOptions, true);
-	$.extend($.options, defaultOptions, true);
+	$.extend(true, $.global, defaultOptions);
+	$.extend(true, $.options, defaultOptions);
 	/**
 	 * 等待动画配置
 	 * @param {type} options
@@ -1259,7 +1298,7 @@ var mui = (function(document, undefined) {
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			webview.evalJS("mui&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}) + "')");
+			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}) + "')");
 		}
 	};
 	/**
@@ -1544,7 +1583,7 @@ var mui = (function(document, undefined) {
 		handle: function() {
 			var options = $.options;
 			var subpages = options.subpages || [];
-			if($.os.plus){
+			if ($.os.plus) {
 				$.plusReady(function() {
 					//TODO  这里需要判断一下，最好等子窗口加载完毕后，再调用主窗口的show方法；
 					//或者：在openwindow方法中，监听实现；
@@ -1561,17 +1600,17 @@ var mui = (function(document, undefined) {
 						}, 300);
 					}
 					//设置ios顶部状态栏颜色；
-					if ($.os.ios&&$.options.statusBarBackground) {
+					if ($.os.ios && $.options.statusBarBackground) {
 						plus.navigator.setStatusBarBackground($.options.statusBarBackground);
 					}
 				});
-			}else{
-				if(subpages.length>0){
+			} else {
+				if (subpages.length > 0) {
 					var err = document.createElement('div');
 					err.className = 'mui-error';
 					//文字描述
 					var span = document.createElement('span');
-					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考'; 
+					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考';
 					err.appendChild(span);
 					var a = document.createElement('a');
 					a.innerHTML = '"mui框架适用场景"';
@@ -1580,9 +1619,9 @@ var mui = (function(document, undefined) {
 					document.body.appendChild(err);
 					console.log('在该浏览器下，不支持创建子页面');
 				}
-				
+
 			}
-			
+
 		}
 	});
 	window.addEventListener('preload', function() {
@@ -1814,271 +1853,270 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @returns {undefined}
  */
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
-    var jsonType = 'application/json';
-    var htmlType = 'text/html';
-    var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
-    var scriptTypeRE = /^(?:text|application)\/javascript/i;
-    var xmlTypeRE = /^(?:text|application)\/xml/i;
-    var blankRE = /^\s*$/;
+	var jsonType = 'application/json';
+	var htmlType = 'text/html';
+	var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+	var scriptTypeRE = /^(?:text|application)\/javascript/i;
+	var xmlTypeRE = /^(?:text|application)\/xml/i;
+	var blankRE = /^\s*$/;
 
-    $.ajaxSettings = {
-        type: 'GET',
-        success: $.noop,
-        error: $.noop,
-        complete: $.noop,
-        context: null,
-        xhr: function () {
-            return new window.XMLHttpRequest();
-        },
-        accepts: {
-            script: 'text/javascript, application/javascript, application/x-javascript',
-            json: jsonType,
-            xml: 'application/xml, text/xml',
-            html: htmlType,
-            text: 'text/plain'
-        },
-        timeout: 0,
-        processData: true,
-        cache: true
-    };
+	$.ajaxSettings = {
+		type: 'GET',
+		success: $.noop,
+		error: $.noop,
+		complete: $.noop,
+		context: null,
+		xhr: function(protocol) {
+			return new window.XMLHttpRequest();
+		},
+		accepts: {
+			script: 'text/javascript, application/javascript, application/x-javascript',
+			json: jsonType,
+			xml: 'application/xml, text/xml',
+			html: htmlType,
+			text: 'text/plain'
+		},
+		timeout: 0,
+		processData: true,
+		cache: true
+	};
 
-    var ajaxSuccess = function (data, xhr, settings) {
-        settings.success.call(settings.context, data, 'success', xhr);
-        ajaxComplete('success', xhr, settings);
-    };
-    // type: "timeout", "error", "abort", "parsererror"
-    var ajaxError = function (error, type, xhr, settings) {
-        settings.error.call(settings.context, xhr, type, error);
-        ajaxComplete(type, xhr, settings);
-    };
-    // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
-    var ajaxComplete = function (status, xhr, settings) {
-        settings.complete.call(settings.context, xhr, status);
-    };
+	var ajaxSuccess = function(data, xhr, settings) {
+		settings.success.call(settings.context, data, 'success', xhr);
+		ajaxComplete('success', xhr, settings);
+	};
+	// type: "timeout", "error", "abort", "parsererror"
+	var ajaxError = function(error, type, xhr, settings) {
+		settings.error.call(settings.context, xhr, type, error);
+		ajaxComplete(type, xhr, settings);
+	};
+	// status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+	var ajaxComplete = function(status, xhr, settings) {
+		settings.complete.call(settings.context, xhr, status);
+	};
 
-    var serialize = function (params, obj, traditional, scope) {
-        var type, array = $.isArray(obj),
-                hash = $.isPlainObject(obj);
-        $.each(obj, function (key, value) {
-            type = $.type(value);
-            if (scope) {
-                key = traditional ? scope :
-                        scope + '[' + (hash || type === 'object' || type === 'array' ? key : '') + ']';
-            }
-            // handle data in serializeArray() format
-            if (!scope && array) {
-                params.add(value.name, value.value);
-            }
-            // recurse into nested objects
-            else if (type === "array" || (!traditional && type === "object")) {
-                serialize(params, value, traditional, key);
-            }
-            else {
-                params.add(key, value);
-            }
-        });
-    };
-    var serializeData = function (options) {
-        if (options.processData && options.data && typeof options.data !== "string") {
-            options.data = $.param(options.data, options.traditional);
-        }
-        if (options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
-            options.url = appendQuery(options.url, options.data);
-            options.data = undefined;
-        }
-    };
-    var appendQuery = function (url, query) {
-        if (query === '') {
-            return url;
-        }
-        return (url + '&' + query).replace(/[&?]{1,2}/, '?');
-    };
-    var mimeToDataType = function (mime) {
-        if (mime) {
-            mime = mime.split(';', 2)[0];
-        }
-        return mime && (mime === htmlType ? 'html' :
-                mime === jsonType ? 'json' :
-                scriptTypeRE.test(mime) ? 'script' :
-                xmlTypeRE.test(mime) && 'xml') || 'text';
-    };
-    var parseArguments = function (url, data, success, dataType) {
-        if ($.isFunction(data)) {
-            dataType = success, success = data, data = undefined;
-        }
-        if (!$.isFunction(success)) {
-            dataType = success, success = undefined;
-        }
-        return {
-            url: url,
-            data: data,
-            success: success,
-            dataType: dataType
-        };
-    };
-    $.ajax = function (url, options) {
-        if (typeof url === "object") {
-            options = url;
-            url = undefined;
-        }
-        var settings = options || {};
-        settings.url = url || settings.url;
-        for (key in $.ajaxSettings) {
-            if (settings[key] === undefined) {
-                settings[key] = $.ajaxSettings[key];
-            }
-        }
-        serializeData(settings);
-        var dataType = settings.dataType;
+	var serialize = function(params, obj, traditional, scope) {
+		var type, array = $.isArray(obj),
+			hash = $.isPlainObject(obj);
+		$.each(obj, function(key, value) {
+			type = $.type(value);
+			if (scope) {
+				key = traditional ? scope :
+					scope + '[' + (hash || type === 'object' || type === 'array' ? key : '') + ']';
+			}
+			// handle data in serializeArray() format
+			if (!scope && array) {
+				params.add(value.name, value.value);
+			}
+			// recurse into nested objects
+			else if (type === "array" || (!traditional && type === "object")) {
+				serialize(params, value, traditional, key);
+			} else {
+				params.add(key, value);
+			}
+		});
+	};
+	var serializeData = function(options) {
+		if (options.processData && options.data && typeof options.data !== "string") {
+			options.data = $.param(options.data, options.traditional);
+		}
+		if (options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
+			options.url = appendQuery(options.url, options.data);
+			options.data = undefined;
+		}
+	};
+	var appendQuery = function(url, query) {
+		if (query === '') {
+			return url;
+		}
+		return (url + '&' + query).replace(/[&?]{1,2}/, '?');
+	};
+	var mimeToDataType = function(mime) {
+		if (mime) {
+			mime = mime.split(';', 2)[0];
+		}
+		return mime && (mime === htmlType ? 'html' :
+			mime === jsonType ? 'json' :
+			scriptTypeRE.test(mime) ? 'script' :
+			xmlTypeRE.test(mime) && 'xml') || 'text';
+	};
+	var parseArguments = function(url, data, success, dataType) {
+		if ($.isFunction(data)) {
+			dataType = success, success = data, data = undefined;
+		}
+		if (!$.isFunction(success)) {
+			dataType = success, success = undefined;
+		}
+		return {
+			url: url,
+			data: data,
+			success: success,
+			dataType: dataType
+		};
+	};
+	$.ajax = function(url, options) {
+		if (typeof url === "object") {
+			options = url;
+			url = undefined;
+		}
+		var settings = options || {};
+		settings.url = url || settings.url;
+		for (key in $.ajaxSettings) {
+			if (settings[key] === undefined) {
+				settings[key] = $.ajaxSettings[key];
+			}
+		}
+		serializeData(settings);
+		var dataType = settings.dataType;
 
-        if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
-            settings.url = appendQuery(settings.url, '_=' + Date.now());
-        }
-        var mime = settings.accepts[dataType];
-        var headers = {};
-        var setHeader = function (name, value) {
-            headers[name.toLowerCase()] = [name, value];
-        };
-        var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-        var xhr = settings.xhr();
-        var nativeSetHeader = xhr.setRequestHeader;
-        var abortTimeout;
+		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
+			settings.url = appendQuery(settings.url, '_=' + Date.now());
+		}
+		var mime = settings.accepts[dataType];
+		var headers = {};
+		var setHeader = function(name, value) {
+			headers[name.toLowerCase()] = [name, value];
+		};
+		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+		var xhr = settings.xhr(protocol);
+		var nativeSetHeader = xhr.setRequestHeader;
+		var abortTimeout;
 
-        setHeader('X-Requested-With', 'XMLHttpRequest');
-        setHeader('Accept', mime || '*/*');
-        if (!!(mime = settings.mimeType || mime)) {
-            if (mime.indexOf(',') > -1) {
-                mime = mime.split(',', 2)[0];
-            }
-            xhr.overrideMimeType && xhr.overrideMimeType(mime);
-        }
-        if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() !== 'GET')) {
-            setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
-        }
-        if (settings.headers) {
-            for (name in settings.headers)
-                setHeader(name, settings.headers[name]);
-        }
-        xhr.setRequestHeader = setHeader;
+		setHeader('X-Requested-With', 'XMLHttpRequest');
+		setHeader('Accept', mime || '*/*');
+		if (!!(mime = settings.mimeType || mime)) {
+			if (mime.indexOf(',') > -1) {
+				mime = mime.split(',', 2)[0];
+			}
+			xhr.overrideMimeType && xhr.overrideMimeType(mime);
+		}
+		if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() !== 'GET')) {
+			setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
+		}
+		if (settings.headers) {
+			for (name in settings.headers)
+				setHeader(name, settings.headers[name]);
+		}
+		xhr.setRequestHeader = setHeader;
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                xhr.onreadystatechange = $.noop;
-                clearTimeout(abortTimeout);
-                var result, error = false;
-                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
-                    dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
-                    result = xhr.responseText;
-                    try {
-                        // http://perfectionkills.com/global-eval-what-are-the-options/
-                        if (dataType === 'script') {
-                            (1, eval)(result);
-                        } else if (dataType === 'xml') {
-                            result = xhr.responseXML;
-                        } else if (dataType === 'json') {
-                            result = blankRE.test(result) ? null : $.parseJSON(result);
-                        }
-                    } catch (e) {
-                        error = e;
-                    }
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				xhr.onreadystatechange = $.noop;
+				clearTimeout(abortTimeout);
+				var result, error = false;
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
+					dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
+					result = xhr.responseText;
+					try {
+						// http://perfectionkills.com/global-eval-what-are-the-options/
+						if (dataType === 'script') {
+							(1, eval)(result);
+						} else if (dataType === 'xml') {
+							result = xhr.responseXML;
+						} else if (dataType === 'json') {
+							result = blankRE.test(result) ? null : $.parseJSON(result);
+						}
+					} catch (e) {
+						error = e;
+					}
 
-                    if (error) {
-                        ajaxError(error, 'parsererror', xhr, settings);
-                    } else {
-                        ajaxSuccess(result, xhr, settings);
-                    }
-                } else {
-                    ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
-                }
-            }
-        };
-        //		if (ajaxBeforeSend(xhr, settings) === false) {
-        //			xhr.abort();
-        //			ajaxError(null, 'abort', xhr, settings);
-        //			return xhr;
-        //		}
+					if (error) {
+						ajaxError(error, 'parsererror', xhr, settings);
+					} else {
+						ajaxSuccess(result, xhr, settings);
+					}
+				} else {
+					ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+				}
+			}
+		};
+		//		if (ajaxBeforeSend(xhr, settings) === false) {
+		//			xhr.abort();
+		//			ajaxError(null, 'abort', xhr, settings);
+		//			return xhr;
+		//		}
 
-        if (settings.xhrFields) {
-            for (name in settings.xhrFields) {
-                xhr[name] = settings.xhrFields[name];
-            }
-        }
+		if (settings.xhrFields) {
+			for (name in settings.xhrFields) {
+				xhr[name] = settings.xhrFields[name];
+			}
+		}
 
-        var async = 'async' in settings ? settings.async : true;
+		var async = 'async' in settings ? settings.async : true;
 
-        xhr.open(settings.type, settings.url, async, settings.username, settings.password);
+		xhr.open(settings.type, settings.url, async, settings.username, settings.password);
 
-        for (name in headers) {
-            nativeSetHeader.apply(xhr, headers[name]);
-        }
-        if (settings.timeout > 0) {
-            abortTimeout = setTimeout(function () {
-                xhr.onreadystatechange = $.noop;
-                xhr.abort();
-                ajaxError(null, 'timeout', xhr, settings);
-            }, settings.timeout);
-        }
-        xhr.send(settings.data ? settings.data : null);
-        return xhr;
-    };
+		for (name in headers) {
+			nativeSetHeader.apply(xhr, headers[name]);
+		}
+		if (settings.timeout > 0) {
+			abortTimeout = setTimeout(function() {
+				xhr.onreadystatechange = $.noop;
+				xhr.abort();
+				ajaxError(null, 'timeout', xhr, settings);
+			}, settings.timeout);
+		}
+		xhr.send(settings.data ? settings.data : null);
+		return xhr;
+	};
 
 
-    $.param = function (obj, traditional) {
-        var params = [];
-        params.add = function (k, v) {
-            this.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
-        };
-        serialize(params, obj, traditional);
-        return params.join('&').replace(/%20/g, '+');
-    };
-    $.get = function ( /* url, data, success, dataType */ ) {
-        return $.ajax(parseArguments.apply(null, arguments));
-    };
+	$.param = function(obj, traditional) {
+		var params = [];
+		params.add = function(k, v) {
+			this.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+		};
+		serialize(params, obj, traditional);
+		return params.join('&').replace(/%20/g, '+');
+	};
+	$.get = function( /* url, data, success, dataType */ ) {
+		return $.ajax(parseArguments.apply(null, arguments));
+	};
 
-    $.post = function ( /* url, data, success, dataType */ ) {
-        var options = parseArguments.apply(null, arguments);
-        options.type = 'POST';
-        return $.ajax(options);
-    };
+	$.post = function( /* url, data, success, dataType */ ) {
+		var options = parseArguments.apply(null, arguments);
+		options.type = 'POST';
+		return $.ajax(options);
+	};
 
-    $.getJSON = function ( /* url, data, success */ ) {
-        var options = parseArguments.apply(null, arguments);
-        options.dataType = 'json';
-        return $.ajax(options);
-    };
+	$.getJSON = function( /* url, data, success */ ) {
+		var options = parseArguments.apply(null, arguments);
+		options.dataType = 'json';
+		return $.ajax(options);
+	};
 
-    $.fn.load = function (url, data, success) {
-        if (!this.length)
-            return this;
-        var self = this,
-                parts = url.split(/\s/),
-                selector,
-                options = parseArguments(url, data, success),
-                callback = options.success;
-        if (parts.length > 1)
-            options.url = parts[0], selector = parts[1];
-        options.success = function (response) {
-            if (selector) {
-                var div = document.createElement('div');
-                div.innerHTML = response.replace(rscript, "");
-                var selectorDiv = document.createElement('div');
-                var childs = div.querySelectorAll(selector);
-                if (childs && childs.length > 0) {
-                    for (var i = 0, len = childs.length; i < len; i++) {
-                        selectorDiv.appendChild(childs[i]);
-                    }
-                }
-                self[0].innerHTML = selectorDiv.innerHTML;
-            } else {
-                self[0].innerHTML = response;
-            }
-            callback && callback.apply(self, arguments);
-        };
-        $.ajax(options);
-        return this;
-    };
+	$.fn.load = function(url, data, success) {
+		if (!this.length)
+			return this;
+		var self = this,
+			parts = url.split(/\s/),
+			selector,
+			options = parseArguments(url, data, success),
+			callback = options.success;
+		if (parts.length > 1)
+			options.url = parts[0], selector = parts[1];
+		options.success = function(response) {
+			if (selector) {
+				var div = document.createElement('div');
+				div.innerHTML = response.replace(rscript, "");
+				var selectorDiv = document.createElement('div');
+				var childs = div.querySelectorAll(selector);
+				if (childs && childs.length > 0) {
+					for (var i = 0, len = childs.length; i < len; i++) {
+						selectorDiv.appendChild(childs[i]);
+					}
+				}
+				self[0].innerHTML = selectorDiv.innerHTML;
+			} else {
+				self[0].innerHTML = response;
+			}
+			callback && callback.apply(self, arguments);
+		};
+		$.ajax(options);
+		return this;
+	};
 
 })(mui, window);
 /**
@@ -2087,7 +2125,10 @@ var mui = (function(document, undefined) {
 (function($) {
 	$.plusReady(function() {
 		$.ajaxSettings = $.extend($.ajaxSettings, {
-			xhr: function() {
+			xhr: function(protocol) {
+				if (protocol === 'file:') { //本地文件使用标准XMLHttpRequest
+					return new window.XMLHttpRequest();
+				}
 				return new plus.net.XMLHttpRequest();
 			}
 		});
@@ -2216,7 +2257,7 @@ var mui = (function(document, undefined) {
 
 	var PullRefresh = {
 		init: function(element, options) {
-			this._super(element, $.extend({
+			this._super(element, $.extend(true, {
 				scrollY: true,
 				scrollX: false,
 				indicators: true,
@@ -2233,7 +2274,7 @@ var mui = (function(document, undefined) {
 					contentnomore: '没有更多数据了',
 					duration: 300
 				}
-			}, options, true));
+			}, options));
 		},
 		_init: function() {
 			this._super();
@@ -2354,6 +2395,8 @@ var mui = (function(document, undefined) {
 	var CLASS_SCROLLBAR_VERTICAL = CLASS_SCROLLBAR + '-vertical';
 	var CLASS_SCROLLBAR_HORIZONTAL = CLASS_SCROLLBAR + '-horizontal';
 
+	var CLASS_ACTIVE = 'mui-active';
+
 	var ease = {
 		quadratic: {
 			style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -2372,10 +2415,10 @@ var mui = (function(document, undefined) {
 		init: function(element, options) {
 			this.wrapper = this.element = element;
 			this.scroller = this.wrapper.children[0];
-			this.scrollerStyle = this.scroller.style;
+			this.scrollerStyle = this.scroller && this.scroller.style;
 			this.stopped = false;
 
-			this.options = $.extend({
+			this.options = $.extend(true, {
 				scrollY: true,
 				scrollX: false,
 				startX: 0,
@@ -2389,13 +2432,17 @@ var mui = (function(document, undefined) {
 				},
 				momentum: true,
 
+				snap: false,
+
 				bounce: true,
 				bounceTime: 300,
 				bounceEasing: ease.circular.style,
 
 				directionLockThreshold: 5,
 
-			}, options, true);
+				parallaxElement: false,
+				parallaxRatio: 0.5
+			}, options);
 
 			this.x = 0;
 			this.y = 0;
@@ -2410,8 +2457,17 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_init: function() {
+			this._initParallax();
 			this._initIndicators();
 			this._initEvent();
+		},
+		_initParallax: function() {
+			if (this.options.parallaxElement) {
+				this.parallaxElement = document.querySelector(this.options.parallaxElement);
+				this.parallaxStyle = this.parallaxElement.style;
+				this.parallaxHeight = this.parallaxElement.offsetHeight;
+				this.parallaxImgStyle = this.parallaxElement.querySelector('img').style;
+			}
 		},
 		_initIndicators: function() {
 			var self = this;
@@ -2472,6 +2528,83 @@ var mui = (function(document, undefined) {
 				});
 			});
 		},
+		_initSnap: function() {
+			this.currentPage = {};
+			this.pages = [];
+			var snaps = this.snaps;
+			var length = snaps.length;
+			var m = 0;
+			var n = -1;
+			var x = 0;
+			var cx = 0;
+			for (var i = 0; i < length; i++) {
+				var snap = snaps[i];
+				var offsetLeft = snap.offsetLeft;
+				var offsetWidth = snap.offsetWidth;
+				if (i === 0 || offsetLeft <= snaps[i - 1].offsetLeft) {
+					m = 0;
+					n++;
+				}
+				if (!this.pages[m]) {
+					this.pages[m] = [];
+				}
+				x = this._getSnapX(offsetLeft);
+				cx = x - Math.round((offsetWidth) / 2);
+				this.pages[m][n] = {
+					x: x,
+					cx: cx,
+					pageX: m,
+					element: snap
+				}
+				if (snap.classList.contains(CLASS_ACTIVE)) {
+					this.currentPage = this.pages[m][0];
+				}
+				if (x >= this.maxScrollX) {
+					m++;
+				}
+			}
+			this.options.startX = this.currentPage.x || 0;
+		},
+		_getSnapX: function(offsetLeft) {
+			return Math.max(Math.min(0, -offsetLeft + (this.wrapperWidth / 2)), this.maxScrollX);
+		},
+		_gotoPage: function(index) {
+			this.currentPage = this.pages[Math.min(index, this.pages.length - 1)][0];
+			for (var i = 0, len = this.snaps.length; i < len; i++) {
+				if (i === index) {
+					this.snaps[i].classList.add(CLASS_ACTIVE);
+				} else {
+					this.snaps[i].classList.remove(CLASS_ACTIVE);
+				}
+			}
+			this.scrollTo(this.currentPage.x, 0, this.options.bounceTime);
+		},
+		_nearestSnap: function(x) {
+			if (!this.pages.length) {
+				return {
+					x: 0,
+					pageX: 0
+				};
+			}
+			var i = 0;
+			var length = this.pages.length;
+
+			if (x > 0) {
+				x = 0;
+			} else if (x < this.maxScrollX) {
+				x = this.maxScrollX;
+			}
+
+			for (; i < length; i++) {
+				if (x >= this.pages[i][0].cx) {
+					return this.pages[i][0];
+				}
+			}
+			return {
+				x: 0,
+				pageX: 0
+			};
+		},
 		_initEvent: function() {
 			window.addEventListener('orientationchange', this);
 			window.addEventListener('resize', this);
@@ -2487,6 +2620,9 @@ var mui = (function(document, undefined) {
 			this.wrapper.addEventListener('scrollend', this);
 			if (this.options.scrollX) {
 				this.wrapper.addEventListener('swiperight', this);
+			}
+			if (this.wrapper.classList.contains('mui-segmented-control')) { //靠，这个bug排查了一下午
+				mui(this.wrapper).on('click', 'a', $.preventDefault);
 			}
 		},
 		handleEvent: function(e) {
@@ -2531,7 +2667,6 @@ var mui = (function(document, undefined) {
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-
 			if (this.isInTransition) {
 				this.needReset = true;
 				this.isInTransition = false;
@@ -2551,11 +2686,15 @@ var mui = (function(document, undefined) {
 			//				return;
 			//			}
 			var detail = e.detail;
-			//ios8 hack
-			if ($.os.ios && parseFloat($.os.version) >= 8) {
-				if ((detail.gesture.touches[0].clientY + 10) > window.innerHeight) {
-					this.resetPosition(this.options.bounceTime);
-					return;
+			if (this.options.scrollY || detail.direction === 'up' || detail.direction === 'down') { //如果是竖向滚动或手势方向是上或下
+				//ios8 hack
+				if ($.os.ios && parseFloat($.os.version) >= 8) { //多webview时，离开当前webview会导致后续touch事件不触发
+					var clientY = detail.gesture.touches[0].clientY;
+					//下拉刷新 or 上拉加载
+					if ((clientY + 10) > window.innerHeight || clientY < 10) {
+						this.resetPosition(this.options.bounceTime);
+						return;
+					}
 				}
 			}
 			var isPreventDefault = isReturn = false;
@@ -2584,6 +2723,7 @@ var mui = (function(document, undefined) {
 			} else {
 				e.stopPropagation(); //move期间阻止冒泡(scroll嵌套)
 			}
+
 			var deltaX = detail.deltaX - detail.lastDeltaX;
 			var deltaY = detail.deltaY - detail.lastDeltaY;
 			var absDeltaX = Math.abs(detail.deltaX);
@@ -2613,8 +2753,7 @@ var mui = (function(document, undefined) {
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
-
-
+			$.trigger(this.wrapper, 'scroll', this);
 		},
 		_flick: function(e) {
 			//			if (!this.moved || this.needReset) {
@@ -2623,6 +2762,7 @@ var mui = (function(document, undefined) {
 			if (!this.moved) {
 				return;
 			}
+			e.stopPropagation();
 			var detail = e.detail;
 			this._clearRequestAnimationFrame();
 			if (e.type === 'dragend' && detail.flick) { //dragend
@@ -2671,7 +2811,7 @@ var mui = (function(document, undefined) {
 			}
 
 			$.trigger(this.wrapper, 'scrollend', this);
-			e.stopPropagation();
+			//			e.stopPropagation();
 		},
 		_end: function(e) {
 			this.needReset = false;
@@ -2704,8 +2844,14 @@ var mui = (function(document, undefined) {
 		_transitionTime: function(time) {
 			time = time || 0;
 			this.scrollerStyle['webkitTransitionDuration'] = time + 'ms';
+			if (this.parallaxElement && this.options.scrollY) { //目前仅支持竖向视差效果
+				this.parallaxStyle['webkitTransitionDuration'] = time + 'ms';
+			}
 			if (this.options.fixedBadAndorid && !time && $.os.isBadAndroid) {
 				this.scrollerStyle['webkitTransitionDuration'] = '0.001s';
+				if (this.parallaxElement && this.options.scrollY) { //目前仅支持竖向视差效果
+					this.parallaxStyle['webkitTransitionDuration'] = '0.001s';
+				}
 			}
 			if (this.indicators) {
 				for (var i = this.indicators.length; i--;) {
@@ -2715,6 +2861,9 @@ var mui = (function(document, undefined) {
 		},
 		_transitionTimingFunction: function(easing) {
 			this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
+			if (this.parallaxElement && this.options.scrollY) { //目前仅支持竖向视差效果
+				this.parallaxStyle['webkitTransitionDuration'] = easing;
+			}
 			if (this.indicators) {
 				for (var i = this.indicators.length; i--;) {
 					this.indicators[i].transitionTimingFunction(easing);
@@ -2778,6 +2927,21 @@ var mui = (function(document, undefined) {
 			this.indicators.map(function(indicator) {
 				indicator.refresh();
 			});
+
+			//以防slider类嵌套使用
+			if (this.options.snap && typeof this.options.snap === 'string') {
+				var items = this.scroller.querySelectorAll(this.options.snap);
+				this.itemLength = 0;
+				this.snaps = [];
+				for (var i = 0, len = items.length; i < len; i++) {
+					var item = items[i];
+					if (item.parentNode === this.scroller) {
+						this.itemLength++;
+						this.snaps.push(item);
+					}
+				}
+				this._initSnap(); //需要每次都_initSnap么。其实init的时候执行一次，后续resize的时候执行一次就行了吧.先这么做吧，如果影响性能，再调整
+			}
 		},
 		_momentum: function(current, distance, time, lowerMargin, wrapperSize, deceleration) {
 			var speed = parseFloat(Math.abs(distance) / time),
@@ -2810,6 +2974,17 @@ var mui = (function(document, undefined) {
 			this.x = x;
 			this.y = y;
 			this.scrollerStyle['webkitTransform'] = 'translate3d(' + x + 'px,' + y + 'px,0px)' + this.translateZ;
+			if (this.parallaxElement && this.options.scrollY) { //目前仅支持竖向视差效果
+				var parallaxY = y * this.options.parallaxRatio;
+				var scale = 1 + parallaxY / ((this.parallaxHeight - parallaxY) / 2);
+				if (scale > 1) {
+					this.parallaxImgStyle['opacity'] = 1 - parallaxY / 100 * this.options.parallaxRatio;
+					this.parallaxStyle['webkitTransform'] = 'translate3d(0px,' + -parallaxY + 'px,0px) scale(' + scale + ',' + scale + ') ' + this.translateZ;
+				} else {
+					this.parallaxImgStyle['opacity'] = 1;
+					this.parallaxStyle['webkitTransform'] = 'translate3d(0px,-10px,0px) scale(1,1) ' + this.translateZ;
+				}
+			}
 			if (this.indicators) {
 				for (var i = this.indicators.length; i--;) {
 					this.indicators[i].updatePosition();
@@ -2886,6 +3061,9 @@ var mui = (function(document, undefined) {
 		scrollToBottom: function(time, easing) {
 			time = time || this.options.bounceTime;
 			this.scrollTo(0, this.maxScrollY, time, easing);
+		},
+		gotoPage: function(index) {
+			this._gotoPage(index);
 		}
 	});
 	//Indicator
@@ -3040,7 +3218,16 @@ var mui = (function(document, undefined) {
 			var id = self.getAttribute('data-scroll');
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = scrollApi = new Scroll(self, options);
+				var _options = $.extend({}, options);
+				if (self.classList.contains('mui-segmented-control')) {
+					_options = $.extend(_options, {
+						scrollY: false,
+						scrollX: true,
+						indicators: false,
+						snap: '.mui-control-item'
+					});
+				}
+				$.data[id] = scrollApi = new Scroll(self, _options);
 				self.setAttribute('data-scroll', id);
 			} else {
 				scrollApi = $.data[id];
@@ -3192,6 +3379,11 @@ var mui = (function(document, undefined) {
 		}
 	};
 })(mui, window, document);
+/**
+ * snap 重构
+ * @param {Object} $
+ * @param {Object} window
+ */
 (function($, window) {
 	var CLASS_SLIDER = 'mui-slider';
 	var CLASS_SLIDER_GROUP = 'mui-slider-group';
@@ -3210,20 +3402,27 @@ var mui = (function(document, undefined) {
 
 	var Slider = $.Scroll.extend({
 		init: function(element, options) {
-			this._super(element, $.extend({
+			this._super(element, $.extend(true, {
 				interval: 0, //设置为0，则不定时轮播
 				scrollY: false,
 				scrollX: true,
 				indicators: false,
 				bounceTime: 200,
-				startX: false
-			}, options, true));
+				startX: false,
+				snap: SELECTOR_SLIDER_ITEM
+			}, options));
 			if (this.options.startX) {
-				$.trigger(this.wrapper, 'scrollend', this);
+				//				$.trigger(this.wrapper, 'scrollend', this);
 			}
 		},
 		_init: function() {
-			this.scroller = this.wrapper.querySelector('.' + CLASS_SLIDER_GROUP);
+			var groups = this.wrapper.querySelectorAll('.' + CLASS_SLIDER_GROUP);
+			for (var i = 0, len = groups.length; i < len; i++) {
+				if (groups[i].parentNode === this.wrapper) {
+					this.scroller = groups[i];
+					break;
+				}
+			}
 			if (this.scroller) {
 				this.scrollerStyle = this.scroller.style;
 				this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
@@ -3248,45 +3447,51 @@ var mui = (function(document, undefined) {
 			self.wrapper.addEventListener('swiperight', $.stopPropagation);
 			self.wrapper.addEventListener('scrollend', function() {
 				self.isInTransition = false;
-				self.slideNumber = self._getSlideNumber();
-				var slideNumber = self.slideNumber;
+				var page = self.currentPage;
+				var oldSlideNumber = self.slideNumber;
+				self.slideNumber = self._fixedSlideNumber();
 				if (self.loop) {
 					if (self.slideNumber === 0) {
-						self.slideNumber = self.itemLength - 2;
-						self.setTranslate(-self.wrapperWidth * (self.itemLength - 2), 0);
-					} else if (self.slideNumber === (self.itemLength - 1)) {
-						self.slideNumber = 1;
-						self.setTranslate(-self.wrapperWidth, 0);
+						self.setTranslate(self.pages[1][0].x, 0);
+					} else if (self.slideNumber === self.itemLength - 3) {
+						self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
 					}
-					slideNumber = self.slideNumber - 1;
 				}
-				$.trigger(self.wrapper, 'slide', {
-					slideNumber: slideNumber
-				});
+				if (oldSlideNumber != self.slideNumber) {
+					$.trigger(self.wrapper, 'slide', {
+						slideNumber: self.slideNumber
+					});
+				}
 			});
+
 			self.wrapper.addEventListener('slide', function(e) {
 				if (e.target !== self.wrapper) {
 					return;
 				}
 				var detail = e.detail;
 				detail.slideNumber = detail.slideNumber || 0;
-				var items = self.wrapper.querySelectorAll(SELECTOR_SLIDER_ITEM);
+				var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
 				var _slideNumber = detail.slideNumber;
 				if (self.loop) {
 					_slideNumber += 1;
 				}
-				for (var i = 0, len = items.length; i < len; i++) {
-					var item = items[i];
-					if (item.parentNode === self.scroller) {
-						if (i === _slideNumber) {
-							item.classList.add(CLASS_ACTIVE);
-						} else {
-							item.classList.remove(CLASS_ACTIVE);
+				if (!self.wrapper.classList.contains('mui-segmented-control')) {
+					for (var i = 0, len = items.length; i < len; i++) {
+						var item = items[i];
+						if (item.parentNode === self.scroller) {
+							if (i === _slideNumber) {
+								item.classList.add(CLASS_ACTIVE);
+							} else {
+								item.classList.remove(CLASS_ACTIVE);
+							}
 						}
 					}
 				}
 				var indicatorWrap = self.wrapper.querySelector('.mui-slider-indicator');
 				if (indicatorWrap) {
+					if (indicatorWrap.getAttribute('data-scroll')) { //scroll
+						$(indicatorWrap).scroll().gotoPage(detail.slideNumber);
+					}
 					var indicators = indicatorWrap.querySelectorAll('.mui-indicator');
 					if (indicators.length > 0) { //图片轮播
 						for (var i = 0, len = indicators.length; i < len; i++) {
@@ -3350,35 +3555,29 @@ var mui = (function(document, undefined) {
 				slider.setAttribute('data-slidershowTimer', slidershowTimer);
 			}
 		},
+
+		_fixedSlideNumber: function(page) {
+			page = page || this.currentPage;
+			var slideNumber = page.pageX;
+			if (this.loop) {
+				if (page.pageX === 0) {
+					slideNumber = this.itemLength - 3;
+				} else if (page.pageX === (this.itemLength - 1)) {
+					slideNumber = 0;
+				} else {
+					slideNumber = page.pageX - 1;
+				}
+			}
+			return slideNumber;
+		},
 		_reLayout: function() {
 			this.hasHorizontalScroll = true;
 			this.loop = this.scroller.classList.contains(CLASS_SLIDER_LOOP);
-			//以防slider类嵌套使用
-			var items = this.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
-			this.itemLength = 0;
-			var current = 0;
-			for (var i = 0, len = items.length; i < len; i++) {
-				if (items[i].parentNode === this.scroller) {
-					if (items[i].classList.contains(CLASS_ACTIVE)) {
-						current = this.itemLength;
-					}
-					this.itemLength++;
-				}
-			}
-			current = current === 0 ? (this.loop ? 1 : 0) : current;
-			//根据active修正startX
-			this.options.startX = current ? -this.scrollerWidth * current : 0;
-			this.scrollerWidth = this.itemLength * this.scrollerWidth;
-			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
-			this.slideNumber = this._getSlideNumber();
 			this._super();
 		},
 		_getScroll: function() {
 			var result = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 			return result ? result.x : 0;
-		},
-		_getSlideNumber: function() {
-			return Math.abs(Math.round(Math.abs(this.x) / this.wrapperWidth));
 		},
 		_transitionEnd: function(e) {
 			if (e.target !== this.scroller || !this.isInTransition) {
@@ -3399,7 +3598,7 @@ var mui = (function(document, undefined) {
 			}
 			if (e.type === 'flick') {
 				if (detail.touchTime < 200) { //flick，太容易触发，额外校验一下touchtime
-					this.x = -(this.slideNumber + (direction === 'left' ? 1 : -1)) * this.wrapperWidth;
+					this.x = this._getPage((this.slideNumber + (direction === 'left' ? 1 : -1)), true).x;
 				}
 				this.resetPosition(this.options.bounceTime);
 			} else if (e.type === 'dragend' && !detail.flick) {
@@ -3407,22 +3606,53 @@ var mui = (function(document, undefined) {
 			}
 			e.stopPropagation();
 		},
+		_initSnap: function() {
+			this.scrollerWidth = this.itemLength * this.scrollerWidth;
+			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
+			this._super();
+			if (!this.currentPage.x) {
+				this.currentPage = this.pages[this.loop ? 1 : 0][0];
+				this.slideNumber = 0;
+			} else {
+				this.slideNumber = this._fixedSlideNumber();
+			}
+			this.options.startX = this.currentPage.x || 0;
+		},
+		_getSnapX: function(offsetLeft) {
+			return Math.max(-offsetLeft, this.maxScrollX);
+		},
+		_getPage: function(slideNumber, isFlick) {
+			if (this.loop) {
+				if (slideNumber > (this.itemLength - (isFlick ? 2 : 3))) {
+					slideNumber = 1;
+					time = 0;
+				} else if (slideNumber < (isFlick ? -1 : 0)) {
+					slideNumber = this.itemLength - 2;
+					time = 0;
+				} else {
+					slideNumber += 1;
+				}
+			} else {
+				if (!isFlick) {
+					if (slideNumber > (this.itemLength - 1)) {
+						slideNumber = 0;
+						time = 0;
+					} else if (slideNumber < 0) {
+						slideNumber = this.itemLength - 1;
+						time = 0;
+					}
+				}
+				slideNumber = Math.min(Math.max(0, slideNumber), this.itemLength - 1);
+			}
+			return this.pages[slideNumber][0];
+		},
 		_gotoItem: function(slideNumber, time) {
-			this.scrollTo(-slideNumber * this.wrapperWidth, 0, time, this.options.bounceEasing);
+			this.currentPage = this._getPage(slideNumber);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
 			this._initTimer();
-		},
-		_fixedSlideNumber: function(slideNumber) {
-			if (!this.loop) {
-				if (slideNumber < 0) {
-					slideNumber = 0;
-				} else if (slideNumber >= this.itemLength) {
-					slideNumber = this.itemLength - 1;
-				}
-			}
-			return slideNumber;
 		},
 		//API
 		setTranslate: function(x, y) {
@@ -3439,33 +3669,27 @@ var mui = (function(document, undefined) {
 			} else if (this.x < this.maxScrollX) {
 				this.x = this.maxScrollX;
 			}
-			this._gotoItem(this._getSlideNumber(), time);
+			this.currentPage = this._nearestSnap(this.x);
+			this.scrollTo(this.currentPage.x, 0, time);
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(this._fixedSlideNumber(this.loop ? (slideNumber + 1) : slideNumber), time || this.options.bounceEasing);
+			this._gotoItem(slideNumber, time || this.options.bounceTime);
 		},
-		nextItem: function(auto) {
-			var slideNumber = this._fixedSlideNumber(this.slideNumber + 1);
-			var bounceTime = this.options.bounceTime;
-			if (auto && !this.loop) {
-				if (this.slideNumber + 1 >= this.itemLength) {
-					bounceTime = slideNumber = 0;
-				}
-			}
-			this._gotoItem(slideNumber, bounceTime);
-			//			if (!auto) { //TODO 这个设置后续还得仔细过一遍
-			//				this.isInTransition = false;
-			//			}
+		nextItem: function() {
+			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);
 		},
 		prevItem: function() {
-			this._gotoItem(this._fixedSlideNumber(this.slideNumber - 1), this.options.bounceTime);
+			this._gotoItem(this.slideNumber - 1, this.options.bounceTime);
+		},
+		getSlideNumber: function() {
+			return this.slideNumber || 0;
 		},
 		refresh: function(options) {
 			if (options) {
 				$.extend(this.options, options);
 				this._super();
-				this._gotoItem(this._getSlideNumber() + 1, this.options.bounceTime);
+				this.nextItem();
 			} else {
 				this._super();
 			}
@@ -3497,6 +3721,12 @@ var mui = (function(document, undefined) {
 	$.ready(function() {
 		//		setTimeout(function() {
 		$('.mui-slider').slider();
+		$('.mui-scroll-wrapper.mui-slider-indicator.mui-segmented-control').scroll({
+			scrollY: false,
+			scrollX: true,
+			indicators: false,
+			snap: '.mui-control-item'
+		});
 		//		}, 500); //临时处理slider宽度计算不正确的问题(初步确认是scrollbar导致的)
 
 	});
@@ -3713,11 +3943,11 @@ var mui = (function(document, undefined) {
 			options = $.parseJSON(options);
 		}
 		var pullRefreshApi = null;
-
-		var id = self.getAttribute('data-pullrefresh-plus-' + options.webviewId);
+		var attrWebviewId = options.webviewId && options.webviewId.replace(/\//g, "_"); //替换所有"/"
+		var id = self.getAttribute('data-pullrefresh-plus-' + attrWebviewId);
 		if (!id) { //避免重复初始化5+ pullrefresh
 			id = ++$.uuid;
-			self.setAttribute('data-pullrefresh-plus-' + options.webviewId, id);
+			self.setAttribute('data-pullrefresh-plus-' + attrWebviewId, id);
 			document.body.classList.add(CLASS_PLUS_PULLREFRESH);
 			$.data[id] = pullRefreshApi = new PlusPullRefresh(self, options);
 		} else {
@@ -3755,9 +3985,9 @@ var mui = (function(document, undefined) {
 			this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
 			this.classList = this.wrapper.classList;
 			if (this.scroller) {
-				this.options = $.extend({
+				this.options = $.extend(true, {
 					dragThresholdX: 10
-				}, options, true);
+				}, options);
 				document.body.classList.add('mui-fullscreen'); //fullscreen
 				this.refresh();
 				this.initEvent();
@@ -4361,6 +4591,9 @@ var mui = (function(document, undefined) {
 	});
 
 	var togglePopover = function(popover, anchor) {
+		//remove一遍，以免来回快速切换，导致webkitTransitionEnd不触发，无法remove
+		popover.removeEventListener('webkitTransitionEnd', onPopoverShown);
+		popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		backdrop.classList.remove(CLASS_BAR_BACKDROP);
 		backdrop.classList.remove(CLASS_ACTION_BACKDROP);
 		var _popover = document.querySelector('.mui-popover.mui-active');
@@ -4525,12 +4758,15 @@ var mui = (function(document, undefined) {
 (function($, window, document, name, undefined) {
 
 	var CLASS_CONTROL_ITEM = 'mui-control-item';
+	var CLASS_SEGMENTED_CONTROL = 'mui-segmented-control';
 	var CLASS_CONTROL_CONTENT = 'mui-control-content';
+	var CLASS_TAB_BAR = 'mui-bar-tab';
 	var CLASS_TAB_ITEM = 'mui-tab-item';
 	var CLASS_SLIDER_ITEM = 'mui-slider-item';
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
+			event.preventDefault(); //stop hash change
 			//			if (target.hash) {
 			return target;
 			//			}
@@ -4556,8 +4792,17 @@ var mui = (function(document, undefined) {
 		var targetBody;
 		var className = 'mui-active';
 		var classSelector = '.' + className;
+		segmentedControl = targetTab.parentNode;
 
-		activeTab = targetTab.parentNode.querySelector(classSelector);
+		for (; segmentedControl && segmentedControl !== document; segmentedControl = segmentedControl.parentNode) {
+			if (segmentedControl.classList.contains(CLASS_SEGMENTED_CONTROL)) {
+				activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_CONTROL_ITEM);
+				break;
+			} else if (segmentedControl.classList.contains(CLASS_TAB_BAR)) {
+				activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_TAB_ITEM);
+			}
+		}
+
 
 		if (activeTab) {
 			activeTab.classList.remove(className);
@@ -4594,11 +4839,10 @@ var mui = (function(document, undefined) {
 		targetBody.classList.add(className);
 
 		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
 		});
-		e.detail.gesture.preventDefault(); //fixed hashchange
+		e.detail && e.detail.gesture.preventDefault(); //fixed hashchange
 	});
 
 })(mui, window, document, 'tab');
@@ -4637,10 +4881,13 @@ var mui = (function(document, undefined) {
 		this.element = element;
 		this.classList = this.element.classList;
 		this.handle = this.element.querySelector(SELECTOR_SWITCH_HANDLE);
+		this.init();
+		this.initEvent();
+	};
+	Toggle.prototype.init = function() {
 		this.toggleWidth = this.element.offsetWidth;
 		this.handleWidth = this.handle.offsetWidth;
 		this.handleX = this.toggleWidth - this.handleWidth - 3;
-		this.initEvent();
 	};
 	Toggle.prototype.initEvent = function() {
 		this.element.addEventListener('touchstart', this);
@@ -4669,6 +4916,9 @@ var mui = (function(document, undefined) {
 	};
 	Toggle.prototype.start = function(e) {
 		this.classList.add(CLASS_DRAGGING);
+		if (this.toggleWidth === 0 || this.handleWidth === 0) { //当switch处于隐藏状态时，width为0，需要重新初始化
+			this.init();
+		}
 	};
 	Toggle.prototype.drag = function(e) {
 		var detail = e.detail;

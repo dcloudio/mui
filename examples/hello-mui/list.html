@@ -420,7 +420,6 @@
 						id:name+"-main",
 						styles:{
 							popGesture:"hide",
-							zindex:2
 						},
 						extras:{
 							mType: 'main'
@@ -433,7 +432,6 @@
 						styles:{
 							top: '48px',
 							bottom: '0px',
-							zindex:2
 						},
 						extras:{
 							mType: 'sub'
@@ -473,11 +471,10 @@
 				//关闭splash页面；
 				plus.navigator.closeSplashscreen();
 				//初始化模板
-				//延迟加载的原因：等待index页面先创建menu和mask，这样就可以保证页面的zindex顺序；
+				//延迟加载的原因：；
 				setTimeout(function () {
 					initTemplates(); //预加载所有模板	
 				},300);
-				
 			});
 			
 			//主列表点击事件
