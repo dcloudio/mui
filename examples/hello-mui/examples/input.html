@@ -15,6 +15,9 @@
 			html,body {
 				background-color: #efeff4;
 			}
+			h5 {
+				margin: 5px 7px;
+			}
 		</style>
 	</head>
 
@@ -29,18 +32,7 @@
 				<div class="mui-input-row mui-search">
 					<input id="search" type="search" class="mui-input-speech mui-input-clear" placeholder="带语音输入的搜索框">
 				</div>
-				<div class="mui-input-row mui-input-range">
-					<label>slider</label>
-					<input type="range" min="0" max="100">
-				</div>
-				<div class="mui-input-row">
-					<label>Switch</label>
-					<div class="mui-switch mui-active">
-						<div class="mui-switch-handle"></div>
-					</div>
-				</div>
 				<form class="mui-input-group">
-
 					<div class="mui-input-row">
 						<label>Input</label>
 						<input type="text" placeholder="普通输入框">
@@ -64,13 +56,6 @@
 				</div>
 			</div>
 		</div>
-
-
-		<style type="text/css">
-			h5 {
-				margin: 5px 7px;
-			}
-		</style>
 		<script>
 			mui.init();
 			 //语音识别完成事件
@@ -79,5 +64,4 @@
 			});
 		</script>
 	</body>
-
 </html>
