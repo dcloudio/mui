@@ -104,19 +104,13 @@
 				//plusReady事件后，自动创建menu窗口；
 			mui.plusReady(function() {
 				main = plus.webview.currentWebview();
-				menu = mui.openWindow({
+				menu = mui.preload({
 					id: 'offcanvas-drag-left-plus-menu',
 					url: 'offcanvas-drag-left-plus-menu.html',
 					styles: {
 						left: "30%",
 						width: '70%',
 						zindex: 9997
-					},
-					show: {
-						aniShow: 'none'
-					},
-					waiting: {
-						autoShow: false
 					}
 				});
 			});
@@ -132,53 +126,44 @@
 							//同时需要修改以下.mui-contnt的padding-top，否则会多出空白；
 							document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = "0px";
 						}
-						
-						
-						
+
 						//侧滑菜单处于隐藏状态，则立即显示出来；
-//						menu.show('none', 0, function() {
-						switch (mode){
-							case 'main-move':
-								menu.show('none',0,function () {
-								
-								});
-								//主窗体开始侧滑；
-								main.setStyle({
-									left: '-70%',
-									transition: {
-										duration: 150
-									}
-								});
-//								console.log('main:'+menu.getStyle().left+','+menu.getStyle().zindex);
-								break;
-							case 'menu-move':
-//								console.log('menu-1:'+menu.getStyle().left+','+menu.getStyle().zindex);
-								
-								menu.show('none',0,function () {
+						//显示完毕后，根据不同动画效果移动窗体；
+						menu.show('none', 0, function() {
+							switch (mode){
+								case 'main-move':
+									//主窗体开始侧滑；
+									main.setStyle({
+										left: '-70%',
+										transition: {
+											duration: 150
+										}
+									});
+									break;
+								case 'menu-move':
 									menu.setStyle({
 										left: '30%',
 										transition: {
 											duration: 150
 										}
 									});
-								});
-								break;
-							case 'all-move':
-								main.setStyle({
-									left: '-70%',
-									transition: {
-										duration: 150
-									}
-								});
-								menu.setStyle({
-									left: '30%',
-									transition: {
-										duration: 150
-									}
-								});
-								break;
-						}
-//						});
+									break;
+								case 'all-move':
+									main.setStyle({
+										left: '-70%',
+										transition: {
+											duration: 150
+										}
+									});
+									menu.setStyle({
+										left: '30%',
+										transition: {
+											duration: 150
+										}
+									});
+									break;
+							}
+						});
 						//显示主窗体遮罩
 						mask.show();
 						showMenu = true;
