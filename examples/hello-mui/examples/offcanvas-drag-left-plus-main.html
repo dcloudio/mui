@@ -48,14 +48,14 @@
 					 <span class="android-only">4、Android手机按menu键；</span>
 				</p>
 				<p style="padding: 5px 20px;margin-bottom: 5px;">
-					<button id="show-btn" class="mui-btn mui-btn-primary mui-btn-block" style="padding: 10px;">
+					<button id="show-btn" type="button" class="mui-btn mui-btn-primary mui-btn-block" style="padding: 10px;">
 						显示侧滑菜单
 					</button>
 				</p>
-				<p class="mui-hidden">侧滑菜单的移动动画，支持多种效果，切换如下选项体验不同动画效果：</p>
+				<p >侧滑菜单的移动动画，支持多种效果，切换如下选项体验不同动画效果：</p>
 
 			</div>
-			<form class="mui-input-group mui-hidden" style="margin-bottom: 15px;">
+			<form class="mui-input-group" style="margin-bottom: 15px;">
 				<div class="mui-input-row mui-radio">
 					<label>主界面移动、菜单不动</label>
 					<input name="style" type="radio" checked="" value="main-move">
@@ -162,7 +162,6 @@
 										}
 									});
 								});
-								console.log('menu-2:'+menu.getStyle().left+','+menu.getStyle().zindex);
 								break;
 							case 'all-move':
 								main.setStyle({
