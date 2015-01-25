@@ -22,6 +22,15 @@
 			.mui-bar-nav~.mui-content {
 				padding: 0;
 			}
+		</style>
+		<script>
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+
+		<style>
 			.mui-control-content {
 				background-color: white;
 				min-height: 215px;
@@ -30,25 +39,22 @@
 				margin-top: 50px;
 			}
 		</style>
-	</head>
-
-	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">可拖动式选项卡</h1>
 		</header>
 		<div class="mui-content">
-			<div id="slider" class="mui-slider mui-fullscreen">
+			<div id="slider" class="mui-slider">
 				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-					<a class="mui-control-item mui-active" href="#item1mobile">
-						待办公文
-					</a>
+					<a class="mui-control-item" href="#item1mobile">
+				待办公文
+			</a>
 					<a class="mui-control-item" href="#item2mobile">
-						已办公文
-					</a>
+				已办公文
+			</a>
 					<a class="mui-control-item" href="#item3mobile">
-						全部公文
-					</a>
+				全部公文
+			</a>
 				</div>
 				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
 				<div class="mui-slider-group">
@@ -145,7 +151,26 @@
 				</div>
 			</div>
 
-			
+			<h5 class="mui-content-padded">Color</h5>
+			<div class="mui-card">
+				<form class="mui-input-group">
+					<div class="mui-input-row mui-radio">
+						<label><span class="mui-bg-primary" style="display:block;width:25px;height:25px;"></span>
+						</label>
+						<input name="radio1" type="radio" checked value="primary">
+					</div>
+					<div class="mui-input-row mui-radio">
+						<label><span class="mui-bg-positive" style="display:block;width:25px;height:25px;"></span>
+						</label>
+						<input name="radio1" type="radio" value="positive">
+					</div>
+					<div class="mui-input-row mui-radio">
+						<label><span class="mui-bg-negative" style="display:block;width:25px;height:25px;"></span>
+						</label>
+						<input name="radio1" type="radio" value="negative">
+					</div>
+				</form>
+			</div>
 
 		</div>
 		<script>

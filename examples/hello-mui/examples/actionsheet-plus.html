@@ -34,6 +34,13 @@
 			#info{
 		  		padding: 20px 10px ;
 		  	}
+		  	.des{
+		  		margin: .5em 0;
+		  	}
+		  	.des>li{
+		  		font-size: 14px;
+				color: #8f8f94;
+		  	}
 		</style>
 		<script>
 			mui.init();
@@ -59,15 +66,16 @@
 		</nav>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<p>这是5+ runtime封装的原生Actionsheet，
-					优点是无需考虑跨webview的遮罩问题，
-					缺点是样式固定，无法自定义；
-					多webview模式下推荐使用原生模式的Actionsheet；
-					<!--<span class="mui-icon mui-icon-trash"></span>会弹出删除信息确认框； 点击本页面右下角
-					<span class="mui-icon mui-icon-undo"></span>会弹出转发确认框； 你也可点击如下按钮，打开照片选择框：-->
-				</p>
+				<p>这是5+ runtime封装的原生actionsheet，该模式具备如下优点：</p>
+				<ul class="des">
+					<li>支持覆盖顶部状态栏</li>
+					<li>支持跨webview的遮罩</li>
+					<li>在有map等原生组件时，依然会显示在最顶层，不会被遮挡</li>
+				</ul>	
+				<p>另一方面，原生模式的actionsheet目前暂不支持样式自定义</p>	
+				
 				<p>
-					<a id="picture-btn" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开Actionsheet</a>
+					<a id="picture-btn" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开actionsheet</a>
 				</p>
 			</div>
 		</div>
