@@ -3504,3 +3504,7 @@ select:focus {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
 }
+
+.mui-bar-tab ~ .mui-content .mui-slider.mui-fullscreen .mui-segmented-control ~ .mui-slider-group {
+  bottom: 50px;
+}

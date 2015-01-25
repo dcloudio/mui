@@ -3303,7 +3303,7 @@ var mui = (function(document, undefined) {
 		},
 		endPulldownToRefresh: function() {
 			var self = this;
-			if (self.topPocket) {
+			if (self.topPocket && self.loading && this.pulldown) {
 				self.scrollTo(0, 0, self.options.bounceTime, self.options.bounceEasing);
 				self.loading = false;
 				self._setCaption(self.options.down.contentdown, true);
@@ -3329,7 +3329,7 @@ var mui = (function(document, undefined) {
 		},
 		endPullupToRefresh: function(finished) {
 			var self = this;
-			if (self.bottomPocket) {
+			if (self.bottomPocket && self.loading && !this.pulldown) {
 				self.loading = false;
 				if (finished) {
 					self._setCaption(self.options.up.contentnomore);
@@ -5577,7 +5577,7 @@ var mui = (function(document, undefined) {
 	 * 自动消失提示框
 	 */
 	$.toast = function(message) {
-		if($.os.plus&&$.os.android){
+		if($.os.plus){
 			//默认显示在底部；
 			plus.nativeUI.toast(message,{verticalAlign:'bottom'});
 		}else{
@@ -5772,6 +5772,7 @@ var mui = (function(document, undefined) {
 				$.trigger(self.element, 'recognized', {
 					value: self.element.value
 				});
+				// document.body.classList.remove(CLASS_FOCUSIN);
 			}, function(e) {
 				document.body.classList.remove(CLASS_FOCUSIN);
 			});
