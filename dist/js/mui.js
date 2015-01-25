@@ -3611,7 +3611,10 @@ var mui = (function(document, undefined) {
 			this.maxScrollX = Math.min(this.wrapperWidth - this.scrollerWidth, 0);
 			this._super();
 			if (!this.currentPage.x) {
-				this.currentPage = this.pages[this.loop ? 1 : 0][0];
+				//当slider处于隐藏状态时，导致snap计算是错误的，临时先这么判断一下，后续要考虑解决所有scroll在隐藏状态下初始化属性不正确的问题
+				var currentPage = this.pages[this.loop ? 1 : 0];
+				currentPage = currentPage || this.pages[0];
+				this.currentPage = currentPage[0];
 				this.slideNumber = 0;
 			} else {
 				this.slideNumber = this._fixedSlideNumber();
