@@ -23,9 +23,6 @@
 				padding: 0;
 			}
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
@@ -38,7 +35,7 @@
 			<ul id="OA_task_1" class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<div class="mui-slider-right mui-disabled">
-						<a class="mui-btn mui-btn-red">delete</a>
+						<a class="mui-btn mui-btn-red">删除</a>
 					</div>
 					<div class="mui-slider-handle">
 						左滑显示删除按钮
@@ -140,6 +137,10 @@
 			</ul>
 		</div>
 		<script>
+			//禁止右滑关闭
+			mui.init({
+				swipeBack: false
+			});
 			(function($) {
 				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
 				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象

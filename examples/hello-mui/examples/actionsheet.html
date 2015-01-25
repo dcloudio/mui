@@ -31,6 +31,9 @@
 				margin-left: -15px;
 				padding-right: 10px;
 			}
+			#info{
+		  		padding: 20px 10px ;
+		  	}
 		</style>
 		<script>
 			mui.init();
@@ -64,6 +67,13 @@
 				<p>
 					<a href="#picture" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开Actionsheet</a>
 				</p>
+				<p>本页面为H5模式的Actionsheet演示示例，
+					H5模式的优点是可通过css自由定制展现样式，
+					缺点是不支持跨webview的遮罩，
+					当前页面使用了双webview的模板机制，故Actionsheet弹出后，顶部导航栏并未被遮罩层覆盖；
+					在单webview模式下，推荐使用H5模式的Actionsheet；
+				</p>
+				<p id="info"></p>
 			</div>
 		</div>
 
@@ -123,6 +133,19 @@
 		mui('body').on('hidden', '.mui-popover', function(e) {
 			//console.log('hidden', e.detail.id);//detail为当前popover元素
 		});
+		var info = document.getElementById("info");
+		mui('body').on('tap','.mui-popover-action li>a',function () {
+			var a = this,parent;
+			//根据点击按钮，反推当前是哪个actionsheet
+			for(parent=a.parentNode;parent!=document.body;parent=parent.parentNode){
+				if(parent.classList.contains('mui-popover-action')){
+					break;
+				}
+			}
+			//关闭actionsheet
+			mui('#'+parent.id).popover('toggle');
+			info.innerHTML = "你刚点击了\""+a.innerHTML+"\"按钮";
+		})
 	</script>
 
 </html>
