@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.1.0 (https://github.com/dcloudio/mui)
+ * Mui v1.1.1 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -320,6 +320,7 @@ a:active {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-wrap: break-word;
   white-space: normal !important;
 
   -webkit-line-clamp: 2;

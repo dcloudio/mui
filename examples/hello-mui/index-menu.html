@@ -7,7 +7,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="css/mui.min.css">
-		<script src="js/mui.min.js"></script>
 		<style type="text/css">
 			body,.mui-content{
 			  	background-color: #333;
@@ -45,38 +44,38 @@
 			<div class="title" style="margin-bottom: 25px;">mui典型控件</div>
 			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted" style="color: #ddd;">
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/buttons.html">
-						按钮（button）
+					<a class="mui-navigate-right" href="examples/tableviews-with-swipe.html">
+						滑动删除
+					</a>
+				</li>
+				<!--<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/list-long.html">
+						千行列表
+					</a>
+				</li>-->
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/pullrefresh.html">
+						下拉刷新
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/slider-table-default.html">
-						图文表格（gallery table）
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/input.html">
-						输入框（input）
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/media-list.html">
-						图文列表（media list）
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/popovers.html">
-						弹出菜单（popover）
+					<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-left.html">
+						侧滑导航
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/switches.html">
-					开关（switch）
-				</a>
+						开关控件
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/range.html">
+						滑块控件
+					</a>
 				</li>
 			</ul>
 		</div>
-		
+		<script src="js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			//关于backbutton和menubutton两个按键的说明，在iOS平台不存在，故需隐藏
 			if(!mui.os.android){
@@ -92,20 +91,34 @@
 			})
 			mui('.mui-table-view').on('tap', 'a', function() {
 				var id = this.getAttribute("href");
-				if (subWebview == null) {
-					template = plus.webview.getWebviewById("default-main");
-					subWebview = template.children()[0];
-				}
-				//判断是否显示右上角menu图标；
-				var showMenu = ~id.indexOf('popovers.html')?true:false;
-				var title = this.innerText;
-				mui.fire(template,'updateHeader',{title:title,showMenu:showMenu});
-				if(subWebview.getURL()==this.href){
-					subWebview.show();
+				var type = this.getAttribute("open-type");
+				if(type=="common"){
+					mui.openWindow({
+						id: id,
+						url: this.href,
+						waiting: {
+							autoShow: false
+						}
+					});
 				}else{
-					subWebview.loadURL(this.href);
+					var href = this.href;
+					if(~href.indexOf('pullrefresh')){
+						plus.webview.getWebviewById("pullrefresh-main").show('slide-in-right', 150);
+					}else{
+						template = plus.webview.getWebviewById("default-main");
+						//获得共用子webview
+						subWebview = template.children()[0];
+						var title = this.innerText;
+						//通知模板修改标题，并显示隐藏右上角图标；
+						mui.fire(template,'updateHeader',{title:title,showMenu:false});
+						if (subWebview.getURL() != this.href) {
+							subWebview.loadURL(this.href);
+						} else {
+							 subWebview.show();
+						}
+						template.show('slide-in-right', 150);
+					}
 				}
-				template.show('slide-in-right', 150);
 			});
 			
 			/**

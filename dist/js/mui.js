@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.1.0 (https://github.com/dcloudio/mui)
+ * Mui v1.1.1 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -303,7 +303,7 @@ var mui = (function(document, undefined) {
 		return result;
 	};
 
-	$.regesterHandler = function(type, handler) {
+	$.registerHandler = function(type, handler) {
 		var handlers = $[type];
 		if (!handlers) {
 			handlers = [];
@@ -751,7 +751,7 @@ var mui = (function(document, undefined) {
 	 * @returns {$.gestures}
 	 */
 	$.registerGesture = function(gesture) {
-		return $.regesterHandler('gestures', gesture);
+		return $.registerHandler('gestures', gesture);
 
 	};
 	/**
@@ -809,18 +809,17 @@ var mui = (function(document, undefined) {
 			}
 		});
 	};
-	var touch = {};
 	var detectTouchStart = function(event) {
 		$.gestures.stoped = false;
 		var now = Date.now();
 		var point = event.touches ? event.touches[0] : event;
-		touch = {
+		$.gestures.touch = {
 			target: event.target,
-			lastTarget: (touch.lastTarget ? touch.lastTarget : null),
+			lastTarget: ($.gestures.touch && $.gestures.touch.lastTarget ? $.gestures.touch.lastTarget : null),
 			startTime: now,
 			touchTime: 0,
 			flickStartTime: now,
-			lastTapTime: (touch.lastTapTime ? touch.lastTapTime : 0),
+			lastTapTime: ($.gestures.touch && $.gestures.touch.lastTapTime ? $.gestures.touch.lastTapTime : 0),
 			start: {
 				x: point.pageX,
 				y: point.pageY
@@ -841,18 +840,22 @@ var mui = (function(document, undefined) {
 			lastDeltaY: 0,
 			angle: '',
 			direction: '',
+			lockDirection: false,
+			startDirection: '',
 			distance: 0,
 			drag: false,
 			swipe: false,
+			hold: false,
 			gesture: event
 		};
 
-		detect(event, touch);
+		detect(event, $.gestures.touch);
 	};
 	var detectTouchMove = function(event) {
 		if ($.gestures.stoped) {
 			return;
 		}
+		var touch = $.gestures.touch;
 		if (event.target != touch.target) {
 			return;
 		}
@@ -882,6 +885,7 @@ var mui = (function(document, undefined) {
 		if ($.gestures.stoped) {
 			return;
 		}
+		var touch = $.gestures.touch;
 		if (event.target != touch.target) {
 			return;
 		}
@@ -1016,20 +1020,19 @@ var mui = (function(document, undefined) {
  * @returns {undefined}
  */
 (function($, name) {
-	var last_direction = false;
 	var handle = function(event, touch) {
 		switch (event.type) {
 			case $.EVENT_MOVE:
 				if (touch.direction) { //drag
 					//修正direction
 					//默认锁定单向drag(后续可能需要额外配置支持)
-					if (!last_direction) {
-						last_direction = touch.direction;
-					} else if (last_direction && last_direction !== touch.direction) {
-						if (last_direction === 'up' || last_direction === 'down') {
-							touch.direction = touch.deltaY < 0 ? 'up' : 'down';
-						} else {
-							touch.direction = touch.deltaX < 0 ? 'left' : 'right';
+					if (touch.lockDirection && touch.startDirection) {
+						if (touch.startDirection && touch.startDirection !== touch.direction) {
+							if (touch.startDirection === 'up' || touch.startDirection === 'down') {
+								touch.direction = touch.deltaY < 0 ? 'up' : 'down';
+							} else {
+								touch.direction = touch.deltaX < 0 ? 'left' : 'right';
+							}
 						}
 					}
 					if (!touch.drag) {
@@ -1045,7 +1048,6 @@ var mui = (function(document, undefined) {
 				if (touch.drag) {
 					$.trigger(event.target, name + 'end', touch);
 				}
-				last_direction = false;
 				break;
 		}
 	};
@@ -1130,18 +1132,59 @@ var mui = (function(document, undefined) {
 		}
 	};
 	/**
-	 * mui gesture drag
+	 * mui gesture longtap
 	 */
 	$.registerGesture({
-		name : name,
-		index : 10,
-		handle : handle,
-		options : {
-			holdTimeout : 500,
-			holdThreshold : 2
+		name: name,
+		index: 10,
+		handle: handle,
+		options: {
+			holdTimeout: 500,
+			holdThreshold: 2
 		}
 	});
-})(mui, 'longtap'); 
+})(mui, 'longtap');
+/**
+ * mui gesture hold
+ * @param {type} $
+ * @param {type} name
+ * @returns {undefined}
+ */
+(function($, name) {
+	var timer;
+	var handle = function(event, touch) {
+		var options = this.options;
+		switch (event.type) {
+			case $.EVENT_START:
+				clearTimeout(timer);
+				timer = setTimeout(function() {
+					touch.hold = true;
+					$.trigger(event.target, name, touch);
+				}, options.holdTimeout);
+				break;
+			case $.EVENT_MOVE:
+				break;
+			case $.EVENT_END:
+			case $.EVENT_CANCEL:
+				clearTimeout(timer);
+				if (touch.hold) {
+					$.trigger(event.target, 'release', touch);
+				}
+				break;
+		}
+	};
+	/**
+	 * mui gesture hold
+	 */
+	$.registerGesture({
+		name: name,
+		index: 10,
+		handle: handle,
+		options: {
+			holdTimeout: 0
+		}
+	});
+})(mui, 'hold');
 /**
  * mui.init
  * @param {type} $
@@ -1202,7 +1245,7 @@ var mui = (function(document, undefined) {
 	 * @param {function} init
 	 */
 	$.registerInit = function(init) {
-		return $.regesterHandler('inits', init);
+		return $.registerHandler('inits', init);
 	};
 	$(function() {
 		if ($.os.ios) {
@@ -1603,6 +1646,18 @@ var mui = (function(document, undefined) {
 					if ($.os.ios && $.options.statusBarBackground) {
 						plus.navigator.setStatusBarBackground($.options.statusBarBackground);
 					}
+					if($.os.android&&parseFloat($.os.version) < 4.4){
+						//解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
+						if(plus.webview.currentWebview().parent()==null){
+							document.addEventListener("resume", function() {
+								var body = document.body;
+								body.style.display = 'none';
+								setTimeout(function() {
+									body.style.display = '';
+								}, 10);
+							});
+						}
+					}
 				});
 			} else {
 				if (subpages.length > 0) {
@@ -1650,7 +1705,7 @@ var mui = (function(document, undefined) {
 	 * @returns {$.gestures}
 	 */
 	$.registerBack = function(back) {
-		return $.regesterHandler('backs', back);
+		return $.registerHandler('backs', back);
 	};
 	/**
 	 * default
@@ -1670,8 +1725,8 @@ var mui = (function(document, undefined) {
 	 * 后退
 	 */
 	$.back = function() {
-		if (typeof $.options.back === 'function') {
-			if ($.options.back() === false) {
+		if (typeof $.options.beforeback === 'function') {
+			if ($.options.beforeback() === false) {
 				return;
 			}
 		}
@@ -1687,7 +1742,7 @@ var mui = (function(document, undefined) {
 	});
 	window.addEventListener('swiperight', function(e) {
 		var detail = e.detail;
-		if ($.options.swipeBack === true && Math.abs(detail.angle)< 3) {
+		if ($.options.swipeBack === true && Math.abs(detail.angle) < 3) {
 			$.back();
 		}
 	});
@@ -2680,6 +2735,18 @@ var mui = (function(document, undefined) {
 			this.reLayout();
 			$.trigger(this.wrapper, 'beforescrollstart', this);
 		},
+		_getDirectionByAngle: function(angle) {
+			if (angle < -80 && angle > -100) {
+				return 'up';
+			} else if (angle >= 80 && angle < 100) {
+				return 'down';
+			} else if (angle >= 170 || angle <= -170) {
+				return 'left';
+			} else if (angle >= -35 && angle <= 10) {
+				return 'right';
+			}
+			return null;
+		},
 		_drag: function(e) {
 			//			if (this.needReset) {
 			//				e.stopPropagation(); //disable parent drag(nested scroller)
@@ -2698,18 +2765,38 @@ var mui = (function(document, undefined) {
 				}
 			}
 			var isPreventDefault = isReturn = false;
+			var direction = this._getDirectionByAngle(detail.angle);
 			if (detail.direction === 'left' || detail.direction === 'right') {
 				if (this.options.scrollX) {
 					isPreventDefault = true;
+					if (!this.moved) { //识别角度
+						if (direction !== 'left' && direction !== 'right') {
+							isReturn = true;
+						} else {
+							$.gestures.touch.lockDirection = true; //锁定方向
+							$.gestures.touch.startDirection = detail.direction;
+						}
+					}
 				} else if (this.options.scrollY && !this.moved) {
 					isReturn = true;
 				}
 			} else if (detail.direction === 'up' || detail.direction === 'down') {
 				if (this.options.scrollY) {
 					isPreventDefault = true;
+					//					if (!this.moved) { //识别角度,竖向滚动似乎没必要进行小角度验证
+					//						if (direction !== 'up' && direction !== 'down') {
+					//							isReturn = true;
+					//						}
+					//					}
+					if (!this.moved) {
+						$.gestures.touch.lockDirection = true; //锁定方向
+						$.gestures.touch.startDirection = detail.direction;
+					}
 				} else if (this.options.scrollX && !this.moved) {
 					isReturn = true;
 				}
+			} else {
+				isReturn = true;
 			}
 			if (isPreventDefault) {
 				e.stopPropagation(); //阻止冒泡(scroll类嵌套)
@@ -2723,9 +2810,15 @@ var mui = (function(document, undefined) {
 			} else {
 				e.stopPropagation(); //move期间阻止冒泡(scroll嵌套)
 			}
-
-			var deltaX = detail.deltaX - detail.lastDeltaX;
-			var deltaY = detail.deltaY - detail.lastDeltaY;
+			var deltaX = 0;
+			var deltaY = 0;
+			if (!this.moved) { //start
+				deltaX = detail.deltaX;
+				deltaY = detail.deltaY;
+			} else { //move
+				deltaX = detail.deltaX - detail.lastDeltaX;
+				deltaY = detail.deltaY - detail.lastDeltaY;
+			}
 			var absDeltaX = Math.abs(detail.deltaX);
 			var absDeltaY = Math.abs(detail.deltaY);
 			if (absDeltaX > absDeltaY + this.options.directionLockThreshold) {
@@ -3588,17 +3681,20 @@ var mui = (function(document, undefined) {
 			$.trigger(this.wrapper, 'scrollend', this);
 		},
 		_flick: function(e) {
+			if (!this.moved) { //无moved
+				return;
+			}
 			var detail = e.detail;
 			var direction = detail.direction;
 			this._clearRequestAnimationFrame();
 			this.isInTransition = true;
-			if (direction === 'up' || direction === 'down') {
-				this.resetPosition(this.options.bounceTime);
-				return;
-			}
+			//			if (direction === 'up' || direction === 'down') {
+			//				this.resetPosition(this.options.bounceTime);
+			//				return;
+			//			}
 			if (e.type === 'flick') {
 				if (detail.touchTime < 200) { //flick，太容易触发，额外校验一下touchtime
-					this.x = this._getPage((this.slideNumber + (direction === 'left' ? 1 : -1)), true).x;
+					this.x = this._getPage((this.slideNumber + (direction === 'right' ? -1 : 1)), true).x;
 				}
 				this.resetPosition(this.options.bounceTime);
 			} else if (e.type === 'dragend' && !detail.flick) {
@@ -3614,6 +3710,9 @@ var mui = (function(document, undefined) {
 				//当slider处于隐藏状态时，导致snap计算是错误的，临时先这么判断一下，后续要考虑解决所有scroll在隐藏状态下初始化属性不正确的问题
 				var currentPage = this.pages[this.loop ? 1 : 0];
 				currentPage = currentPage || this.pages[0];
+				if (!currentPage) {
+					return;
+				}
 				this.currentPage = currentPage[0];
 				this.slideNumber = 0;
 			} else {
