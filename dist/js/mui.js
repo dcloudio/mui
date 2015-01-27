@@ -1167,7 +1167,7 @@ var mui = (function(document, undefined) {
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
 				clearTimeout(timer);
-				if (touch.hold) {
+				if ($.options.gestureConfig.hold && touch.hold) {
 					$.trigger(event.target, 'release', touch);
 				}
 				break;
@@ -1196,6 +1196,7 @@ var mui = (function(document, undefined) {
 			tap: true,
 			doubletap: false,
 			longtap: false,
+			hold: false,
 			flick: true,
 			swipe: true,
 			drag: true
@@ -4164,6 +4165,10 @@ var mui = (function(document, undefined) {
 						if (this.scroller) {
 							this.startX = this.lastX;
 							this.isDragging = true;
+							
+							$.gestures.touch.lockDirection = true; //锁定方向
+							$.gestures.touch.startDirection = detail.direction;
+							
 							this.scroller.classList.remove(CLASS_TRANSITIONING);
 							this.offsetX = this.getTranslateX();
 							this._initOffCanvasVisible();
