@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-01-27 21:04:48 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-01-27 21:04:48 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-01-27 21:09:53 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-01-27 21:09:53 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -330,7 +330,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<li>执行beforeback参数对应的函数若返回false，则不再执行<code>mui.back()</code>方法；</li>
 	<li>否则（返回true或无返回值），继续执行<code>mui.back()</code>方法；</li>
 </ul>
-<p class="component-description">示例：从列表打开详情页面，从详情页面再返回后希望刷新列表界面，此时可注册beforeback参数，然后通过自定义事件通知列表页面刷新数据，示例低吗如下：</p>
+<p class="component-description">示例：从列表打开详情页面，从详情页面再返回后希望刷新列表界面，此时可注册beforeback参数，然后通过<a href="#customevent">自定义事件</a>通知列表页面刷新数据，示例代码如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
 	<span class="nx">beforeback</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
 		<span class="c1">//获得列表界面的webview</span>
@@ -341,7 +341,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
 	<span class="p">}</span>
 <span class="p">});</span></code></pre></div>
-<p class="component-description">注意：beforeback的执行返回必须是同步的（阻塞模式），若使用nativeUI这种异步js（非阻塞模式），则可能会出现意想不到的结果；比如：通过plus.nativeUI.confirm弹出确认框，可能用户尚未选择，页面已经返回了（beforeback同步执行完毕，无返回值，继续执行mui.back()方法，nativeUI不会阻塞js进程）：在这种情况下，若要自定义业务逻辑，就需要复写<code>mui.back</code>方法了；如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面</p>
+<p class="component-description">注意：beforeback的执行返回必须是同步的（阻塞模式），若使用nativeUI这种异步js（非阻塞模式），则可能会出现意想不到的结果；比如：通过<code>plus.nativeUI.confirm()</code>弹出确认框，可能用户尚未选择，页面已经返回了（beforeback同步执行完毕，无返回值，继续执行<code>mui.back()</code>方法，nativeUI不会阻塞js进程）：在这种情况下，若要自定义业务逻辑，就需要复写<code>mui.back</code>方法了；如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//备份mui.back，mui.back已将窗口关闭逻辑封装的比较完善（预加载及父子窗口），因此最好复用mui.back</span>
 <span class="kd">var</span> <span class="nx">old_back</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">.</span><span class="nx">back</span><span class="p">;</span>
@@ -1084,8 +1084,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-01-27 21:04:48 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-01-27 21:04:48 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-01-27 21:09:53 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-01-27 21:09:53 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
