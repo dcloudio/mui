@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-01-04 17:24:52 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-01-04 17:24:52 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-01-27 21:04:48 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-01-27 21:04:48 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -218,7 +218,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     id:new-page-id,
     styles:{
       top:newpage-top-position,//新页面顶部位置
-      bottom:newage-bottom-position,//新页面顶部位置
+      bottom:newage-bottom-position,//新页面底部位置
       width:newpage-width,//新页面宽度，默认为100%
       height:newpage-height,//新页面高度，默认为100%
       ......
@@ -312,7 +312,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">&quot;mui-title&quot;</span><span class="nt">&gt;</span>标题<span class="nt">&lt;/h1&gt;</span>
 <span class="nt">&lt;/header&gt;</span></code></pre></div>
   	<p class="component-description">若希望在顶部导航栏之外的其它区域添加关闭页面的控件，只需要在对应控件上添加<code>.mui-action-back</code>类即可，如下为一个关闭按钮示例：</p>
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">&#39;mui-btn mui-btn-danger mui-action-back&#39;</span><span class="nt">&gt;</span>关闭<span class="nt">&lt;/button&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">class=</span><span class="s">&#39;mui-btn mui-btn-danger mui-action-back&#39;</span><span class="nt">&gt;</span>关闭<span class="nt">&lt;/button&gt;</span></code></pre></div>
 <p class="component-description">mui框架封装的页面右滑关闭功能，默认未启用，若要使用右滑关闭功能，需要在<code>mui.init();</code>方法中设置swipeBack参数，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
 	<span class="nx">swipeBack</span><span class="o">:</span><span class="kc">true</span> <span class="c1">//启用右滑关闭功能</span>
@@ -325,13 +325,32 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<span class="p">}</span>
 <span class="p">});</span></code></pre></div>
 <p class="component-description">除了如上三种操作外，也可以直接调用<code>mui.back()</code>方法，执行窗口关闭逻辑；</p>
-<p class="component-description">若希望自定义关闭逻辑，则可以通过复写<code>mui.back()</code>方法实现，如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面。 </p>
+<p class="component-description"><code>mui.back()</code>仅处理窗口逻辑，若希望在窗口关闭之前再处理一些其它业务逻辑，则可将业务逻辑抽象成一个具体函数，然后注册为mui.init方法的beforeback参数;beforeback的执行逻辑为：</p>
+<ul>
+	<li>执行beforeback参数对应的函数若返回false，则不再执行<code>mui.back()</code>方法；</li>
+	<li>否则（返回true或无返回值），继续执行<code>mui.back()</code>方法；</li>
+</ul>
+<p class="component-description">示例：从列表打开详情页面，从详情页面再返回后希望刷新列表界面，此时可注册beforeback参数，然后通过自定义事件通知列表页面刷新数据，示例低吗如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+	<span class="nx">beforeback</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+		<span class="c1">//获得列表界面的webview</span>
+		<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">plus</span><span class="p">.</span><span class="nx">webview</span><span class="p">.</span><span class="nx">getWebviewById</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">);</span>
+		<span class="c1">//触发列表界面的自定义事件（refresh）,从而进行数据刷新</span>
+		<span class="nx">mui</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span><span class="s1">&#39;refresh&#39;</span><span class="p">);</span>
+		<span class="c1">//返回true，继续页面关闭逻辑</span>
+		<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">});</span></code></pre></div>
+<p class="component-description">注意：beforeback的执行返回必须是同步的（阻塞模式），若使用nativeUI这种异步js（非阻塞模式），则可能会出现意想不到的结果；比如：通过plus.nativeUI.confirm弹出确认框，可能用户尚未选择，页面已经返回了（beforeback同步执行完毕，无返回值，继续执行mui.back()方法，nativeUI不会阻塞js进程）：在这种情况下，若要自定义业务逻辑，就需要复写<code>mui.back</code>方法了；如下为一个自定义示例，每次都需要用户确认后，才会关闭当前页面</p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//备份mui.back，mui.back已将窗口关闭逻辑封装的比较完善（预加载及父子窗口），因此最好复用mui.back</span>
+<span class="kd">var</span> <span class="nx">old_back</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">.</span><span class="nx">back</span><span class="p">;</span>
+<span class="nx">mui</span><span class="p">.</span><span class="nx">back</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;确定&quot;</span><span class="p">,</span><span class="s2">&quot;取消&quot;</span><span class="p">];</span>
   <span class="nx">mui</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;确认关闭当前窗口？&#39;</span><span class="p">,</span><span class="s1">&#39;Hello MUI&#39;</span><span class="p">,</span><span class="nx">btn</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">index</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
-      <span class="nx">mui</span><span class="p">.</span><span class="nx">currentWebview</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    	<span class="c1">//执行mui封装好的窗口关闭逻辑；</span>
+    	<span class="nx">old_back</span><span class="p">();</span>
     <span class="p">}</span>
   <span class="p">});</span>
 <span class="p">}</span></code></pre></div>
@@ -537,6 +556,14 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
             <td>dragend</td>
             <td>拖动结束</td>
         </tr>
+        <tr>
+            <td>hold</td>
+            <td>按住</td>
+        </tr>
+        <tr>
+            <td>release</td>
+            <td>释放</td>
+        </tr>
 
     </tbody>
     </table>
@@ -558,7 +585,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
       }
     </style>
       <h3 class="component-title">手势事件配置</h3>
-      <p class="component-description">除了不常用的双击和长按事件，mui默认会监听其它所有手势事件；为了开发出更高性能的moble App，mui支持用户根据实际业务需求，通过mui.init方法中的gestureConfig参数，配置具体需要监听的手势事件，。</p>
+      <p class="component-description">根据使用频率，mui默认会监听部分手势事件，如点击、滑动事件；为了开发出更高性能的moble App，mui支持用户根据实际业务需求，通过mui.init方法中的gestureConfig参数，配置具体需要监听的手势事件，。</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
   <span class="nx">gestureConfig</span><span class="o">:</span><span class="p">{</span>
@@ -566,7 +593,9 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
    <span class="nx">doubletap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为false</span>
    <span class="nx">longtap</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为false</span>
    <span class="nx">swipe</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为true</span>
-   <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span> <span class="c1">//默认为true</span>
+   <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//默认为true</span>
+   <span class="nx">hold</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//默认为false，不监听</span>
+   <span class="nx">release</span><span class="o">:</span><span class="kc">false</span><span class="c1">//默认为false，不监听</span>
   <span class="p">}</span>
 <span class="p">});</span></code></pre></div>
     <p class="component-note touch-only"><strong>注意:</strong>dragstart、drag、dragend共用drag开关，swipeleft、swiperight、swipeup、swipedown共用swipe开关</p>
@@ -1055,8 +1084,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-01-04 17:24:52 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-01-04 17:24:52 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-01-27 21:04:48 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-01-27 21:04:48 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
