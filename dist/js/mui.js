@@ -177,8 +177,7 @@ var mui = (function(document, undefined) {
 	 * map
 	 */
 	$.map = function(elements, callback) {
-		var value, values = [],
-			i, key;
+		var value, values = [],i, key;
 		if (typeof elements.length === 'number') {
 			for (i = 0, len = elements.length; i < len; i++) {
 				value = callback(elements[i], i);
