@@ -102,17 +102,22 @@
 					});
 				}else{
 					var href = this.href;
+					var title = this.innerText;
 					if(~href.indexOf('pullrefresh')){
-						plus.webview.getWebviewById("pullrefresh-main").show('slide-in-right', 150);
+						var template = plus.webview.getWebviewById("pullrefresh-main");
+						subWebview = template.children()[0];
+						mui.fire(template,'updateHeader',{title:title,showMenu:false});
+						subWebview.show();
+						template.show('slide-in-right', 150);
 					}else{
 						template = plus.webview.getWebviewById("default-main");
 						//获得共用子webview
 						subWebview = template.children()[0];
-						var title = this.innerText;
+						
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(template,'updateHeader',{title:title,showMenu:false});
-						if (subWebview.getURL() != this.href) {
-							subWebview.loadURL(this.href);
+						if (subWebview.getURL() != href) {
+							subWebview.loadURL(href);
 						} else {
 							 subWebview.show();
 						}
