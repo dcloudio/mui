@@ -397,13 +397,10 @@
 			};
 			
 			mui.plusReady(function() {
+				//初始化模板
+				initTemplates(); //预加载所有模板	
 				//关闭splash页面；
 				plus.navigator.closeSplashscreen();
-				//初始化模板
-				//延迟加载的原因：；
-				setTimeout(function () {
-					initTemplates(); //预加载所有模板	
-				},300);
 			});
 			
 			//主列表点击事件
