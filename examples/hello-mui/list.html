@@ -341,6 +341,12 @@
 			});
 			var templates = {};
 			var firstClick = true;
+
+
+			window.addEventListener('firstClick',function () {
+				firstClick = false;
+			});
+
 			var getTemplate = function(name, header, content, loading) {
 				var template = templates[name];
 				if (!template) {

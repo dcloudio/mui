@@ -139,6 +139,9 @@
 				if (subWebview == null) {
 					//获取共用父窗体
 					template = plus.webview.getWebviewById("default-main");
+					//通知列表界面，已经开始点击；
+					var list = plus.webview.currentWebview().children()[0];
+					mui.fire(list,'firstClick',{});
 				}
 				if(template){
 					subWebview = template.children()[0];
