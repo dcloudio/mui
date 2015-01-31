@@ -340,6 +340,7 @@
 				}
 			});
 			var templates = {};
+			var firstClick = true;
 			var getTemplate = function(name, header, content, loading) {
 				var template = templates[name];
 				if (!template) {
@@ -367,9 +368,11 @@
 						}
 					});
 					subWebview.addEventListener('loaded', function() {
-						setTimeout(function() {
-							subWebview.show();
-						}, 50);
+						if(!firstClick){
+							setTimeout(function() {
+								subWebview.show();
+							}, 50);
+						}
 					});
 					subWebview.hide();
 					headerWebview.append(subWebview);
@@ -457,6 +460,9 @@
 						(!reload) && contentWebview.show();
 						
 						headerWebview.show('slide-in-right', 150);
+						if(firstClick){
+							firstClick = false;
+						}
 					}
 				}
 			});
