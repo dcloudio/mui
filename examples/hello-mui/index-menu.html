@@ -88,7 +88,8 @@
 			mui.plusReady(function () {
 				//获得主页面webview引用；
 				index = plus.webview.currentWebview().opener();
-			})
+			});
+			var firstClick = true;
 			mui('.mui-table-view').on('tap', 'a', function() {
 				var id = this.getAttribute("href");
 				var type = this.getAttribute("open-type");
@@ -110,6 +111,12 @@
 						subWebview.show();
 						template.show('slide-in-right', 150);
 					}else{
+						if(firstClick){
+							firstClick = false;
+							//通知列表界面，已经开始点击；
+							var list = index.children()[0];
+							mui.fire(list,'firstClick',{});
+						}
 						template = plus.webview.getWebviewById("default-main");
 						//获得共用子webview
 						subWebview = template.children()[0];
