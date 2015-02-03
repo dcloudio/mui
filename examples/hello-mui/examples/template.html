@@ -92,8 +92,19 @@
 			menu.style.display = display;
 		});
 
-		document.getElementById("menu").addEventListener('tap', function() {
-			plus.webview.currentWebview().children()[0].evalJS('mui("#topPopover").popover("toggle")');
+		var contentWebview = null; 
+		document.getElementById("menu").addEventListener('tap', function(e) {
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS('mui("#topPopover").popover("toggle")');
+		});
+		//敲击顶部、回到顶部
+		document.querySelector('header').addEventListener('tap',function () {
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS('window.scroll(0, 0)');
 		});
 	</script>
 

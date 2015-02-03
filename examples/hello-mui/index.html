@@ -21,7 +21,6 @@
 		</header>
 		<script>
 			var menu = null,
-				list = null,
 				main = null;
 			var showMenu = false;
 			mui.init({
@@ -58,8 +57,6 @@
 							aniShow: 'none'
 						}
 					});
-
-
 				}, 200);
 			});
 
@@ -108,12 +105,17 @@
 					}
 				}
 				//点击左上角侧滑图标，打开侧滑菜单；
-			document.querySelector('.mui-icon-bars').addEventListener('tap', function() {
+			document.querySelector('.mui-icon-bars').addEventListener('tap', function(e) {
+				e.stopPropagation();
 				if (showMenu) {
 					closeMenu();
 				} else {
 					openMenu();
 				}
+			});
+			//敲击顶部导航，内容区回到顶部
+			document.querySelector('header').addEventListener('tap',function () {
+				main.children()[0].evalJS('window.scroll(0, 0)');
 			});
 			 //主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
 			window.addEventListener("swiperight", openMenu);

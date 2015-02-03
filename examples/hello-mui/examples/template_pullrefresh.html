@@ -75,6 +75,14 @@
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
 		});
+		var contentWebview = null;
+		//敲击顶部、回到顶部
+		document.querySelector('header').addEventListener('tap',function () {
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS('window.scroll(0, 0)');
+		});
 	</script>
 
 </html>
