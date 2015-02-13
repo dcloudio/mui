@@ -68,6 +68,12 @@
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/app.js"></script>
 	<script type="text/javascript">
+		//启用双击监听
+		mui.init({
+			gestureConfig:{
+				doubletap:true
+			}
+		});
 		var titleElem = document.getElementById("title");
 		window.addEventListener("updateHeader", function(e) {
 			var title = '下拉刷新和上拉加载更多';
@@ -79,7 +85,7 @@
 			if(contentWebview==null){
 				contentWebview = plus.webview.currentWebview().children()[0];
 			}
-			contentWebview.evalJS('window.scroll(0, 0)');
+			contentWebview.evalJS('mui.scrollTo(0, 100)');
 		});
 	</script>
 

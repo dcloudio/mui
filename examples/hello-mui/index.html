@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="css/mui.min.css">
-		<script src="js/mui.min.js"></script>
-		<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -19,6 +17,8 @@
 			<a id="info" class="mui-icon mui-icon-info-filled mui-pull-right" style="color: #999;"></a>
 			<h1 class="mui-title">Hello mui</h1>
 		</header>
+		<script src="js/mui.min.js"></script>
+		<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var menu = null,
 				main = null;
@@ -26,6 +26,9 @@
 			mui.init({
 				swipeBack: false,
 				statusBarBackground: '#f7f7f7',
+				gestureConfig:{
+					doubletap:true
+				},
 				subpages: [{
 					id: 'list',
 					url: 'list.html',
@@ -38,6 +41,7 @@
 			});
 
 			mui.plusReady(function() {
+								
 				if (mui.os.android) {
 					plus.screen.lockOrientation("portrait-primary");
 				}
@@ -61,49 +65,46 @@
 			});
 
 
-
 			/**
 			 * 显示侧滑菜单
 			 */
 			function openMenu() {
-					if (!showMenu) {
-						//侧滑菜单处于隐藏状态，则立即显示出来；
-						menu.show('none', 0, function() {
-							//主窗体开始侧滑并显示遮罩
-							main.setStyle({
-								mask: 'rgba(0,0,0,0.4)',
-								left: '70%',
-								transition: {
-									duration: 150
-								}
-							});
-							showMenu = true;
-						});
-
-					}
-				}
-				/**
-				 * 关闭菜单
-				 */
-
-			function closeMenu() {
-					if (showMenu) {
-						//关闭遮罩；
-						//主窗体开始侧滑；
+				if (!showMenu) {
+					//侧滑菜单处于隐藏状态，则立即显示出来；
+					menu.show('none', 0, function() {
+						//主窗体开始侧滑并显示遮罩
 						main.setStyle({
-							mask: 'none',
-							left: '0',
+							mask: 'rgba(0,0,0,0.4)',
+							left: '70%',
 							transition: {
-								duration: 200
+								duration: 150
 							}
 						});
-						showMenu = false;
-						//等动画结束后，隐藏菜单webview，节省资源；
-						setTimeout(function() {
-							menu.hide();
-						}, 300);
-					}
+						showMenu = true;
+					});
 				}
+			}
+			/**
+			 * 关闭菜单
+			 */
+			function closeMenu() {
+				if (showMenu) {
+					//关闭遮罩；
+					//主窗体开始侧滑；
+					main.setStyle({
+						mask: 'none',
+						left: '0',
+						transition: {
+							duration: 200
+						}
+					});
+					showMenu = false;
+					//等动画结束后，隐藏菜单webview，节省资源；
+					setTimeout(function() {
+						menu.hide();
+					}, 300);
+				}
+			}
 				//点击左上角侧滑图标，打开侧滑菜单；
 			document.querySelector('.mui-icon-bars').addEventListener('tap', function(e) {
 				e.stopPropagation();
@@ -114,8 +115,8 @@
 				}
 			});
 			//敲击顶部导航，内容区回到顶部
-			document.querySelector('header').addEventListener('tap',function () {
-				main.children()[0].evalJS('window.scroll(0, 0)');
+			document.querySelector('header').addEventListener('doubletap',function () {
+				main.children()[0].evalJS('mui.scrollTo(0, 100)');
 			});
 			 //主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
 			window.addEventListener("swiperight", openMenu);
@@ -141,9 +142,6 @@
 				if (subWebview == null) {
 					//获取共用父窗体
 					template = plus.webview.getWebviewById("default-main");
-					//通知列表界面，已经开始点击；
-					var list = plus.webview.currentWebview().children()[0];
-					mui.fire(list,'firstClick',{});
 				}
 				if(template){
 					subWebview = template.children()[0];
@@ -177,7 +175,6 @@
 						}
 					}
 				}
-
 			};
 		</script>
 	</body>
