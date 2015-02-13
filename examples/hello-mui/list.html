@@ -187,13 +187,11 @@
 								三行列表
 							</a>
 						</li>
-
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tableviews-with-collapses.html">
 								二级列表
 							</a>
 						</li>
-
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tableviews-with-swipe.html">
 								滑动触发列表项菜单
@@ -313,6 +311,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/typography.html">
 						typography（文字）
@@ -340,13 +339,6 @@
 				}
 			});
 			var templates = {};
-			var firstClick = true;
-
-
-			window.addEventListener('firstClick',function () {
-				firstClick = false;
-			});
-
 			var getTemplate = function(name, header, content, loading) {
 				var template = templates[name];
 				if (!template) {
@@ -374,11 +366,9 @@
 						}
 					});
 					subWebview.addEventListener('loaded', function() {
-						if(!firstClick){
-							setTimeout(function() {
-								subWebview.show();
-							}, 50);
-						}
+						setTimeout(function() {
+							subWebview.show();
+						}, 50);
 					});
 					subWebview.hide();
 					headerWebview.append(subWebview);
@@ -402,7 +392,7 @@
 
 			var initTemplates = function() {
 				getTemplate('pullrefresh', 'examples/template_pullrefresh.html', 'examples/pullrefresh.html', true);
-				getTemplate('default', 'examples/template.html','examples/accordion.html');
+				getTemplate('default', 'examples/template.html');
 			};
 			
 			mui.plusReady(function() {
@@ -450,7 +440,7 @@
 						var headerWebview = template.header;
 						//获得共用子webview
 						var contentWebview = template.content;
-						var title = this.innerText;
+						var title = this.innerText.trim();
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(headerWebview,'updateHeader',{title:title,showMenu:showMenu});
 						var reload = true;
@@ -466,9 +456,6 @@
 						(!reload) && contentWebview.show();
 						
 						headerWebview.show('slide-in-right', 150);
-						if(firstClick){
-							firstClick = false;
-						}
 					}
 				}
 			});
@@ -480,8 +467,15 @@
 			}
 
 			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragstart',function(e){
+				mui.gestures.touch.lockDirection = true; //锁定方向
+				mui.gestures.touch.startDirection = e.detail.direction;
+			});
+
 			window.addEventListener('dragright', function(e) {
-				e.detail.gesture.preventDefault();
+				if(!mui.isScrolling){
+					e.detail.gesture.preventDefault();	
+				}
 			});
 
 

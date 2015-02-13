@@ -43,11 +43,7 @@
 			</div>
 			<div class="title" style="margin-bottom: 25px;">mui典型控件</div>
 			<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted" style="color: #ddd;">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/tableviews-with-swipe.html">
-						滑动删除
-					</a>
-				</li>
+				
 				<!--<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/list-long.html">
 						千行列表
@@ -69,8 +65,13 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/range.html">
-						滑块控件
+					<a class="mui-navigate-right" href="examples/tableviews-with-swipe.html">
+						列表左滑菜单
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/tab-with-viewpagerindicator.html">
+						可拖动式选项卡
 					</a>
 				</li>
 			</ul>
@@ -88,8 +89,7 @@
 			mui.plusReady(function () {
 				//获得主页面webview引用；
 				index = plus.webview.currentWebview().opener();
-			});
-			var firstClick = true;
+			})
 			mui('.mui-table-view').on('tap', 'a', function() {
 				var id = this.getAttribute("href");
 				var type = this.getAttribute("open-type");
@@ -111,12 +111,6 @@
 						subWebview.show();
 						template.show('slide-in-right', 150);
 					}else{
-						if(firstClick){
-							firstClick = false;
-							//通知列表界面，已经开始点击；
-							var list = index.children()[0];
-							mui.fire(list,'firstClick',{});
-						}
 						template = plus.webview.getWebviewById("default-main");
 						//获得共用子webview
 						subWebview = template.children()[0];
@@ -143,8 +137,14 @@
 			//点击“关闭侧滑菜单”按钮处理逻辑
 			document.getElementById("close-btn").addEventListener("tap",close);
 			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+			window.addEventListener('dragstart',function(e){
+				mui.gestures.touch.lockDirection = true; //锁定方向
+				mui.gestures.touch.startDirection = e.detail.direction;
+			});
 			window.addEventListener('dragleft', function(e) {
-				e.detail.gesture.preventDefault();
+				if(!mui.isScrolling){
+					e.detail.gesture.preventDefault();	
+				}
 			});
 			//监听左滑事件，若菜单已展开，左滑要关闭菜单；
 			window.addEventListener("swipeleft",function (e) {

@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.1.1 (https://github.com/dcloudio/mui)
+ * Mui v1.2.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -863,6 +863,10 @@ button,
   background-clip: padding-box;
   border: 1px solid #ccc;
   border-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
   -webkit-transition: all;
           transition: all;
   -webkit-transition-timing-function: linear;
@@ -1276,6 +1280,19 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   margin: 6px 0;
 }
 
+.mui-bar .mui-input-row .mui-btn {
+  padding: 12px 10px;
+}
+
+.mui-bar .mui-search:before {
+  margin-top: -10px;
+}
+
+.mui-bar .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-input-row .mui-input-speech ~ .mui-icon-speech {
+  top: 0;
+  right: 17%;
+}
+
 .mui-bar .mui-segmented-control {
   top: 7px;
   width: auto;
@@ -1483,7 +1500,10 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   position: relative;
   padding: 11px 15px;
   overflow: hidden;
+  background-color: inherit;
 
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
   -webkit-touch-callout: none;
 }
 .mui-table-view-cell:after {
@@ -1530,12 +1550,18 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 }
 
 .mui-table-view-cell.mui-transitioning > .mui-slider-handle, .mui-table-view-cell.mui-transitioning > .mui-slider-left .mui-btn, .mui-table-view-cell.mui-transitioning > .mui-slider-right .mui-btn {
-  -webkit-transition: 300ms;
-          transition: 300ms;
+  -webkit-transition: -webkit-transform 300ms ease;
+          transition:         transform 300ms ease;
+}
+.mui-table-view-cell > .mui-slider-handle {
+  background-color: #fff;
 }
 .mui-table-view-cell > .mui-slider-handle, .mui-table-view-cell > .mui-slider-left .mui-btn, .mui-table-view-cell > .mui-slider-right .mui-btn {
-  -webkit-transition: 0ms;
-          transition: 0ms;
+  -webkit-transition: -webkit-transform 0ms ease;
+          transition:         transform 0ms ease;
+
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
 }
 .mui-table-view-cell > .mui-slider-left, .mui-table-view-cell > .mui-slider-right {
   position: absolute;
@@ -1544,6 +1570,9 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   display: -webkit-flex;
   display:         flex;
   height: 100%;
+
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
 }
 .mui-table-view-cell > .mui-slider-left > .mui-btn, .mui-table-view-cell > .mui-slider-right > .mui-btn {
   position: relative;
@@ -1574,11 +1603,15 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 }
 .mui-table-view-cell > .mui-slider-right {
   right: 0;
+  -webkit-transition: -webkit-transform 0ms ease;
+          transition:         transform 0ms ease;
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
 }
 .mui-table-view-cell > .mui-slider-left {
   left: 0;
+  -webkit-transition: -webkit-transform 0ms ease;
+          transition:         transform 0ms ease;
   -webkit-transform: translateX(-100%);
           transform: translateX(-100%);
 }
@@ -1919,6 +1952,10 @@ input[type="color"] {
   outline: none;
 }
 
+input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+}
+
 input[type="search"] {
   height: 34px;
   -webkit-box-sizing: border-box;
@@ -2020,7 +2057,7 @@ select:focus {
 }
 
 .mui-input-row:last-child,
-.mui-input-row label + input {
+.mui-input-row label + input, .mui-input-row .mui-btn + input {
   background-image: none;
 }
 
@@ -2050,6 +2087,22 @@ select:focus {
 .mui-input-row label ~ input, .mui-input-row label ~ select, .mui-input-row label ~ textarea {
   float: right;
   width: 65%;
+  padding-left: 0;
+  margin-bottom: 0;
+  border: 0;
+}
+
+.mui-input-row .mui-btn {
+  float: right;
+  width: 15%;
+  padding: 10px 15px;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.1;
+}
+
+.mui-input-row .mui-btn ~ input, .mui-input-row .mui-btn ~ select, .mui-input-row .mui-btn ~ textarea {
+  float: left;
+  width: 85%;
   padding-left: 0;
   margin-bottom: 0;
   border: 0;

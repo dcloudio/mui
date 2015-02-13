@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.1.1 (https://github.com/dcloudio/mui)
+ * Mui v1.2.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -177,7 +177,8 @@ var mui = (function(document, undefined) {
 	 * map
 	 */
 	$.map = function(elements, callback) {
-		var value, values = [],i, key;
+		var value, values = [],
+			i, key;
 		if (typeof elements.length === 'number') {
 			for (i = 0, len = elements.length; i < len; i++) {
 				value = callback(elements[i], i);
@@ -948,10 +949,21 @@ var mui = (function(document, undefined) {
 		});
 	};
 	var preventDefault = function(e) {
-		if (e.target && e.target.tagName !== 'INPUT') {
+		var tagName = e.target && e.target.tagName;
+		if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
 			e.preventDefault();
 		}
 	};
+	//增加原生滚动识别
+	$.isScrolling = false;
+	var scrollingTimeout = null;
+	window.addEventListener('scroll', function() {
+		$.isScrolling = true;
+		scrollingTimeout && clearTimeout(scrollingTimeout);
+		scrollingTimeout = setTimeout(function() {
+			$.isScrolling = false;
+		}, 250);
+	});
 })(mui, window);
 /**
  * mui gesture flick[left|right|up|down]
@@ -1784,10 +1796,10 @@ var mui = (function(document, undefined) {
 			if (!window.plus) {
 				return false;
 			}
-			var wobj = $.currentWebview;
+			var wobj = plus.webview.currentWebview();
 			var parent = wobj.parent();
 			if (parent) {
-				parent.evalJS('mui.back();');
+				parent.evalJS('mui&&mui.back();');
 			}else{
 				wobj.canBack(function(e) {
 					//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
@@ -1890,7 +1902,7 @@ var mui = (function(document, undefined) {
 										downOptions.down = $.extend({}, pullRefreshOptions.down);
 										downOptions.down.callback = '_CALLBACK';
 										//父页面初始化pulldown
-										parent.evalJS("mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+										parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
 									}
 								}
 							});
@@ -2676,8 +2688,9 @@ var mui = (function(document, undefined) {
 			if (this.options.scrollX) {
 				this.wrapper.addEventListener('swiperight', this);
 			}
-			if (this.wrapper.classList.contains('mui-segmented-control')) { //靠，这个bug排查了一下午
-				mui(this.wrapper).on('click', 'a', $.preventDefault);
+			var segmentedControl = this.wrapper.querySelector('.mui-segmented-control');
+			if (segmentedControl) { //靠，这个bug排查了一下午，阻止hash跳转，一旦hash跳转会导致可拖拽选项卡的tab不见
+				mui(segmentedControl).on('click', 'a', $.preventDefault);
 			}
 		},
 		handleEvent: function(e) {
@@ -3059,6 +3072,12 @@ var mui = (function(document, undefined) {
 				duration: duration
 			};
 		},
+		_getTranslateStr: function(x, y) {
+			if (this.options.hardwareAccelerated) {
+				return 'translate3d(' + x + 'px,' + y + 'px,0px) ' + this.translateZ;
+			}
+			return 'translate(' + x + 'px,' + y + 'px) ';
+		},
 		//API
 		setStopped: function(stopped) {
 			this.stopped = !!stopped;
@@ -3066,16 +3085,16 @@ var mui = (function(document, undefined) {
 		setTranslate: function(x, y) {
 			this.x = x;
 			this.y = y;
-			this.scrollerStyle['webkitTransform'] = 'translate3d(' + x + 'px,' + y + 'px,0px)' + this.translateZ;
+			this.scrollerStyle['webkitTransform'] = this._getTranslateStr(x, y);
 			if (this.parallaxElement && this.options.scrollY) { //目前仅支持竖向视差效果
 				var parallaxY = y * this.options.parallaxRatio;
 				var scale = 1 + parallaxY / ((this.parallaxHeight - parallaxY) / 2);
 				if (scale > 1) {
 					this.parallaxImgStyle['opacity'] = 1 - parallaxY / 100 * this.options.parallaxRatio;
-					this.parallaxStyle['webkitTransform'] = 'translate3d(0px,' + -parallaxY + 'px,0px) scale(' + scale + ',' + scale + ') ' + this.translateZ;
+					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -parallaxY) + ' scale(' + scale + ',' + scale + ')';
 				} else {
 					this.parallaxImgStyle['opacity'] = 1;
-					this.parallaxStyle['webkitTransform'] = 'translate3d(0px,-10px,0px) scale(1,1) ' + this.translateZ;
+					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -10) + ' scale(1,1)';
 				}
 			}
 			if (this.indicators) {
@@ -3276,7 +3295,7 @@ var mui = (function(document, undefined) {
 			this.x = x;
 			this.y = y;
 
-			this.indicatorStyle['webkitTransform'] = 'translate3d(' + x + 'px,' + y + 'px,0px)' + this.scroller.translateZ;
+			this.indicatorStyle['webkitTransform'] = this.scroller._getTranslateStr(x, y);
 
 		},
 		fade: function(val, hold) {
@@ -3761,7 +3780,7 @@ var mui = (function(document, undefined) {
 			this._super(x, y);
 			var progressBar = this.progressBar;
 			if (progressBar) {
-				this.progressBarStyle.webkitTransform = 'translate3d(' + (-x * (this.progressBarWidth / this.wrapperWidth)) + 'px,0,0)';
+				this.progressBarStyle.webkitTransform = this._getTranslateStr((-x * (this.progressBarWidth / this.wrapperWidth)), 0);
 			}
 		},
 		resetPosition: function(time) {
@@ -3885,7 +3904,7 @@ var mui = (function(document, undefined) {
 								break;
 							case "dragEndAfterChangeOffset": //正在刷新状态
 								//执行下拉刷新所在webview的回调函数
-								webview.evalJS("mui.options.pullRefresh.down.callback()");
+								webview.evalJS("mui&&mui.options.pullRefresh.down.callback()");
 								self._setCaption(downOptions.contentrefresh);
 								break;
 							default:
@@ -3964,7 +3983,7 @@ var mui = (function(document, undefined) {
 		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
-			webview.parent().evalJS("mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
+			webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
 				webviewId: webview.id
 			}) + "')._endPulldownToRefresh()");
 		},
@@ -4132,7 +4151,10 @@ var mui = (function(document, undefined) {
 		handleEvent: function(e) {
 			switch (e.type) {
 				case 'touchstart':
-					e.preventDefault();
+					var tagName = e.target && e.target.tagName;
+					if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
+						e.preventDefault();
+					}
 					break;
 				case 'webkitTransitionEnd': //有个bug需要处理，需要考虑假设没有触发webkitTransitionEnd的情况
 					if (e.target === this.scroller) {
@@ -4164,10 +4186,10 @@ var mui = (function(document, undefined) {
 						if (this.scroller) {
 							this.startX = this.lastX;
 							this.isDragging = true;
-							
+
 							$.gestures.touch.lockDirection = true; //锁定方向
 							$.gestures.touch.startDirection = detail.direction;
-							
+
 							this.scroller.classList.remove(CLASS_TRANSITIONING);
 							this.offsetX = this.getTranslateX();
 							this._initOffCanvasVisible();
