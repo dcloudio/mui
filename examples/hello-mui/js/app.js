@@ -16,7 +16,7 @@
 			if ($.targets._popover) {
 				$($.targets._popover).popover('hide');
 			} else {
-				current.parent().evalJS('mui.back();');
+				current.parent().evalJS('mui&&mui.back();');
 			}
 		} else {
 			back();

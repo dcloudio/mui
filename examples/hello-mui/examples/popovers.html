@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,
 			body {
@@ -43,9 +41,6 @@
 				padding: 10px;
 			}
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
@@ -160,7 +155,10 @@
 			</div>
 
 		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
 		<script>
+			mui.init();
 			mui('.mui-scroll-wrapper').scroll();
 			mui('body').on('shown', '.mui-popover', function(e) {
 				//console.log('shown', e.detail.id);//detail为当前popover元素

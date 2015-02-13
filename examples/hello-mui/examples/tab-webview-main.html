@@ -9,15 +9,12 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,body {
 				background-color: #efeff4;
 			}
 		</style>
 	</head>
-
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -41,6 +38,8 @@
 				<span class="mui-tab-label">设置</span>
 			</a>
 		</nav>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var subpages = ['tab-webview-subpage-about.html','tab-webview-subpage-chat.html','tab-webview-subpage-contact.html','tab-webview-subpage-setting.html'];
 			var subpage_style = {
@@ -78,6 +77,20 @@
 				//更改当前活跃的选项卡
 				activeTab = targetTab;
 			});
+			
+			//自定义事件，模拟点击“首页选项卡”
+			document.addEventListener('gohome',function () {
+				var defaultTab = document.getElementById("defaultTab");
+				//模拟首页点击
+				mui.trigger(defaultTab,'tap');
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if(defaultTab!==current){
+					current.classList.remove('mui-active');
+					defaultTab.classList.add('mui-active');
+				}
+			});
+			
 		</script>
 	</body>
 </html>

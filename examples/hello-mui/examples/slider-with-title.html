@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,body {
 				background-color: #efeff4;
@@ -22,9 +20,6 @@
 				padding: 0;
 			}
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
@@ -90,20 +85,22 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			var slider = mui("#slider");
-			document.getElementById("switch").addEventListener('toggle', function(e) {
-				if (e.detail.isActive) {
-					slider.slider({
-						interval: 5000
-					});
-				} else {
-					slider.slider({
-						interval: 0
-					});
-				}
-			});
-		</script>
 	</body>
-
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script>
+		mui.init();
+		var slider = mui("#slider");
+		document.getElementById("switch").addEventListener('toggle', function(e) {
+			if (e.detail.isActive) {
+				slider.slider({
+					interval: 5000
+				});
+			} else {
+				slider.slider({
+					interval: 0
+				});
+			}
+		});
+	</script>
 </html>

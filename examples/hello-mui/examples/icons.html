@@ -9,8 +9,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
+		
 		<style>
 			html,
 			body {
@@ -22,15 +21,6 @@
 			.mui-bar-nav~.mui-content {
 				padding: 0;
 			}
-		</style>
-		<script>
-			mui.init();
-		</script>
-	</head>
-
-	<body>
-
-		<style>
 			.flex-container {
 				display: -webkit-box;
 				display: -webkit-flex;
@@ -70,6 +60,9 @@
 				color: #007aff;
 			}
 		</style>
+	</head>
+
+	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">Icons</h1>
@@ -162,10 +155,13 @@
 
 					<a><span class="mui-icon mui-icon-pulldown"></span></a>
 				</div>
-
-
 			</div>
 		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script>
+			mui.init();
+		</script>
 		<script type="text/javascript" charset="utf-8">
 			var active = null,
 				lastid, span;
@@ -198,7 +194,5 @@
 				lastid = id;
 			});
 		</script>
-
 	</body>
-
 </html>

@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,
 			body {
@@ -67,7 +65,8 @@
 		</header>
 		<div class="mui-content"></div>
 	</body>
-	
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
 	<script type="text/javascript">
 		var titleElem = document.getElementById("title");
 		window.addEventListener("updateHeader", function(e) {
@@ -76,7 +75,6 @@
 			titleElem.className = "mui-title mui-fadein";
 		});
 		var contentWebview = null;
-		//敲击顶部、回到顶部
 		document.querySelector('header').addEventListener('tap',function () {
 			if(contentWebview==null){
 				contentWebview = plus.webview.currentWebview().children()[0];
