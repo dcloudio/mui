@@ -81,7 +81,7 @@
 			titleElem.className = "mui-title mui-fadein";
 		});
 		var contentWebview = null;
-		document.querySelector('header').addEventListener('tap',function () {
+		document.querySelector('header').addEventListener('doubletap',function () {
 			if(contentWebview==null){
 				contentWebview = plus.webview.currentWebview().children()[0];
 			}
