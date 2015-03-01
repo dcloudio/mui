@@ -2030,7 +2030,7 @@ var mui = (function(document, undefined) {
 		}
 		var settings = options || {};
 		settings.url = url || settings.url;
-		for (key in $.ajaxSettings) {
+		for (var key in $.ajaxSettings) {
 			if (settings[key] === undefined) {
 				settings[key] = $.ajaxSettings[key];
 			}
@@ -2106,7 +2106,7 @@ var mui = (function(document, undefined) {
 		//		}
 
 		if (settings.xhrFields) {
-			for (name in settings.xhrFields) {
+			for (var name in settings.xhrFields) {
 				xhr[name] = settings.xhrFields[name];
 			}
 		}
@@ -2115,7 +2115,7 @@ var mui = (function(document, undefined) {
 
 		xhr.open(settings.type, settings.url, async, settings.username, settings.password);
 
-		for (name in headers) {
+		for (var name in headers) {
 			nativeSetHeader.apply(xhr, headers[name]);
 		}
 		if (settings.timeout > 0) {
