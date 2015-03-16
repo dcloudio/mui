@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.2.0 (https://github.com/dcloudio/mui)
+ * Mui v1.3.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -609,7 +609,19 @@ p {
   transform: translate(0px, 0px) translateZ(0px);
 }
 
-.mui-plus-pullrefresh .mui-scroll-wrapper {
+.mui-plus-pullrefresh .mui-fullscreen .mui-scroll-wrapper .mui-scroll-wrapper, .mui-plus-pullrefresh .mui-fullscreen .mui-slider-group .mui-scroll-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.mui-plus-pullrefresh .mui-fullscreen .mui-scroll-wrapper .mui-scroll, .mui-plus-pullrefresh .mui-fullscreen .mui-slider-group .mui-scroll {
+  position: absolute;
+  width: 100%;
+}
+.mui-plus-pullrefresh .mui-scroll-wrapper, .mui-plus-pullrefresh .mui-slider-group {
   position: static;
   top: auto;
   bottom: auto;
@@ -1192,13 +1204,6 @@ input[type="submit"]:active, input[type="submit"].mui-active,
 
 .mui-focusin > .mui-bar {
   position: absolute;
-}
-
-.mui-focusin > .mui-bar-tab,
-.mui-focusin > .mui-bar-footer,
-.mui-focusin > .mui-bar-footer-secondary,
-.mui-focusin > .mui-bar-footer-secondary-tab {
-  position: static;
 }
 
 .mui-bar .mui-btn {
@@ -2316,6 +2321,11 @@ select:focus {
   opacity: .8;
 }
 
+.mui-bar .mui-input-row.mui-search .mui-icon-speech {
+  top: -2px;
+  right: 10px;
+}
+
 .mui-search {
   position: relative;
 }
@@ -2950,6 +2960,9 @@ select:focus {
   -webkit-transition-property: background-color, border;
           transition-property: background-color, border;
 }
+.mui-switch.mui-disabled {
+  opacity: .3;
+}
 .mui-switch .mui-switch-handle {
   position: absolute;
   top: -1px;
@@ -3105,7 +3118,7 @@ select:focus {
   height: 40px;
 }
 .mui-pull-bottom-pocket .mui-pull-loading {
-  display: none;
+  visibility: hidden;
 }
 .mui-pull-bottom-pocket .mui-pull-loading.mui-in {
   display: inline-block;
@@ -3561,4 +3574,9 @@ select:focus {
 
 .mui-bar-tab ~ .mui-content .mui-slider.mui-fullscreen .mui-segmented-control ~ .mui-slider-group {
   bottom: 50px;
+}
+
+.mui-android.mui-android-4-0 input:focus,
+.mui-android.mui-android-4-0 textarea:focus {
+  -webkit-user-modify: inherit;
 }
