@@ -71,7 +71,7 @@
 <script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<script>
-			var main,menu, mask = mui.createMask(closeMenu);
+			var main,menu, mask = mui.createMask(_closeMenu);
 			var showMenu = false,mode = 'main-move';
 			 
 			if (!mui.os.android) {
@@ -163,10 +163,18 @@
 			/**
 			 * 关闭侧滑菜单
 			 */
-			function closeMenu() {
+			function closeMenu () {
+				_closeMenu();
+				//关闭遮罩
+				mask.close();
+			}
+			
+			/**
+			 * 关闭侧滑菜单（业务部分）
+			 */
+			function _closeMenu() {
 				if (showMenu) {
 					//关闭遮罩；
-					mask.close();
 					switch (mode){
 						case 'main-move':
 							//主窗体开始侧滑；

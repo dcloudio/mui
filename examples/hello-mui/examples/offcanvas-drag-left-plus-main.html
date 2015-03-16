@@ -71,7 +71,7 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<script>
-			var main,menu, mask = mui.createMask(closeMenu);
+			var main,menu, mask = mui.createMask(_closeMenu);
 			var showMenu = false,
 				mode = 'main-move';
 
@@ -169,11 +169,17 @@
 						showMenu = true;
 					}
 				}
-				/**
-				 * 关闭侧滑菜单
-				 */
-
-			function closeMenu() {
+			function closeMenu () {
+				//窗体移动
+				_closeMenu();
+				//关闭遮罩
+				mask.close();
+			}
+			
+			/**
+			 * 关闭侧滑菜单(业务部分)
+			 */
+			function _closeMenu() {
 				if (showMenu) {
 					//解决android 4.4以下版本webview移动时，导致fixed定位元素错乱的bug;
 					if (mui.os.android && parseFloat(mui.os.version) < 4.4) {
@@ -182,8 +188,6 @@
 						document.querySelector(".mui-bar-nav~.mui-content").style.paddingTop = "44px";
 					}
 
-					//关闭遮罩
-					mask.close();
 					switch (mode){
 						case 'main-move':
 							//主窗体开始侧滑；
