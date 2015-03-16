@@ -3,7 +3,7 @@
 	localDir="update",localFile="update.json",//本地保存升级描述目录和文件名
 	keyUpdate="updateCheck",//取消升级键名
 	keyAbort="updateAbort",//忽略版本键名
-	checkInterval=60480000,//升级检查间隔，单位为ms,7天为7*24*60*60*1000=60480000, 如果每次启动需要检查设置值为0
+	checkInterval=3600000,//升级检查间隔，单位为ms,1小时为60*60*1000=3600000, 如果每次启动需要检查设置值为0
 	dir=null;
 
 	/**
@@ -103,6 +103,7 @@
 	 */
 	function getUpdateData(){
 		mui.getJSON(server,{},function (data) {
+			//appid一致，才将服务器上的版本数据保存到本地
 			if(data.appid==plus.runtime.appid){
 				// 保存到本地文件中
 	            	dir.getFile( localFile, {create:true}, function(fentry){
