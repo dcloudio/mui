@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.3.0 (https://github.com/dcloudio/mui)
+ * Mui v1.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -9,7 +9,7 @@
  */
 var mui = (function(document, undefined) {
 	var readyRE = /complete|loaded|interactive/;
-	var idSelectorRE = /^#([\w-]*)$/;
+	var idSelectorRE = /^#([\w-]+)$/;
 	var classSelectorRE = /^\.([\w-]+)$/;
 	var tagSelectorRE = /^[\w-]+$/;
 	var translateRE = /translate(?:3d)?\((.+?)\)/;
@@ -23,14 +23,15 @@ var mui = (function(document, undefined) {
 			return wrap([selector], null);
 		if (typeof selector === 'function')
 			return $.ready(selector);
-		try {
-			if (idSelectorRE.test(selector)) {
-				var found = document.getElementById(RegExp.$1);
-				return wrap(found ? [found] : []);
-			}
-			return wrap($.qsa(selector, context), selector);
-		} catch (e) {
-
+		if (typeof selector === 'string') {
+			try {
+				selector = selector.trim();
+				if (idSelectorRE.test(selector)) {
+					var found = document.getElementById(RegExp.$1);
+					return wrap(found ? [found] : []);
+				}
+				return wrap($.qsa(selector, context), selector);
+			} catch (e) {}
 		}
 		return wrap();
 	};
@@ -179,7 +180,7 @@ var mui = (function(document, undefined) {
 	$.map = function(elements, callback) {
 		var value, values = [],
 			i, key;
-		if (typeof elements.length === 'number') {
+		if (typeof elements.length === 'number') { //TODO 此处逻辑不严谨，可能会有Object:{a:'b',length:1}的情况未处理
 			for (i = 0, len = elements.length; i < len; i++) {
 				value = callback(elements[i], i);
 				if (value != null) values.push(value);
@@ -484,10 +485,8 @@ var mui = (function(document, undefined) {
 			};
 			var evt = document.createEvent('Events');
 			var bubbles = true;
-			if (params) {
-				for (var name in params) {
-					(name === 'bubbles') ? (bubbles = !!params[name]) : (evt[name] = params[name]);
-				}
+			for (var name in params) {
+				(name === 'bubbles') ? (bubbles = !!params[name]) : (evt[name] = params[name]);
 			}
 			evt.initEvent(event, bubbles, true);
 			return evt;
@@ -553,27 +552,21 @@ var mui = (function(document, undefined) {
  * @returns {undefined}
  */
 (function(window) {
-    var lastTime = 0;
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-        window.cancelAnimationFrame = window.webkitCancelAnimationFrame || window.webkitCancelRequestAnimationFrame;
-    }
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
-            var id = window.setTimeout(function() {
-                callback(currTime + timeToCall);
-            }, timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-    }
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-    }
+	if (!window.requestAnimationFrame) {
+		var lastTime = 0;
+		window.requestAnimationFrame = window.webkitRequestAnimationFrame || function(callback, element) {
+			var currTime = new Date().getTime();
+			var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+			var id = window.setTimeout(function() {
+				callback(currTime + timeToCall);
+			}, timeToCall);
+			lastTime = currTime + timeToCall;
+			return id;
+		};
+		window.cancelAnimationFrame = window.webkitCancelAnimationFrame || window.webkitCancelRequestAnimationFrame || function(id) {
+			clearTimeout(id);
+		};
+	};
 }(window));
 /**
  * fastclick(only for radio,checkbox)
@@ -1641,7 +1634,7 @@ var mui = (function(document, undefined) {
 			webview = plus.webview.create(options.url, id, options.styles, options.extras);
 			//TODO 理论上，子webview也应该计算到预加载队列中，但这样就麻烦了，要退必须退整体，否则可能出现问题；
 			webview.addEventListener('loaded', function() {
-				$.currentWebview.append(webview);
+				plus.webview.currentWebview().append(webview);
 			});
 			$.webviews[id] = options;
 		}
@@ -1670,21 +1663,21 @@ var mui = (function(document, undefined) {
 						$.appendWebview(subpage);
 					});
 					//判断是否首页
-					if ($.currentWebview === plus.webview.getWebviewById(plus.runtime.appid)) {
+					if (plus.webview.currentWebview() === plus.webview.getWebviewById(plus.runtime.appid)) {
 						$.isHomePage = true;
 						//首页需要自己激活预加载；
 						//timeout因为子页面loaded之后才append的，防止子页面尚未append、从而导致其preload未触发的问题；
 						setTimeout(function() {
-							triggerPreload($.currentWebview);
+							triggerPreload(plus.webview.currentWebview());
 						}, 300);
 					}
 					//设置ios顶部状态栏颜色；
 					if ($.os.ios && $.options.statusBarBackground) {
 						plus.navigator.setStatusBarBackground($.options.statusBarBackground);
 					}
-					if($.os.android&&parseFloat($.os.version) < 4.4){
+					if ($.os.android && parseFloat($.os.version) < 4.4) {
 						//解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
-						if(plus.webview.currentWebview().parent()==null){
+						if (plus.webview.currentWebview().parent() == null) {
 							document.addEventListener("resume", function() {
 								var body = document.body;
 								body.style.display = 'none';

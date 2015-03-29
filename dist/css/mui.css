@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.3.0 (https://github.com/dcloudio/mui)
+ * Mui v1.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1267,7 +1267,7 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   opacity: .3;
 }
 .mui-bar .mui-btn .mui-icon {
-  top: 3px;
+  top: 1px;
   padding: 0;
   margin: 0;
 }
@@ -1293,9 +1293,14 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   margin-top: -10px;
 }
 
-.mui-bar .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-input-row .mui-input-speech ~ .mui-icon-speech {
+.mui-bar .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-bar .mui-input-row .mui-input-speech ~ .mui-icon-speech {
   top: 0;
-  right: 17%;
+  right: 12px;
+}
+
+.mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-speech ~ .mui-icon-speech {
+  top: 0;
+  right: 0;
 }
 
 .mui-bar .mui-segmented-control {
@@ -1884,6 +1889,9 @@ input[type="submit"]:active, input[type="submit"].mui-active,
   padding: 10px 0;
   margin: 0;
 }
+.mui-grid-view.mui-grid-9:before {
+  height: 0;
+}
 .mui-grid-view.mui-grid-9 .mui-media {
   color: #797979;
 }
@@ -2319,11 +2327,6 @@ select:focus {
   border: 1px solid #ddd;
   border-radius: 6px;
   opacity: .8;
-}
-
-.mui-bar .mui-input-row.mui-search .mui-icon-speech {
-  top: -2px;
-  right: 10px;
 }
 
 .mui-search {
@@ -3110,6 +3113,10 @@ select:focus {
 
 .mui-bar-nav ~ .mui-content .mui-pull-top-pocket {
   top: 44px;
+}
+
+.mui-bar-nav ~ .mui-bar-header-secondary ~ .mui-content .mui-pull-top-pocket {
+  top: 88px;
 }
 
 .mui-pull-bottom-pocket {
