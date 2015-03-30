@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-01-28 15:09:07 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-01-28 15:09:07 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-03-30 16:37:17 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-03-30 16:37:17 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -756,14 +756,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 <span class="p">}</span><span class="k">else</span><span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;关闭状态&quot;</span><span class="p">);</span>  
 <span class="p">}</span></code></pre></div>
-<p class="component-description">同理，要打开、关闭开控件，同样操作该控件的<code>.mui-active</code>类即可，如下为示例代码：</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">mySwitch</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;mySwitch&quot;</span><span class="p">);</span>
-<span class="c1">//添加mui-active类，打开开关</span>
-<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span>
-<span class="c1">//删除mui-active类，关闭开关</span>
-<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span>
-<span class="c1">//也可以直接使用toggle方法自动处理打开或关闭</span>
-<span class="nx">mySwitch</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;mui-active&#39;</span><span class="p">);</span></code></pre></div>
+<p class="component-description">若使用js打开、关闭开关控件，可使用switch插件的<code>toggle()</code>方法，如下为示例代码：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">(</span><span class="s2">&quot;#mySwitch&quot;</span><span class="p">).</span><span class="k">switch</span><span class="p">().</span><span class="nx">toggle</span><span class="p">();</span></code></pre></div>
   </article>
       <!-- slide事件 -->
           <article id="slide" class="component mui-active">
@@ -1071,7 +1065,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
 	</p>
 	<ul class="docs-footer-links">
-		<li>最新版本 v0.9.0</li>
+		<li>最新版本 v1.4.0</li>
 		<li>&middot;</li>
 		<li><a href="http://ask.dcloud.net.cn">问答社区</a></li>
 		<li>&middot;</li>
@@ -1085,8 +1079,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-01-28 15:09:07 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-01-28 15:09:07 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-03-30 16:37:17 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-03-30 16:37:17 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
