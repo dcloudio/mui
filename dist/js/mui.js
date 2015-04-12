@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.4.0 (https://github.com/dcloudio/mui)
+ * Mui v1.5.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -656,6 +656,9 @@ var mui = (function(document, undefined) {
 			}
 			var target = e.target;
 			if (target.tagName && target.tagName === 'INPUT' && target.type === 'text') {
+				if (target.disabled || target.readOnly) {
+					return;
+				}
 				document.body.classList.add(CLASS_FOCUSIN);
 				var isFooter = false;
 				for (; target && target !== document; target = target.parentNode) {
@@ -1370,7 +1373,7 @@ var mui = (function(document, undefined) {
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}) + "')");
+			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c") + "')");
 		}
 	};
 	/**
@@ -4701,7 +4704,7 @@ var mui = (function(document, undefined) {
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
-		this.setAttribute('style', '');
+		setStyle(this,'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener('touchmove', $.preventDefault);
 		fixedPopoverScroll(false);
@@ -4788,7 +4791,7 @@ var mui = (function(document, undefined) {
 				//				}
 			}
 		}
-		popover.setAttribute('style', 'display:block'); //actionsheet transform
+		setStyle(popover, 'block'); //actionsheet transform
 		popover.offsetHeight;
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
@@ -4797,6 +4800,15 @@ var mui = (function(document, undefined) {
 		calPosition(popover, anchor, isActionSheet); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 		popover.addEventListener('webkitTransitionEnd', onPopoverShown);
+	};
+	var setStyle = function(popover, display, top, left) {
+		var style = popover.style;
+		if (typeof display !== 'undefined')
+			style.display = display;
+		if (typeof top !== 'undefined')
+			style.top = top + 'px';
+		if (typeof left !== 'undefined')
+			style.left = left + 'px';
 	};
 	var calPosition = function(popover, anchor, isActionSheet) {
 		if (!popover || !anchor) {
@@ -4808,7 +4820,7 @@ var mui = (function(document, undefined) {
 		var pWidth = popover.offsetWidth;
 		var pHeight = popover.offsetHeight;
 		if (isActionSheet) { //actionsheet
-			popover.setAttribute('style', 'display:block;top:' + (wHeight - pHeight + window.pageYOffset) + 'px;left:' + (wWidth - pWidth) / 2 + 'px;');
+			setStyle(popover, 'block', (wHeight - pHeight + window.pageYOffset), (wWidth - pWidth) / 2)
 			return;
 		}
 		var aWidth = anchor.offsetWidth;
@@ -4862,7 +4874,7 @@ var mui = (function(document, undefined) {
 		} else if (position === 'middle') {
 			arrow.setAttribute('style', 'display:none');
 		}
-		popover.setAttribute('style', 'display:block;top:' + pTop + 'px;left:' + pLeft + 'px;');
+		setStyle(popover, 'block', pTop, pLeft);
 	};
 
 	$.createMask = function(callback) {

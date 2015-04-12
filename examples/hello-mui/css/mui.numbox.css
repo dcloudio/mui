@@ -1,0 +1,59 @@
+.mui-numbox {
+	border: solid 1px #bbb;
+	overflow: hidden !important;
+	display: inline-block;
+	height: 35px;
+	border-radius: 3px;
+	background-color: #efeff4 !important;
+	vertical-align: top;
+	box-sizing: border-box;
+	position: relative;
+	padding: 0px 40px 0px 40px;
+	width: 120px;
+	vertical-align: middle;
+}
+.mui-numbox [class*=mui-numbox-btn] {
+	width: 40px;
+	height: 100%;
+	margin: 0px;
+	position: absolute;
+	top: 0px;
+	border: none;
+	border-radius: 0px !important;
+	font-size: 18px;
+	color: #555;
+	line-height: 100%;
+	font-weight: normal;
+	overflow: hidden;
+	padding: 0px;
+	background-color: #f9f9f9;
+}
+.mui-numbox [class*=mui-numbox-btn]:active {
+	background-color: #ccc;
+}
+.mui-numbox [class*=mui-numbox-btn][disabled] {
+	color: #c0c0c0;
+}
+.mui-numbox .mui-numbox-btn-plus {
+	right: 0px;
+}
+.mui-numbox .mui-numbox-btn-minus {
+	left: 0px;
+}
+.mui-numbox .mui-numbox-input {
+	width: 100% !important;
+	height: 100% !important;
+	text-align: center;
+	border: none;
+	border-left: solid 1px #ccc !important;
+	border-right: solid 1px #ccc !important;
+	appearance: none;
+	margin: 0px;
+	padding: 0px 3px !important;
+	display: inline-block;
+	border-radius: 0px !important;
+}
+.mui-input-row .mui-numbox {
+	margin: 2px 8px;
+	float: right;
+}

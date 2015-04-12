@@ -143,7 +143,7 @@
 					template = plus.webview.getWebviewById("default-main");
 				}
 				if(template){
-					subWebview = template.children()[0];
+					subWebview = template.children()[0];	
 					subWebview.loadURL('examples/info.html');
 					//修改共用父模板的标题
 					mui.fire(template, 'updateHeader', {
