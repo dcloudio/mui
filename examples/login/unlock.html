@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+				overflow: hidden;
+			}
+			.mui-locker {
+				margin: 35px auto;
+			}
+			#forget {
+				display: block;
+				margin-top: 10px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">解锁</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 10px 0px;">
+				<div class="mui-locker" data-locker-options='{"ringColor":"rgba(221,221,221,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}' data-locker-width='320' data-locker-height='320'>
+				</div>
+			</div>
+			<a id='forget'>我忘记了解锁图案</a>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.locker.js"></script>
+		<script src="js/app.js"></script>
+
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var settings = app.getSettings();
+					var forgetButton = doc.querySelector("#forget");
+					var locker = doc.querySelector('.mui-locker');
+					forgetButton.addEventListener('tap', function(event) {
+						settings.gestures = '';
+						app.setSettings(settings);
+						var state = app.getState();
+						state.token = '';
+						app.setState(state);
+						$.openWindow({
+							url: 'login.html',
+							id: 'login'
+						});
+					});
+					locker.addEventListener('done', function(event) {
+						var rs = event.detail;
+						if (settings.gestures == rs.points.join('')) {
+							$.openWindow({
+								url: 'main.html',
+								id: 'main'
+							});
+							rs.sender.clear();
+						} else {
+							plus.nativeUI.toast('解锁手势错误');
+							rs.sender.clear();
+						}
+					}, false);
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>
