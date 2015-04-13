@@ -333,10 +333,22 @@ var mui = (function(document, undefined) {
 				return callback.call(el, idx, el) !== false;
 			});
 			return this;
+		},
+		/**
+		 * transfer HTMLElements to Array
+		 * @returns {Array}
+		 */
+		toArray: function() {
+			return [].slice.call(this);
 		}
 	};
 	return $;
 })(document);
+
+// static variable for header and footer height
+mui.HEADER_HEIGHT = '48px';
+mui.FOOTER_HEIGHT = '50px';
+
 //window.mui = mui;
 //'$' in window || (window.$ = mui);
 /**
