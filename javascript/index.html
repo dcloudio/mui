@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-03-30 16:37:17 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-03-30 16:37:17 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-04-20 12:10:17 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-04-20 12:10:17 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -454,15 +454,15 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		<span class="c1">//服务器返回响应，根据响应结果，分析是否登录成功；</span>
 		<span class="p">...</span>
 	<span class="p">},</span><span class="s1">&#39;json&#39;</span>
-<span class="p">});</span></code></pre></div>	
+<span class="p">);</span></code></pre></div>	
 	<p class="component-description"><code>mui.get()</code>方法和<code>mui.post()</code>方法类似，只不过是直接使用GET请求方式向服务器发送数据、且不处理timeout和异常（若需处理异常及超时，请使用<code>mui.ajax()</code>方法），使用方法：
 		<code>mui.get(url[,data][,success][,dataType])</code>，如下为获得某服务器新闻列表的代码片段，服务器以json格式返回数据列表
 		</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;http://server-name/list.php&#39;</span><span class="p">,{</span><span class="nx">category</span><span class="o">:</span><span class="s1">&#39;news&#39;</span><span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-	<span class="c1">//获得服务器响应</span>
-	<span class="p">...</span>
+		<span class="c1">//获得服务器响应</span>
+		<span class="p">...</span>
 	<span class="p">},</span><span class="s1">&#39;json&#39;</span>
-<span class="p">});</span></code></pre></div>
+<span class="p">);</span></code></pre></div>
 <p class="component-description">
 			如上<code>mui.get()</code>方法和如下<code>mui.ajax()</code>方法效果是一致的：</p>
 		</p>
@@ -481,10 +481,10 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 		<p class="component-description" ><code>mui.getJSON()</code>方法是在<code>mui.get()</code>方法基础上的更进一步简化，限定返回json格式的数据，其它参数和<code>mui.get()</code>方法一致，使用方法：
 		<code>mui.get(url[,data][,success])</code>，如上获得新闻列表的代码换成<code>mui.getJSON()</code>方法后，更为简洁，如下：</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">mui</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;http://server-name/list.php&#39;</span><span class="p">,{</span><span class="nx">category</span><span class="o">:</span><span class="s1">&#39;news&#39;</span><span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-	<span class="c1">//获得服务器响应</span>
-	<span class="p">...</span>
+		<span class="c1">//获得服务器响应</span>
+		<span class="p">...</span>
 	<span class="p">}</span>
-<span class="p">});</span></code></pre></div>
+<span class="p">);</span></code></pre></div>
 		
 	
 
@@ -1065,7 +1065,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
 	</p>
 	<ul class="docs-footer-links">
-		<li>最新版本 v1.4.0</li>
+		<li>最新版本 v1.5.0</li>
 		<li>&middot;</li>
 		<li><a href="http://ask.dcloud.net.cn">问答社区</a></li>
 		<li>&middot;</li>
@@ -1079,8 +1079,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-03-30 16:37:17 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-03-30 16:37:17 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-04-20 12:10:17 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-04-20 12:10:17 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));

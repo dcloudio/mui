@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.4.0 (https://github.com/dcloudio/mui)
+ * Mui v1.5.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -656,6 +656,9 @@ var mui = (function(document, undefined) {
 			}
 			var target = e.target;
 			if (target.tagName && target.tagName === 'INPUT' && target.type === 'text') {
+				if (target.disabled || target.readOnly) {
+					return;
+				}
 				document.body.classList.add(CLASS_FOCUSIN);
 				var isFooter = false;
 				for (; target && target !== document; target = target.parentNode) {
@@ -1370,7 +1373,7 @@ var mui = (function(document, undefined) {
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}) + "')");
+			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c") + "')");
 		}
 	};
 	/**
@@ -2764,12 +2767,12 @@ var mui = (function(document, undefined) {
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
 				this.resetPosition(); //reset
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 				//				e.stopPropagation();
 				e.preventDefault();
 			}
 			this.reLayout();
-			$.trigger(this.wrapper, 'beforescrollstart', this);
+			$.trigger(this.scroller, 'beforescrollstart', this);
 		},
 		_getDirectionByAngle: function(angle) {
 			if (angle < -80 && angle > -100) {
@@ -2805,13 +2808,13 @@ var mui = (function(document, undefined) {
 			if (detail.direction === 'left' || detail.direction === 'right') {
 				if (this.options.scrollX) {
 					isPreventDefault = true;
-					if (!this.moved) { //识别角度
-						if (direction !== 'left' && direction !== 'right') {
-							isReturn = true;
-						} else {
-							$.gestures.touch.lockDirection = true; //锁定方向
-							$.gestures.touch.startDirection = detail.direction;
-						}
+					if (!this.moved) { //识别角度(该角度导致轮播不灵敏)
+						//						if (direction !== 'left' && direction !== 'right') {
+						//							isReturn = true;
+						//						} else {
+						$.gestures.touch.lockDirection = true; //锁定方向
+						$.gestures.touch.startDirection = detail.direction;
+						//						}
 					}
 				} else if (this.options.scrollY && !this.moved) {
 					isReturn = true;
@@ -2842,7 +2845,7 @@ var mui = (function(document, undefined) {
 				return;
 			}
 			if (!this.moved) {
-				$.trigger(this.wrapper, 'scrollstart', this);
+				$.trigger(this.scroller, 'scrollstart', this);
 			} else {
 				e.stopPropagation(); //move期间阻止冒泡(scroll嵌套)
 			}
@@ -2882,7 +2885,7 @@ var mui = (function(document, undefined) {
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
-			$.trigger(this.wrapper, 'scroll', this);
+			$.trigger(this.scroller, 'scroll', this);
 		},
 		_flick: function(e) {
 			//			if (!this.moved || this.needReset) {
@@ -2910,7 +2913,7 @@ var mui = (function(document, undefined) {
 			this.scrollTo(newX, newY); // ensures that the last position is rounded
 
 			if (e.type === 'dragend') { //dragend
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 				return;
 			}
 			var time = 0;
@@ -2939,7 +2942,7 @@ var mui = (function(document, undefined) {
 				return;
 			}
 
-			$.trigger(this.wrapper, 'scrollend', this);
+			$.trigger(this.scroller, 'scrollend', this);
 			//			e.stopPropagation();
 		},
 		_end: function(e) {
@@ -2955,12 +2958,12 @@ var mui = (function(document, undefined) {
 			this._transitionTime();
 			if (!this.resetPosition(this.options.bounceTime)) {
 				this.isInTransition = false;
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 			}
 		},
 		_scrollend: function(e) {
 			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
-				$.trigger(this.wrapper, 'scrollbottom', this);
+				$.trigger(this.scroller, 'scrollbottom', this);
 			}
 		},
 		_resize: function() {
@@ -3117,7 +3120,7 @@ var mui = (function(document, undefined) {
 					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -parallaxY) + ' scale(' + scale + ',' + scale + ')';
 				} else {
 					this.parallaxImgStyle['opacity'] = 1;
-					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -10) + ' scale(1,1)';
+					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -1) + ' scale(1,1)';
 				}
 			}
 			if (this.indicators) {
@@ -3177,7 +3180,7 @@ var mui = (function(document, undefined) {
 		},
 		refresh: function() {
 			this.reLayout();
-			$.trigger(this.wrapper, 'refresh', this);
+			$.trigger(this.scroller, 'refresh', this);
 			this.resetPosition();
 		},
 		scrollTo: function(x, y, time, easing) {
@@ -4701,7 +4704,7 @@ var mui = (function(document, undefined) {
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
-		this.setAttribute('style', '');
+		setStyle(this,'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener('touchmove', $.preventDefault);
 		fixedPopoverScroll(false);
@@ -4788,7 +4791,7 @@ var mui = (function(document, undefined) {
 				//				}
 			}
 		}
-		popover.setAttribute('style', 'display:block'); //actionsheet transform
+		setStyle(popover, 'block'); //actionsheet transform
 		popover.offsetHeight;
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
@@ -4797,6 +4800,15 @@ var mui = (function(document, undefined) {
 		calPosition(popover, anchor, isActionSheet); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 		popover.addEventListener('webkitTransitionEnd', onPopoverShown);
+	};
+	var setStyle = function(popover, display, top, left) {
+		var style = popover.style;
+		if (typeof display !== 'undefined')
+			style.display = display;
+		if (typeof top !== 'undefined')
+			style.top = top + 'px';
+		if (typeof left !== 'undefined')
+			style.left = left + 'px';
 	};
 	var calPosition = function(popover, anchor, isActionSheet) {
 		if (!popover || !anchor) {
@@ -4808,7 +4820,7 @@ var mui = (function(document, undefined) {
 		var pWidth = popover.offsetWidth;
 		var pHeight = popover.offsetHeight;
 		if (isActionSheet) { //actionsheet
-			popover.setAttribute('style', 'display:block;top:' + (wHeight - pHeight + window.pageYOffset) + 'px;left:' + (wWidth - pWidth) / 2 + 'px;');
+			setStyle(popover, 'block', (wHeight - pHeight + window.pageYOffset), (wWidth - pWidth) / 2)
 			return;
 		}
 		var aWidth = anchor.offsetWidth;
@@ -4862,7 +4874,7 @@ var mui = (function(document, undefined) {
 		} else if (position === 'middle') {
 			arrow.setAttribute('style', 'display:none');
 		}
-		popover.setAttribute('style', 'display:block;top:' + pTop + 'px;left:' + pLeft + 'px;');
+		setStyle(popover, 'block', pTop, pLeft);
 	};
 
 	$.createMask = function(callback) {
