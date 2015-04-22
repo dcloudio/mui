@@ -28,16 +28,16 @@
 				margin-left: -15px;
 				padding-right: 10px;
 			}
-			#info{
-		  		padding: 20px 10px ;
-		  	}
-		  	.des{
-		  		margin: .5em 0;
-		  	}
-		  	.des>li{
-		  		font-size: 14px;
+			#info {
+				padding: 20px 10px;
+			}
+			.des {
+				margin: .5em 0;
+			}
+			.des>li {
+				font-size: 14px;
 				color: #8f8f94;
-		  	}
+			}
 		</style>
 	</head>
 
@@ -69,9 +69,11 @@
 					<a href="#picture" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开actionsheet</a>
 				</p>
 				<p>本页面为H5模式的actionsheet演示示例，该模式具有如下优点：</p>
-					<ul class="des"><li>可通过css自由定制展现样式</li></ul>
-					
-				<p>另一方面，H5模式的actionsheet也具备如下缺点：</p>	
+				<ul class="des">
+					<li>可通过css自由定制展现样式</li>
+				</ul>
+
+				<p>另一方面，H5模式的actionsheet也具备如下缺点：</p>
 				<ul class="des">
 					<li>不支持覆盖顶部状态栏</li>
 					<li>不支持跨webview的遮罩</li>
@@ -80,8 +82,6 @@
 				<p id="info"></p>
 			</div>
 		</div>
-
-
 
 		<div id="delete" class="mui-popover mui-popover-action mui-popover-bottom">
 			<ul class="mui-table-view">
@@ -131,9 +131,10 @@
 
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/app.js"></script>
 	<script>
-		mui.init();
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
 		mui('body').on('shown', '.mui-popover', function(e) {
 			//console.log('shown', e.detail.id);//detail为当前popover元素
 		});
@@ -141,17 +142,18 @@
 			//console.log('hidden', e.detail.id);//detail为当前popover元素
 		});
 		var info = document.getElementById("info");
-		mui('body').on('tap','.mui-popover-action li>a',function () {
-			var a = this,parent;
+		mui('body').on('tap', '.mui-popover-action li>a', function() {
+			var a = this,
+				parent;
 			//根据点击按钮，反推当前是哪个actionsheet
-			for(parent=a.parentNode;parent!=document.body;parent=parent.parentNode){
-				if(parent.classList.contains('mui-popover-action')){
+			for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
+				if (parent.classList.contains('mui-popover-action')) {
 					break;
 				}
 			}
 			//关闭actionsheet
-			mui('#'+parent.id).popover('toggle');
-			info.innerHTML = "你刚点击了\""+a.innerHTML+"\"按钮";
+			mui('#' + parent.id).popover('toggle');
+			info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
 		})
 	</script>
 

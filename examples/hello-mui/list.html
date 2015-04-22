@@ -8,8 +8,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="css/mui.min.css">
-		<script src="js/mui.min.js"></script>
-		<script src="js/app.js"></script>
 		<style type="text/css">
 			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
@@ -328,6 +326,7 @@
 				</li>
 			</ul>
 		</div>
+		<script src="js/mui.min.js"></script>
 		<script>
 			//只有ios支持的功能需要在Android平台隐藏；
 			if (mui.os.android) {
@@ -340,13 +339,7 @@
 			}
 			
 			
-			mui.init({
-				preloadLimit: 5, //同时并存的预加载窗口数量
-				swipeBack: false,
-				keyEventBind: {
-					backbutton: false
-				}
-			});
+			mui.init();
 			var templates = {};
 			var getTemplate = function(name, header, content, loading) {
 				var template = templates[name];

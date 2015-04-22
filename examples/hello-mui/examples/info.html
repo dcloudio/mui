@@ -59,9 +59,10 @@
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			mui.init();
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
 			//处理点击事件，需要打开原生浏览器
 			mui('body').on('tap', 'a', function(e) {
 				var href = this.getAttribute('href');

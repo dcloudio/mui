@@ -86,16 +86,12 @@
 				</ul>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			mui.init({
-				swipeBack:false
-			});
+			mui.init();
 			//获得侧滑主窗口webview对象
 			var main = null;
 			mui.plusReady(function () {
 				main = plus.webview.currentWebview().opener();
-				
 			})
 			function closeMenu () {
 				mui.fire(main,"menu:swipeleft");
