@@ -1,25 +1,9 @@
 /**
- * <div class=“mui-views">
-	<div class=“mui-view">
-		<div class=“mui-navbar">
-			<div class=“mui-navbar-inner”>
-				<div class=“mui-navbar-left”></div>
-			        <div class=“mui-navbar-center”></div>
-		        	<div class=“mui-navbar-right”></div>
-			 </div>
-			<div class=“mui-navbar-inner”>
-				<div class=“mui-navbar-left”></div>
-			        <div class=“mui-navbar-center”></div>
-		        	<div class=“mui-navbar-right”></div>
-			 </div>
+ * <div id="app" class="mui-views">
+	<div class="mui-view">
+		<div class="mui-navbar">
 		</div>
-		<div class=“mui-pages”>
-		     <div class=“mui-page”>
-				<div class=“mui-page-content"></div>
-			 </div>
-		        <div class=“mui-page”>
-				<div class=“mui-page-content"></div>
-			 </div>
+		<div class="mui-pages">
 		</div>
 	</div>
 </div>
@@ -107,6 +91,7 @@
 			}
 		},
 		initEvent: function() {
+			this.view.addEventListener('click', this);
 			this.view.addEventListener('tap', this);
 			this.pages.addEventListener('drag', this);
 			this.pages.addEventListener('dragend', this);
@@ -114,6 +99,9 @@
 		},
 		handleEvent: function(event) {
 			switch (event.type) {
+				case 'click':
+					this._click(event);
+					break;
 				case 'tap':
 					this._tap(event);
 					break;
@@ -184,6 +172,18 @@
 				}
 			}
 		},
+		_click: function(event) {
+			var target = event.target;
+			for (; target && target !== document; target = target.parentNode) {
+				if (target.tagName === 'A' && target.hash) {
+					var page = document.getElementById(target.hash.replace('#', ''));
+					if (page && page.classList.contains(CLASS_PAGE)) {
+						event.preventDefault();
+						break;
+					}
+				}
+			}
+		},
 		_cleanStyle: function(el) {
 			if (el) {
 				el.style.webkitTransform = '';
@@ -192,10 +192,10 @@
 		},
 		_webkitTransitionEnd: function(event) {
 			this.dragging = this.moved = false;
-
 			if (this.activePage !== event.target) {
 				return;
 			}
+
 			this.isInTransition = false;
 
 			this.shadow.parentNode === this.activePage && this.activePage.removeChild(this.shadow);
@@ -575,7 +575,6 @@
 				this._appendPage(nextPage);
 				nextPage.appendChild(this.shadow); //shadow
 				nextPage.offsetHeight; //force
-
 				this.isBack = false;
 				this.ratio = 1;
 

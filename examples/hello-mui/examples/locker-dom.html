@@ -9,9 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../css/mui.min.css" />
 		<style>
-			* {
-				box-sizing: border-box;
-			}
 			html,
 			body {
 				width: 100%;
@@ -29,23 +26,17 @@
 				margin: 50px auto;
 				background-color: #fff;
 			}
-			#alert {
-				width: 300px;
-				height: 45px;
-				line-height: 45px;
-				text-align: center;
-				color: red;
-				margin: auto auto;
-				border: dashed 1px #bbb;
-				border-radius: 5px;
-				background-color: #fff;
-			}
+			#alert{
+				text-align:center;
+			  	padding: 20px 10px ;
+			  }
 		</style>
 	</head>
 
 	<body>
-		<div id='holder' class="mui-locker" data-locker-options='{"ringColor":"rgba(221,221,221,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}'></div>
+		<div id='holder' class="mui-locker" data-locker-options='{"ringColor":"rgba(210,210,210,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}'></div>
 		<div id='alert'></div>
+		
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/mui.locker.js"></script>
 		<script>

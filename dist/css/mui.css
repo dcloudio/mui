@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.5.0 (https://github.com/dcloudio/mui)
+ * Mui v1.6.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1465,6 +1465,23 @@ input[type="submit"]:enabled:active, input[type="submit"].mui-active:enabled,
   margin-right: -65px;
 }
 
+.mui-table-view-radio .mui-table-view-cell {
+  padding-right: 65px;
+}
+.mui-table-view-radio .mui-table-view-cell > a:not(.mui-btn) {
+  margin-right: -65px;
+}
+.mui-table-view-radio .mui-table-view-cell .mui-navigate-right:after {
+  right: 9px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #007aff;
+  content: '';
+}
+.mui-table-view-radio .mui-table-view-cell.mui-selected .mui-navigate-right:after {
+  content: '\e472';
+}
+
 .mui-table-view-inverted {
   color: #fff;
   background: #333;
@@ -1564,8 +1581,15 @@ input[type="submit"]:enabled:active, input[type="submit"].mui-active:enabled,
   -webkit-transition: -webkit-transform 300ms ease;
           transition:         transform 300ms ease;
 }
+.mui-table-view-cell.mui-active > .mui-slider-handle {
+  background-color: #eee;
+}
 .mui-table-view-cell > .mui-slider-handle {
+  position: relative;
   background-color: #fff;
+}
+.mui-table-view-cell > .mui-slider-handle.mui-navigate-right:after, .mui-table-view-cell > .mui-slider-handle .mui-navigate-right:after {
+  right: 0;
 }
 .mui-table-view-cell > .mui-slider-handle, .mui-table-view-cell > .mui-slider-left .mui-btn, .mui-table-view-cell > .mui-slider-right .mui-btn {
   -webkit-transition: -webkit-transform 0ms ease;
@@ -1966,7 +1990,9 @@ input[type="color"] {
   outline: none;
 }
 
+input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
   margin: 0;
 }
 
@@ -3579,6 +3605,11 @@ select:focus {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
 }
+.mui-fullscreen .mui-off-canvas-wrap .mui-slider-item > a {
+  top: auto;
+  -webkit-transform: none;
+          transform: none;
+}
 
 .mui-bar-tab ~ .mui-content .mui-slider.mui-fullscreen .mui-segmented-control ~ .mui-slider-group {
   bottom: 50px;
@@ -3587,4 +3618,9 @@ select:focus {
 .mui-android.mui-android-4-0 input:focus,
 .mui-android.mui-android-4-0 textarea:focus {
   -webkit-user-modify: inherit;
+}
+
+.mui-ios .mui-table-view-cell {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
 }

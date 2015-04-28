@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.5.0 (https://github.com/dcloudio/mui)
+ * Mui v1.6.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -114,6 +114,10 @@ var mui = (function(document, undefined) {
 	 * mui slice(array)
 	 */
 	$.slice = [].slice;
+	/**
+	 * mui filter(array)
+	 */
+	$.filter = [].filter;
 
 	$.type = function(obj) {
 		return obj == null ? String(obj) : class2type[{}.toString.call(obj)] || "object";
@@ -142,6 +146,18 @@ var mui = (function(document, undefined) {
 	 */
 	$.isPlainObject = function(obj) {
 		return $.isObject(obj) && !$.isWindow(obj) && Object.getPrototypeOf(obj) === Object.prototype;
+	};
+	/**
+	 * mui isEmptyObject
+	 * @param {Object} o
+	 */
+	$.isEmptyObject = function(o) {
+		for (var p in o) {
+			if (p !== undefined) {
+				return false;
+			}
+		}
+		return true;
 	};
 	/**
 	 * mui isFunction
@@ -317,6 +333,40 @@ var mui = (function(document, undefined) {
 		$[type] = handlers;
 		return $[type];
 	};
+	/**
+	 * setTimeout封装
+	 * @param {Object} fn
+	 * @param {Object} when
+	 * @param {Object} context
+	 * @param {Object} data
+	 */
+	$.later = function(fn, when, context, data) {
+		when = when || 0;
+		var m = fn;
+		var d = data;
+		var f;
+		var r;
+
+		if (typeof fn === 'string') {
+			m = context[fn];
+		}
+
+		f = function() {
+			m.apply(context, $.isArray(d) ? d : [d]);
+		};
+
+		r = setTimeout(f, when);
+
+		return {
+			id: r,
+			cancel: function() {
+				clearTimeout(r);
+			}
+		};
+	};
+	$.now = Date.now || function() {
+		return +new Date();
+	};
 	var class2type = {};
 	$.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
 		class2type["[object " + name + "]"] = name.toLowerCase();
@@ -335,6 +385,16 @@ var mui = (function(document, undefined) {
 			return this;
 		}
 	};
+
+	/**
+	 * 兼容 AMD 模块
+	 **/
+	if (typeof define === 'function' && define.amd) {
+		define('mui', [], function() {
+			return $;
+		});
+	}
+
 	return $;
 })(document);
 //window.mui = mui;
@@ -819,7 +879,7 @@ var mui = (function(document, undefined) {
 	};
 	var detectTouchStart = function(event) {
 		$.gestures.stoped = false;
-		var now = Date.now();
+		var now = $.now();
 		var point = event.touches ? event.touches[0] : event;
 		$.gestures.touch = {
 			target: event.target,
@@ -867,7 +927,7 @@ var mui = (function(document, undefined) {
 		if (event.target != touch.target) {
 			return;
 		}
-		var now = Date.now();
+		var now = $.now();
 		var point = event.touches ? event.touches[0] : event;
 		touch.touchTime = now - touch.startTime;
 		touch.move = {
@@ -897,7 +957,7 @@ var mui = (function(document, undefined) {
 		if (event.target != touch.target) {
 			return;
 		}
-		var now = Date.now();
+		var now = $.now();
 		touch.touchTime = now - touch.startTime;
 		touch.flickTime = now - touch.flickStartTime;
 		touch.flickDistanceX = touch.move.x - touch.flickStart.x;
@@ -1095,13 +1155,13 @@ var mui = (function(document, undefined) {
 				if ($.options.gestureConfig.doubletap && touch.lastTarget && (touch.lastTarget === event.target)) { //same target
 					if (touch.lastTapTime && (touch.startTime - touch.lastTapTime) < options.tapMaxInterval) {
 						$.trigger(event.target, 'doubletap', touch);
-						touch.lastTapTime = Date.now();
+						touch.lastTapTime = $.now();
 						touch.lastTarget = event.target;
 						return;
 					}
 				}
 				$.trigger(event.target, name, touch);
-				touch.lastTapTime = Date.now();
+				touch.lastTapTime = $.now();
 				touch.lastTarget = event.target;
 			}
 		}
@@ -2065,7 +2125,7 @@ var mui = (function(document, undefined) {
 		var dataType = settings.dataType;
 
 		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
-			settings.url = appendQuery(settings.url, '_=' + Date.now());
+			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
 		var mime = settings.accepts[dataType];
 		var headers = {};
@@ -2767,12 +2827,12 @@ var mui = (function(document, undefined) {
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
 				this.resetPosition(); //reset
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 				//				e.stopPropagation();
 				e.preventDefault();
 			}
 			this.reLayout();
-			$.trigger(this.wrapper, 'beforescrollstart', this);
+			$.trigger(this.scroller, 'beforescrollstart', this);
 		},
 		_getDirectionByAngle: function(angle) {
 			if (angle < -80 && angle > -100) {
@@ -2808,13 +2868,13 @@ var mui = (function(document, undefined) {
 			if (detail.direction === 'left' || detail.direction === 'right') {
 				if (this.options.scrollX) {
 					isPreventDefault = true;
-					if (!this.moved) { //识别角度
-						if (direction !== 'left' && direction !== 'right') {
-							isReturn = true;
-						} else {
-							$.gestures.touch.lockDirection = true; //锁定方向
-							$.gestures.touch.startDirection = detail.direction;
-						}
+					if (!this.moved) { //识别角度(该角度导致轮播不灵敏)
+						//						if (direction !== 'left' && direction !== 'right') {
+						//							isReturn = true;
+						//						} else {
+						$.gestures.touch.lockDirection = true; //锁定方向
+						$.gestures.touch.startDirection = detail.direction;
+						//						}
 					}
 				} else if (this.options.scrollY && !this.moved) {
 					isReturn = true;
@@ -2845,7 +2905,7 @@ var mui = (function(document, undefined) {
 				return;
 			}
 			if (!this.moved) {
-				$.trigger(this.wrapper, 'scrollstart', this);
+				$.trigger(this.scroller, 'scrollstart', this);
 			} else {
 				e.stopPropagation(); //move期间阻止冒泡(scroll嵌套)
 			}
@@ -2885,7 +2945,7 @@ var mui = (function(document, undefined) {
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
-			$.trigger(this.wrapper, 'scroll', this);
+			$.trigger(this.scroller, 'scroll', this);
 		},
 		_flick: function(e) {
 			//			if (!this.moved || this.needReset) {
@@ -2913,7 +2973,7 @@ var mui = (function(document, undefined) {
 			this.scrollTo(newX, newY); // ensures that the last position is rounded
 
 			if (e.type === 'dragend') { //dragend
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 				return;
 			}
 			var time = 0;
@@ -2942,7 +3002,7 @@ var mui = (function(document, undefined) {
 				return;
 			}
 
-			$.trigger(this.wrapper, 'scrollend', this);
+			$.trigger(this.scroller, 'scrollend', this);
 			//			e.stopPropagation();
 		},
 		_end: function(e) {
@@ -2958,12 +3018,12 @@ var mui = (function(document, undefined) {
 			this._transitionTime();
 			if (!this.resetPosition(this.options.bounceTime)) {
 				this.isInTransition = false;
-				$.trigger(this.wrapper, 'scrollend', this);
+				$.trigger(this.scroller, 'scrollend', this);
 			}
 		},
 		_scrollend: function(e) {
 			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
-				$.trigger(this.wrapper, 'scrollbottom', this);
+				$.trigger(this.scroller, 'scrollbottom', this);
 			}
 		},
 		_resize: function() {
@@ -3120,7 +3180,7 @@ var mui = (function(document, undefined) {
 					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -parallaxY) + ' scale(' + scale + ',' + scale + ')';
 				} else {
 					this.parallaxImgStyle['opacity'] = 1;
-					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -10) + ' scale(1,1)';
+					this.parallaxStyle['webkitTransform'] = this._getTranslateStr(0, -1) + ' scale(1,1)';
 				}
 			}
 			if (this.indicators) {
@@ -3180,7 +3240,7 @@ var mui = (function(document, undefined) {
 		},
 		refresh: function() {
 			this.reLayout();
-			$.trigger(this.wrapper, 'refresh', this);
+			$.trigger(this.scroller, 'refresh', this);
 			this.resetPosition();
 		},
 		scrollTo: function(x, y, time, easing) {
@@ -4149,14 +4209,22 @@ var mui = (function(document, undefined) {
 				this.initEvent();
 			}
 		},
-		refresh: function() {
+		refresh: function(offCanvas) {
 			this.classList.remove(CLASS_ACTIVE);
 			this.slideIn = this.classList.contains(CLASS_SLIDE_IN);
 			this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
 			this.scroller.classList.remove(CLASS_TRANSITIONING);
 			this.scroller.setAttribute('style', '');
-			this.offCanvasRight = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT);
-			this.offCanvasLeft = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT);
+			if (offCanvas) {
+				if (offCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT)) {
+					this.offCanvasLeft = offCanvas;
+				} else if (offCanvas.classList.contains(CLASS_OFF_CANVAS_RIGHT)) {
+					this.offCanvasRight = offCanvas;
+				}
+			} else {
+				this.offCanvasRight = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT);
+				this.offCanvasLeft = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT);
+			}
 			this.offCanvasRightWidth = this.offCanvasLeftWidth = 0;
 			this.offCanvasLeftSlideIn = this.offCanvasRightSlideIn = false;
 			if (this.offCanvasRight) {
@@ -4493,7 +4561,12 @@ var mui = (function(document, undefined) {
 				this.openPercentage(direction === 'left' ? 100 : -100);
 			}
 		},
-		toggle: function(direction) {
+		toggle: function(directionOrOffCanvas) {
+			var direction = directionOrOffCanvas;
+			if (directionOrOffCanvas && directionOrOffCanvas.classList) {
+				direction = directionOrOffCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT) ? 'left' : 'right';
+				this.refresh(directionOrOffCanvas);
+			}
 			if (this.isShown(direction)) {
 				this.close();
 			} else {
@@ -4548,7 +4621,7 @@ var mui = (function(document, undefined) {
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
-				$($.targets._container).offCanvas().toggle($.targets.offcanvas.classList.contains(CLASS_OFF_CANVAS_LEFT) ? 'left' : 'right');
+				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;
 			}
@@ -5200,6 +5273,7 @@ var mui = (function(document, undefined) {
 	var CLASS_ACTIVE = 'mui-active';
 	var CLASS_SELECTED = 'mui-selected';
 	var CLASS_GRID_VIEW = 'mui-grid-view';
+	var CLASS_RADIO_VIEW = 'mui-table-view-radio';
 	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
 	var CLASS_COLLAPSE_CONTENT = 'mui-collapse-content';
 	var CLASS_DISABLED = 'mui-disabled';
@@ -5222,7 +5296,7 @@ var mui = (function(document, undefined) {
 
 	var isMoved = isOpened = openedActions = progress = false;
 	var sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
-	var translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
+	var timer = translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
 
 
 
@@ -5234,6 +5308,7 @@ var mui = (function(document, undefined) {
 				cell.classList.add(CLASS_ACTIVE);
 			}
 		} else {
+			timer && timer.cancel();
 			if (a) {
 				a.classList.remove(CLASS_ACTIVE);
 			} else if (cell) {
@@ -5309,7 +5384,7 @@ var mui = (function(document, undefined) {
 					cell = target;
 					//TODO swipe to delete close
 					var selected = cell.parentNode.querySelector(SELECTOR_SELECTED);
-					if (selected && selected !== cell) {
+					if (!cell.parentNode.classList.contains(CLASS_RADIO_VIEW) && selected && selected !== cell) {
 						$.swipeoutClose(selected);
 						cell = isDisabled = false;
 						return;
@@ -5320,12 +5395,20 @@ var mui = (function(document, undefined) {
 							a = link;
 						}
 					}
-					if (cell.querySelector(SELECTOR_SLIDER_HANDLE)) {
+					var handle = cell.querySelector(SELECTOR_SLIDER_HANDLE);
+					if (handle) {
 						toggleEvents(cell);
 						event.stopPropagation();
 					}
 					if (!isDisabled) {
-						if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
+						if (handle) {
+							if (timer) {
+								timer.cancel();
+							}
+							timer = $.later(function() {
+								toggleActive(true);
+							}, 100);
+						} else if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
 							toggleActive(true);
 						}
 					}
@@ -5636,6 +5719,21 @@ var mui = (function(document, undefined) {
 		}
 		var isExpand = false;
 		var classList = cell.classList;
+		var ul = cell.parentNode;
+		if (ul.classList.contains(CLASS_RADIO_VIEW)) {
+			if (classList.contains(CLASS_SELECTED)) {
+				return;
+			}
+			var selected = ul.querySelector('li' + SELECTOR_SELECTED);
+			if (selected) {
+				selected.classList.remove(CLASS_SELECTED);
+			}
+			classList.add(CLASS_SELECTED);
+			$.trigger(cell, 'selected', {
+				el: cell
+			});
+			return;
+		}
 		if (classList.contains('mui-collapse') && !cell.parentNode.classList.contains('mui-unfold')) {
 			event.detail.gesture.preventDefault();
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
@@ -5872,6 +5970,9 @@ var mui = (function(document, undefined) {
 			if (actionClass === this.searchActionClass) {
 				action.innerHTML = '<span class="' + CLASS_ICON + ' ' + CLASS_ICON_SEARCH + '"></span>' + this.element.getAttribute('placeholder');
 				this.element.setAttribute('placeholder', '');
+				if (this.element.value.trim()) {
+					row.classList.add('mui-active');
+				}
 			}
 			row.insertBefore(action, this.element.nextSibling);
 		}

@@ -36,9 +36,13 @@
 }
 .mui-numbox .mui-numbox-btn-plus {
 	right: 0px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 .mui-numbox .mui-numbox-btn-minus {
 	left: 0px;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
 }
 .mui-numbox .mui-numbox-input {
 	width: 100% !important;
@@ -52,6 +56,9 @@
 	padding: 0px 3px !important;
 	display: inline-block;
 	border-radius: 0px !important;
+	text-overflow: ellipsis;
+	word-break: normal;
+	overflow: hidden;
 }
 .mui-input-row .mui-numbox {
 	margin: 2px 8px;
