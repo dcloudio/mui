@@ -406,6 +406,10 @@ a:active {
   border-radius: 6px;
 }
 
+.mui-subtitle {
+  font-size: 15px;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin-top: 5px;
   margin-bottom: 5px;
@@ -1694,6 +1698,14 @@ input[type="submit"]:enabled:active, input[type="submit"].mui-active:enabled,
   overflow: hidden;
 }
 
+.mui-table-view .mui-media-large .mui-media-object {
+  max-width: 80px;
+  height: 80px;
+  line-height: 80px;
+}
+.mui-table-view .mui-media .mui-subtitle {
+  color: #000;
+}
 .mui-table-view .mui-media-object {
   max-width: 42px;
   height: 42px;
@@ -3216,6 +3228,71 @@ select:focus {
   text-align: center;
   background-color: #d8d8d8;
   border-radius: 7px;
+}
+
+.mui-numbox {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 35px;
+  padding: 0 40px 0 40px;
+  overflow: hidden;
+  vertical-align: top;
+  vertical-align: middle;
+  background-color: #efeff4;
+  border: solid 1px #bbb;
+  border-radius: 3px;
+}
+.mui-numbox [class*=mui-numbox-btn] {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 100%;
+  color: #555;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 0;
+}
+.mui-numbox [class*=mui-numbox-btn]:active {
+  background-color: #ccc;
+}
+.mui-numbox [class*=mui-numbox-btn][disabled] {
+  color: #c0c0c0;
+}
+.mui-numbox .mui-numbox-btn-plus {
+  right: 0;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.mui-numbox .mui-numbox-btn-minus {
+  left: 0;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.mui-numbox .mui-numbox-input {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 0 3px;
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  word-break: normal;
+  border: none;
+  border-right: solid 1px #ccc;
+  border-left: solid 1px #ccc;
+  border-radius: 0;
+}
+
+.mui-input-row .mui-numbox {
+  float: right;
+  margin: 2px 8px;
 }
 
 @font-face {
