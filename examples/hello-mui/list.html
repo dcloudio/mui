@@ -327,13 +327,18 @@
 				
 				<li class="mui-table-view-divider">模板</li>
 				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/lazyload-image.html">
+						lazyload（懒加载） 
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/locker-dom.html">
 						locker（手势图案锁屏） 
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/lazyload-image.html">
-						lazyload（懒加载） 
+					<a class="mui-navigate-right" open-type="common" href="examples/setting.html">
+						setting（设置）
 					</a>
 				</li>
 			</ul>
@@ -458,11 +463,11 @@
 						mui.fire(headerWebview,'updateHeader',{title:title,showMenu:showMenu});
 						var reload = true;
 						if (!template.loaded) {
-							//if (contentWebview.getURL() != this.href) {
+							if (contentWebview.getURL() != this.href) {
 								contentWebview.loadURL(this.href);
-							//} else {
-							//	reload = false;
-							//}
+							} else {
+								reload = false;
+							}
 						} else {
 							reload = false;
 						}

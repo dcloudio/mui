@@ -2240,12 +2240,15 @@ select:focus {
   border: 0;
   outline: 0 !important;
 }
+.mui-radio input[type="radio"][disabled]:before, .mui-checkbox input[type="checkbox"][disabled]:before {
+  opacity: .3;
+}
 .mui-radio input[type="radio"]:before, .mui-checkbox input[type="checkbox"]:before {
   font-family: Muiicons;
   font-size: 28px;
   font-weight: normal;
   line-height: 1;
-  color: rgba(170, 170, 170, .6);
+  color: #aaa;
   text-decoration: none;
   background: none;
   border-radius: 0;
@@ -2254,6 +2257,10 @@ select:focus {
 }
 .mui-radio input[type="radio"]:checked:before, .mui-checkbox input[type="checkbox"]:checked:before {
   color: #007aff;
+}
+
+.mui-radio.mui-disabled label, .mui-radio label.mui-disabled, .mui-checkbox.mui-disabled label, .mui-checkbox label.mui-disabled {
+  opacity: .4;
 }
 
 .mui-radio input[type="radio"]:before {
@@ -3276,18 +3283,18 @@ select:focus {
 }
 .mui-numbox .mui-numbox-input {
   display: inline-block;
-  width: 100%;
+  width: 100% !important;
   height: 100%;
-  padding: 0 3px;
+  padding: 0 3px !important;
   margin: 0;
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
   word-break: normal;
-  border: none;
-  border-right: solid 1px #ccc;
-  border-left: solid 1px #ccc;
-  border-radius: 0;
+  border: none !important;
+  border-right: solid 1px #ccc !important;
+  border-left: solid 1px #ccc !important;
+  border-radius: 0 !important;
 }
 
 .mui-input-row .mui-numbox {

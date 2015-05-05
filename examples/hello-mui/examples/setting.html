@@ -28,7 +28,7 @@
 				height: 100%;
 				background-color: #efeff4;
 			}
-			.mui-pages{
+			.mui-pages {
 				top: 46px;
 				height: auto;
 			}
@@ -36,7 +36,6 @@
 			.mui-scroll {
 				background-color: #efeff4;
 			}
-			
 			.mui-page.mui-transitioning {
 				-webkit-transition: -webkit-transform 200ms ease;
 				transition: transform 200ms ease;
@@ -102,6 +101,7 @@
 				width: 1px;
 				background-color: rgba(0, 0, 0);
 			}*/
+			
 			.mui-navbar-inner.mui-transitioning,
 			.mui-navbar-inner .mui-transitioning {
 				-webkit-transition: opacity 200ms ease, -webkit-transform 200ms ease;
@@ -140,6 +140,7 @@
 	</head>
 
 	<body>
+		<!--页面主结构开始-->
 		<div id="app" class="mui-views">
 			<div class="mui-view">
 				<div class="mui-navbar">
@@ -148,13 +149,18 @@
 				</div>
 			</div>
 		</div>
+		<!--页面主结构结束-->
+		<!--单页面开始-->
 		<div id="setting" class="mui-page">
+			<!--页面标题栏开始-->
 			<div class="mui-navbar-inner mui-bar mui-bar-nav">
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
 					<span class="mui-icon mui-icon-left-nav"></span>
 				</button>
 				<h1 class="mui-center mui-title">设置</h1>
 			</div>
+			<!--页面标题栏结束-->
+			<!--页面主内容区开始-->
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
@@ -176,7 +182,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
 							<li class="mui-table-view-cell">
-								<a href="#about" class="mui-navigate-right">关于微信</a>
+								<a href="#about" class="mui-navigate-right">关于MUI</a>
 							</li>
 						</ul>
 						<ul class="mui-table-view">
@@ -187,7 +193,9 @@
 					</div>
 				</div>
 			</div>
+			<!--页面主内容区结束-->
 		</div>
+		<!--单页面结束-->
 		<div id="account" class="mui-page">
 			<div class="mui-navbar-inner mui-bar mui-bar-nav">
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
@@ -200,7 +208,7 @@
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								<a>微信号<span class="mui-pull-right">xxxxxx</span></a>
+								<a>HBuilder账号<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
 							</li>
 						</ul>
 						<ul class="mui-table-view">
@@ -211,18 +219,7 @@
 								<a>手机号<span class="mui-pull-right">18601234567</span></a>
 							</li>
 							<li class="mui-table-view-cell">
-								<a>邮箱地址<span class="mui-pull-right">xxx@xxx.com</span></a>
-							</li>
-						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								<a>微信密码</a>
-							</li>
-							<li class="mui-table-view-cell">
-								<a>账号保护</a>
-							</li>
-							<li class="mui-table-view-cell">
-								<a>微信安全中心</a>
+								<a>邮箱地址<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
 							</li>
 						</ul>
 					</div>
@@ -247,16 +244,23 @@
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								通知显示消息详情
-								<div class="mui-switch mui-active">
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
 						</ul>
+						<div class="mui-content-padded">
+							<p>若关闭，当收到新消息时，通知提示将不显示发信人和内容摘要</p>
+						</div>
+
 						<ul class="mui-table-view mui-table-view-chevron">
 							<li class="mui-table-view-cell">
 								<a href="#notifications_disturb" class="mui-navigate-right">功能消息免打扰</a>
 							</li>
 						</ul>
+						<div class="mui-content-padded">
+							<p>设置系统功能消息提示声音和震动的时段</p>
+						</div>
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								<a>接收新消息通知<span class="mui-pull-right">已开启</span></a>
@@ -265,25 +269,21 @@
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								声音
-								<div class="mui-switch mui-active">
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
 							<li class="mui-table-view-cell">
 								震动
-								<div class="mui-switch mui-active">
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
 						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								朋友圈照片更新
-								<div class="mui-switch mui-active">
-									<div class="mui-switch-handle"></div>
-								</div>
-							</li>
-						</ul>
+						<div class="mui-content-padded">
+							<p>当HelloMUI在运行时，你可以设置是否需要声音或者震动</p>
+						</div>
+						<div></div>
 					</div>
 				</div>
 			</div>
@@ -298,15 +298,15 @@
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<ul class="mui-table-view">
+						<ul class="mui-table-view mui-table-view-radio">
 							<li class="mui-table-view-cell">
-								<a>开启</a>
+								<a class="mui-navigate-right">开启</a>
 							</li>
 							<li class="mui-table-view-cell">
-								<a>只在夜间开启</a>
+								<a class="mui-navigate-right">只在夜间开启</a>
 							</li>
 							<li class="mui-table-view-cell">
-								<a>关闭</a>
+								<a class="mui-navigate-right">关闭</a>
 							</li>
 						</ul>
 					</div>
@@ -327,7 +327,7 @@
 							<li class="mui-table-view-divider">通讯录</li>
 							<li class="mui-table-view-cell">
 								加我为朋友时需要验证
-								<div class="mui-switch mui-active">
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
@@ -335,13 +335,13 @@
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								向我推荐QQ好友
-								<div class="mui-switch">
+								<div class="mui-switch mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
 							<li class="mui-table-view-cell">
 								通过QQ号搜索到我
-								<div class="mui-switch">
+								<div class="mui-switch mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
@@ -349,49 +349,28 @@
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								可通过手机号搜索到我
-								<div class="mui-switch mui-active">
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
 							<li class="mui-table-view-cell">
 								向我推荐通讯录朋友
-								<div class="mui-switch">
+								<div class="mui-switch mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
-							<li class="mui-table-view-divider">开启后，为你推荐已经开通微信的手机联系人</li>
+							<li class="mui-table-view-divider">开启后，为你推荐已经开通HBuilder的手机联系人</li>
 						</ul>
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								通过微信号搜索到我
-								<div class="mui-switch mui-active">
+								通过HBuilder账号搜索到我
+								<div class="mui-switch mui-active mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
-							<li class="mui-table-view-divider">关闭后，其他用户将不能通过微信号搜索到你</li>
+							<li class="mui-table-view-divider">关闭后，其他用户将不能通过HBuilder号搜索到你</li>
 						</ul>
-						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell">
-								<a>通讯录黑名单</a>
-							</li>
-						</ul>
-						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-divider">朋友圈</li>
-							<li class="mui-table-view-cell">
-								<a>不让他(她)看我的朋友圈</a>
-							</li>
-							<li class="mui-table-view-cell">
-								<a>不看他(她)的朋友圈</a>
-							</li>
-						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								允许陌生人查看十张照片
-								<div class="mui-switch">
-									<div class="mui-switch-handle"></div>
-								</div>
-							</li>
-						</ul>
+
 					</div>
 				</div>
 			</div>
@@ -411,24 +390,11 @@
 								多语言
 							</li>
 						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								字体大小
-							</li>
-							<li class="mui-table-view-cell">
-								<a href="#general_bg" class="mui-navigate-right">聊天背景</a>
-							</li>
-							<li class="mui-table-view-cell">
-								我的背景
-							</li>
-							<li class="mui-table-view-cell">
-								<a href="#general_video" class="mui-navigate-right">朋友圈小视频</a>
-							</li>
-						</ul>
+
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
 								听筒模式
-								<div class="mui-switch">
+								<div class="mui-switch mui-switch-mini">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</li>
@@ -438,94 +404,24 @@
 								功能
 							</li>
 						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								聊天记录迁移
-							</li>
-							<li class="mui-table-view-cell">
-								清理微信存储空间
-							</li>
-						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell" style="text-align: center;">
-								清空聊天记录
-							</li>
-						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="general_bg" class="mui-page">
-			<div class="mui-navbar-inner mui-bar mui-bar-nav">
-				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-					<span class="mui-icon mui-icon-left-nav"></span>通用
-				</button>
-				<h1 class="mui-center mui-title">聊天背景</h1>
-			</div>
-			<div class="mui-page-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								选择背景图
-							</li>
-						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								从手机相册选择
-							</li>
-							<li class="mui-table-view-cell">
-								拍一张
-							</li>
-						</ul>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell" style="text-align: center;">
-								将背景应用到所有聊天背景
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="general_video" class="mui-page">
-			<div class="mui-navbar-inner mui-bar mui-bar-nav">
-				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
-					<span class="mui-icon mui-icon-left-nav"></span>通用
-				</button>
-				<h1 class="mui-center mui-title">朋友圈小视频</h1>
-			</div>
-			<div class="mui-page-content">
-				<div class="mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-divider">朋友圈自动播放小视频</li>
-							<li class="mui-table-view-cell">
-								<a>3G/4G和Wi-Fi</a>
-							</li>
-							<li class="mui-table-view-cell">
-								<a>仅Wi-Fi</a>
-							</li>
-							<li class="mui-table-view-cell">
-								<a>关闭</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
+
 		<div id="about" class="mui-page">
 			<div class="mui-navbar-inner mui-bar mui-bar-nav">
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
 					<span class="mui-icon mui-icon-left-nav"></span>设置
 				</button>
-				<h1 class="mui-center mui-title">关于微信</h1>
+				<h1 class="mui-center mui-title">关于MUI</h1>
 			</div>
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								去评分
+								<a id="rate">去评分</a>
 							</li>
 							<li class="mui-table-view-cell">
 								欢迎页
@@ -549,12 +445,26 @@
 	<script src="../js/mui.view.js "></script>
 	<script>
 		mui.init();
+		 //初始化单页view
 		var viewApi = mui('#app').view({
 			defaultPage: '#setting'
 		});
+		 //初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
 		var view = viewApi.view;
 		(function($) {
+			//去评分
+			var rateLinkEl = document.getElementById("rate");
+			var rateLink = '';
+			if ($.os.ios) {
+				rateLink = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
+			} else if ($.os.plus && $.os.android) {
+				rateLink = 'market://details?id=io.dcloud.HelloMUI';
+			}
+			if (rateLink) {
+				rateLinkEl.classList.add('mui-navigate-right');
+				rateLinkEl.href = rateLink;
+			}
 			//处理view的后退与webview后退
 			var oldBack = $.back;
 			$.back = function() {

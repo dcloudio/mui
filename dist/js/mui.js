@@ -987,7 +987,7 @@ var mui = (function(document, undefined) {
 	 * @returns {undefined}
 	 */
 	$.fn.on = function(event, selector, callback) {
-		this.each(function() {
+		return this.each(function() {
 			var element = this;
 			element.addEventListener(event, function(e) {
 				var delegates = $.qsa(selector, element);
@@ -998,6 +998,9 @@ var mui = (function(document, undefined) {
 							break;
 						}
 						if (target && ~delegates.indexOf(target)) {
+							if (~['click', 'tap', 'doubletap', 'longtap', 'hold'].indexOf(event) && (target.disabled || target.classList.contains('mui-disabled'))) {
+								break;
+							}
 							if (!e.detail) {
 								e.detail = {
 									currentTarget: target
@@ -1010,10 +1013,12 @@ var mui = (function(document, undefined) {
 					}
 				}
 			});
-			////避免多次on的时候重复绑定
-			element.removeEventListener($.EVENT_CLICK, preventDefault);
-			//click event preventDefault
-			element.addEventListener($.EVENT_CLICK, preventDefault);
+			if (event === 'tap') {
+				////避免多次on的时候重复绑定
+				element.removeEventListener($.EVENT_CLICK, preventDefault);
+				//click event preventDefault
+				element.addEventListener($.EVENT_CLICK, preventDefault);
+			}
 		});
 	};
 	var preventDefault = function(e) {
@@ -1880,7 +1885,7 @@ var mui = (function(document, undefined) {
 			var parent = wobj.parent();
 			if (parent) {
 				parent.evalJS('mui&&mui.back();');
-			}else{
+			} else {
 				wobj.canBack(function(e) {
 					//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
 					if (e.canBack) { //webview history back
@@ -1910,7 +1915,7 @@ var mui = (function(document, undefined) {
 	$.menu = function() {
 		var menu = document.querySelector('.mui-action-menu');
 		if (menu) {
-			$.trigger(menu, 'touchstart');//临时处理menu无touchstart的话，找不到当前targets的问题
+			$.trigger(menu, 'touchstart'); //临时处理menu无touchstart的话，找不到当前targets的问题
 			$.trigger(menu, 'tap');
 		} else { //执行父窗口的menu
 			if (window.plus) {
@@ -1922,17 +1927,27 @@ var mui = (function(document, undefined) {
 			}
 		}
 	};
+	//默认监听
+	$.plusReady(function() {
+		if ($.options.keyEventBind.backbutton) {
+			plus.key.addEventListener('backbutton', $.back, false);
+		}
+		if ($.options.keyEventBind.menubutton) {
+			plus.key.addEventListener('menubutton', $.menu, false);
+		}
+	});
 	//处理按键监听事件
 	$.registerInit({
 		name: 'keyEventBind',
 		index: 1000,
 		handle: function() {
 			$.plusReady(function() {
-				if ($.options.keyEventBind.backbutton) {
-					plus.key.addEventListener('backbutton', $.back, false);
+				//如果不为true，则移除默认监听
+				if (!$.options.keyEventBind.backbutton) {
+					plus.key.removeEventListener('backbutton', $.back);
 				}
-				if ($.options.keyEventBind.menubutton) {
-					plus.key.addEventListener('menubutton', $.menu, false);
+				if (!$.options.keyEventBind.menubutton) {
+					plus.key.removeEventListener('menubutton', $.menu);
 				}
 			});
 		}
@@ -2133,7 +2148,7 @@ var mui = (function(document, undefined) {
 			headers[name.toLowerCase()] = [name, value];
 		};
 		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-		var xhr = settings.xhr(protocol);
+		var xhr = settings.xhr(settings);
 		var nativeSetHeader = xhr.setRequestHeader;
 		var abortTimeout;
 
@@ -2276,13 +2291,25 @@ var mui = (function(document, undefined) {
  * 5+ ajax
  */
 (function($) {
+	var originAnchor = document.createElement('a');
+	originAnchor.href = window.location.href;
 	$.plusReady(function() {
 		$.ajaxSettings = $.extend($.ajaxSettings, {
-			xhr: function(protocol) {
-				if (protocol === 'file:') { //本地文件使用标准XMLHttpRequest
-					return new window.XMLHttpRequest();
+			xhr: function(settings) {
+				if (settings.crossDomain) { //强制使用plus跨域
+					return new plus.net.XMLHttpRequest();
 				}
-				return new plus.net.XMLHttpRequest();
+				//仅在webview的url为远程文件，且ajax请求的资源不同源下使用plus.net.XMLHttpRequest
+				if (originAnchor.protocol !== 'file:') {
+					var urlAnchor = document.createElement('a');
+					urlAnchor.href = settings.url;
+					urlAnchor.href = urlAnchor.href;
+					settings.crossDomain = (originAnchor.protocol + '//' + originAnchor.host) !== (urlAnchor.protocol + '//' + urlAnchor.host);
+					if (settings.crossDomain) {
+						return new plus.net.XMLHttpRequest();
+					}
+				}
+				return new window.XMLHttpRequest();
 			}
 		});
 	});
@@ -3854,7 +3881,7 @@ var mui = (function(document, undefined) {
 			return this.pages[slideNumber][0];
 		},
 		_gotoItem: function(slideNumber, time) {
-			this.currentPage = this._getPage(slideNumber);
+			this.currentPage = this._getPage(slideNumber, true); //此处传true。可保证程序切换时，动画与人手操作一致(第一张，最后一张的切换动画)
 			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
@@ -3909,7 +3936,7 @@ var mui = (function(document, undefined) {
 			if (!this.classList.contains(CLASS_SLIDER)) {
 				sliderElement = this.querySelector('.' + CLASS_SLIDER);
 			}
-			if (sliderElement) {
+			if (sliderElement && sliderElement.querySelector(SELECTOR_SLIDER_ITEM)) {
 				var id = sliderElement.getAttribute('data-slider');
 				if (!id) {
 					id = ++$.uuid;
@@ -4210,11 +4237,13 @@ var mui = (function(document, undefined) {
 			}
 		},
 		refresh: function(offCanvas) {
-			this.classList.remove(CLASS_ACTIVE);
+			//			offCanvas && !offCanvas.classList.contains(CLASS_ACTIVE) && this.classList.remove(CLASS_ACTIVE);
 			this.slideIn = this.classList.contains(CLASS_SLIDE_IN);
 			this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
-			this.scroller.classList.remove(CLASS_TRANSITIONING);
-			this.scroller.setAttribute('style', '');
+			//			!offCanvas && this.scroller.classList.remove(CLASS_TRANSITIONING);
+			//			!offCanvas && this.scroller.setAttribute('style', '');
+			this.offCanvasLefts = this.wrapper.querySelectorAll('.' + CLASS_OFF_CANVAS_LEFT);
+			this.offCanvasRights = this.wrapper.querySelectorAll('.' + CLASS_OFF_CANVAS_RIGHT);
 			if (offCanvas) {
 				if (offCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT)) {
 					this.offCanvasLeft = offCanvas;
@@ -4230,16 +4259,16 @@ var mui = (function(document, undefined) {
 			if (this.offCanvasRight) {
 				this.offCanvasRightWidth = this.offCanvasRight.offsetWidth;
 				this.offCanvasRightSlideIn = this.slideIn && (this.offCanvasRight.parentNode === this.wrapper);
-				this.offCanvasRight.classList.remove(CLASS_TRANSITIONING);
-				this.offCanvasRight.classList.remove(CLASS_ACTIVE);
-				this.offCanvasRight.setAttribute('style', '');
+				//				this.offCanvasRight.classList.remove(CLASS_TRANSITIONING);
+				//				this.offCanvasRight.classList.remove(CLASS_ACTIVE);
+				//				this.offCanvasRight.setAttribute('style', '');
 			}
 			if (this.offCanvasLeft) {
 				this.offCanvasLeftWidth = this.offCanvasLeft.offsetWidth;
 				this.offCanvasLeftSlideIn = this.slideIn && (this.offCanvasLeft.parentNode === this.wrapper);
-				this.offCanvasLeft.classList.remove(CLASS_TRANSITIONING);
-				this.offCanvasLeft.classList.remove(CLASS_ACTIVE);
-				this.offCanvasLeft.setAttribute('style', '');
+				//				this.offCanvasLeft.classList.remove(CLASS_TRANSITIONING);
+				//				this.offCanvasLeft.classList.remove(CLASS_ACTIVE);
+				//				this.offCanvasLeft.setAttribute('style', '');
 			}
 			this.backdrop = this.scroller.querySelector('.' + CLASS_ACTION_BACKDEOP);
 
@@ -4460,7 +4489,13 @@ var mui = (function(document, undefined) {
 						this.rightShowing = false;
 						if (x > 0) {
 							if (this.offCanvasLeft) {
-								this.offCanvasLeft.style.zIndex = 0;
+								$.each(this.offCanvasLefts, function(index, offCanvas) {
+									if (offCanvas === this.offCanvasLeft) {
+										this.offCanvasLeft.style.zIndex = 0;
+									} else {
+										offCanvas.style.zIndex = -1;
+									}
+								}.bind(this));
 							}
 							if (this.offCanvasRight) {
 								this.offCanvasRight.style.zIndex = -1;
@@ -4470,7 +4505,14 @@ var mui = (function(document, undefined) {
 						this.rightShowing = true;
 						this.leftShowing = false;
 						if (this.offCanvasRight) {
-							this.offCanvasRight.style.zIndex = 0;
+							$.each(this.offCanvasRights, function(index, offCanvas) {
+								console.log(offCanvas === this.offCanvasRight);
+								if (offCanvas === this.offCanvasRight) {
+									offCanvas.style.zIndex = 0;
+								} else {
+									offCanvas.style.zIndex = -1;
+								}
+							}.bind(this));
 						}
 						if (this.offCanvasLeft) {
 							this.offCanvasLeft.style.zIndex = -1;
@@ -4526,11 +4568,11 @@ var mui = (function(document, undefined) {
 				}
 			} else {
 				if (direction === 'left') {
-					shown = this.offCanvasLeft && this.offCanvasLeft.classList.contains(CLASS_ACTIVE);
+					shown = this.classList.contains(CLASS_ACTIVE) && this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
 				} else if (direction === 'right') {
-					shown = this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE);
+					shown = this.classList.contains(CLASS_ACTIVE) && this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE);
 				} else {
-					shown = (this.offCanvasLeft && this.offCanvasLeft.classList.contains(CLASS_ACTIVE)) || (this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE));
+					shown = this.classList.contains(CLASS_ACTIVE) && (this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE));
 				}
 			}
 			return shown;
@@ -4538,7 +4580,7 @@ var mui = (function(document, undefined) {
 		close: function() {
 			this._initOffCanvasVisible();
 			if (this.slideIn) {
-				this.scroller = this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE) ? this.offCanvasRight : this.offCanvasLeft;
+				this.scroller = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
 			}
 			if (this.scroller) {
 				this.scroller.classList.add(CLASS_TRANSITIONING);
@@ -4548,7 +4590,7 @@ var mui = (function(document, undefined) {
 		show: function(direction) {
 			this._initOffCanvasVisible();
 			if (this.isShown(direction)) {
-				return;
+				return false;
 			}
 			if (!direction) {
 				direction = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT) ? 'right' : 'left';
@@ -4560,6 +4602,7 @@ var mui = (function(document, undefined) {
 				this.scroller.classList.add(CLASS_TRANSITIONING);
 				this.openPercentage(direction === 'left' ? 100 : -100);
 			}
+			return true;
 		},
 		toggle: function(directionOrOffCanvas) {
 			var direction = directionOrOffCanvas;
@@ -4567,10 +4610,8 @@ var mui = (function(document, undefined) {
 				direction = directionOrOffCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT) ? 'left' : 'right';
 				this.refresh(directionOrOffCanvas);
 			}
-			if (this.isShown(direction)) {
+			if (!this.show(direction)) {
 				this.close();
-			} else {
-				this.show(direction);
 			}
 		}
 	});
@@ -4596,7 +4637,6 @@ var mui = (function(document, undefined) {
 				var container = findOffCanvasContainer(offcanvas);
 				if (container) {
 					$.targets._container = container;
-					event.preventDefault(); //fixed hashchange
 					return offcanvas;
 				}
 			}
@@ -4621,6 +4661,7 @@ var mui = (function(document, undefined) {
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
+				e.detail.gesture.preventDefault(); //fixed hashchange
 				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;
@@ -4697,7 +4738,6 @@ var mui = (function(document, undefined) {
 		if (target.tagName === 'A' && target.hash) {
 			var modal = document.getElementById(target.hash.replace('#', ''));
 			if (modal && modal.classList.contains(CLASS_MODAL)) {
-				event.preventDefault(); //fixed hashchange
 				return modal;
 			}
 		}
@@ -4715,6 +4755,7 @@ var mui = (function(document, undefined) {
 
 	window.addEventListener('tap', function(event) {
 		if ($.targets.modal) {
+			event.detail.gesture.preventDefault(); //fixed hashchange
 			$.targets.modal.classList.toggle('mui-active');
 		}
 	});
@@ -4746,7 +4787,6 @@ var mui = (function(document, undefined) {
 		if (target.tagName === 'A' && target.hash) {
 			$.targets._popover = document.getElementById(target.hash.replace('#', ''));
 			if ($.targets._popover && $.targets._popover.classList.contains(CLASS_POPOVER)) {
-				event.preventDefault(); //fixed hashchange
 				return target;
 			} else {
 				$.targets._popover = null;
@@ -4821,6 +4861,7 @@ var mui = (function(document, undefined) {
 			}
 		}
 		if (toggle) {
+			e.detail.gesture.preventDefault(); //fixed hashchange
 			togglePopover($.targets._popover, $.targets.popover);
 		}
 
@@ -5241,7 +5282,7 @@ var mui = (function(document, undefined) {
 
 	});
 
-	$.fn.switch = function(options) {
+	$.fn['switch'] = function(options) {
 		var switchApis = [];
 		this.each(function() {
 			var switchApi = null;
@@ -5258,7 +5299,7 @@ var mui = (function(document, undefined) {
 		return switchApis.length > 1 ? switchApis : switchApis[0];
 	};
 	$.ready(function() {
-		$('.' + CLASS_SWITCH).switch();
+		$('.' + CLASS_SWITCH)['switch']();
 	});
 })(mui, window, 'toggle');
 /**
@@ -6044,6 +6085,7 @@ var mui = (function(document, undefined) {
 	Input.prototype.speechActionClick = function(event) {
 		if (window.plus) {
 			var self = this;
+			var oldValue = self.element.value;
 			self.element.value = '';
 			document.body.classList.add(CLASS_FOCUSIN);
 			plus.speech.startRecognize({
@@ -6055,6 +6097,10 @@ var mui = (function(document, undefined) {
 				$.trigger(self.element, 'recognized', {
 					value: self.element.value
 				});
+				if (oldValue !== self.element.value) {
+					$.trigger(self.element, 'change');
+					$.trigger(self.element, 'input');
+				}
 				// document.body.classList.remove(CLASS_FOCUSIN);
 			}, function(e) {
 				document.body.classList.remove(CLASS_FOCUSIN);
