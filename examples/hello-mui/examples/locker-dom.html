@@ -26,51 +26,49 @@
 				margin: 50px auto;
 				background-color: #fff;
 			}
-			#alert{
-				text-align:center;
-			  	padding: 20px 10px ;
-			  }
+			#alert {
+				text-align: center;
+				padding: 20px 10px;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div id='holder' class="mui-locker" data-locker-options='{"ringColor":"rgba(210,210,210,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}'></div>
+		<div id='holder' class="mui-locker" data-locker-options='{"ringColor":"rgba(210,210,210,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}' data-locker-width='300' data-locker-height='300'></div>
 		<div id='alert'></div>
-		
+
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/mui.locker.js"></script>
 		<script>
-		(function($,doc){
-			$.init();
-			
-			var holder = doc.querySelector('#holder'),
-				alert = doc.querySelector('#alert'),
-				record = [];
-			 //处理事件
-			holder.addEventListener('done', function(event) {
-				var rs = event.detail;
-				if (rs.points.length < 4) {
-					alert.innerText = '设定的手势太简单了';
+			(function($, doc) {
+				$.init();
+				var holder = doc.querySelector('#holder'),
+					alert = doc.querySelector('#alert'),
 					record = [];
-					rs.sender.clear();
-					return;
-				}
-				record.push(rs.points.join(''));
-				if (record.length >= 2) {
-					if (record[0] == record[1]) {
-						alert.innerText = '手势设定完成';
-					} else {
-						alert.innerText = '两次手势设定不一致';
+				//处理事件
+				holder.addEventListener('done', function(event) {
+					var rs = event.detail;
+					if (rs.points.length < 4) {
+						alert.innerText = '设定的手势太简单了';
+						record = [];
+						rs.sender.clear();
+						return;
 					}
-					rs.sender.clear();
-					record = [];
-				} else {
-					alert.innerText = '请确认手势设定';
-					rs.sender.clear();
-				}
-			});
-		}(mui,document));
-			
+					record.push(rs.points.join(''));
+					if (record.length >= 2) {
+						if (record[0] == record[1]) {
+							alert.innerText = '手势设定完成';
+						} else {
+							alert.innerText = '两次手势设定不一致';
+						}
+						rs.sender.clear();
+						record = [];
+					} else {
+						alert.innerText = '请确认手势设定';
+						rs.sender.clear();
+					}
+				});
+			}(mui, document));
 		</script>
 	</body>
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -48,10 +47,6 @@
 				-webkit-transform: translate3d(-20%, 0, 0);
 				transform: translate3d(-20%, 0, 0);
 			}
-			/*.mui-page-center {
-				background-color: red;
-			}*/
-			
 			.mui-navbar {
 				position: fixed;
 				right: 0;
@@ -96,12 +91,7 @@
 			.mui-page-shadow {
 				background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
 				background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
-			}
-			/*.mui-android .mui-page-shadow {
-				width: 1px;
-				background-color: rgba(0, 0, 0);
-			}*/
-			
+			}			
 			.mui-navbar-inner.mui-transitioning,
 			.mui-navbar-inner .mui-transitioning {
 				-webkit-transition: opacity 200ms ease, -webkit-transform 200ms ease;
@@ -421,19 +411,13 @@
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								<a id="rate">去评分</a>
+								<a id="rate" class="mui-navigate-right">评分鼓励</a>
 							</li>
 							<li class="mui-table-view-cell">
-								欢迎页
+								<a id="share" class="mui-navigate-right">分享推荐</a>
 							</li>
 							<li class="mui-table-view-cell">
-								功能介绍
-							</li>
-							<li class="mui-table-view-cell">
-								系统通知
-							</li>
-							<li class="mui-table-view-cell">
-								帮助与反馈
+								<a id="tel" class="mui-navigate-right">客服电话</a>
 							</li>
 						</ul>
 					</div>
@@ -451,20 +435,87 @@
 		});
 		 //初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
+		
+		//分享操作
+		var shares = {};
+		mui.plusReady(function () {
+			plus.share.getServices(function (s) {
+				if(s&&s.length>0){
+					for (var i = 0; i < s.length; i++) {
+						var t = s[i];
+						shares[t.id] = t;
+					}
+				}
+			},function () {
+				console.log("获取分享服务列表失败");
+			});
+		});
+		
+		//分享链接点击事件
+		document.getElementById("share").addEventListener('tap',function () {
+			var ids=[{id:"weixin",ex:"WXSceneSession"},{id:"weixin",ex:"WXSceneTimeline"},{id:"sinaweibo"},{id:"tencentweibo"}],
+			bts=[{title:"发送给微信好友"},{title:"分享到微信朋友圈"},{title:"分享到新浪微博"},{title:"分享到腾讯微博"}];
+			if(plus.os.name=="iOS"){
+				ids.push({id:"qq"});
+				bts.push({title:"分享到QQ"});
+			}
+			plus.nativeUI.actionSheet({cancel:"取消",buttons:bts},function(e){
+				var i=e.index;
+				if(i>0){
+					var s_id = ids[i-1].id;
+					var share = shares[s_id];
+					if ( share.authenticated ) {
+						shareMessage(share,ids[i-1].ex);
+					} else {
+						share.authorize( function(){
+								shareMessage(share,ids[i-1].ex);
+							},function(e){
+							console.log( "认证授权失败："+e.code+" - "+e.message );
+						});
+					}
+				}
+			});
+		});
+		
+		function shareMessage(share,ex){
+			var msg={extra:{scene:ex}};
+			msg.href="http://www.dcloud.io/hellomui/";
+			msg.title="最接近原生APP体验的高性能前端框架";
+			msg.content="我正在体验HelloMUI，果然很流畅，基本看不出和原生App的差距";
+			if(~share.id.indexOf('weibo')){
+				msg.content += "；体验地址：http://www.dcloud.io/hellomui/";
+			}
+			msg.thumbs=["_www/images/logo.png"];
+			share.send( msg, function(){
+				console.log( "分享到\""+share.description+"\"成功！ " );
+			}, function(e){
+				console.log( "分享到\""+share.description+"\"失败: "+e.code+" - "+e.message );
+			} );
+		}
+		
+		//去评分
+		document.getElementById("rate").addEventListener('tap',function () {
+			if(mui.os.ios){
+				location.href = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
+			}else if(mui.os.android){
+				 plus.runtime.openURL( "market://details?id=io.dcloud.HelloMUI", function(e){ 
+			        plus.runtime.openURL( "market://details?id=io.dcloud.HelloMUI", function(e){ 
+				        mui.alert("360手机助手和应用宝，你一个都没装，暂时无法评分，感谢支持"); 
+				    }, "com.tencent.android.qqdownloader" ); 
+			    	}, "com.qihoo.appstore" ); 
+			}
+			
+		});
+		
+		//客服电话
+		document.getElementById("tel").addEventListener('tap',function () {
+			plus.device.dial("114");
+		});
+		
+		
+		
 		var view = viewApi.view;
 		(function($) {
-			//去评分
-			var rateLinkEl = document.getElementById("rate");
-			var rateLink = '';
-			if ($.os.ios) {
-				rateLink = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
-			} else if ($.os.plus && $.os.android) {
-				rateLink = 'market://details?id=io.dcloud.HelloMUI';
-			}
-			if (rateLink) {
-				rateLinkEl.classList.add('mui-navigate-right');
-				rateLinkEl.href = rateLink;
-			}
 			//处理view的后退与webview后退
 			var oldBack = $.back;
 			$.back = function() {
@@ -477,31 +528,17 @@
 			//监听页面切换事件方案1,通过view元素监听所有页面切换事件，目前提供pageBeforeShow|pageShow|pageBeforeBack|pageBack四种事件(before事件为动画开始前触发)
 			//第一个参数为事件名称，第二个参数为事件回调，其中e.detail.page为当前页面的html对象
 			view.addEventListener('pageBeforeShow', function(e) {
-				console.log(e.detail.page.id + ' beforeShow');
+//				console.log(e.detail.page.id + ' beforeShow');
 			});
 			view.addEventListener('pageShow', function(e) {
-				console.log(e.detail.page.id + ' show');
+//				console.log(e.detail.page.id + ' show');
 			});
 			view.addEventListener('pageBeforeBack', function(e) {
-				console.log(e.detail.page.id + ' beforeBack');
+//				console.log(e.detail.page.id + ' beforeBack');
 			});
 			view.addEventListener('pageBack', function(e) {
-				console.log(e.detail.page.id + ' back');
+//				console.log(e.detail.page.id + ' back');
 			});
-			//监听页面切换事件方案2,通过viewApi对象添加对单个页面的事件监听
-			//第一个参数为页面的id(即mui-page元素的html id属性)，第二个参数为事件回调
-			//			viewApi.onPageBeforeShow('about', function() {
-			//				console.log('about beforeShow');
-			//			});
-			//			viewApi.onPageShow('about', function() {
-			//				console.log('about show');
-			//			});
-			//			viewApi.onPageBeforeBack('about', function() {
-			//				console.log('about beforeBack');
-			//			});
-			//			viewApi.onPageBack('about', function() {
-			//				console.log('about back');
-			//			});
 		})(mui);
 	</script>
 

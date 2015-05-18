@@ -464,7 +464,7 @@
 		var isExpand = false;
 		var classList = cell.classList;
 		var ul = cell.parentNode;
-		if (ul.classList.contains(CLASS_RADIO_VIEW)) {
+		if (ul && ul.classList.contains(CLASS_RADIO_VIEW)) {
 			if (classList.contains(CLASS_SELECTED)) {
 				return;
 			}
