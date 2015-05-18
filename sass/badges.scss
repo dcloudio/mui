@@ -1,0 +1,88 @@
+//
+// Badges
+// --------------------------------------------------
+.#{$namespace}badge {
+    display: inline-block;
+    padding: 3px 6px;
+    font-size: 12px;
+    line-height: 1;
+    color: #333;
+    background-color: rgba(0,0,0,.15);
+    border-radius: 100px;
+
+    // Inverted badges have no background.
+    &.#{$namespace}badge-inverted {
+        padding: 0 5px 0 0;
+        color: $default-color;
+        background-color: transparent;
+    }
+}
+
+
+// Badge modifiers
+// --------------------------------------------------
+
+// Main badge
+.#{$namespace}badge-primary,.#{$namespace}badge-blue {
+    color: #fff;
+    background-color: $primary-color;
+
+    &.#{$namespace}badge-inverted {
+        color: $primary-color;
+        background-color: transparent;
+    }
+}
+
+// success badge
+.#{$namespace}badge-success,.#{$namespace}badge-green {
+    color: #fff;
+    background-color: $positive-color;
+
+    &.#{$namespace}badge-inverted {
+        color: $positive-color;
+        background-color: transparent;
+    }
+}
+//waring
+.#{$namespace}badge-warning,.#{$namespace}badge-yellow {
+    color: #fff;
+    background-color: $warning-color;
+
+    &.#{$namespace}badge-inverted {
+        color: $warning-color;
+        background-color: transparent;
+    }
+}
+
+// Negative badge
+.#{$namespace}badge-danger,.#{$namespace}badge-red {
+    color: #fff;
+    background-color: $negative-color;
+
+    &.#{$namespace}badge-inverted {
+        color: $negative-color;
+        background-color: transparent;
+    }
+}
+
+.#{$namespace}badge-royal,.#{$namespace}badge-purple {
+    color: #fff;
+    background-color: $royal-color;
+
+    &.#{$namespace}badge-inverted {
+        color: $royal-color;
+        background-color: transparent;
+    }
+}
+
+.#{$namespace}icon .#{$namespace}badge{
+    position: absolute;
+    left: 100%;
+    margin-left: -10px;
+    top: -2px;
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 1px 5px;
+    background: red;
+    color: white;   
+}

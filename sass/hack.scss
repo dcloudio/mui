@@ -1,0 +1,14 @@
+.#{$namespace}android.#{$namespace}android-4-0 {
+input,
+textarea{
+    &:focus{
+        //修复4.0.x系统的输入框无法正常输入文字
+        -webkit-user-modify: inherit;
+    }
+}	
+}
+//解决ios list 过多(height>20000px) crash的bug
+.#{$namespace}ios .#{$namespace}table-view-cell {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}

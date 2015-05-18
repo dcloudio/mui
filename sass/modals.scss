@@ -1,0 +1,34 @@
+//
+// Modals
+// --------------------------------------------------
+
+.#{$namespace}modal {
+  position: fixed;
+  top: 0;
+  z-index: z("modal");
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  opacity: 0;
+  -webkit-transition: -webkit-transform .25s, opacity 1ms .25s;
+          transition: transform .25s, opacity 1ms .25s;
+  @include transform(translate3d(0, 100%, 0));
+  @include transition-timing-function($timing-fuction);
+
+  // Active modal
+  &.#{$namespace}active {
+    height: 100%;
+    opacity: 1;
+    -webkit-transition: -webkit-transform .25s;
+            transition: transform .25s;
+    @include transform(translate3d(0, 0, 0));
+    @include transition-timing-function($timing-fuction);
+  }
+}
+.#{$namespace}android .#{$namespace}modal .#{$namespace}bar{
+      position: static;
+}
+.#{$namespace}android .#{$namespace}modal .#{$namespace}bar-nav~.#{$namespace}content{
+    padding-top: 0;
+}

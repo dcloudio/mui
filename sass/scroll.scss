@@ -1,0 +1,95 @@
+
+.#{$namespace}scroll-wrapper {
+    -webkit-backface-visibility: hidden;
+    position: absolute;
+    z-index: z("default");
+    top: 0px;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+.#{$namespace}scroll {
+    -webkit-backface-visibility: hidden;
+    position: absolute;
+    z-index: z("default");
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.#{$namespace}scrollbar{
+    position: absolute;
+    z-index: z("scroll","scrollbar");
+    overflow: hidden;
+    transform: translateZ(0px);
+    transition: 500ms;
+    -webkit-transition: 500ms;
+    opacity: 0;
+    pointer-events: none;
+}
+.#{$namespace}scrollbar-vertical{
+    width: 4px;
+    bottom: 2px;
+    top: 0;
+    right: 1px;
+    .#{$namespace}scrollbar-indicator{
+        width:100%;
+    }
+}
+.#{$namespace}scrollbar-horizontal{
+    height: 4px;
+    left: 2px;
+    right: 2px;
+    bottom: 0px;
+    .#{$namespace}scrollbar-indicator{
+        height:100%;
+    }
+}
+
+.#{$namespace}scrollbar-indicator{
+    box-sizing: border-box;
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.801961);
+    border-radius: 2px;
+    transition: 0.01s cubic-bezier(0.1, 0.57, 0.1, 1);
+    -webkit-transition: 0.01s cubic-bezier(0.1, 0.57, 0.1, 1);
+    display: block;
+    transform: translate(0px, 0px) translateZ(0px);
+    background: rgba(0, 0, 0, 0.398039);
+}
+
+//android 5+
+.#{$namespace}plus-pullrefresh{
+    .#{$namespace}fullscreen{
+        .#{$namespace}scroll-wrapper,.#{$namespace}slider-group {
+            .#{$namespace}scroll-wrapper {
+                position: absolute;
+                top: 0px;
+                bottom: 0px;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+            }
+             .#{$namespace}scroll {
+                position: absolute;
+                width: 100%;
+            }  
+        }
+    }
+    .#{$namespace}scroll-wrapper,.#{$namespace}slider-group {
+        position: static;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        width: auto;
+        overflow: auto;
+    }
+    .#{$namespace}slider-group{
+        overflow: visible;
+    }
+    .#{$namespace}scroll {
+        position: static;
+        width: auto;
+    }   
+}
