@@ -266,7 +266,7 @@
 	$.ready(function() {
 		setTimeout(function() {
 			$('.' + lockerClassName).locker();
-		}, 200);
+		}, 350);
 	});
 
 }(mui, document));

@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.6.0 (https://github.com/dcloudio/mui)
+ * Mui v1.7.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -879,7 +879,7 @@ var mui = (function(document, undefined) {
 				var tagName = target.tagName;
 				if (event === 'tap' && (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT')) {
 					e.preventDefault();
-					e.detail && e.detail.gesture && e.detail.gesture.preventDefault()
+					e.detail && e.detail.gesture && e.detail.gesture.preventDefault();
 				}
 				$.each(handler.handlers, function(index, handler) {
 					$.each(handler, function(index, callback) {
@@ -918,6 +918,16 @@ var mui = (function(document, undefined) {
 			if (isAddEventListener) {
 				delegateFns[mid(element)] = delegateFn(element, event, selector, callback);
 				element.addEventListener(event, delegateFns[mid(element)]);
+				if (event === 'tap') { //TODO 需要找个更好的解决方案
+					element.addEventListener('click', function(e) {
+						if (e.target) {
+							var tagName = e.target.tagName;
+							if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
+								e.preventDefault();
+							}
+						}
+					});
+				}
 			}
 		});
 	};
@@ -5914,7 +5924,7 @@ var mui = (function(document, undefined) {
 		var isExpand = false;
 		var classList = cell.classList;
 		var ul = cell.parentNode;
-		if (ul.classList.contains(CLASS_RADIO_VIEW)) {
+		if (ul && ul.classList.contains(CLASS_RADIO_VIEW)) {
 			if (classList.contains(CLASS_SELECTED)) {
 				return;
 			}

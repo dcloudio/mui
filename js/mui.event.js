@@ -82,7 +82,7 @@
 				var tagName = target.tagName;
 				if (event === 'tap' && (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT')) {
 					e.preventDefault();
-					e.detail && e.detail.gesture && e.detail.gesture.preventDefault()
+					e.detail && e.detail.gesture && e.detail.gesture.preventDefault();
 				}
 				$.each(handler.handlers, function(index, handler) {
 					$.each(handler, function(index, callback) {
@@ -121,6 +121,16 @@
 			if (isAddEventListener) {
 				delegateFns[mid(element)] = delegateFn(element, event, selector, callback);
 				element.addEventListener(event, delegateFns[mid(element)]);
+				if (event === 'tap') { //TODO 需要找个更好的解决方案
+					element.addEventListener('click', function(e) {
+						if (e.target) {
+							var tagName = e.target.tagName;
+							if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
+								e.preventDefault();
+							}
+						}
+					});
+				}
 			}
 		});
 	};
