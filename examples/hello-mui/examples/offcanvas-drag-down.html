@@ -299,7 +299,7 @@
 				</p>
 				<p style="padding: 5px 20px;margin-bottom: 5px;">
 					<button id="menu-btn" type="button" class="mui-btn mui-btn-primary mui-btn-block" style="padding: 10px;">
-						显示下沉菜单
+						显示下拉菜单
 					</button>
 				</p>
 				<div id="info"></div>
@@ -310,25 +310,25 @@
 			<div id="menu" class="menu">
 				<ul class="mui-table-view mui-table-view-inverted">
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">首页</a>
+						<a href="javascript:;">Item 1</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">国内创业公司</a>
+						<a href="javascript:;">Item 2</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">国外创业公司</a>
+						<a href="javascript:;">Item 3</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">国内资讯</a>
+						<a href="javascript:;">Item 4</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">国外资讯</a>
+						<a href="javascript:;">Item 5</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">专栏文章</a>
+						<a href="javascript:;">Item 6</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a href="javascript:;">生活方式</a>
+						<a href="javascript:;">Item 7</a>
 					</li>
 				</ul>
 			</div>
@@ -351,18 +351,16 @@
 			//下沉菜单中的点击事件
 			mui('#menu').on('tap', 'a', function() {
 				toggleMenu();
-				info.innerHTML = '你已选择："'+this.innerHTML+'"类别';
+				info.innerHTML = '你已选择：'+this.innerHTML;
 			});
 			var busying = false;
 
 			function toggleMenu() {
-				console.log("busying flag:"+busying);
 				if (busying) {
 					return;
 				}
 				busying = true;
 				if (menuWrapperClassList.contains('mui-active')) {
-					console.log('hideMenu');
 					document.body.classList.remove('menu-open');
 					menuWrapper.className = 'menu-wrapper fade-out-up animated';
 					menu.className = 'menu bounce-out-up animated';
@@ -371,7 +369,6 @@
 						menuWrapper.classList.add('hidden');
 					}, 500);
 				} else {
-					console.log('showMenu');
 					document.body.classList.add('menu-open');
 					menuWrapper.className = 'menu-wrapper fade-in-down animated mui-active';
 					menu.className = 'menu bounce-in-down animated';
