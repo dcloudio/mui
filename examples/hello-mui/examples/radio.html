@@ -82,6 +82,9 @@
 					</a>
 				</li>
 			</ul>
+			<div class="mui-content-padded">
+				<p id="info"></p>
+			</div>
 		</div>
 	</body>
 	<script src="../js/mui.min.js"></script>
@@ -89,5 +92,10 @@
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
 		});
+		var info = document.getElementById("info");
+		document.querySelector('.mui-table-view.mui-table-view-radio').addEventListener('selected',function(e){
+			info.innerHTML = "当前选中的为："+e.detail.el.innerText;
+		});
+		
 	</script>
 </html>
