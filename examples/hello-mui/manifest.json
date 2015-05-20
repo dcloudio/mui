@@ -1,7 +1,7 @@
 {
 	"@platforms": ["android", "iPhone", "iPad"],
-	"id": "H5291D269",/*必选，应用的标识*/
-	"name": "test",/*必选，应用名称*/
+	"id": "hellomui",/*必选，应用的标识*/
+	"name": "hellomui",/*必选，应用名称*/
 	"version": {
 		"name": "1.0",/*必选，版本名称*/
 		"code": ""
