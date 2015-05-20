@@ -1,6 +1,6 @@
 /**
  * 手势锁屏插件
- * varstion 1.0.4
+ * varstion 1.0.5
  * by Houfeng
  * Houfeng@DCloud.io
  */
@@ -16,6 +16,8 @@
 
 	var styleHolder = doc.querySelector('head') || doc.querySelector('body');
 	styleHolder.innerHTML += "<style>.mui-locker-holder{overflow:hidden;position:relative;padding:0px;}.mui-locker-holder canvas{width:100%;height:100%;}</style>";
+
+	var times = 4;
 
 	//定义 Locker 类
 	var Locker = $.Locker = $.Class.extend({
@@ -47,10 +49,20 @@
 			canvas.off = canvas.removeEventListener || function(name, handler, capture) {
 				canvas.detachEvent('on' + name, handler, capture);
 			};
+			//
 			if (self.options.width) self.holder.style.width = self.options.width + 'px';
 			if (self.options.height) self.holder.style.height = self.options.height + 'px';
-			canvas.width = self.CW = (options.width || canvas.offsetWidth);
-			canvas.height = self.CH = (options.height || canvas.offsetHeight);
+			self.CW = self.holder.offsetWidth || self.CW;
+			self.CH = self.holder.offsetHeight || self.CH;
+			//处理 “宽、高” 等数值, 全部扩大 times 倍
+			self.R *= times;
+			self.CW *= times;
+			self.CH *= times;
+			self.OffsetX *= times;
+			self.OffsetY *= times;
+			//
+			canvas.width = self.CW;
+			canvas.height = self.CH;
 			var cxt = self.cxt = canvas.getContext("2d");
 			//两个圆之间的外距离 就是说两个圆心的距离去除两个半径
 			var X = (self.CW - 2 * self.OffsetX - self.R * 2 * 3) / 2;
@@ -90,7 +102,7 @@
 					var pointIndex = _LinePointArr[i];
 					cxt.lineTo(_PointLocationArr[pointIndex].X, _PointLocationArr[pointIndex].Y);
 				}
-				cxt.lineWidth = 10;
+				cxt.lineWidth = 2 * times;
 				cxt.strokeStyle = self.options.lineColor || "#999"; //连结线颜色
 				cxt.stroke();
 				cxt.closePath();
@@ -108,18 +120,18 @@
 				var Point = _PointLocationArr[i];
 				cxt.fillStyle = self.options.ringColor || "#888"; //圆圈边框颜色
 				cxt.beginPath();
-				cxt.arc(Point.X, Point.Y, R, 0, Math.PI * 2, true);
+				cxt.arc(Point.X, Point.Y, R, 0, Math.PI * times, true);
 				cxt.closePath();
 				cxt.fill();
 				cxt.fillStyle = self.options.fillColor || "#f3f3f3"; //圆圈填充颜色
 				cxt.beginPath();
-				cxt.arc(Point.X, Point.Y, R - 3, 0, Math.PI * 2, true);
+				cxt.arc(Point.X, Point.Y, R - (2 * times), 0, Math.PI * times, true);
 				cxt.closePath();
 				cxt.fill();
 				if (_LinePointArr.indexOf(i) >= 0) {
 					cxt.fillStyle = self.options.pointColor || "#777"; //圆圈中心点颜色
 					cxt.beginPath();
-					cxt.arc(Point.X, Point.Y, R - 16, 0, Math.PI * 2, true);
+					cxt.arc(Point.X, Point.Y, R - (16 * times), 0, Math.PI * times, true);
 					cxt.closePath();
 					cxt.fill();
 				}
@@ -149,8 +161,8 @@
 			//start
 			self._startHandler = function(e) {
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft);
-				e.point.elementY = (e.point.pageY - holder.offsetTop);
+				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
+				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
 				self.isPointSelect(e.point, linePoint);
 				isDown = true;
 			};
@@ -160,8 +172,8 @@
 				if (!isDown) return;
 				e.preventDefault();
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft);
-				e.point.elementY = (e.point.pageY - holder.offsetTop);
+				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
+				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
 				var touches = e.point;
 				self.isPointSelect(touches, linePoint);
 				cxt.clearRect(0, 0, self.CW, self.CH);
@@ -174,8 +186,8 @@
 			//end
 			self._endHandler = function(e) {
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft);
-				e.point.elementY = (e.point.pageY - holder.offsetTop);
+				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
+				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
 				cxt.clearRect(0, 0, self.CW, self.CH);
 				self.draw(cxt, self.pointLocationArr, linePoint, null);
 				//事件数据
@@ -256,7 +268,7 @@
 	$.ready(function() {
 		setTimeout(function() {
 			$('.' + lockerClassName).locker();
-		}, 200);
+		}, 350);
 	});
 
 }(mui, document));

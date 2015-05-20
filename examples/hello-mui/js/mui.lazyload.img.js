@@ -4,7 +4,7 @@
 			this._super(element, options);
 		},
 		_init: function() {
-			this.options.selector = 'img';
+			this.options.selector = 'img[data-lazyload]';
 			this._super();
 		},
 		addElement: function(img) {
@@ -36,6 +36,7 @@
 						});
 					}
 				}
+				return true;
 			}
 			return false;
 		},
@@ -44,6 +45,7 @@
 			if (dataSrc && img.src != dataSrc) {
 				img.src = dataSrc;
 				img.removeAttribute('data-lazyload');
+				img.parentNode.parentNode.setAttribute('data-lazyload', 'true');
 			}
 		}
 	});

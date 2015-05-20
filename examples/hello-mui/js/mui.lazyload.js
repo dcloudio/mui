@@ -1,4 +1,5 @@
 (function($, window, document) {
+	var mid = 0;
 	$.Lazyload = $.Class.extend({
 		init: function(element, options) {
 			var self = this;
@@ -251,17 +252,25 @@
 				self.refresh();
 			}
 		},
-		addElements: function() {
+		addElements: function(elements) {
 			var self = this;
 			self._counter = self._counter || 0;
-			if (self.options.selector) {
-				var lazyloads = self.container.querySelectorAll(self.options.selector);
-				$.each(lazyloads, function(index, el) {
-					if (self.addElement(el)) {
-						self.addCallback(el, self.handle);
-					}
+			var lazyloads = [];
+			if (!elements && self.options.selector) {
+				lazyloads = self.container.querySelectorAll(self.options.selector);
+			} else {
+				$.each(elements, function(index, el) {
+					lazyloads = lazyloads.concat($.qsa(self.options.selector, el));
 				});
 			}
+			$.each(lazyloads, function(index, el) {
+				if (!el.getAttribute('data-lazyload-id')) {
+					if (self.addElement(el)) {
+						el.setAttribute('data-lazyload-id', mid++);
+						self.addCallback(el, self.handle);
+					}
+				}
+			});
 		},
 		addElement: function(el) {
 			return true;
@@ -269,7 +278,10 @@
 		handle: function() {
 			//throw new Error('需子类实现');
 		},
-		refresh: function() {
+		refresh: function(check) {
+			if (check) { //检查新的lazyload
+				this.addElements();
+			}
 			this._loadFn();
 		},
 		pause: function() {
@@ -281,6 +293,7 @@
 			window.removeEventListener('touchmove', load);
 			window.removeEventListener('resize', load);
 			if (this._containerIsNotDocument) {
+				this.container.removeEventListener('scrollend', load);
 				this.container.removeEventListener('scroll', load);
 				this.container.removeEventListener('touchmove', load);
 			}
@@ -294,6 +307,7 @@
 			window.addEventListener('touchmove', load, false);
 			window.addEventListener('resize', load, false);
 			if (this._containerIsNotDocument) {
+				this.container.addEventListener('scrollend', load, false);
 				this.container.addEventListener('scroll', load, false);
 				this.container.addEventListener('touchmove', load, false);
 			}

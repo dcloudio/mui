@@ -2229,6 +2229,7 @@ select:focus {
   display: inline-block;
   float: none;
   width: 100%;
+  padding-right: 58px;
 }
 
 .mui-radio.mui-left input[type="radio"], .mui-checkbox.mui-left input[type="checkbox"] {
@@ -2236,6 +2237,7 @@ select:focus {
 }
 
 .mui-radio.mui-left label, .mui-checkbox.mui-left label {
+  padding-right: 15px;
   padding-left: 58px;
 }
 

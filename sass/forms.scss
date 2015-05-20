@@ -233,7 +233,8 @@ select {
     label{
         float: none;
         display: inline-block;
-        width: 100%;  
+        width: 100%;
+        padding-right: 58px;
     }
 
 }
@@ -242,6 +243,7 @@ select {
 }
 .#{$namespace}radio.#{$namespace}left label,.#{$namespace}checkbox.#{$namespace}left label{
     padding-left: 58px;
+    padding-right: 15px;
 }
 .#{$namespace}radio input[type="radio"],.#{$namespace}checkbox input[type="checkbox"]{
     -webkit-appearance:none;
