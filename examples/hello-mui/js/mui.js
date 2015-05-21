@@ -1674,6 +1674,17 @@ var mui = (function(document, undefined) {
 			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 			return webview;
 		} else { //新窗口
+			if (options.createNew !== true) {
+				webview = plus.webview.getWebviewById(id);
+				if (webview) {//如果已存在
+					nShow = $.showOptions(options.show);
+					webview.show(nShow.aniShow, nShow.duration, function() {
+						triggerPreload(webview);
+						trigger(webview, 'pagebeforeshow', false);
+					});
+					return webview;
+				}
+			}
 			//显示waiting
 			var waitingConfig = $.waitingOptions(options.waiting);
 			if (waitingConfig.autoShow) {
@@ -1684,6 +1695,7 @@ var mui = (function(document, undefined) {
 				id: id,
 				url: url
 			});
+
 			webview = $.createWindow(options);
 			//显示
 			nShow = $.showOptions(options.show);
@@ -1847,7 +1859,7 @@ var mui = (function(document, undefined) {
 			//修改方式：不再监控loaded事件，直接append
 			//by chb@20150521
 			// webview.addEventListener('loaded', function() {
-				plus.webview.currentWebview().append(webview);
+			plus.webview.currentWebview().append(webview);
 			// });
 			$.webviews[id] = options;
 		}
