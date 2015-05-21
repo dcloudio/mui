@@ -5,16 +5,13 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
-		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 		<link href="../css/mui.listpicker.css" rel="stylesheet" />
 		<style>
-			html,
-			body,
-			.mui-content {
-				height: 0px;
-				margin: 0px;
-				background-color: #efeff4;
-			}
+			
 			h5.mui-content-padded {
 				margin-left: 3px;
 				margin-top: 20px !important;
@@ -138,6 +135,10 @@
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">list picker（选择列表）</h1>
+		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<h5 class="mui-content-padded">普通示例</h5>
