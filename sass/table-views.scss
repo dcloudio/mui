@@ -354,6 +354,9 @@
 
 //collapse
 .#{$namespace}table-view-cell.#{$namespace}collapse{
+    .#{$namespace}table-view:after{
+        left:15px;
+    }
     //二级列表默认为向下箭头；
     >.#{$namespace}navigate-right:after, >.#{$namespace}push-right:after {
         content: '\e581';

@@ -1821,6 +1821,9 @@ input[type="submit"]:enabled:active, input[type="submit"].mui-active:enabled,
   margin-top: 15px;
 }
 
+.mui-table-view-cell.mui-collapse .mui-table-view:after {
+  left: 15px;
+}
 .mui-table-view-cell.mui-collapse > .mui-navigate-right:after, .mui-table-view-cell.mui-collapse > .mui-push-right:after {
   content: '\e581';
 }
