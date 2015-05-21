@@ -346,10 +346,14 @@
 		if (!$.webviews[id]) { //保证执行一遍
 			//TODO 这里也有隐患，比如某个webview不是作为subpage创建的，而是作为target webview的话；
 			webview = plus.webview.create(options.url, id, options.styles, options.extras);
-			//TODO 理论上，子webview也应该计算到预加载队列中，但这样就麻烦了，要退必须退整体，否则可能出现问题；
-			webview.addEventListener('loaded', function() {
+			//之前的实现方案：子窗口loaded之后再append到父窗口中；
+			//问题：部分子窗口loaded事件发生较晚，此时执行父窗口的children方法会返回空，导致父子通讯失败；
+			//     比如父页面执行完preload事件后，需触发子页面的preload事件，此时未append的话，就无法触发；
+			//修改方式：不再监控loaded事件，直接append
+			//by chb@20150521
+			// webview.addEventListener('loaded', function() {
 				plus.webview.currentWebview().append(webview);
-			});
+			// });
 			$.webviews[id] = options;
 		}
 		return webview;
