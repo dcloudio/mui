@@ -356,7 +356,15 @@
 				}
 			}
 			
-			mui.init();
+			//初始化，并预加载webview模式的选项卡
+			mui.init({
+				preloadPages:[
+				    {
+				    	url:'examples/tab-webview-main.html',
+				    	id:'examples/tab-webview-main.html'
+			    	}
+  				]
+			});
 			var templates = {};
 			var getTemplate = function(name, header, content, loading) {
 				var template = templates[name];
