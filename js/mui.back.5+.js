@@ -80,27 +80,18 @@
 			}
 		}
 	};
-	//默认监听
-	$.plusReady(function() {
-		if ($.options.keyEventBind.backbutton) {
-			plus.key.addEventListener('backbutton', $.back, false);
-		}
-		if ($.options.keyEventBind.menubutton) {
-			plus.key.addEventListener('menubutton', $.menu, false);
-		}
-	});
+
 	//处理按键监听事件
 	$.registerInit({
 		name: 'keyEventBind',
 		index: 1000,
 		handle: function() {
 			$.plusReady(function() {
-				//如果不为true，则移除默认监听
-				if (!$.options.keyEventBind.backbutton) {
-					plus.key.removeEventListener('backbutton', $.back);
+				if ($.options.keyEventBind.backbutton) {
+					plus.key.addEventListener('backbutton', $.back);
 				}
-				if (!$.options.keyEventBind.menubutton) {
-					plus.key.removeEventListener('menubutton', $.menu);
+				if ($.options.keyEventBind.menubutton) {
+					plus.key.addEventListener('menubutton', $.menu);
 				}
 			});
 		}
