@@ -8,18 +8,10 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding: 0;
-			}
-		</style>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav">
@@ -68,8 +60,24 @@
 		</div>
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/app.js"></script>
 	<script>
-		mui.init();
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		window.addEventListener('toggle', function(event) {
+			if (event.target.id === 'M_Toggle') {
+				var isActive = event.detail.isActive;
+				var table = document.querySelector('.mui-table-view');
+				var card = document.querySelector('.mui-card');
+				if (isActive) {
+					card.appendChild(table);
+					card.style.display = '';
+				} else {
+					var content = document.querySelector('.mui-content');
+					content.insertBefore(table, card);
+					card.style.display = 'none';
+				}
+			}
+		});
 	</script>
 </html>

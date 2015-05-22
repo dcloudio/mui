@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+				margin: 0px;
+				padding: 0px;
+				background-color: #efeff4;
+			}
+			.ui-logo {
+				width: 100px;
+				height: 100px;
+				margin: 60px auto 25px auto;
+				background-image: url(images/user-photo.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+				border-radius: 60px;
+			}
+			.mui-content-padded {
+				margin-top: 20px;
+			}
+			.ui-login-form {
+				border: solid 1px #ddd;
+				border-radius: 5px;
+				margin: 10px;
+				overflow: hidden;
+				background-color: #ddd;
+			}
+			.ui-login-form input {
+				border: none;
+				margin: 0px;
+				font-size: 18px;
+				padding: 15px !important;
+				border-radius: 0px;
+				height: auto;
+			}
+			.ui-login-form input:first-child {
+				margin-bottom: 1px;
+			}
+			.mui-btn-block {
+				padding: 12px 0px;
+			}
+			#reg {
+				display: block;
+				margin-top: 45px;
+				text-align: center;
+			}
+			.mui-checkbox label {
+				display: inline-block;
+				width: auto;
+				vertical-align: text-bottom;
+				padding: 2px 0px;
+				color: #777;
+			}
+			.mui-checkbox input {
+				position: relative !important;
+				top: auto!important;
+				left: auto!important;
+				right: auto!important;
+				bottom: auto!important;
+				margin: 0px;
+				padding: 0px;
+				vertical-align: text-bottom;
+			}
+			.mui-checkbox {
+				margin: 3px 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="ui-logo"></div>
+			<form class="ui-login-form">
+				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="账号">
+				<input id='password' type="password" class="mui-input-clear mui-input" placeholder="密码">
+			</form>
+			<div class="mui-checkbox">
+				<input class="mui-checkbox" id='autoLogin' name="checkbox" type="checkbox">
+				<label>记住我的状态</label>
+			</div>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				<a id='reg'>注册新用户</a>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var settings = app.getSettings();
+					var loginButton = doc.querySelector('#login');
+					var accountBox = doc.querySelector('#account');
+					var passwordBox = doc.querySelector('#password');
+					var autoLoginButton = doc.querySelector("#autoLogin");
+					var regButton = doc.querySelector('#reg');
+					loginButton.addEventListener('tap', function(event) {
+						var loginInfo = {
+							account: accountBox.value,
+							password: passwordBox.value
+						};
+						app.login(loginInfo, function(err) {
+							if (err) {
+								plus.nativeUI.toast(err);
+								return;
+							}
+							$.openWindow({
+								url: 'main.html',
+								id: 'main'
+							});
+						});
+					});
+					autoLoginButton.checked = settings.autoLogin;
+					autoLoginButton.addEventListener('change', function(event) {
+						setTimeout(function() {
+							settings.autoLogin = autoLoginButton.checked;
+							app.setSettings(settings);
+						}, 50);
+					}, false);
+					regButton.addEventListener('tap', function(event) {
+						$.openWindow({
+							url: 'reg.html',
+							id: 'reg'
+						});
+					}, false);
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

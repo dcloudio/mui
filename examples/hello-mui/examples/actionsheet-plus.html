@@ -8,18 +8,11 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 		<style>
-			html,
-			body {
-				background-color: #efeff4;
-			}
-			header.mui-bar {
-				display: none;
-			}
-			.mui-bar-nav~.mui-content {
-				padding: 0;
-			}
 			p {
 				text-indent: 22px;
 			}
@@ -46,7 +39,7 @@
 
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">Actionsheet</h1>
+			<h1 class="mui-title">原生模式actionsheet</h1>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
 			<a id="delete-btn" class="mui-tab-item">
@@ -77,9 +70,10 @@
 		<p id="info"></p>
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/app.js"></script>
 	<script>
-		mui.init();
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
 		mui('body').on('shown', '.mui-popover', function(e) {
 			//console.log('shown', e.detail.id);//detail为当前popover元素
 		});

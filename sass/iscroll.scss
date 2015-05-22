@@ -1,0 +1,43 @@
+.#{$namespace}iscroll-wrapper{
+    position: absolute;
+    z-index: z("default");
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+}
+.#{$namespace}bar-nav ~ .#{$namespace}iscroll-wrapper {
+    top: $bar-base-height;
+    padding:0;
+}
+.#{$namespace}bar-header-secondary ~ .#{$namespace}iscroll-wrapper {
+    top: ($bar-base-height*2);
+}
+.#{$namespace}bar-footer ~ .#{$namespace}iscroll-wrapper {
+    bottom: $bar-base-height;
+    padding:0;
+}
+.#{$namespace}bar-footer-secondary ~ .#{$namespace}iscroll-wrapper {
+    bottom: ($bar-base-height*2);
+}
+.#{$namespace}bar-tab ~ .#{$namespace}iscroll-wrapper{
+    bottom: $bar-tab-height;
+    padding:0;
+}
+.#{$namespace}bar-footer-secondary-tab ~  .#{$namespace}iscroll-wrapper{
+    bottom: ($bar-tab-height+$bar-base-height);
+}
+
+.#{$namespace}iscroll{
+    position: absolute;
+    z-index: z("default");
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}

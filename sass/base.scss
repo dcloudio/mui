@@ -1,0 +1,196 @@
+//
+// Base styles
+// --------------------------------------------------
+
+// Use box sizing on all the things!
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;//禁止选择文字
+    outline: none;
+}
+// We fix position the body and scroll `.#{$namespace}content`.
+body {
+    font-family: $font-family-default;
+    font-size: $font-size-default;
+    line-height: $line-height-default;
+    color: #000;
+    background-color: #efeff4;
+    -webkit-overflow-scrolling: touch;
+}
+
+// Universal link styling
+a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:active {
+        color: darken($primary-color, 10%);
+    }
+}
+
+// Wrapper to be used around all content not in .#{$namespace}bar-title and .#{$namespace}bar-tab
+.#{$namespace}content {
+    background-color: #efeff4;
+    -webkit-overflow-scrolling: touch;
+}
+
+// Hack to force all relatively and absolutely positioned elements still render while scrolling
+// Note: This is a bug for "-webkit-overflow-scrolling: touch"
+// .#{$namespace}content > * {
+//     @include transform(translateZ(0));
+// }
+
+// Pad top/bottom of content so it doesn't hide behind bars.
+// Note: For these to work, content must come after both bars in the markup
+.#{$namespace}bar-nav ~ .#{$namespace}content {
+    padding-top: $bar-base-height;
+    &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         top:$bar-base-height;
+     }
+    }
+}
+.#{$namespace}bar-header-secondary ~ .#{$namespace}content {
+    padding-top: ($bar-base-height*2);
+     &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         top:($bar-base-height*2);
+     }
+    }
+}
+
+// Footer bar padding
+.#{$namespace}bar-footer ~ .#{$namespace}content {
+    padding-bottom: $bar-base-height;
+     &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         bottom:$bar-base-height;
+     }
+    }
+}
+.#{$namespace}bar-footer-secondary ~ .#{$namespace}content {
+    padding-bottom: ($bar-base-height*2);
+     &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         bottom:($bar-base-height*2);
+     }
+    }
+}
+
+// Tab bar padding
+.#{$namespace}bar-tab ~ .#{$namespace}content {
+    padding-bottom: $bar-tab-height;
+     &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         bottom:$bar-tab-height;
+     }
+    }
+}
+.#{$namespace}bar-footer-secondary-tab ~ .#{$namespace}content {
+    padding-bottom: ($bar-tab-height+$bar-base-height);
+     &.#{$namespace}scroll-wrapper{
+     .#{$namespace}scrollbar-vertical{
+         bottom:($bar-tab-height+$bar-base-height);
+     }
+    }
+}
+
+// Utility classes
+
+.#{$namespace}content-padded {
+    //暂时放弃content-padded
+       margin: $bar-side-spacing;
+}
+.#{$namespace}inline {
+    display: inline-block;
+    vertical-align: top;
+}
+.#{$namespace}block {
+    display: block!important;
+}
+.#{$namespace}visibility {
+    visibility: visible!important;
+}
+.#{$namespace}hidden {
+    display: none!important;
+}
+.#{$namespace}ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.#{$namespace}ellipsis-2{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal!important;
+    word-wrap: break-word;
+}
+.#{$namespace}table{
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.#{$namespace}table-cell{
+    display: table-cell;
+    position: relative;
+}
+.#{$namespace}text-left{
+    text-align: left!important;
+}
+.#{$namespace}text-center{
+    text-align: center!important;
+}
+.#{$namespace}text-justify{
+    text-align: justify!important;
+}
+.#{$namespace}text-right{
+    text-align: right!important;
+}
+.#{$namespace}pull-left {
+    float: left;
+}
+.#{$namespace}pull-right {
+    float: right;
+}
+
+.#{$namespace}list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+.#{$namespace}list-inline {
+    padding-left: 0;
+    list-style: none;
+    margin-left: -5px;
+}
+.#{$namespace}list-inline > li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.#{$namespace}clearfix {
+    @include clearfix();
+}
+.#{$namespace}bg-primary {
+    background-color:$primary-color;
+}
+.#{$namespace}bg-positive{
+    background-color:$positive-color;
+}
+.#{$namespace}bg-negative{
+    background-color:$negative-color;
+}
+.#{$namespace}error{
+    margin: 88px 35px;
+    padding:10px;
+    border-radius:6px;
+    background-color:#bbb;
+}
+.#{$namespace}subtitle{
+    font-size: 15px;
+}

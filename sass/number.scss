@@ -1,0 +1,70 @@
+.#{$namespace}numbox {
+	border: solid 1px #bbb;
+	overflow: hidden ;
+	display: inline-block;
+	height: 35px;
+	border-radius: 3px;
+	background-color: #efeff4;
+	vertical-align: top;
+	position: relative;
+	padding: 0px 40px 0px 40px;
+	width: 120px;
+	vertical-align: middle;
+
+	[class*=mui-numbox-btn] {
+		width: 40px;
+		height: 100%;
+		position: absolute;
+		top: 0px;
+		border: none;
+		border-radius: 0px;
+		font-size: 18px;
+		color: #555;
+		line-height: 100%;
+		font-weight: normal;
+		overflow: hidden;
+		padding: 0px;
+		background-color: #f9f9f9;
+
+		&:active{
+			background-color: #ccc;
+		}
+		&[disabled]{
+			color: #c0c0c0;
+		}
+	}
+
+	.#{$namespace}numbox-btn-plus {
+		right: 0px;
+		border-top-right-radius:3px;
+		border-bottom-right-radius:3px;
+	}
+	.#{$namespace}numbox-btn-minus {
+		left: 0px;
+		border-top-left-radius:3px;
+		border-bottom-left-radius:3px;
+	}
+
+	.#{$namespace}numbox-input {
+		width: 100% !important;
+		height: 100%;
+		text-align: center;
+		border: none !important;
+		border-left: solid 1px #ccc !important;
+		border-right: solid 1px #ccc !important;
+		margin: 0px;
+		padding: 0px 3px !important;
+		display: inline-block;
+		border-radius: 0px !important;
+		text-overflow: ellipsis;
+		word-break: normal;
+		overflow: hidden;
+	}
+
+}
+
+
+.#{$namespace}input-row .#{$namespace}numbox {
+	margin: 2px 8px;
+	float: right;
+}

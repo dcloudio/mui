@@ -8,14 +8,19 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<style>
-			html,
-			body {
-				background-color: #efeff4;
-			}
 			/*跨webview需要手动指定位置*/
 			
+			header.mui-bar {
+				display: none!important;
+			}
+			.mui-bar-nav~.mui-content {
+				padding: 0!important;
+			}
 			#topPopover {
 				position: fixed;
 				top: 16px;
@@ -44,9 +49,14 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-footer">
-			<a href="#bottomPopover" class="mui-btn mui-btn-link mui-pull-right">菜单</a>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right"></a>
+			<h1 class="mui-title">popover（弹出菜单）</h1>
 		</header>
+		<footer class="mui-bar mui-bar-footer">
+			<a href="#bottomPopover" class="mui-btn mui-btn-link mui-pull-right">菜单</a>
+		</footer>
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<p>popover（弹出菜单是）mobile App中常见的UI组件，在用户点击位置附近弹出悬浮菜单，向用户展示更多信息或提供快捷操作。</p>
@@ -156,9 +166,10 @@
 
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<script>
-			mui.init();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
 			mui('.mui-scroll-wrapper').scroll();
 			mui('body').on('shown', '.mui-popover', function(e) {
 				//console.log('shown', e.detail.id);//detail为当前popover元素

@@ -73,7 +73,6 @@
 		<div class="mui-loader">加载中...</div>
 	</body>
 	<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 	<script type="text/javascript">
 		//启用双击监听
 		mui.init({
@@ -81,6 +80,19 @@
 				doubletap:true
 			}
 		});
+		var contentWebview = null;
+		mui.back = function() {
+			var current = plus.webview.currentWebview();
+			current.hide('auto');
+			setTimeout(function() {
+				document.getElementById("title").className = 'mui-title mui-fadeout';
+				if(contentWebview==null){
+					contentWebview = current.children()[0];
+				}
+				contentWebview.hide("none");
+			}, 200);
+		}
+		
 		var titleElem = document.getElementById("title")
 		var menu = document.getElementById("menu")
 
@@ -97,7 +109,7 @@
 			}
 			menu.style.display = display;
 		});
-		var contentWebview = null;
+		
 		document.getElementById("menu").addEventListener('tap', function(e) {
 			e.stopPropagation();
 			if(contentWebview==null){

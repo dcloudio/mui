@@ -1,0 +1,133 @@
+//
+// Slider styles (to be used with galleries.js)
+// --------------------------------------------------
+
+// Outer wrapper for slider
+.#{$namespace}slider {
+    //-webkit-backface-visibility: hidden;
+    overflow: hidden;
+    width: 100%;
+    position:relative;
+    .#{$namespace}segmented-control.#{$namespace}segmented-control-inverted{
+        .#{$namespace}control-item {
+            &.#{$namespace}active {
+                border-bottom:0;
+            }
+        }
+        ~ .#{$namespace}slider-group{
+            .#{$namespace}slider-item{
+                //@include hairline(double, #c8c7cc, 0); // double grey border.
+                border-top: 1px solid #c8c7cc;
+                border-bottom: 1px solid #c8c7cc;    
+            }
+        }
+     }
+    // Inner wrapper for slider (width of all sliders together)
+    .#{$namespace}slider-group {
+        //加上后好像内嵌轮播时，第一张图片显示有问题
+//      -webkit-backface-visibility: hidden;
+        position: relative;
+        font-size: 0; // Remove spaces from inline-block children
+        white-space: nowrap;
+        @include transition(all 0s linear);
+
+        // Individual slider
+        .#{$namespace}slider-item {
+//          -webkit-backface-visibility: hidden;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            vertical-align: top; // Ensure that li always aligns to top
+            >a:not(.#{$namespace}control-item){
+                position: relative;
+                line-height: 0;
+                display: block;
+            }
+            img{
+                width: 100%; 
+            }
+            .#{$namespace}table-view:before,.#{$namespace}table-view:after{
+                    height:0;
+             }
+//           .#{$namespace}table-view-cell:last-child:after{
+//               height: 0;
+//           }
+        }
+        &.#{$namespace}slider-loop{
+            @include transform(translate(-100%, 0px));
+        }
+//      &.#{$namespace}slider-loop .#{$namespace}slider-item{
+//          &:first-child{
+//              margin-left: -100%;
+//          }
+//          &:last-child{
+//              margin-right: -100%;
+//          }
+//      }
+    }
+}
+.#{$namespace}slider-title{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    text-align: left;
+    text-indent: 12px;
+    background-color: #000;
+    opacity: 0.8;
+    margin: 0;   
+}
+.#{$namespace}slider-indicator{
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align:center;
+    background:none;
+    &.#{$namespace}segmented-control{
+        position:relative;
+        bottom:auto;
+//      .#{$namespace}control-item{
+//          line-height: 40px;    
+//      }
+    }
+    .#{$namespace}indicator{
+        display: inline-block;
+        cursor: pointer;
+        background: #aaa;
+        width: 6px;
+        height: 6px;
+        margin: 1px 6px;
+        border-radius: 50%;
+        @include box-shadow(0 0 1px 1px rgba(130,130,130,.7));
+    }
+    .#{$namespace}active.#{$namespace}indicator{
+        background: #fff;
+    }
+    .#{$namespace}icon{
+        width: 40px;
+        height: 30px;
+        margin: 3px;
+        font-size: 20px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid #dddddd;
+    }
+    .#{$namespace}number{
+        display: inline-block;
+        line-height: 32px;
+        width: 58px;
+        span{
+            color: #ff5053;
+        }
+    }
+}
+.#{$namespace}slider-progress-bar{
+    -webkit-backface-visibility: hidden;
+    @include transform(translateZ(0));
+    height:2px;
+    z-index:z("default");
+}

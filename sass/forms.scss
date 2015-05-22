@@ -1,0 +1,452 @@
+//
+// Forms
+// --------------------------------------------------
+
+// Force form elements to inherit font styles
+input,
+textarea,
+select {
+    font-family: $font-family-default;
+    font-size: $font-size-default;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+    &:focus{
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-modify: read-write-plaintext-only;
+    }
+}
+
+// Stretch inputs/textareas to full width and add height to maintain a consistent baseline
+select,
+textarea,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    -webkit-appearance: none;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    line-height: $line-height-default;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 3px;
+    outline: none;
+    -webkit-user-select: text;
+}
+//input[type=number]::-webkit-outer-spin-button { margin: 0; }
+//turn off spin button
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+// Rounded search input
+input[type="search"] {
+    font-size: 16px;
+    height: 34px;
+    text-align: center;
+    background-color: rgba(0,0,0,.1);
+    border: 0;
+    border-radius: 6px;
+    // Override content-box in normalize
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+input[type="search"]:focus {
+    text-align: left;
+}
+
+// Allow text area's height to grow larger than a normal input
+textarea {
+    height: auto;
+    resize: none;
+}
+
+// Style select button to look like part of the Ratchet's style
+select {
+    margin-top:1px;
+    height: auto;
+    font-size: 14px;
+    background-color: #fff;
+    border: 0!important;
+    &:focus{
+        -webkit-user-modify: read-only;
+    }
+}
+
+
+
+// Input groups (cluster multiple inputs together into a single group)
+// -------------------------------------------------------------------
+
+// Remove spacing, borders, shadows and rounding since it all belongs on the .#{$namespace}input-group not the input
+.#{$namespace}input-group {
+    position: relative;
+    padding: 0;
+    border: 0;
+    background-color: #fff;
+    @include hairline(double, #c8c7cc, 0); // Double grey border.
+}
+.#{$namespace}input-group input[type=text],
+.#{$namespace}input-group textarea {
+    margin-bottom: 0;
+    background-color: transparent;
+    border-radius: 0;
+    @include box-shadow(none);
+    border: 0;
+    @include hairline(single, #c8c7cc, 15px);
+}
+.#{$namespace}input-group input[type="search"]{
+    background:none;
+}
+.#{$namespace}input-group input:last-child {
+    background-image: none;
+}
+// Input groups with labels
+// --------------------------------------------------
+.#{$namespace}input-row {
+    clear:left;
+    overflow: hidden;
+    select{
+        padding: 0;
+        height: 37px;
+        font-size:17px;
+    }
+}
+.#{$namespace}input-row:last-child,
+.#{$namespace}input-row label + input,.#{$namespace}input-row .mui-btn + input  {
+    background-image: none;
+}
+// To use labels with input groups, wrap a label and an input in an .#{$namespace}input-row
+.#{$namespace}input-group .#{$namespace}input-row {
+    height: 40px; // Matches the height of inputs.
+    @include hairline(single, #c8c7cc, 15px); // Single grey border with a 15px .
+}
+// Labels get floated left with a set percentage width
+.#{$namespace}input-row label {
+    float: left;
+    width: 35%;
+    padding: 10px 15px;
+    font-family: $font-family-default;
+    line-height: 1.1; // Put the text on the baseline.
+}
+.#{$namespace}input-row label ~
+{
+    input,select,textarea{
+        float: right;
+        width: 65%;
+        padding-left: 0;
+        margin-bottom: 0;
+        border: 0;    
+    }
+}
+.#{$namespace}input-row .mui-btn {
+    float: right;
+    width: 15%;
+    padding: 10px 15px;
+    font-family: $font-family-default;
+    line-height: 1.1; // Put the text on the baseline.
+}
+.#{$namespace}input-row .mui-btn ~
+{
+    input,select,textarea{
+        float: left;
+        width: 85%;
+        padding-left: 0;
+        margin-bottom: 0;
+        border: 0;    
+    }
+}
+.#{$namespace}button-row  {
+    position: relative;
+    padding-top: 5px;
+    text-align: center;    
+}
+.#{$namespace}input-group .#{$namespace}button-row  {
+    height: 45px;
+}
+// Actual inputs float to right of labels and also have a set percentage
+.#{$namespace}input-row  {
+    position:relative;
+    &.#{$namespace}input-range{
+        padding-right: 20px;
+        overflow: visible;
+    }
+    .#{$namespace}inline{
+        padding: 8px 0;
+    }
+    .#{$namespace}input-clear ~ .#{$namespace}icon-clear,.#{$namespace}input-speech ~ .#{$namespace}icon-speech{
+        position:absolute;
+        right: 0px;
+        top: 10px;
+        font-size: 20px;
+        height: 38px;
+        width: 38px;
+        text-align: center;
+        color:#999;
+        z-index: z("default");
+    }
+    .#{$namespace}input-speech ~ .#{$namespace}icon-speech{
+        top:8px;
+        font-size:24px;
+    }
+    .#{$namespace}input-clear ~ .#{$namespace}icon-clear {
+        ~ .#{$namespace}icon-speech{
+            display:none;
+        }
+        &.#{$namespace}hidden{
+            ~ .#{$namespace}icon-speech{
+                display:inline-block;
+            }
+        }
+    }
+    .#{$namespace}icon-speech ~ .#{$namespace}placeholder{
+        right:38px;
+    }
+    &.#{$namespace}search{
+        .#{$namespace}icon-clear{
+            top:7px;
+        }
+        .#{$namespace}icon-speech{
+            top:5px;
+        }
+    }
+}
+
+//radio,checkbox
+.#{$namespace}radio,.#{$namespace}checkbox{
+    position:relative;
+    label{
+        float: none;
+        display: inline-block;
+        width: 100%;
+        padding-right: 58px;
+    }
+
+}
+.#{$namespace}radio.#{$namespace}left input[type="radio"],.#{$namespace}checkbox.#{$namespace}left input[type="checkbox"]{
+    left:20px;
+}
+.#{$namespace}radio.#{$namespace}left label,.#{$namespace}checkbox.#{$namespace}left label{
+    padding-left: 58px;
+    padding-right: 15px;
+}
+.#{$namespace}radio input[type="radio"],.#{$namespace}checkbox input[type="checkbox"]{
+    -webkit-appearance:none;
+    outline: 0!important;
+    width: 28px;
+    border: 0;
+    height: 26px;
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    top: 4px;
+    //设置背景色，否则在Ios上会有黑色边框；
+    background-color:transparent;
+    &[disabled]:before{
+        opacity: .3;
+    }
+    &:before{
+        font-family: Muiicons;
+        font-weight: normal;
+        border-radius: 0;
+        font-size: 28px;
+        line-height: 1;
+        text-decoration: none;
+        -webkit-font-smoothing: antialiased;
+        color: rgb(170, 170, 170);
+        background: none;
+    }
+    &:checked:before{
+        color:$primary-color;
+    }
+
+}
+.#{$namespace}radio.#{$namespace}disabled label,.#{$namespace}radio label.#{$namespace}disabled,.#{$namespace}checkbox.#{$namespace}disabled label,.#{$namespace}checkbox label.#{$namespace}disabled{
+    opacity: .4;
+}
+.#{$namespace}radio input[type="radio"]:before{
+    content: "\e411";
+}
+.#{$namespace}radio input[type="radio"]:checked:before{
+    content: "\e441";
+}
+.#{$namespace}checkbox input[type="checkbox"]:before{
+    content: "\e411";
+}
+.#{$namespace}checkbox input[type="checkbox"]:checked:before{
+    content: "\e442";
+}
+
+
+.#{$namespace}select{
+    position: relative;
+}
+.#{$namespace}select:before{
+    position: absolute;
+    top: 8px;
+    color:rgba(170, 170, 170, 0.6);
+    font-family: Muiicons;
+    right: 21px;
+    content: '\e581';
+}
+
+
+.#{$namespace}input-row .#{$namespace}switch{
+    float: right;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+//show the min and max
+.#{$namespace}input-range{
+    input[type="range"] {
+        -webkit-appearance: none!important;
+        cursor: pointer;
+        border: 0;
+        outline: none;
+        padding: 0;
+        margin: 17px 0;
+        background-color: #999;
+        height: 2px;
+        border-radius: 3px;
+        position: relative;
+        width:100%;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none!important;
+        background-color:$primary-color;
+        background-clip: padding-box;
+        height:28px;
+        width:28px;
+        border-radius: 50%;
+        border-color: darken($primary-color, 10%);
+    }
+    /*input[type="range"] {
+        -webkit-appearance: none;
+        background: #999;
+        height: 36px;
+        border-radius: 1px;
+        overflow: hidden;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        outline:none;
+        position:relative;
+        width:100%;
+    }*/
+    label ~ input[type="range"]{
+        width:65%;
+    }
+
+    /*input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none!important;
+        opacity: 0.5;
+        height:28px;
+        width:28px;
+        border-radius: 50%;
+        background:#00b7fb;
+        position: relative;
+        pointer-events: none;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        &:before{
+            position: absolute;
+            top: 13px;
+            left: -2000px;
+            width: 2000px;
+            height: 2px;
+            background: #00b7fb;
+            content:' ';
+        }
+    }*/
+    .#{$namespace}tooltip{
+        width: 64px;
+        height: 64px;
+        font-size: 36px;
+        line-height:64px;
+        opacity: .8;
+        background-color: #fff;
+        border:1px solid #ddd;
+        border-radius:6px;
+        color: #333;
+        text-shadow: 0 1px 0 #f3f3f3;
+        position:absolute;
+        top:-70px;
+        text-align:center;
+        z-index:z("default");
+    }
+}
+//.#{$namespace}bar .#{$namespace}input-row.#{$namespace}search .#{$namespace}icon-speech{
+//  top: -2px;
+//  right: 10px;
+//}
+.#{$namespace}search{
+    position: relative;
+    input[type="search"]{
+        padding-left:30px;
+    }
+    .#{$namespace}placeholder{
+        height: 34px;
+        font-size: 16px;
+        line-height:34px;
+        text-align: center;
+        background:none;
+        border: 0;
+        color:#999;
+        border-radius: 6px;
+        display:inline-block;
+        position:absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index:z("default");
+        .#{$namespace}icon{
+            color:#333;
+            font-size:20px;
+        }
+    }
+
+    &:before{
+        position: absolute;
+        font-family: Muiicons;
+        font-weight: normal;
+        font-size: 20px;
+        right: 50%;
+        margin-right:31px;
+        top: 50%;
+        margin-top: -18px;
+        content: '\e466';
+        display:none;
+    }
+    &.#{$namespace}active{
+        &:before{
+            left:5px;
+            right:auto;
+            margin-right:0;
+            font-size:20px;
+            display:block;
+        }
+        input[type="search"]{
+            text-align:left;
+        }
+        .#{$namespace}placeholder{
+            display:none;
+        }
+    }
+}
+

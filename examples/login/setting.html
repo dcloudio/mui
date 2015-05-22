@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+				overflow: hidden;
+			}
+			.mui-locker {
+				margin: 35px auto;
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">设定解锁手势</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 10px 0px;">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						启用状态
+						<div id="lockState" class="mui-switch">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</li>
+				</ul>
+				<div class="mui-locker" data-locker-options='{"ringColor":"rgba(221,221,221,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}' data-locker-width='320' data-locker-height='320'>
+				</div>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.locker.js"></script>
+		<script src="js/app.js"></script>
+
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var settings = app.getSettings();
+					var lockStateButton = doc.querySelector("#lockState");
+					var locker = doc.querySelector('.mui-locker');
+					lockStateButton.addEventListener('toggle', function(event) {
+						var isActive = event.detail.isActive;
+						locker.style.display = isActive ? 'block' : 'none';
+						if (!isActive) {
+							settings.gestures = '';
+							app.setSettings(settings);
+						}
+					}, false);
+					lockStateButton.classList[settings.gestures ? 'add' : 'remove']('mui-active')
+					locker.style.display = settings.gestures ? 'block' : 'none';
+					var record = [];
+					locker.addEventListener('done', function(event) {
+						var rs = event.detail;
+						if (rs.points.length < 4) {
+							plus.nativeUI.toast('设定的手势太简单了');
+							record = [];
+							rs.sender.clear();
+							return;
+						}
+						record.push(rs.points.join(''));
+						if (record.length >= 2) {
+							if (record[0] == record[1]) {
+								plus.nativeUI.toast('手势设定完成');
+								settings.gestures = record[0];
+								app.setSettings(settings);
+								setTimeout(function() {
+									$.openWindow({
+										url: 'main.html',
+										id: 'main'
+									});
+								}, 200);
+							} else {
+								plus.nativeUI.toast('两次手势不一致,请重新设定');
+							}
+							rs.sender.clear();
+							record = [];
+						} else {
+							plus.nativeUI.toast('请确认手势设定');
+							rs.sender.clear();
+						}
+					}, false);
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

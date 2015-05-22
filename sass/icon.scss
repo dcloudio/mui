@@ -1,0 +1,170 @@
+//
+// Muiicons
+// --------------------------------------------------
+
+@font-face {
+    font-family: Muiicons;
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/mui.ttf') format('truetype');
+}
+
+.#{$namespace}icon {
+    display: inline-block;
+    font-family: Muiicons;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+
+    &.#{$namespace}right{
+        &:before{
+            float:right;
+            padding-left: 0.2em;
+        }   
+    }
+}
+
+
+// 通讯录
+// 空心部分
+.#{$namespace}icon-contact:before { content: "\e100"; }
+.#{$namespace}icon-person:before { content: "\e101"; }
+.#{$namespace}icon-personadd:before { content: "\e102"; }
+
+// 实心部分
+.#{$namespace}icon-contact-filled:before { content: "\e130"; }
+.#{$namespace}icon-person-filled:before { content: "\e131"; }
+.#{$namespace}icon-personadd-filled:before { content: "\e132"; }
+
+
+// 通讯功能
+// 空心部分
+.#{$namespace}icon-phone:before { content: "\e200"; }
+.#{$namespace}icon-email:before { content: "\e201"; }
+.#{$namespace}icon-chatbubble:before { content: "\e202"; }
+.#{$namespace}icon-chatboxes:before { content: "\e203"; }
+
+// 实心部分
+.#{$namespace}icon-phone-filled:before { content: "\e230"; }
+.#{$namespace}icon-email-filled:before { content: "\e231"; }
+.#{$namespace}icon-chatbubble-filled:before { content: "\e232"; }
+.#{$namespace}icon-chatboxes-filled:before { content: "\e233"; }
+// 通讯功能补充类
+.#{$namespace}icon-weibo:before { content: "\e260"; }
+.#{$namespace}icon-weixin:before { content: "\e261"; }
+.#{$namespace}icon-pengyouquan:before { content: "\e262"; }
+.#{$namespace}icon-chat:before { content: "\e263"; }
+
+
+// 设备类
+// 空心部分
+.#{$namespace}icon-videocam:before { content: "\e300"; }
+.#{$namespace}icon-camera:before { content: "\e301"; }
+.#{$namespace}icon-mic:before { content: "\e302"; }
+.#{$namespace}icon-location:before { content: "\e303"; }
+
+// 实心部分
+.#{$namespace}icon-mic-filled:before,.#{$namespace}icon-speech:before { content: "\e332"; }
+.#{$namespace}icon-location-filled:before { content: "\e333"; }
+
+// 设备补充类
+.#{$namespace}icon-micoff:before { content: "\e360"; }
+// .#{$namespace}icon-volumehigh:before { content: "\e361"; }
+// .#{$namespace}icon-volumelow:before { content: "\e362"; }
+.#{$namespace}icon-image:before { content: "\e363"; }
+.#{$namespace}icon-map:before { content: "\e364"; }
+
+
+// 操作标志类
+// 空心部分
+.#{$namespace}icon-compose:before { content: "\e400"; }
+.#{$namespace}icon-trash:before { content: "\e401"; }
+.#{$namespace}icon-upload:before { content: "\e402"; }
+.#{$namespace}icon-download:before { content: "\e403"; }
+.#{$namespace}icon-close:before { content: "\e404"; }
+.#{$namespace}icon-redo:before { content: "\e405"; }
+.#{$namespace}icon-undo:before { content: "\e406"; }
+.#{$namespace}icon-refresh:before { content: "\e407"; }
+.#{$namespace}icon-star:before { content: "\e408"; }
+.#{$namespace}icon-plus:before { content: "\e409"; }
+.#{$namespace}icon-minus:before { content: "\e410"; }
+.#{$namespace}icon-circle:before,.#{$namespace}icon-checkbox:before { content: "\e411"; }
+
+// 实心部分
+.#{$namespace}icon-close-filled:before,.#{$namespace}icon-clear:before { content: "\e434"; }
+.#{$namespace}icon-refresh-filled:before { content: "\e437"; }
+.#{$namespace}icon-star-filled:before { content: "\e438"; }
+.#{$namespace}icon-plus-filled:before { content: "\e439"; }
+.#{$namespace}icon-minus-filled:before { content: "\e440"; }
+.#{$namespace}icon-circle-filled:before { content: "\e441"; }
+.#{$namespace}icon-checkbox-filled:before { content: "\e442"; }
+
+
+// 操作标志补充类
+.#{$namespace}icon-closeempty:before { content: "\e460"; }
+.#{$namespace}icon-refreshempty:before { content: "\e461"; }
+.#{$namespace}icon-reload:before { content: "\e462"; }
+.#{$namespace}icon-starhalf:before { content: "\e463"; }
+.#{$namespace}icon-spinner:before { content: "\e464"; }
+.#{$namespace}icon-spinner-cycle:before { content: "\e465"; }
+.#{$namespace}icon-search:before { content: "\e466"; }
+// .#{$namespace}icon-searchstrong:before { content: "\e467"; }
+.#{$namespace}icon-plusempty:before { content: "\e468"; }
+
+.#{$namespace}icon-forward:before { content: "\e470"; }
+.#{$namespace}icon-back:before,.#{$namespace}icon-left-nav:before { content: "\e471"; }
+.#{$namespace}icon-checkmarkempty:before { content: "\e472"; }
+// .#{$namespace}icon-share:before { content: "\e473"; }
+
+
+// 拟物标志类
+// 空心部分
+.#{$namespace}icon-home:before { content: "\e500"; }
+.#{$namespace}icon-navigate:before { content: "\e501"; }
+.#{$namespace}icon-gear:before { content: "\e502"; }
+.#{$namespace}icon-paperplane:before { content: "\e503"; }
+.#{$namespace}icon-info:before { content: "\e504"; }
+.#{$namespace}icon-help:before { content: "\e505"; }
+.#{$namespace}icon-locked:before { content: "\e506"; }
+.#{$namespace}icon-more:before { content: "\e507"; }
+.#{$namespace}icon-flag:before { content: "\e508"; }
+
+// 实心部分
+.#{$namespace}icon-home-filled:before { content: "\e530"; }
+.#{$namespace}icon-gear-filled:before { content: "\e532"; }
+.#{$namespace}icon-info-filled:before { content: "\e534"; }
+.#{$namespace}icon-help-filled:before { content: "\e535"; }
+.#{$namespace}icon-more-filled:before { content: "\e537"; }
+
+// 拟物标志补充类
+.#{$namespace}icon-settings:before { content: "\e560"; }
+// .#{$namespace}icon-settingsstrong:before { content: "\e561"; }
+.#{$namespace}icon-list:before { content: "\e562"; }
+.#{$namespace}icon-bars:before { content: "\e563"; }
+// .#{$namespace}icon-more-vertical:before { content: "\e564"; }
+.#{$namespace}icon-loop:before { content: "\e565"; }
+// .#{$namespace}icon-loopstrong:before { content: "\e566"; }
+.#{$namespace}icon-paperclip:before { content: "\e567"; }
+
+// 箭头
+.#{$namespace}icon-arrowup:before { content: "\e580"; }
+.#{$namespace}icon-arrowdown:before { content: "\e581"; }
+.#{$namespace}icon-arrowleft:before { content: "\e582"; }
+.#{$namespace}icon-arrowright:before { content: "\e583"; }
+
+.#{$namespace}icon-arrowthinup:before { content: "\e584"; }
+.#{$namespace}icon-arrowthindown:before { content: "\e585"; }
+.#{$namespace}icon-arrowthinleft:before { content: "\e586"; }
+.#{$namespace}icon-arrowthinright:before { content: "\e587"; }
+
+.#{$namespace}icon-pulldown:before { content: "\e588"; }
+
+
+
+
+
+
+

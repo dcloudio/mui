@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link href="../css/mui.listpicker.css" rel="stylesheet" />
+		<style>
+			
+			h5.mui-content-padded {
+				margin-left: 3px;
+				margin-top: 20px !important;
+			}
+			h5.mui-content-padded:first-child {
+				margin-top: 12px !important;
+			}
+			.ui-alert {
+				text-align: center;
+				padding: 20px 10px;
+				font-size: 16px;
+			}
+			/*.ui-mask {
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 999998;
+				background-color: rgba(0, 0, 0, 0.15);
+				display: none;
+				-webkit-transition: .3s;
+			}*/
+			.mui-btn {
+				font-size: 16px;
+				padding: 8px;
+				margin: 3px;
+			}
+			/*用户列表示例*/
+			
+			.user-panel {
+				/*position: fixed;
+				left: 0px;
+				width: 100%;
+				z-index: 999999;
+				background-color: #eee;
+				border-top: solid 1px #ccc;
+				box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+				-webkit-transition: .3s;
+				bottom: 0px;
+				-webkit-transform: translateY(280px);*/
+			}
+			
+			.mui-picker-panel{
+				position: fixed;
+				left: 0px;
+				width: 100%;
+				z-index: 999999;
+				background-color: #eee;
+				border-top: solid 1px #ccc;
+				box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+				-webkit-transition: .3s;
+				bottom: 0px;
+				-webkit-transform: translateY(280px);
+			}
+			
+			.mui-picker-panel .mui-panel-header {
+				padding: 6px;
+				font-size: 14px;
+				color: #888;
+			}
+			.mui-picker-panel .mui-panel-body {
+				position: relative;
+				width: 100%;
+				height: 200px;
+				border-top: solid 1px #ddd;
+			}
+			.user-panel .mui-listpicker {
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				border: none;
+			}
+			.mui-panel-header button {
+				font-size: 12px;
+				padding: 5px 10px;
+			}
+			.mui-panel-header button:last-child {
+				float: right;
+			}
+			/**级联示例样式**/
+			
+			.city-panel {
+				/*position: fixed;
+				left: 0px;
+				width: 100%;
+				z-index: 999999;
+				background-color: #eee;
+				border-top: solid 1px #ccc;
+				box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+				-webkit-transition: .3s;
+				bottom: 0px;
+				-webkit-transform: translateY(280px);*/
+			}
+			/*.city-panel .city-panel-header {
+				padding: 6px;
+				font-size: 14px;
+				color: #888;
+			}
+			.mui-panel-header button {
+				font-size: 12px;
+				padding: 5px 10px;
+			}
+			.city-panel-header button:last-child {
+				float: right;
+			}
+			.city-panel .city-panel-body {
+				position: relative;
+				width: 100%;
+				height: 200px;
+				border-top: solid 1px #ddd;
+			}*/
+			.city-panel .mui-listpicker {
+				width: 50%;
+				height: 100%;
+				margin: 0px;
+				float: left;
+				border: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">list picker（选择列表）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<h5 class="mui-content-padded">普通示例</h5>
+				<button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>显示选择人员 ...</button>
+				<button id='showUserPickerAndSelect' class="mui-btn mui-btn-block" type='button'>显示并选中指定的项（庄颜） ...</button>
+				<div id='userPickerResult' class="ui-alert"></div>
+				<div class="user-panel mui-picker-panel">
+					<div class="mui-panel-header">
+						<button id='userPickerCancelBtn' class="mui-btn">取消</button>
+						<button id='userPickerOKBtn' class="mui-btn mui-btn-blue">确定</button>
+					</div>
+					<div class="mui-panel-body">
+						<div id='userPicker' class="mui-listpicker">
+							<div class="mui-listpicker-inner">
+								<ul>
+									<li data-value="ywj">董事长 叶文洁</li>
+									<li data-value="aaa">总经理 艾AA</li>
+									<li data-value="lj">罗辑</li>
+									<li data-value="ymt">云天明</li>
+									<li data-value="shq">史强</li>
+									<li data-value="zhbh">章北海</li>
+									<li data-value="zhy">庄颜</li>
+									<li data-value="gyf">关一帆</li>
+									<li data-value="zhz">智子</li>
+									<li data-value="gezh">歌者</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h5 class="mui-content-padded">级联示例</h5>
+				<button id='showCityPicker' class="mui-btn mui-btn-block" type='button'>显示选择城市 ...</button>
+				<div id='cityPickerResult' class="ui-alert"></div>
+				<div class="city-panel mui-picker-panel">
+					<div class="mui-panel-header">
+						<button id='cityPickerCancel' class="mui-btn">取消</button>
+						<button id='cityPickerOK' class="mui-btn mui-btn-blue">确定</button>
+					</div>
+					<div class="mui-panel-body">
+						<div id='provincePicker' class="mui-listpicker">
+							<div class="mui-listpicker-inner">
+								<ul>
+								</ul>
+							</div>
+						</div>
+						<div id='cityPicker' class="mui-listpicker">
+							<div class="mui-listpicker-inner">
+								<ul>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="ui-mask"></div>-->
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.listpicker.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			(function($, doc) {
+				$.init();
+				$.ready(function() {
+//					var mask = doc.querySelector('.ui-mask');
+					var mask = mui.createMask(_hidePickerPanel);
+					var currentPanel = null;
+					//普通示例****************************************************
+					var showUserPickerBtn = doc.querySelector('#showUserPicker');
+					var showUserPickerAndSelect = doc.querySelector('#showUserPickerAndSelect');
+					var userPickerPanel = doc.querySelector('.user-panel');
+					var userPickerOKBtn = doc.querySelector('#userPickerOKBtn');
+					var userPickerCancelBtn = doc.querySelector('#userPickerCancelBtn');
+					var userPickerResult = doc.querySelector('#userPickerResult');
+					var userPicker = doc.querySelector('#userPicker');
+					userPicker.setSelectedValue('shq');
+					var showUserPanel = function() {
+//						mask.style.display = 'block';
+						mask.show();
+						currentPanel = userPickerPanel;
+						userPickerPanel.style.webkitTransform = 'translateY(0px)';
+					};
+//					function hideUserPanel() {
+//						userPickerPanel.style.webkitTransform = 'translateY(280px)';
+//						mask.style.display = 'none';
+//					}
+					//关闭弹出的选择面板
+					function _hidePickerPanel () {
+						if(currentPanel){
+							currentPanel.style.webkitTransform = 'translateY(280px)';
+							currentPanel = null;
+						}
+					}
+					
+					//关闭弹出的选择面板
+					function hidePickerPanel () {
+						_hidePickerPanel();
+						mask.close();
+					}
+					
+//					mask.addEventListener('tap', hideUserPanel, false);
+					showUserPickerBtn.addEventListener('tap', showUserPanel, false);
+					showUserPickerAndSelect.addEventListener('tap', function() {
+						userPicker.setSelectedValue('zhy');
+						showUserPanel();
+					}, false);
+					//确定按钮的点击事件
+					userPickerOKBtn.addEventListener('tap', function() {
+						var buffer = [];
+						buffer.push('索引: ' + userPicker.getSelectedIndex());
+						buffer.push('值: ' + userPicker.getSelectedValue());
+						buffer.push('文本: ' + userPicker.getSelectedText());
+						buffer.push('项: ' + JSON.stringify(userPicker.getSelectedItem()));
+						userPickerResult.innerHTML = buffer.join(' , ');
+						hidePickerPanel();
+					}, false);
+					//取消按钮的点击事件
+					userPickerCancelBtn.addEventListener('tap', hidePickerPanel, false);
+					/*
+					userPicker.addEventListener('change', function(event) {
+						var item = event.detail.item;
+						console.log(item.value);
+					}, false);
+					*/
+					//级联示例********************************************
+					var showCityPickerBtn = doc.querySelector('#showCityPicker');
+					var cityPickerPanel = doc.querySelector('.city-panel');
+					var cityCancelBtn = doc.querySelector('#cityPickerCancel');
+					var cityOKBtn = doc.querySelector('#cityPickerOK');
+					var provincePicker = doc.querySelector('#provincePicker');
+					var cityPicker = doc.querySelector('#cityPicker');
+					var cityPickerResult = doc.querySelector('#cityPickerResult');
+					var showCityPanel = function() {
+//						mask.style.display = 'block';
+						mask.show();
+						currentPanel = cityPickerPanel;
+						cityPickerPanel.style.webkitTransform = 'translateY(0px)';
+					};
+//					var hideCityPanel = function() {
+//						cityPickerPanel.style.webkitTransform = 'translateY(280px)';
+//						mask.style.display = 'none';
+//					};
+					//TODO chb
+//					mask.addEventListener('tap', function() {
+//						hideCityPanel();
+//					}, false);
+					showCityPickerBtn.addEventListener('tap', showCityPanel, false);
+					cityCancelBtn.addEventListener('tap', hidePickerPanel, false);
+					//城市级联选择的确定按钮
+					cityOKBtn.addEventListener('tap', function() {
+						cityPickerResult.innerText = '您选择了: ' + provincePicker.getSelectedText() + cityPicker.getSelectedText();
+						hidePickerPanel();
+					}, false);
+					//城市列表数据
+					var provinces = [{
+						value: 'sx',
+						text: '陕西',
+						citys: [{
+							value: 'xy',
+							text: '咸阳'
+						}, {
+							value: 'xa',
+							text: '西安'
+						}, {
+							value: 'ya',
+							text: '延安'
+						}, {
+							value: 'bj',
+							text: '宝鸡'
+						}, {
+							value: 'tc',
+							text: '铜川'
+						}, {
+							value: 'wn',
+							text: '渭南'
+						}, {
+							value: 'sl',
+							text: '商洛 '
+						}, {
+							value: 'hz',
+							text: '汉中 '
+						}]
+					}, {
+						value: 'hn',
+						text: '河南',
+						citys: [{
+							value: 'ly',
+							text: '洛阳'
+						}, {
+							value: 'df',
+							text: '开封'
+						}, {
+							value: 'ny',
+							text: '南阳'
+						}, {
+							value: 'ay',
+							text: '安阳'
+						}, {
+							value: 'jy',
+							text: '济源'
+						}, {
+							value: 'jz',
+							text: '焦作'
+						}, {
+							value: 'xx',
+							text: '新乡'
+						}, {
+							value: 'xy',
+							text: '信阳'
+						}, {
+							value: 'py',
+							text: '濮阳'
+						}, {
+							value: 'smx',
+							text: '三门峡'
+						}, {
+							value: 'sq',
+							text: '商丘'
+						}, {
+							value: 'zk',
+							text: '周口'
+						}, {
+							value: 'pds',
+							text: '平顶山'
+						}]
+					}, {
+						value: 'sd',
+						text: '山东',
+						citys: [{
+							value: 'qf',
+							text: '曲阜'
+						}, {
+							value: 'jn',
+							text: '济南'
+						}, {
+							value: 'qd',
+							text: '青岛'
+						}, {
+							value: 'wh',
+							text: '威海'
+						}, {
+							value: 'yc',
+							text: '烟台'
+						}, {
+							value: 'hz',
+							text: '荷泽'
+						}, {
+							value: 'ta',
+							text: '泰安'
+						}]
+					}];
+					//绑定
+					provincePicker.setItems(provinces);
+					provincePicker.addEventListener('change', function(event) {
+						var eventData = event.detail;
+						cityPicker.setItems(eventData.item.citys);
+					}, false);
+					setTimeout(function() {
+						provincePicker.setSelectedIndex(1);
+					}, 200);
+				});
+			})(mui, document);
+		</script>
+	</body>
+
+</html>

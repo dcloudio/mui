@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+
+		<style>
+			ul {
+				font-size: 14px;
+				color: #8f8f94;
+			}
+			.mui-btn-block {
+				padding: 12px 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">主页</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>
+					您好，您已成功登录。
+					<ul>
+						<li>关闭应用并不会注销当前用户的登录状态。</li>
+						<li>注销登录会清除当前用户的登录状态。</li>
+						<li>如果登录时您选择了 "记住我的状态"，可以在这里设置 "解锁手势图案"。</li>
+					</ul>
+				</p>
+				<button id='setting' class="mui-btn mui-btn-block mui-btn-primary">设置解锁图案</button>
+				<button id='exit' class="mui-btn mui-btn-block mui-btn-green">关闭应用</button>
+				<button id='logout' class="mui-btn mui-btn-red mui-btn-block">注销登录</button>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var settings = app.getSettings();
+					//退出应用
+					var exitButton = doc.querySelector('#exit');
+					exitButton.addEventListener('tap', function(event) {
+						if (!settings.autoLogin) {
+							app.setState({});
+						}
+						plus.runtime.quit();
+					});
+					exitButton.style.display = mui.os.ios ? 'none' : 'block';
+					//设置
+					var settingButton = doc.querySelector('#setting');
+					settingButton.style.display = settings.autoLogin ? 'block' : 'none';
+					settingButton.addEventListener('tap', function(event) {
+						$.openWindow({
+							url: 'setting.html',
+							id: 'setting'
+						});
+					});
+					//注销
+					$.oldBack = mui.back;
+					var logoutButton = doc.querySelector('#logout');
+					logoutButton.addEventListener('tap', function(event) {
+						app.setState({});
+						$.openWindow({
+							url: 'login.html',
+							id: 'login',
+							show: {
+								aniShow: 'slide-in-left'
+							}
+						});
+					});
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

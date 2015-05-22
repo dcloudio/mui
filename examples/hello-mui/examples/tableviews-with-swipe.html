@@ -8,19 +8,10 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<style>
-			html,
-			body {
-				background-color: #efeff4;
-			}
-			header.mui-bar {
-				display: none;
-			}
-			.mui-bar-nav~.mui-content {
-				padding: 0;
-			}
-		</style>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 
 	<body>
@@ -135,12 +126,8 @@
 			</ul>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<script>
-			//禁止右滑关闭
-			mui.init({
-				swipeBack: false
-			});
+			mui.init();
 			(function($) {
 				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
 				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
