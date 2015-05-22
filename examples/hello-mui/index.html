@@ -138,52 +138,21 @@
 			var subWebview = null,
 				template = null;
 			document.getElementById('info').addEventListener('tap', function() {
-				if(mui.os.ios){
-					mui.openWindow({
-						id: 'about',
-						url: 'examples/info.html',
-						styles: {
-							popGesture: "close"
-						},
-						show: {
-							aniShow: 'slide-in-right'
-						},
-						waiting: {
-							autoShow: false
-						}
-					});	
-				}else{
-					if (subWebview == null) {
-						//获取共用父窗体
-						template = plus.webview.getWebviewById("default-main");
+				var aniShow = mui.os.ios?"slide-in-right":"zoom-fade-out";
+				mui.openWindow({
+					id: 'about',
+					url: 'examples/info.html',
+					styles: {
+						popGesture: "close"
+					},
+					show: {
+						aniShow: aniShow,
+						duration:200
+					},
+					waiting: {
+						autoShow: false
 					}
-					if(template){
-						subWebview = template.children()[0];	
-						
-						var reload = true;
-						if (subWebview.getURL() != 'examples/info.html') {
-							subWebview.loadURL("examples/info.html");
-						} else {
-							reload = false;
-						}
-						(!reload) && subWebview.show();
-						
-//						subWebview.loadURL('examples/info.html');
-						if(reload){
-							//修改共用父模板的标题
-							mui.fire(template, 'updateHeader', {
-								title: '关于',
-								showMenu: false
-							});
-						}else{
-							console.log("show direct");
-							subWebview.show("none");
-						}
-						
-						template.show('zoom-fade-out', 150);
-					}
-				}
-				
+				});	
 			});
 
 			 //首页返回键处理

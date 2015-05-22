@@ -2084,13 +2084,19 @@ var mui = (function(document, undefined) {
 			}
 		}
 	};
+	var __back = function() {
+		$.back();
+	};
+	var __menu = function() {
+		$.menu();
+	};
 	//默认监听
 	$.plusReady(function() {
 		if ($.options.keyEventBind.backbutton) {
-			plus.key.addEventListener('backbutton', $.back, false);
+			plus.key.addEventListener('backbutton', __back, false);
 		}
 		if ($.options.keyEventBind.menubutton) {
-			plus.key.addEventListener('menubutton', $.menu, false);
+			plus.key.addEventListener('menubutton', __menu, false);
 		}
 	});
 	//处理按键监听事件
@@ -2101,10 +2107,10 @@ var mui = (function(document, undefined) {
 			$.plusReady(function() {
 				//如果不为true，则移除默认监听
 				if (!$.options.keyEventBind.backbutton) {
-					plus.key.removeEventListener('backbutton', $.back);
+					plus.key.removeEventListener('backbutton', __back);
 				}
 				if (!$.options.keyEventBind.menubutton) {
-					plus.key.removeEventListener('menubutton', $.menu);
+					plus.key.removeEventListener('menubutton', __menu);
 				}
 			});
 		}

@@ -250,7 +250,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/pullrefresh.html">
+					<a class="mui-navigate-right" open-type="common" href="examples/pullrefresh_main.html">
 						pull to refresh（下拉刷新和上拉加载更多）
 					</a>
 				</li>
@@ -356,17 +356,22 @@
 					}
 				}
 				//Android平台暂时使用slide-in-right动画
-				//				aniShow = "slide-in-right"
+				//aniShow = "slide-in-right"
 			}
 			 //初始化，并预加载webview模式的选项卡
 			mui.init({
 				preloadPages: [{
-					url: 'examples/tab-webview-main.html',
-					id: 'examples/tab-webview-main.html'
+					url: 'examples/tab-webview-main.html'
+				},
+				{
+					url:"examples/pullrefresh_main.html",
+					styles:{
+						popGesture:'hide'
+					}
 				}]
 			});
 			var templates = {};
-			var getTemplate = function(name, header, content, loading) {
+			var getTemplate = function(name, header, content) {
 				var template = templates[name];
 				if (!template) {
 					//预加载共用父模板；
@@ -395,7 +400,7 @@
 					subWebview.addEventListener('loaded', function() {
 						setTimeout(function() {
 							subWebview.show();
-						}, 50);
+						}, 10);
 					});
 					subWebview.hide();
 					headerWebview.append(subWebview);
@@ -409,13 +414,11 @@
 						name: name,
 						header: headerWebview,
 						content: subWebview,
-						loaded: loading
 					};
 				}
 				return template;
 			};
 			var initTemplates = function() {
-				getTemplate('pullrefresh', 'examples/template_pullrefresh.html', 'examples/pullrefresh.html', true);
 				getTemplate('default', 'examples/template.html');
 			};
 			mui.plusReady(function() {
@@ -451,7 +454,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html') && !~href.indexOf('pullrefresh.html') && mui.os.ios) {
+					if (!~id.indexOf('popovers.html') && mui.os.ios) {
 						mui.openWindow({
 							id: id,
 							url: this.href,
@@ -466,42 +469,31 @@
 							}
 						});
 					} else {
+						//TODO  by chb 当初这么设计，是为了一个App中有多个模板，目前仅有一个模板的情况下，实际上无需这么复杂
 						//使用父子模板方案打开的页面
 						//获得共用模板组
-						var template = ~href.indexOf('pullrefresh.html') ? getTemplate('pullrefresh') : getTemplate('default');
+						var template = getTemplate('default');
 						//判断是否显示右上角menu图标；
 						var showMenu = ~href.indexOf('popovers.html') ? true : false;
 						//获得共用父模板
 						var headerWebview = template.header;
-						//获得共用子webview
-						var contentWebview = template.content;
 						var title = this.innerText.trim();
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(headerWebview, 'updateHeader', {
 							title: title,
-							showMenu: showMenu
+							showMenu: showMenu,
+							target:href,
+							aniShow: aniShow
 						});
-						var reload = true;
-						if (!template.loaded) {
-							if (contentWebview.getURL() != this.href) {
-								contentWebview.loadURL(this.href);
-							} else {
-								reload = false;
-							}
-						} else {
-							reload = false;
-						}
-						(!reload) && contentWebview.show();
-						headerWebview.show('slide-in-right', 150);
 					}
 				}
 			});
 			var index = null; //主页面
 			function openMenu() {
-					!index && (index = mui.currentWebview.parent());
-					mui.fire(index, "menu:open");
-				}
-				//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+				!index && (index = mui.currentWebview.parent());
+				mui.fire(index, "menu:open");
+			}
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
 			window.addEventListener('dragstart', function(e) {
 				mui.gestures.touch.lockDirection = true; //锁定方向
 				mui.gestures.touch.startDirection = e.detail.direction;

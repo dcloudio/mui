@@ -102,7 +102,7 @@
 				<header class="mui-bar mui-bar-nav">
 					<a href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
 					<a class="mui-action-back mui-btn mui-btn-link mui-pull-right">关闭</a>
-					<h1 class="mui-title">右滑导航</h1>
+					<h1 class="mui-title">div模式右滑菜单</h1>
 				</header>
 				<div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
 					<div class="mui-scroll">
@@ -194,6 +194,8 @@
 							break;
 					}
 					offCanvasWrapper.offCanvas().refresh();
+					offCanvasSide.classList.remove('mui-transitioning');
+					offCanvasSide.setAttribute('style', '');
 				}
 			});
 
