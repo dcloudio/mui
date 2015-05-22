@@ -81,6 +81,7 @@
 						slideNumber: self.slideNumber
 					});
 				}
+				self._initTimer();
 			});
 
 			self.wrapper.addEventListener('slide', function(e) {
@@ -150,6 +151,10 @@
 			this._super(e);
 			var direction = e.detail.direction;
 			if (direction === 'left' || direction === 'right') {
+				//拖拽期间取消定时
+				var slidershowTimer = this.wrapper.getAttribute('data-slidershowTimer');
+				slidershowTimer && window.clearTimeout(slidershowTimer);
+				
 				e.stopPropagation();
 			}
 		},
@@ -280,7 +285,6 @@
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
-			this._initTimer();
 		},
 		//API
 		setTranslate: function(x, y) {
