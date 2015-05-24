@@ -356,7 +356,7 @@
 					}
 				}
 				//Android平台暂时使用slide-in-right动画
-				//aniShow = "slide-in-right"
+				aniShow = "slide-in-right"
 			}
 			 //初始化，并预加载webview模式的选项卡
 			mui.init({
@@ -400,7 +400,7 @@
 					subWebview.addEventListener('loaded', function() {
 						setTimeout(function() {
 							subWebview.show();
-						}, 10);
+						}, 50);
 					});
 					subWebview.hide();
 					headerWebview.append(subWebview);
@@ -454,7 +454,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html') && mui.os.ios) {
+					if (!~id.indexOf('popovers.html')&&!~id.indexOf('tab-with-viewpagerindicator.html') && mui.os.ios) {
 						mui.openWindow({
 							id: id,
 							url: this.href,
@@ -477,14 +477,28 @@
 						var showMenu = ~href.indexOf('popovers.html') ? true : false;
 						//获得共用父模板
 						var headerWebview = template.header;
+						//获得共用子webview
+						var contentWebview = template.content;
 						var title = this.innerText.trim();
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(headerWebview, 'updateHeader', {
 							title: title,
-							showMenu: showMenu,
-							target:href,
-							aniShow: aniShow
+							showMenu: showMenu
 						});
+						
+						var reload = true;
+						if (!template.loaded) {
+							if (contentWebview.getURL() != this.href) {
+								contentWebview.loadURL(this.href);
+							} else {
+								reload = false;
+							}
+						} else {
+							reload = false;
+						}
+						(!reload) && contentWebview.show();
+						
+						headerWebview.show(aniShow, 150);
 					}
 				}
 			});

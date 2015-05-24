@@ -99,8 +99,6 @@
 		 window.addEventListener("updateHeader", function(e) {
 			var title = e.detail.title;
 			var showMenu = e.detail.showMenu;
-			var href = e.detail.target;
-			var aniShow = e.detail.aniShow;
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
 			var display = showMenu ? "" : "none";
@@ -111,19 +109,6 @@
 			}
 			menu.style.display = display;
 			
-			var template = plus.webview.getWebviewById("default-main");
-			//获得共用子webview
-			var subWebview = template.children()[0];
-			
-			var reload = true;
-			if (subWebview.getURL() != href) {
-				subWebview.loadURL(href);
-			} else {
-				subWebview.show();
-			}
-			setTimeout(function () {
-				template.show(aniShow);
-			},10);
 		});
 		
 		document.getElementById("menu").addEventListener('tap', function(e) {

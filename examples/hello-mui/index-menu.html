@@ -90,7 +90,7 @@
 				var id = this.getAttribute("href");
 				var type = this.getAttribute("open-type");
 				var href = this.href;
-				if(type=="common"||mui.os.ios){
+				if(type=="common"||(mui.os.ios&&!~id.indexOf('tab-with-viewpagerindicator.html')) ){
 					var webview_style = {
 						popGesture: "close"
 					};
@@ -106,12 +106,20 @@
 						}
 					});
 				}else{
+					var href = this.href;
 					var title = this.innerText;
-					if(!template){
-						template = plus.webview.getWebviewById("default-main");
-					}
+					template = plus.webview.getWebviewById("default-main");
+					//获得共用子webview
+					subWebview = template.children()[0];
+					
 					//通知模板修改标题，并显示隐藏右上角图标；
-					mui.fire(template,'updateHeader',{title:title,showMenu:false,target:href,aniShow:aniShow});
+					mui.fire(template,'updateHeader',{title:title,showMenu:false});
+					if (subWebview.getURL() != href) {
+						subWebview.loadURL(href);
+					} else {
+						 subWebview.show();
+					}
+					template.show('slide-in-right', 150);
 				}
 			});
 			
