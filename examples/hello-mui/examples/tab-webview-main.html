@@ -75,8 +75,6 @@
 				plus.webview.show(targetTab);
 				//隐藏当前;
 				plus.webview.hide(activeTab);
-				//TODO 为了规避5+的bug，暂时需要执行两次隐藏
-				plus.webview.hide(activeTab);
 				//更改当前活跃的选项卡
 				activeTab = targetTab;
 			});
