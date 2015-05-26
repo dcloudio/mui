@@ -1087,7 +1087,7 @@ input[type="submit"]:enabled:active, input[type="submit"].mui-active:enabled,
   height: 44px;
   padding-right: 10px;
   padding-left: 10px;
-  background-color: rgba(247, 247, 247, .98);
+  background-color: #f7f7f7;
   border-bottom: 0;
   -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .85);
           box-shadow: 0 0 1px rgba(0, 0, 0, .85);
@@ -2564,7 +2564,7 @@ select:focus {
   z-index: 999;
   display: none;
   width: 280px;
-  background-color: rgba(247, 247, 247, .98);
+  background-color: #f7f7f7;
   border-radius: 7px;
   -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, .1);
           box-shadow: 0 0 15px rgba(0, 0, 0, .1);
@@ -2592,7 +2592,7 @@ select:focus {
   width: 26px;
   height: 26px;
   content: ' ';
-  background: rgba(247, 247, 247, .98);
+  background: #f7f7f7;
   border-radius: 3px;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -2718,7 +2718,7 @@ select:focus {
   margin-bottom: 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  background-color: rgba(247, 247, 247, .98);
+  background-color: #f7f7f7;
   background-image: none;
   border-radius: 7px;
 }
@@ -3055,8 +3055,8 @@ select:focus {
   content: "Off";
 }
 .mui-switch.mui-dragging {
-  background-color: rgba(247, 247, 247, .98);
-  border-color: rgba(247, 247, 247, .98);
+  background-color: #f7f7f7;
+  border-color: #f7f7f7;
 }
 .mui-switch.mui-dragging .mui-switch-handle {
   width: 38px;

@@ -604,10 +604,10 @@
 		if (!id) {
 			id = ++$.uuid;
 			$.data[id] = viewApi = new View(self, options);
+			self.setAttribute('data-view', id);
 		} else {
 			viewApi = $.data[id];
 		}
 		return viewApi;
-
 	}
 })(mui, window);
