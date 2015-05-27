@@ -87,7 +87,12 @@
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			mui.init();
+			mui.init({
+				keyEventBind: {
+					backbutton: false,
+					menubutton: false
+				}
+			});
 			//获得侧滑主窗口webview对象
 			var main = null;
 			mui.plusReady(function () {

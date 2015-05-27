@@ -76,7 +76,13 @@
 		</div>
 	<script src="../js/mui.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		mui.init();
+		//关闭back、menu按键监听，这样侧滑主界面会自动获得back和memu的按键事件，仅在主界面处理按键逻辑即可；
+		mui.init({
+			keyEventBind: {
+				backbutton: false,
+				menubutton: false
+			}
+		});
 		var main = null;
 		mui.plusReady(function () {
 			main = plus.webview.currentWebview().opener();
@@ -90,8 +96,6 @@
 		window.addEventListener("swiperight",closeMenu);
 		
 		document.getElementById("close-btn").addEventListener('tap',closeMenu);
-		mui.menu = closeMenu;
-	  	mui.back = closeMenu;
 	</script>
 </body>
 
