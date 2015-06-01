@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-icon-star{color: #FFB400;font-size: 30px;}
+		    	.mui-icon-star-filled{color: #FFB400;font-size: 30px;} 
+		    	a{font: "微软雅黑" 25px/25px; color: #666;} 
+		    	p{font-size: 30px;padding: 10px;}
+		    	li{display: -webkit-box;width: 100%;padding: 0 10px;} 
+		    	li a{-webkit-box-flex: 1;display: block;}
+		    	li div{-webkit-box-flex: 2;text-align: right;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">评分</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<p>给MUI评分</p>
+				<li>
+					<a>运行速度</a>
+					<div class="icons" id="ran">
+						<i data-index="1" class="mui-icon mui-icon-star"></i>
+						<i data-index="2" class="mui-icon mui-icon-star"></i>
+						<i data-index="3" class="mui-icon mui-icon-star"></i>
+						<i data-index="4" class="mui-icon mui-icon-star"></i>
+						<i data-index="5" class="mui-icon mui-icon-star"></i>
+					</div>
+				</li>
+				<li>
+					<a>UI界面</a>
+					<div class="icons" id="ui">
+						<i data-index="1" class="mui-icon mui-icon-star"></i>
+						<i data-index="2" class="mui-icon mui-icon-star"></i>
+						<i data-index="3" class="mui-icon mui-icon-star"></i>
+						<i data-index="4" class="mui-icon mui-icon-star"></i>
+						<i data-index="5" class="mui-icon mui-icon-star"></i>
+					</div>
+				</li>
+				<li>
+					<a>服务态度</a>
+					<div class="icons" id="service">
+												<i data-index="1" class="mui-icon mui-icon-star"></i>
+						<i data-index="2" class="mui-icon mui-icon-star"></i>
+						<i data-index="3" class="mui-icon mui-icon-star"></i>
+						<i data-index="4" class="mui-icon mui-icon-star"></i>
+						<i data-index="5" class="mui-icon mui-icon-star"></i>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		      mui('.icons').on('tap','i',function(){
+		      	var index = parseInt(this.getAttribute("data-index"));
+		      	var parent = this.parentNode;
+		      	var children = parent.children;//i节点
+		      	console.log(index)
+		      	if(this.classList.contains("mui-icon-star")){
+		      		for(var i=0;i<index;i++){
+		      				children[i].classList.remove('mui-icon-star');
+		      				children[i].classList.add('mui-icon-star-filled');
+		      		}
+		      	}else{
+		      		for (var i = index; i < 5; i++) {
+		      			children[i].classList.add('mui-icon-star')
+		      			children[i].classList.remove('mui-icon-star-filled')
+		      		}
+		      		//delete
+		      	}
+		      })
+		</script>
+	</body>
+
+</html>
