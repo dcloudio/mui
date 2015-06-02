@@ -16,27 +16,27 @@ end
 
   snippet 'mButton' do |cmd|
     cmd.trigger = 'mbutton'
-    cmd.expansion = "<button class=\"mui-btn\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn\">按钮$1</button>"
   end
   snippet 'mButton-blue' do |cmd|
     cmd.trigger = 'mbuttonblue'
-    cmd.expansion = "<button class=\"mui-btn mui-btn-blue\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn mui-btn-blue\">按钮$1</button>"
   end
   snippet 'mButton-green' do |cmd|
     cmd.trigger = 'mbuttongreen'
-    cmd.expansion = "<button class=\"mui-btn mui-btn-green\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn mui-btn-green\">按钮$1</button>"
   end
   snippet 'mButton-yellow' do |cmd|
     cmd.trigger = 'mbuttonyellow'
-    cmd.expansion = "<button class=\"mui-btn mui-btn-yellow\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn mui-btn-yellow\">按钮$1</button>"
   end
   snippet 'mButton-red' do |cmd|
     cmd.trigger = 'mbuttonred'
-    cmd.expansion = "<button class=\"mui-btn mui-btn-red\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn mui-btn-red\">按钮$1</button>"
   end
   snippet 'mButton-purple' do |cmd|
     cmd.trigger = 'mbuttonred'
-    cmd.expansion = "<button class=\"mui-btn mui-btn-purple\">按钮$1</button>"
+    cmd.expansion = "<button type=\"button\" class=\"mui-btn mui-btn-purple\">按钮$1</button>"
   end
   
 snippet 'mCheckbox' do |cmd|
