@@ -17,6 +17,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>com.aptana.projects.webnature</nature>
 		<nature>com.pandora.projects.ui.MKeyNature</nature>
 	</natures>
 </projectDescription>
