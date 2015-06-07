@@ -4,6 +4,9 @@
 	var CLASS_PULL = $.className('pull');
 	var CLASS_PULL_LOADING = $.className('pull-loading');
 	var CLASS_PULL_CAPTION = $.className('pull-caption');
+	var CLASS_PULL_CAPTION_DOWN = $.className('pull-caption-down');
+	var CLASS_PULL_CAPTION_REFRESH = $.className('pull-caption-refresh');
+	var CLASS_PULL_CAPTION_NOMORE = $.className('pull-caption-nomore');
 
 	var CLASS_ICON = $.className('icon');
 	var CLASS_SPINNER = $.className('spinner');
@@ -100,6 +103,21 @@
 				loading.className = CLASS_LOADING_DOWN;
 			}
 		},
+		_setCaptionClass: function(isPulldown, caption, title) {
+			if (!isPulldown) {
+				switch (title) {
+					case this.options.up.contentdown:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+						break;
+					case this.options.up.contentrefresh:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
+						break;
+					case this.options.up.contentnomore:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
+						break;
+				}
+			}
+		},
 		_setCaption: function(title, reset) {
 			if (this.loading) {
 				return;
@@ -109,14 +127,15 @@
 			var caption = this.pullCaption;
 			var loading = this.pullLoading;
 			var isPulldown = this.pulldown;
+			var self = this;
 			if (pocket) {
 				if (reset) {
-					var self = this;
 					setTimeout(function() {
 						caption.innerHTML = self.lastTitle = title;
 						if (isPulldown) {
 							loading.className = CLASS_LOADING_DOWN;
 						} else {
+							self._setCaptionClass(false, caption, title);
 							loading.className = CLASS_LOADING;
 						}
 						loading.style.webkitAnimation = "";
@@ -145,6 +164,7 @@
 							} else {
 								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
 							}
+							self._setCaptionClass(false, caption, title);
 						}
 						this.lastTitle = title;
 					}

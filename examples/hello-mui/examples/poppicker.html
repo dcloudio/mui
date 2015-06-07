@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<link href="../css/mui.listpicker.css" rel="stylesheet" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			.mui-btn {
+				font-size: 16px;
+				padding: 8px;
+				margin: 3px;
+			}
+			h5.mui-content-padded {
+				margin-left: 3px;
+				margin-top: 20px !important;
+			}
+			h5.mui-content-padded:first-child {
+				margin-top: 12px !important;
+			}
+			.ui-alert {
+				text-align: center;
+				padding: 20px 10px;
+				font-size: 16px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">list picker（选择列表）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<h5 class="mui-content-padded">普通示例</h5>
+				<button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>显示选择人员 ...</button>
+				<div id='userResult' class="ui-alert"></div>
+				<h5 class="mui-content-padded">级联示例</h5>
+				<button id='showCityPicker' class="mui-btn mui-btn-block" type='button'>显示选择城市 ...</button>
+				<div id='cityResult' class="ui-alert"></div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.listpicker.js"></script>
+		<script src="../js/mui.poppicker.js"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				$.ready(function() {
+					//普通示例
+					var userPicker = new $.PopPicker();
+					userPicker.setData([{
+						value: 'ywj',
+						text: '董事长 叶文洁'
+					}, {
+						value: 'aaa',
+						text: '总经理 艾AA'
+					}, {
+						value: 'lj',
+						text: '罗辑'
+					}, {
+						value: 'ymt',
+						text: '云天明'
+					}, {
+						value: 'shq',
+						text: '史强'
+					}, {
+						value: 'zhbh',
+						text: '章北海'
+					}, {
+						value: 'zhy',
+						text: '庄颜'
+					}, {
+						value: 'gyf',
+						text: '关一帆'
+					}, {
+						value: 'zhz',
+						text: '智子'
+					}, {
+						value: 'gezh',
+						text: '歌者'
+					}]);
+					var showUserPickerButton = doc.getElementById('showUserPicker');
+					var userResult = doc.getElementById('userResult');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						userPicker.show(function(items) {
+							userResult.innerText = JSON.stringify(items[0]);
+						});
+					}, false);
+					//-----------------------------------------
+					//级联示例
+					var cityPicker = new $.PopPicker({
+						layer: 2
+					});
+					cityPicker.setData([{
+						value: 'sx',
+						text: '陕西',
+						children: [{
+							value: 'xy',
+							text: '咸阳'
+						}, {
+							value: 'xa',
+							text: '西安'
+						}, {
+							value: 'ya',
+							text: '延安'
+						}, {
+							value: 'bj',
+							text: '宝鸡'
+						}, {
+							value: 'tc',
+							text: '铜川'
+						}, {
+							value: 'wn',
+							text: '渭南'
+						}, {
+							value: 'sl',
+							text: '商洛 '
+						}, {
+							value: 'hz',
+							text: '汉中 '
+						}]
+					}, {
+						value: 'hn',
+						text: '河南',
+						children: [{
+							value: 'ly',
+							text: '洛阳'
+						}, {
+							value: 'df',
+							text: '开封'
+						}, {
+							value: 'ny',
+							text: '南阳'
+						}, {
+							value: 'ay',
+							text: '安阳'
+						}, {
+							value: 'jy',
+							text: '济源'
+						}, {
+							value: 'jz',
+							text: '焦作'
+						}, {
+							value: 'xx',
+							text: '新乡'
+						}, {
+							value: 'xy',
+							text: '信阳'
+						}, {
+							value: 'py',
+							text: '濮阳'
+						}, {
+							value: 'smx',
+							text: '三门峡'
+						}, {
+							value: 'sq',
+							text: '商丘'
+						}, {
+							value: 'zk',
+							text: '周口'
+						}, {
+							value: 'pds',
+							text: '平顶山'
+						}]
+					}, {
+						value: 'sd',
+						text: '山东',
+						children: [{
+							value: 'qf',
+							text: '曲阜'
+						}, {
+							value: 'jn',
+							text: '济南'
+						}, {
+							value: 'qd',
+							text: '青岛'
+						}, {
+							value: 'wh',
+							text: '威海'
+						}, {
+							value: 'yc',
+							text: '烟台'
+						}, {
+							value: 'hz',
+							text: '荷泽'
+						}, {
+							value: 'ta',
+							text: '泰安'
+						}]
+					}]);
+					var showCityPickerButton = doc.getElementById('showCityPicker');
+					var cityResult = doc.getElementById('cityResult');
+					showCityPickerButton.addEventListener('tap', function(event) {
+						cityPicker.show(function(items) {
+							cityResult.innerText = items[0].text + items[1].text;
+						});
+					}, false);
+				});
+			})(mui, document);
+		</script>
+	</body>
+
+</html>

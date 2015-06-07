@@ -2,25 +2,33 @@
 	/**
 	 * 确认消息框
 	 */
-	$.confirm = function(message,title,btnArray,callback) {
+	$.confirm = function(message, title, btnArray, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
-				if(typeof title ==='function'){
+			} else {
+				if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnArray = null;
-				}else if(typeof btnArray ==='function'){
+				} else if (typeof btnArray === 'function') {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.confirm(message,callback,title,btnArray);
+				plus.nativeUI.confirm(message, callback, title, btnArray);
 			}
 
-		}else{
-			//TODO H5版本
-			window.confirm(message);
+		} else {
+			//H5版本，0为确认，1为取消
+			if (window.confirm(message)) {
+				callback({
+					index: 0
+				});
+			} else {
+				callback({
+					index: 1
+				});
+			}
 		}
 	};
 

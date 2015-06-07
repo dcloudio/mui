@@ -154,7 +154,7 @@
 				//拖拽期间取消定时
 				var slidershowTimer = this.wrapper.getAttribute('data-slidershowTimer');
 				slidershowTimer && window.clearTimeout(slidershowTimer);
-				
+
 				e.stopPropagation();
 			}
 		},
@@ -306,7 +306,7 @@
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(slideNumber, time || this.options.bounceTime);
+			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.bounceTime : time);
 		},
 		nextItem: function() {
 			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);

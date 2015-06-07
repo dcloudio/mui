@@ -36,7 +36,7 @@
 				return sourceMethod && sourceMethod.apply(event, arguments)
 			}
 			event[predicate] = returnFalse;
-		});
+		}, true);
 		return event;
 	};
 	//简单的wrap对象_mid
@@ -62,12 +62,13 @@
 				}
 				var matches = {};
 				$.each(callbackObjs, function(selector, callbacks) { //same selector
-					if (~(selectorAlls[selector] || (selectorAlls[selector] = $.qsa(selector, element))).indexOf(target)) {
+					selectorAlls[selector] || (selectorAlls[selector] = $.qsa(selector, element));
+					if (selectorAlls[selector] && ~(selectorAlls[selector]).indexOf(target)) {
 						if (!matches[selector]) {
 							matches[selector] = callbacks;
 						}
 					}
-				});
+				}, true);
 				if (!$.isEmptyObject(matches)) {
 					handlerQueue.push({
 						element: target,
@@ -90,14 +91,15 @@
 							e.preventDefault();
 							e.stopPropagation();
 						}
-					});
-				})
+					}, true);
+				}, true)
 				if (e.isPropagationStopped()) {
 					return false;
 				}
-			});
+			}, true);
 		};
 	};
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	/**
 	 * mui delegate events
 	 * @param {type} event
@@ -125,8 +127,15 @@
 					element.addEventListener('click', function(e) {
 						if (e.target) {
 							var tagName = e.target.tagName;
-							if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
-								e.preventDefault();
+							if (!preventDefaultException.test(tagName)) {
+								if (tagName === 'A') {
+									var href = e.target.href;
+									if (!(href && ~href.indexOf('tel:'))) {
+										e.preventDefault();
+									}
+								} else {
+									e.preventDefault();
+								}
 							}
 						}
 					});
@@ -148,7 +157,7 @@
 						delegateCallbacks.splice(index, 1);
 						return false;
 					}
-				});
+				}, true);
 			}
 			//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
 			if (delegates[_mid] && $.isEmptyObject(delegates[_mid][event])) {

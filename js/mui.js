@@ -210,7 +210,7 @@ var mui = (function(document, undefined) {
 	 * @param {type} callback
 	 * @returns {_L8.$}
 	 */
-	$.each = function(elements, callback) {
+	$.each = function(elements, callback, hasOwnProperty) {
 		if (!elements) {
 			return this;
 		}
@@ -220,7 +220,13 @@ var mui = (function(document, undefined) {
 			});
 		} else {
 			for (var key in elements) {
-				if (callback.call(elements[key], key, elements[key]) === false) return elements;
+				if (hasOwnProperty) {
+					if (elements.hasOwnProperty(key)) {
+						if (callback.call(elements[key], key, elements[key]) === false) return elements;
+					}
+				} else {
+					if (callback.call(elements[key], key, elements[key]) === false) return elements;
+				}
 			}
 		}
 		return this;

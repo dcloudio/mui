@@ -67,7 +67,9 @@
 	 */
 	$.plusReady = function(callback) {
 		if (window.plus) {
-			callback();
+			setTimeout(function() { //解决callback与plusready事件的执行时机问题(典型案例:showWaiting,closeWaiting)
+				callback();
+			}, 0);
 		} else {
 			document.addEventListener("plusready", function() {
 				callback();
@@ -181,7 +183,7 @@
 		} else { //新窗口
 			if (options.createNew !== true) {
 				webview = plus.webview.getWebviewById(id);
-				if (webview) {//如果已存在
+				if (webview) { //如果已存在
 					nShow = $.showOptions(options.show);
 					webview.show(nShow.aniShow, nShow.duration, function() {
 						triggerPreload(webview);

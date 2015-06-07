@@ -12,6 +12,11 @@
 	var CLASS_HIDDEN = $.className('hidden');
 	var CLASS_BLOCK = $.className('block');
 
+	var CLASS_PULL_CAPTION = $.className('pull-caption');
+	var CLASS_PULL_CAPTION_DOWN = $.className('pull-caption-down');
+	var CLASS_PULL_CAPTION_REFRESH = $.className('pull-caption-refresh');
+	var CLASS_PULL_CAPTION_NOMORE = $.className('pull-caption-nomore');
+
 	var PlusPullRefresh = $.Class.extend({
 		init: function(element, options) {
 			this.element = element;
@@ -128,8 +133,8 @@
 			}
 		},
 		pulldownLoading: function() {
-			//TODO
-			throw new Error('暂不支持');
+			var callback = $.options.pullRefresh.down.callback;
+			callback && callback.call(this);
 		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
@@ -161,6 +166,7 @@
 				self.pullLoading.classList.add(CLASS_VISIBILITY);
 				self.pullLoading.classList.remove(CLASS_HIDDEN);
 				self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
+				self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH;
 				self.pullCaption.innerHTML = self.options.up.contentrefresh;
 				callback = callback || self.options.up.callback;
 				callback && callback.call(self);
@@ -174,12 +180,14 @@
 				self.isLoading = false;
 				if (finished) {
 					self.finished = true;
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
 					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					//					document.removeEventListener('plusscrollbottom', self);
 					window.removeEventListener('dragup', self);
 				} else { //初始化时隐藏，后续不再隐藏
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 					self.pullCaption.innerHTML = self.options.up.contentdown;
 					//					setTimeout(function() {
 					//						self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
@@ -192,10 +200,9 @@
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				if (this.pulldown !== false) {
-					this._initPullupRefresh();
-				}
+				this._initPullupRefresh();
 				this.bottomPocket.classList.remove(CLASS_HIDDEN);
+				this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 				this.pullCaption.innerHTML = this.options.up.contentdown;
 				window.addEventListener('dragup', this);
 				this.finished = false;

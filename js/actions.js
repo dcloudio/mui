@@ -9,7 +9,9 @@
 
 	var handle = function(event, target) {
 		if (target.className && ~target.className.indexOf(CLASS_ACTION)) {
-			event.preventDefault();
+			if (target.classList.contains($.className('action-back'))) {
+				event.preventDefault();
+			}
 			return target;
 		}
 		return false;

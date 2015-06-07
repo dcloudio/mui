@@ -134,7 +134,7 @@
 		detect(event, $.gestures.touch);
 	};
 	var detectTouchMove = function(event) {
-		if ($.gestures.stoped) {
+		if ($.gestures.stoped || !$.gestures.touch) {
 			return;
 		}
 		var touch = $.gestures.touch;
@@ -164,7 +164,7 @@
 		detect(event, touch);
 	};
 	var detectTouchEnd = function(event) {
-		if ($.gestures.stoped) {
+		if ($.gestures.stoped || !$.gestures.touch) {
 			return;
 		}
 		var touch = $.gestures.touch;
@@ -193,7 +193,7 @@
 		}
 	}, true);
 
-	
+
 	//增加原生滚动识别
 	$.isScrolling = false;
 	var scrollingTimeout = null;

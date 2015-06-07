@@ -68,7 +68,7 @@
 //        @include box-shadow(inset 0 0 0 13px $positive-color);
         .#{$namespace}switch-handle {
 //          border-color: $positive-color;
-            @include transform(translate3d(43px,0,0));
+            @include transform(translate(43px,0));
         }
         &:before {
             right: auto;
@@ -91,7 +91,7 @@
     // Active state for switch
     &.#{$namespace}active {
         .#{$namespace}switch-handle {
-            @include transform(translate3d(16px,0,0));
+            @include transform(translate(16px,0));
         }
     }
 }

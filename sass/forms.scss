@@ -101,15 +101,16 @@ select {
     background-color: #fff;
     @include hairline(double, #c8c7cc, 0); // Double grey border.
 }
-.#{$namespace}input-group input[type=text],
+.#{$namespace}input-group input,
 .#{$namespace}input-group textarea {
     margin-bottom: 0;
     background-color: transparent;
     border-radius: 0;
     @include box-shadow(none);
     border: 0;
-    @include hairline(single, #c8c7cc, 15px);
+//  @include hairline(single, #c8c7cc, 15px);//为啥之前给input，textarea加了边线？都放入input-row的话，是不需要的
 }
+
 .#{$namespace}input-group input[type="search"]{
     background:none;
 }
@@ -129,7 +130,7 @@ select {
 }
 .#{$namespace}input-row:last-child,
 .#{$namespace}input-row label + input,.#{$namespace}input-row .mui-btn + input  {
-    background-image: none;
+    background: none;
 }
 // To use labels with input groups, wrap a label and an input in an .#{$namespace}input-row
 .#{$namespace}input-group .#{$namespace}input-row {

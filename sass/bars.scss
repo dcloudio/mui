@@ -161,16 +161,13 @@
         }
     }
 }
-.#{$namespace}focusin>.#{$namespace}bar{
+.#{$namespace}focusin>.#{$namespace}bar-nav,.#{$namespace}focusin>.#{$namespace}bar-header-secondary{
     position:absolute;
 }
+.#{$namespace}focusin>.#{$namespace}bar~.#{$namespace}content{
+    padding-bottom: 0;
+}
 
-//.#{$namespace}focusin>.#{$namespace}bar-tab,
-//.#{$namespace}focusin> .#{$namespace}bar-footer,
-//.#{$namespace}focusin>.#{$namespace}bar-footer-secondary,
-//.#{$namespace}focusin>.#{$namespace}bar-footer-secondary-tab{
-//  position:static;
-//}
 // Bars with buttons
 // --------------------------------------------------
 

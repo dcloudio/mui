@@ -26,10 +26,10 @@
 	//plugin
 	$.fn.listpicker = function(options) {
 		return this.each(function(index, box) {
-			if (box.getAttribute('data-listpicker-inited')) {
-				return;
-			}
-			box.setAttribute('data-listpicker-inited', '1');
+			//避免重复初始化开始
+			if (box.__listpicker_inited) return;
+			box.__listpicker_inited = true;
+			//避免重复初始化结束
 			//
 			var boxInner = $('.mui-listpicker-inner', box)[0];
 			if ($.os.ios) {
@@ -65,9 +65,9 @@
 					boxInner.scrollTop-=remainder;
 				}*/
 				var fiexd = parseInt((boxInner.scrollTop / itemHeight).toFixed(0));
-				box.setSelectedIndex(fiexd);
+
 				setTimeout(function() {
-					disabledScrollEnd = false;
+					box.setSelectedIndex(fiexd);
 					$.trigger(box, 'change', {
 						index: box.getSelectedIndex(),
 						value: box.getSelectedValue(),
@@ -76,7 +76,8 @@
 						element: box.getSelectedElement()
 					});
 					handleHighlight(event);
-				}, 200);
+					disabledScrollEnd = false;
+				}, 0);
 			};
 			var handleHighlight = function(event) {
 				var fiexd = parseInt((boxInner.scrollTop / itemHeight).toFixed(0));
@@ -109,17 +110,36 @@
 				*/
 			};
 			var isTouchDown = false;
-			var delayExecScrollEnd = false;
+			var isScrolling = false;
 			boxInner.addEventListener('scroll', function(event) {
+				if (disabledScrollEnd) return;
+				isScrolling = true;
 				if (boxInner.scrollTimer) {
 					clearTimeout(boxInner.scrollTimer);
 				}
 				handleHighlight(event);
-				isTouchDown = true;
 				boxInner.scrollTimer = setTimeout(function() {
-					scrollEnd(event);
-				}, 80);
+					isScrolling = false;
+					if (!isTouchDown || !mui.os.ios) {
+						scrollEnd(event);
+					}
+				}, 100);
 			}, false);
+			//在 ios 上手指不弹起时，防止定位抖动开始
+			if (mui.os.ios) {
+				boxInner.addEventListener('touchstart', function(event) {
+					isTouchDown = true;
+				}, false);
+				boxInner.addEventListener('touchend', function(event) {
+					isTouchDown = false;
+					if (!isScrolling) {
+						setTimeout(function() {
+							scrollEnd(event);
+						}, 0);
+					}
+				}, false);
+			}
+			//在 ios 上手指不弹起时，防止定位抖动结束
 			$(boxInner).on('tap', 'li', function(event) {
 				var tapItem = this;
 				var items = [].slice.call($('li', ul));
@@ -137,7 +157,9 @@
 			var aniScrollTop = function(y1, y2, dur, callback) {
 				var stepNum = dur / 13;
 				var stepSize = (y2 - y1) / stepNum;
-				_aniScrollTop(y1, y2, 0, stepNum, stepSize, callback);
+				setTimeout(function() {
+					_aniScrollTop(y1, y2, 0, stepNum, stepSize, callback);
+				}, 13);
 			};
 			var _aniScrollTop = function(y1, y2, stepIndex, stepNum, stepSize, callback) {
 				var val = stepIndex * stepSize;

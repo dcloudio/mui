@@ -452,6 +452,7 @@
 			radioOrCheckboxClick();
 		}
 	});
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	window.addEventListener('tap', function(event) {
 		if (!cell) {
 			return;
@@ -479,7 +480,10 @@
 			return;
 		}
 		if (classList.contains($.className('collapse')) && !cell.parentNode.classList.contains($.className('unfold'))) {
-			event.detail.gesture.preventDefault();
+			if (!preventDefaultException.test(event.target.tagName)) {
+				event.detail.gesture.preventDefault();
+			}
+
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
 				var collapse = cell.parentNode.querySelector($.classSelector('.collapse.active'));
 				if (collapse) {

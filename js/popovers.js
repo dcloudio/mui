@@ -55,7 +55,7 @@
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
-		setStyle(this,'none');
+		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener('touchmove', $.preventDefault);
 		fixedPopoverScroll(false);
@@ -248,8 +248,9 @@
 			if (mask._show) {
 				mask._show = false;
 				element.setAttribute('style', 'opacity:0');
-				setTimeout(function() {
-					document.body.removeChild(element);
+				$.later(function() {
+					var body = document.body;
+					element.parentNode === body && body.removeChild(element);
 				}, 350);
 			}
 			return mask;

@@ -21,7 +21,7 @@
 				}
 			}
 			var target = e.target;
-			if (target.tagName && target.tagName === 'INPUT' && target.type === 'text') {
+			if (target.tagName && target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')) {
 				if (target.disabled || target.readOnly) {
 					return;
 				}

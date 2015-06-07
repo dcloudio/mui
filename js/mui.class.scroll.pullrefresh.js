@@ -47,9 +47,9 @@
 			}
 			return this._super(time);
 		},
-		pulldownLoading: function(x, time) {
-			x = x || 0;
-			this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
+		pulldownLoading: function(y, time) {
+			typeof y === 'undefined' && (y = this.options.down.height); //默认高度
+			this.scrollTo(0, y, time, this.options.bounceEasing);
 			if (this.loading) {
 				return;
 			}
@@ -110,9 +110,7 @@
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				if (this.pulldown !== false) {
-					this._initPullupRefresh();
-				}
+				this._initPullupRefresh();
 				this.bottomPocket.classList.remove(CLASS_HIDDEN);
 				this._setCaption(this.options.up.contentdown);
 				this.wrapper.addEventListener('scrollbottom', this);
