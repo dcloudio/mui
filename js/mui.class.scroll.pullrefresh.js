@@ -42,7 +42,7 @@
 		//API
 		resetPosition: function(time) {
 			if (this.pulldown && this.y >= this.options.down.height) {
-				this.pulldownLoading(0, time || 0);
+				this.pulldownLoading(undefined, time || 0);
 				return true;
 			}
 			return this._super(time);
