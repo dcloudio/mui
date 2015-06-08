@@ -3053,7 +3053,7 @@ var mui = (function(document, undefined) {
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition) {
+			if (this.isInTransition && this.moved) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
@@ -3711,7 +3711,7 @@ var mui = (function(document, undefined) {
 		//API
 		resetPosition: function(time) {
 			if (this.pulldown && this.y >= this.options.down.height) {
-				this.pulldownLoading(0, time || 0);
+				this.pulldownLoading(undefined, time || 0);
 				return true;
 			}
 			return this._super(time);
@@ -3884,7 +3884,6 @@ var mui = (function(document, undefined) {
 			self.wrapper.addEventListener('scrollend', function() {
 				self.isInTransition = false;
 				var page = self.currentPage;
-				var oldSlideNumber = self.slideNumber;
 				self.slideNumber = self._fixedSlideNumber();
 				if (self.loop) {
 					if (self.slideNumber === 0) {
@@ -3893,7 +3892,8 @@ var mui = (function(document, undefined) {
 						self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
 					}
 				}
-				if (oldSlideNumber != self.slideNumber) {
+				if (self.lastSlideNumber != self.slideNumber) {
+					self.lastSlideNumber = self.slideNumber;
 					$.trigger(self.wrapper, 'slide', {
 						slideNumber: self.slideNumber
 					});
@@ -4063,8 +4063,10 @@ var mui = (function(document, undefined) {
 				}
 				this.currentPage = currentPage[0];
 				this.slideNumber = 0;
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? 0 : this.lastSlideNumber;
 			} else {
 				this.slideNumber = this._fixedSlideNumber();
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? this.slideNumber : this.lastSlideNumber;
 			}
 			this.options.startX = this.currentPage.x || 0;
 		},

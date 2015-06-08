@@ -278,7 +278,7 @@
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition) {
+			if (this.isInTransition && this.moved) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));

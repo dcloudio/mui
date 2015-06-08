@@ -67,7 +67,6 @@
 			self.wrapper.addEventListener('scrollend', function() {
 				self.isInTransition = false;
 				var page = self.currentPage;
-				var oldSlideNumber = self.slideNumber;
 				self.slideNumber = self._fixedSlideNumber();
 				if (self.loop) {
 					if (self.slideNumber === 0) {
@@ -76,7 +75,8 @@
 						self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
 					}
 				}
-				if (oldSlideNumber != self.slideNumber) {
+				if (self.lastSlideNumber != self.slideNumber) {
+					self.lastSlideNumber = self.slideNumber;
 					$.trigger(self.wrapper, 'slide', {
 						slideNumber: self.slideNumber
 					});
@@ -246,8 +246,10 @@
 				}
 				this.currentPage = currentPage[0];
 				this.slideNumber = 0;
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? 0 : this.lastSlideNumber;
 			} else {
 				this.slideNumber = this._fixedSlideNumber();
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? this.slideNumber : this.lastSlideNumber;
 			}
 			this.options.startX = this.currentPage.x || 0;
 		},
