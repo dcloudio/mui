@@ -8,90 +8,86 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/style.css" rel="stylesheet" />
 		<style>
-			html,
-			body {
-				height: 100%;
-				overflow: hidden;
-				margin: 0px;
-				padding: 0px;
-				background-color: #efeff4;
+			.area {
+				margin: 20px auto 0px auto;
 			}
-			.ui-logo {
-				width: 100px;
-				height: 100px;
-				margin: 60px auto 25px auto;
-				background-image: url(images/user-photo.png);
-				background-position: center center;
-				background-repeat: no-repeat;
-				background-size: 100% 100%;
-				border-radius: 60px;
+			.mui-input-group {
+				margin-top: 10px;
 			}
-			.mui-content-padded {
+			.mui-input-group:first-child {
 				margin-top: 20px;
 			}
-			.ui-login-form {
-				border: solid 1px #ddd;
-				border-radius: 5px;
-				margin: 10px;
-				overflow: hidden;
-				background-color: #ddd;
+			.mui-input-group label {
+				width: 22%;
 			}
-			.ui-login-form input {
-				border: none;
-				margin: 0px;
-				font-size: 18px;
-				padding: 15px !important;
-				border-radius: 0px;
-				height: auto;
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 78%;
 			}
-			.ui-login-form input:first-child {
-				margin-bottom: 1px;
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
 			}
-			.mui-btn-block {
-				padding: 12px 0px;
+			.mui-content-padded {
+				margin-top: 25px;
 			}
-			#reg {
+			.mui-btn {
+				padding: 10px;
+			}
+			.link-area {
 				display: block;
-				margin-top: 45px;
+				margin-top: 25px;
 				text-align: center;
 			}
-			.mui-checkbox label {
-				display: inline-block;
-				width: auto;
-				vertical-align: text-bottom;
-				padding: 2px 0px;
-				color: #777;
+			.spliter {
+				color: #bbb;
+				padding: 0px 8px;
 			}
-			.mui-checkbox input {
-				position: relative !important;
-				top: auto!important;
-				left: auto!important;
-				right: auto!important;
-				bottom: auto!important;
-				margin: 0px;
-				padding: 0px;
-				vertical-align: text-bottom;
+			/*
+			#forgetPassword {	
 			}
-			.mui-checkbox {
-				margin: 3px 10px;
-			}
+			#reg {
+				position: absolute;
+				bottom: 30px;
+				left: 50%;
+				width: 80px;
+				margin-left: -40px;
+				background-color: #f5f5f5;
+			}*/
 		</style>
+
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">登录</h1>
+		</header>
 		<div class="mui-content">
-			<div class="ui-logo"></div>
-			<form class="ui-login-form">
-				<input id='account' type="text" class="mui-input-clear mui-input" placeholder="账号">
-				<input id='password' type="password" class="mui-input-clear mui-input" placeholder="密码">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>账号</label>
+					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
 			</form>
-			<div class="mui-checkbox">
-				<input class="mui-checkbox" id='autoLogin' name="checkbox" type="checkbox">
-				<label>记住我的状态</label>
-			</div>
+			<form class="mui-input-group">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						自动登录
+						<div id="autoLogin" class="mui-switch">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</li>
+				</ul>
+			</form>
 			<div class="mui-content-padded">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<a id='reg'>注册新用户</a>
+				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				</div>
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -101,11 +97,42 @@
 				$.init();
 				$.plusReady(function() {
 					var settings = app.getSettings();
-					var loginButton = doc.querySelector('#login');
-					var accountBox = doc.querySelector('#account');
-					var passwordBox = doc.querySelector('#password');
-					var autoLoginButton = doc.querySelector("#autoLogin");
-					var regButton = doc.querySelector('#reg');
+					var state = app.getState();
+					//检查 "登录状态/锁屏状态" 开始
+					if (settings.autoLogin && state.token && settings.gestures) {
+						$.openWindow({
+							url: 'unlock.html',
+							id: 'unlock',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					} else if (settings.autoLogin && state.token) {
+						$.openWindow({
+							url: 'main.html',
+							id: 'main',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					}
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 600);
+					//检查 "登录状态/锁屏状态" 结束
+					var loginButton = doc.getElementById('login');
+					var accountBox = doc.getElementById('account');
+					var passwordBox = doc.getElementById('password');
+					var autoLoginButton = doc.getElementById("autoLogin");
+					var regButton = doc.getElementById('reg');
+					var forgetButton = doc.getElementById('forgetPassword');
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
 							account: accountBox.value,
@@ -118,23 +145,54 @@
 							}
 							$.openWindow({
 								url: 'main.html',
-								id: 'main'
+								id: 'main',
+								show: {
+									aniShow: 'pop-in'
+								},
+								waiting: {
+									autoShow: false
+								}
 							});
 						});
 					});
-					autoLoginButton.checked = settings.autoLogin;
-					autoLoginButton.addEventListener('change', function(event) {
+					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
+					autoLoginButton.addEventListener('toggle', function(event) {
 						setTimeout(function() {
-							settings.autoLogin = autoLoginButton.checked;
+							var isActive = event.detail.isActive;
+							settings.autoLogin = isActive;
 							app.setSettings(settings);
 						}, 50);
 					}, false);
 					regButton.addEventListener('tap', function(event) {
 						$.openWindow({
 							url: 'reg.html',
-							id: 'reg'
+							id: 'reg',
+							show: {
+									aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
 						});
 					}, false);
+					forgetButton.addEventListener('tap', function(event) {
+						$.openWindow({
+							url: 'forget_password.html',
+							id: 'forget_password',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					}, false);
+					/*
+					window.addEventListener('resize', function() {
+						setTimeout(function() {
+							regButton.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
+						}, 0);
+					}, false);*/
 					var backButtonPress = 0;
 					$.back = function(event) {
 						backButtonPress++;

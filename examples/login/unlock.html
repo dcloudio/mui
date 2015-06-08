@@ -43,7 +43,7 @@
 				$.init();
 				$.plusReady(function() {
 					var settings = app.getSettings();
-					var forgetButton = doc.querySelector("#forget");
+					var forgetButton = doc.getElementById("forget");
 					var locker = doc.querySelector('.mui-locker');
 					forgetButton.addEventListener('tap', function(event) {
 						settings.gestures = '';
@@ -53,7 +53,13 @@
 						app.setState(state);
 						$.openWindow({
 							url: 'login.html',
-							id: 'login'
+							id: 'login',
+							show: {
+									aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
 						});
 					});
 					locker.addEventListener('done', function(event) {
@@ -61,7 +67,13 @@
 						if (settings.gestures == rs.points.join('')) {
 							$.openWindow({
 								url: 'main.html',
-								id: 'main'
+								id: 'main',
+								show: {
+									aniShow: 'pop-in'
+								},
+								waiting: {
+									autoShow: false
+								}
 							});
 							rs.sender.clear();
 						} else {
