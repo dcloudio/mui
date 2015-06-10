@@ -44,17 +44,31 @@
 				color: #bbb;
 				padding: 0px 8px;
 			}
-			/*
-			#forgetPassword {	
-			}
-			#reg {
+			.oauth-area {
 				position: absolute;
-				bottom: 30px;
-				left: 50%;
-				width: 80px;
-				margin-left: -40px;
-				background-color: #f5f5f5;
-			}*/
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			.oauth-area .oauth-btn {
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				background-size: 30px 30px;
+				background-position: center center;
+				background-repeat: no-repeat;
+				margin: 0px 20px;
+				/*-webkit-filter: grayscale(100%); */
+				
+				border: solid 1px #ddd;
+				border-radius: 25px;
+			}
+			.oauth-area .oauth-btn:active {
+				border: solid 1px #aaa;
+			}
 		</style>
 
 	</head>
@@ -64,7 +78,7 @@
 			<h1 class="mui-title">登录</h1>
 		</header>
 		<div class="mui-content">
-			<form class="mui-input-group">
+			<form id='login-form' class="mui-input-group">
 				<div class="mui-input-row">
 					<label>账号</label>
 					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
@@ -89,15 +103,40 @@
 				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
 				</div>
 			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/app.js"></script>
 		<script>
 			(function($, doc) {
-				$.init();
+				$.init({
+					statusBarBackground: '#f7f7f7'
+				});
 				$.plusReady(function() {
+					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
+					var mainPage = $.preload({
+						"id": 'main',
+						"url": 'main.html'
+					});
+					var toMain = function() {
+						$.fire(mainPage, 'show', null);
+						setTimeout(function() {
+							$.openWindow({
+								id: 'main',
+								show: {
+									aniShow: 'pop-in'
+								},
+								waiting: {
+									autoShow: false
+								}
+							});
+						}, 0);
+					};
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {
 						$.openWindow({
@@ -111,17 +150,51 @@
 							}
 						});
 					} else if (settings.autoLogin && state.token) {
-						$.openWindow({
-							url: 'main.html',
-							id: 'main',
-							show: {
-								aniShow: 'pop-in'
-							},
-							waiting: {
-								autoShow: false
+						toMain();
+					} else {
+						//第三方登录
+						var auths = {};
+						var oauthArea = doc.querySelector('.oauth-area');
+						plus.oauth.getServices(function(services) {
+							for (var i in services) {
+								var service = services[i];
+								auths[service.id] = service;
+								var btn = document.createElement('div');
+								btn.setAttribute('class', 'oauth-btn');
+								btn.authId = service.id;
+								btn.style.backgroundImage = 'url("images/' + service.id + '.png")'
+									//alert(service.id);
+									//btn.innerText = service.description + "登录";
+								oauthArea.appendChild(btn);
 							}
+							$(oauthArea).on('tap', '.oauth-btn', function() {
+								var auth = auths[this.authId];
+								var waiting = plus.nativeUI.showWaiting();
+								auth.login(function() {
+									waiting.close();
+									plus.nativeUI.toast("登录认证成功");
+									//alert(JSON.stringify(auth.authResult));
+									auth.getUserInfo(function() {
+										plus.nativeUI.toast("获取用户信息成功：");
+										//alert(JSON.stringify(auth.userInfo));
+										var name = auth.userInfo.nickname || auth.userInfo.name;
+										app.createState(name, function() {
+											toMain();
+										});
+									}, function(e) {
+										plus.nativeUI.toast("获取用户信息失败：" + e.message);
+									});
+								}, function(e) {
+									waiting.close();
+									plus.nativeUI.toast("登录认证失败：" + e.message);
+								});
+							});
+						}, function(e) {
+							oauthArea.style.display = 'none';
+							plus.nativeUI.toast("获取登录认证失败：" + e.message);
 						});
 					}
+					// close splash
 					setTimeout(function() {
 						//关闭 splash
 						plus.navigator.closeSplashscreen();
@@ -143,17 +216,11 @@
 								plus.nativeUI.toast(err);
 								return;
 							}
-							$.openWindow({
-								url: 'main.html',
-								id: 'main',
-								show: {
-									aniShow: 'pop-in'
-								},
-								waiting: {
-									autoShow: false
-								}
-							});
+							toMain();
 						});
+					});
+					$.enterfocus('#login-form input', function() {
+						$.trigger(loginButton, 'tap');
 					});
 					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
 					autoLoginButton.addEventListener('toggle', function(event) {
@@ -168,7 +235,10 @@
 							url: 'reg.html',
 							id: 'reg',
 							show: {
-									aniShow: 'pop-in'
+								aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
 							},
 							waiting: {
 								autoShow: false
@@ -182,17 +252,19 @@
 							show: {
 								aniShow: 'pop-in'
 							},
+							styles: {
+								popGesture: 'hide'
+							},
 							waiting: {
 								autoShow: false
 							}
 						});
 					}, false);
-					/*
+					//
 					window.addEventListener('resize', function() {
-						setTimeout(function() {
-							regButton.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
-						}, 0);
-					}, false);*/
+						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
+					}, false);
+					//
 					var backButtonPress = 0;
 					$.back = function(event) {
 						backButtonPress++;

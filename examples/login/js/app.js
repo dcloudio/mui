@@ -23,14 +23,18 @@
 			return loginInfo.account == user.account && loginInfo.password == user.password;
 		});
 		if (authed) {
-			var state = owner.getState();
-			state.account = loginInfo.account;
-			state.token = "token123456789";
-			owner.setState(state);
-			return callback();
+			return owner.createState(loginInfo.account, callback);
 		} else {
 			return callback('用户名或密码错误');
 		}
+	};
+
+	owner.createState = function(name, callback) {
+		var state = owner.getState();
+		state.account = name;
+		state.token = "token123456789";
+		owner.setState(state);
+		return callback();
 	};
 
 	/**
@@ -70,12 +74,12 @@
 	owner.setState = function(state) {
 		state = state || {};
 		localStorage.setItem('$state', JSON.stringify(state));
-		var settings = owner.getSettings();
-		settings.gestures = '';
-		owner.setSettings(settings);
+		//var settings = owner.getSettings();
+		//settings.gestures = '';
+		//owner.setSettings(settings);
 	};
-	
-	var checkEmail=function(email){
+
+	var checkEmail = function(email) {
 		email = email || '';
 		return (email.length > 3 && email.indexOf('@') > -1);
 	};
