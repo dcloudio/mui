@@ -9,7 +9,6 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 		<style type="text/css">
 			.mui-fullscreen{
 				position: fixed;
@@ -27,7 +26,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">图片放大预览示例</h1>
+			<h1 class="mui-title">image viewer（图片预览）</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
@@ -46,8 +45,9 @@
 		mui.ready(function () {
 			var imgs = document.querySelectorAll("img.mui-action-preview");
 			imgs = mui.slice.call(imgs);
+			var slider = null;
 			if(imgs&&imgs.length>0){
-				var slider = document.createElement("div");
+				slider = document.createElement("div");
 				slider.setAttribute("id","__mui-imageview__");
 				slider.classList.add("mui-slider");
 				slider.classList.add("mui-fullscreen");
@@ -86,7 +86,18 @@
 				document.body.appendChild(slider);
 				var _slider = mui(slider).slider();
 			}
+			
+			var oldback = mui.back;
+			mui.back = function () {
+				if(slider&&slider.style.display=="block"){
+					slider.style.display = "none";
+				}else{
+					oldback();
+				}
+			}
+			
 		});
+		
 		
 		
 	</script>
