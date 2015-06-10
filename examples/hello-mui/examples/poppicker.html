@@ -30,7 +30,7 @@
 				font-size: 16px;
 			}
 		</style>
-	</head>
+	</head> 
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
@@ -50,6 +50,7 @@
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/mui.listpicker.js"></script>
 		<script src="../js/mui.poppicker.js"></script>
+		<script src="../js/city.data.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			(function($, doc) {
 				$.init();
@@ -93,114 +94,18 @@
 						userPicker.show(function(items) {
 							userResult.innerText = JSON.stringify(items[0]);
 						});
-					}, false);
+					}, false); 
 					//-----------------------------------------
 					//级联示例
 					var cityPicker = new $.PopPicker({
 						layer: 2
-					});
-					cityPicker.setData([{
-						value: 'sx',
-						text: '陕西',
-						children: [{
-							value: 'xy',
-							text: '咸阳'
-						}, {
-							value: 'xa',
-							text: '西安'
-						}, {
-							value: 'ya',
-							text: '延安'
-						}, {
-							value: 'bj',
-							text: '宝鸡'
-						}, {
-							value: 'tc',
-							text: '铜川'
-						}, {
-							value: 'wn',
-							text: '渭南'
-						}, {
-							value: 'sl',
-							text: '商洛 '
-						}, {
-							value: 'hz',
-							text: '汉中 '
-						}]
-					}, {
-						value: 'hn',
-						text: '河南',
-						children: [{
-							value: 'ly',
-							text: '洛阳'
-						}, {
-							value: 'df',
-							text: '开封'
-						}, {
-							value: 'ny',
-							text: '南阳'
-						}, {
-							value: 'ay',
-							text: '安阳'
-						}, {
-							value: 'jy',
-							text: '济源'
-						}, {
-							value: 'jz',
-							text: '焦作'
-						}, {
-							value: 'xx',
-							text: '新乡'
-						}, {
-							value: 'xy',
-							text: '信阳'
-						}, {
-							value: 'py',
-							text: '濮阳'
-						}, {
-							value: 'smx',
-							text: '三门峡'
-						}, {
-							value: 'sq',
-							text: '商丘'
-						}, {
-							value: 'zk',
-							text: '周口'
-						}, {
-							value: 'pds',
-							text: '平顶山'
-						}]
-					}, {
-						value: 'sd',
-						text: '山东',
-						children: [{
-							value: 'qf',
-							text: '曲阜'
-						}, {
-							value: 'jn',
-							text: '济南'
-						}, {
-							value: 'qd',
-							text: '青岛'
-						}, {
-							value: 'wh',
-							text: '威海'
-						}, {
-							value: 'yc',
-							text: '烟台'
-						}, {
-							value: 'hz',
-							text: '荷泽'
-						}, {
-							value: 'ta',
-							text: '泰安'
-						}]
-					}]);
+					}); 
+					cityPicker.setData(cityData);
 					var showCityPickerButton = doc.getElementById('showCityPicker');
 					var cityResult = doc.getElementById('cityResult');
 					showCityPickerButton.addEventListener('tap', function(event) {
 						cityPicker.show(function(items) {
-							cityResult.innerText = items[0].text + items[1].text;
+							cityResult.innerText ="你选择的城市是:" + items[0].text + items[1].text;
 						});
 					}, false);
 				});
