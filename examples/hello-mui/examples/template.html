@@ -83,14 +83,15 @@
 		var contentWebview = null;
 		mui.back = function() {
 			var current = plus.webview.currentWebview();
-			current.hide('auto');
-			setTimeout(function() {
-				document.getElementById("title").className = 'mui-title mui-fadeout';
-				if(contentWebview==null){
-					contentWebview = current.children()[0];
-				}
-				contentWebview.hide("none");
-			}, 200);
+			current.hide('auto',function () {
+				setTimeout(function() {
+					document.getElementById("title").className = 'mui-title mui-fadeout';
+					if(contentWebview==null){
+						contentWebview = current.children()[0];
+					}
+					contentWebview.hide("none");
+				}, 200);
+			});
 		}
 		
 		var titleElem = document.getElementById("title")
