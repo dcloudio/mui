@@ -109,7 +109,6 @@
 			.msg-item .msg-user-img{
 				width: 38px;
 				height: 38px;
-				border: solid 1px #d3d3d3;
 				display: inline-block;
 				border-radius: 3px;
 				vertical-align: top;
@@ -398,7 +397,7 @@
 							});
 						}
 					};
-					var imageViewer = new $.ImageViewer('img', {
+					var imageViewer = new $.ImageViewer('.msg-content-image', {
 						dbl: false
 					});
 					var bindMsgList = function() {
