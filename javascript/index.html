@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-06-15 12:03:29 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-06-15 12:03:29 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-06-15 12:16:50 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-06-15 12:16:50 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -249,6 +249,9 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     styles表示窗口参数，参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.WebviewStyle">5+规范中的WebviewStyle</a>；特别注意，height和width两个属性,即使不设置，也默认按100%计算；因此若设置了top值为非"0px"的情况，建议同时设置bottom值，否则5+ runtime根据高度100%计算，可能会造成页面真实底部位置超出屏幕范围的情况；left、right同理。
   </li>
   <li>extras:新窗口的额外扩展参数，可用来处理页面间传值；例如：<code>var webview = mui.openWindow({url:'info.html',extras:{name:'mui'}});console.log(webview.name);</code>，会输出"mui"字符串；注意：扩展参数仅在打开新窗口时有效，若目标窗口为预加载页面，则通过mui.openWindow方法打开时传递的extras参数无效。</li>
+  <li>
+    createNew：是否重复创建相同id的webview；为优化性能、避免app中重复创建webview，mui v1.7.0开始增加createNew参数，默认为false；判断逻辑如下：若createNew为true，则不判断重复，每次都新建webview；若为fasle，则先计算当前App中是否已存在同样id的webview，若存在则直接显示；否则新创建并根据show参数执行显示逻辑；该参数可能导致的影响：若业务写在plusReady事件中，而plusReady事件仅首次创建时会触发，则下次再次通过<code>mui.openWindow</code>方法打开同样webview时，是不会再次触发plusReady事件的，此时可通过自定义事件触发；案例参考：<a href="http://ask.dcloud.net.cn/question/6514">http://ask.dcloud.net.cn/question/6514</a>;
+  </li>
   <li>
     show表示窗口显示控制。autoShow：目标窗口loaded事件发生后，是否自动显示；若目标页面为预加载页面，则该参数无效；aniShow表示页面显示动画，比如从右侧划入、从下侧划入等，具体可参考<a href="http://www.dcloud.io/docs/api/zh_cn/webview.shtml#plus.webview.AnimationTypeShow">5+规范中的AnimationTypeShow</a>
   </li>
@@ -1088,8 +1091,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-06-15 12:03:29 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-06-15 12:03:29 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-06-15 12:16:50 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-06-15 12:16:50 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));
