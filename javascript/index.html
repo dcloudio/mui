@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-04-20 12:10:17 +0800">
-<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-04-20 12:10:17 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/dist/css/mui.min.css?v=2015-06-15 12:03:29 +0800">
+<link rel="stylesheet" href="http://dcloudio.github.io/mui/assets/css/docs.css?v=2015-06-15 12:03:29 +0800">
 
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://dcloudio.github.io/mui/assets/img/apple-touch-icon-114x114.png">
 
@@ -225,7 +225,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     },
     extras:{
       .....//自定义扩展参数，可以用来处理页面间传值
-    }
+    },
+    crateNew:false,//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
     show:{
       autoShow:true,//页面loaded事件发生后自动显示，默认为true
       aniShow:animationType,//页面显示动画，默认为”slide-in-right“；
@@ -697,7 +698,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
      <span class="c1">//业务逻辑代码，比如通过ajax从服务器获取新数据；</span>
      <span class="p">......</span>
      <span class="c1">//注意，加载完新数据后，必须执行如下代码，注意：若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后</span>
-     <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#pullrefreshContainer&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
+     <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;#refreshContainer&#39;</span><span class="p">).</span><span class="nx">pullRefresh</span><span class="p">().</span><span class="nx">endPulldownToRefresh</span><span class="p">();</span>
 <span class="p">}</span></code></pre></div>
   </article>
       <!-- 上拉加载 -->
@@ -917,6 +918,14 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mui-slider-item mui-slider-item-duplicate&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;1.jpg&quot;</span> <span class="nt">/&gt;&lt;/a&gt;&lt;/div&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 <span class="nt">&lt;/div&gt;</span></code></pre></div>
+<p class="component-description">
+    <strong>注意：</strong>mui框架会默认初始化当前页面的图片轮播组件；若轮播组件内容为js动态生成时（比如通过ajax动态获取的营销信息），则需要在动态DOM生成后，手动调用图片轮播的初始化方法；代码如下：
+  </p>
+  <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">//获得slider插件对象</span>
+<span class="kd">var</span> <span class="nx">gallery</span> <span class="o">=</span> <span class="nx">mui</span><span class="p">(</span><span class="s1">&#39;.mui-slider&#39;</span><span class="p">);</span>
+<span class="nx">gallery</span><span class="p">.</span><span class="nx">slider</span><span class="p">({</span>
+  <span class="nx">interval</span><span class="o">:</span><span class="mi">5000</span><span class="c1">//自动轮播周期，若为0则不自动播放，默认为0；</span>
+<span class="p">});</span></code></pre></div>
 </article>
       <!-- 侧滑菜单 -->
       <article id="plugin-offcanvas" class="component mui-active">
@@ -1065,7 +1074,7 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 	<p class="docs-footer-text">mui遵循 <a href="https://github.com/dcloudio/mui/blob/master/LICENSE">MIT License</a> 
 	</p>
 	<ul class="docs-footer-links">
-		<li>最新版本 v1.5.0</li>
+		<li>最新版本 v1.8.0</li>
 		<li>&middot;</li>
 		<li><a href="http://ask.dcloud.net.cn">问答社区</a></li>
 		<li>&middot;</li>
@@ -1079,8 +1088,8 @@ mui的解决思路是：单webview只承载单个页面的dom，减少dom层级�
 </div>
 <script src="http://dcloudio.github.io/mui/dist/js/jquery-2.1.1.js"></script>
 <script src="http://dcloudio.github.io/mui/dist/js/bootstrap.min.js"></script>
-<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-04-20 12:10:17 +0800"></script>
-<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-04-20 12:10:17 +0800"></script>
+<script src="http://dcloudio.github.io/mui/dist/js/mui.min.js?v=2015-06-15 12:03:29 +0800"></script>
+<script src="http://dcloudio.github.io/mui/assets/js/docs.min.js?v=2015-06-15 12:03:29 +0800"></script>
 <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Ffff299fda9ff2d5ac97d9e621f738e52' type='text/javascript'%3E%3C/script%3E"));

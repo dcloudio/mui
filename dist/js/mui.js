@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.5.0 (https://github.com/dcloudio/mui)
+ * Mui v1.8.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -114,6 +114,10 @@ var mui = (function(document, undefined) {
 	 * mui slice(array)
 	 */
 	$.slice = [].slice;
+	/**
+	 * mui filter(array)
+	 */
+	$.filter = [].filter;
 
 	$.type = function(obj) {
 		return obj == null ? String(obj) : class2type[{}.toString.call(obj)] || "object";
@@ -142,6 +146,18 @@ var mui = (function(document, undefined) {
 	 */
 	$.isPlainObject = function(obj) {
 		return $.isObject(obj) && !$.isWindow(obj) && Object.getPrototypeOf(obj) === Object.prototype;
+	};
+	/**
+	 * mui isEmptyObject
+	 * @param {Object} o
+	 */
+	$.isEmptyObject = function(o) {
+		for (var p in o) {
+			if (p !== undefined) {
+				return false;
+			}
+		}
+		return true;
 	};
 	/**
 	 * mui isFunction
@@ -199,7 +215,7 @@ var mui = (function(document, undefined) {
 	 * @param {type} callback
 	 * @returns {_L8.$}
 	 */
-	$.each = function(elements, callback) {
+	$.each = function(elements, callback, hasOwnProperty) {
 		if (!elements) {
 			return this;
 		}
@@ -209,7 +225,13 @@ var mui = (function(document, undefined) {
 			});
 		} else {
 			for (var key in elements) {
-				if (callback.call(elements[key], key, elements[key]) === false) return elements;
+				if (hasOwnProperty) {
+					if (elements.hasOwnProperty(key)) {
+						if (callback.call(elements[key], key, elements[key]) === false) return elements;
+					}
+				} else {
+					if (callback.call(elements[key], key, elements[key]) === false) return elements;
+				}
 			}
 		}
 		return this;
@@ -317,6 +339,40 @@ var mui = (function(document, undefined) {
 		$[type] = handlers;
 		return $[type];
 	};
+	/**
+	 * setTimeout封装
+	 * @param {Object} fn
+	 * @param {Object} when
+	 * @param {Object} context
+	 * @param {Object} data
+	 */
+	$.later = function(fn, when, context, data) {
+		when = when || 0;
+		var m = fn;
+		var d = data;
+		var f;
+		var r;
+
+		if (typeof fn === 'string') {
+			m = context[fn];
+		}
+
+		f = function() {
+			m.apply(context, $.isArray(d) ? d : [d]);
+		};
+
+		r = setTimeout(f, when);
+
+		return {
+			id: r,
+			cancel: function() {
+				clearTimeout(r);
+			}
+		};
+	};
+	$.now = Date.now || function() {
+		return +new Date();
+	};
 	var class2type = {};
 	$.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
 		class2type["[object " + name + "]"] = name.toLowerCase();
@@ -335,6 +391,16 @@ var mui = (function(document, undefined) {
 			return this;
 		}
 	};
+
+	/**
+	 * 兼容 AMD 模块
+	 **/
+	if (typeof define === 'function' && define.amd) {
+		define('mui', [], function() {
+			return $;
+		});
+	}
+
 	return $;
 })(document);
 //window.mui = mui;
@@ -349,6 +415,15 @@ var mui = (function(document, undefined) {
 		this.os = {};
 		var funcs = [
 
+			function() { //wechat
+				var wechat = ua.match(/(MicroMessenger)\/([\d\.]+)/i);
+				if (wechat) { //wechat
+					this.os.wechat = {
+						version: wechat[2].replace(/_/g, '.')
+					};
+				}
+				return false;
+			},
 			function() { //android
 				var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
 				if (android) {
@@ -385,17 +460,19 @@ var mui = (function(document, undefined) {
  * @param {type} $
  * @returns {undefined}
  */
-(function($) {
-    function detect(ua) {
-        this.os = this.os || {};
-        var plus = ua.match(/Html5Plus/i);//TODO 5\+Browser?
-        if (plus) {
-            this.os.plus = true;
-        }
-    }
-    detect.call($, navigator.userAgent);
-})(mui);
-
+(function($, document) {
+	function detect(ua) {
+		this.os = this.os || {};
+		var plus = ua.match(/Html5Plus/i); //TODO 5\+Browser?
+		if (plus) {
+			this.os.plus = true;
+			$(function() {
+				document.body.classList.add('mui-plus');
+			});
+		}
+	}
+	detect.call($, navigator.userAgent);
+})(mui, document);
 /**
  * mui target(action>popover>modal>tab>toggle)
  */
@@ -582,7 +659,7 @@ var mui = (function(document, undefined) {
 				target = target.parentNode.querySelector('input');
 			}
 		}
-		if (target.type === 'radio' || target.type === 'checkbox') {
+		if (target && (target.type === 'radio' || target.type === 'checkbox')) {
 			if (!target.disabled) { //disabled
 				return target;
 			}
@@ -610,6 +687,7 @@ var mui = (function(document, undefined) {
 			clickEvent.initMouseEvent('click', true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
 			clickEvent.forwardedTouchEvent = true;
 			targetElement.dispatchEvent(clickEvent);
+			event.detail && event.detail.gesture.preventDefault();
 		}
 	};
 	window.addEventListener('tap', dispatchEvent);
@@ -655,7 +733,7 @@ var mui = (function(document, undefined) {
 				}
 			}
 			var target = e.target;
-			if (target.tagName && target.tagName === 'INPUT' && target.type === 'text') {
+			if (target.tagName && target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')) {
 				if (target.disabled || target.readOnly) {
 					return;
 				}
@@ -724,6 +802,175 @@ var mui = (function(document, undefined) {
 	};
 })(mui);
 
+/**
+ * 仅提供简单的on，off(仅支持事件委托，不支持当前元素绑定，当前元素绑定请直接使用addEventListener,removeEventListener)
+ * @param {Object} $
+ */
+(function($) {
+
+	var _mid = 1;
+	var delegates = {};
+	//需要wrap的函数
+	var eventMethods = {
+		preventDefault: 'isDefaultPrevented',
+		stopImmediatePropagation: 'isImmediatePropagationStopped',
+		stopPropagation: 'isPropagationStopped'
+	};
+	//默认true返回函数
+	var returnTrue = function() {
+		return true
+	};
+	//默认false返回函数
+	var returnFalse = function() {
+		return false
+	};
+	//wrap浏览器事件
+	var compatible = function(event, target) {
+		if (!event.detail) {
+			event.detail = {
+				currentTarget: target
+			};
+		} else {
+			event.detail.currentTarget = target;
+		}
+		$.each(eventMethods, function(name, predicate) {
+			var sourceMethod = event[name];
+			event[name] = function() {
+				this[predicate] = returnTrue;
+				return sourceMethod && sourceMethod.apply(event, arguments)
+			}
+			event[predicate] = returnFalse;
+		}, true);
+		return event;
+	};
+	//简单的wrap对象_mid
+	var mid = function(obj) {
+		return obj && (obj._mid || (obj._mid = _mid++));
+	};
+	//事件委托对象绑定的事件回调列表
+	var delegateFns = {};
+	//返回事件委托的wrap事件回调
+	var delegateFn = function(element, event, selector, callback) {
+		return function(e) {
+			//same event
+			var callbackObjs = delegates[element._mid][event];
+			var handlerQueue = [];
+			var target = e.target;
+			var selectorAlls = {};
+			for (; target && target !== document; target = target.parentNode) {
+				if (target === element) {
+					break;
+				}
+				if (~['click', 'tap', 'doubletap', 'longtap', 'hold'].indexOf(event) && (target.disabled || target.classList.contains('mui-disabled'))) {
+					break;
+				}
+				var matches = {};
+				$.each(callbackObjs, function(selector, callbacks) { //same selector
+					selectorAlls[selector] || (selectorAlls[selector] = $.qsa(selector, element));
+					if (selectorAlls[selector] && ~(selectorAlls[selector]).indexOf(target)) {
+						if (!matches[selector]) {
+							matches[selector] = callbacks;
+						}
+					}
+				}, true);
+				if (!$.isEmptyObject(matches)) {
+					handlerQueue.push({
+						element: target,
+						handlers: matches
+					});
+				}
+			}
+			selectorAlls = null;
+			e = compatible(e); //compatible event
+			$.each(handlerQueue, function(index, handler) {
+				target = handler.element;
+				var tagName = target.tagName;
+				if (event === 'tap' && (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT')) {
+					e.preventDefault();
+					e.detail && e.detail.gesture && e.detail.gesture.preventDefault();
+				}
+				$.each(handler.handlers, function(index, handler) {
+					$.each(handler, function(index, callback) {
+						if (callback.call(target, e) === false) {
+							e.preventDefault();
+							e.stopPropagation();
+						}
+					}, true);
+				}, true)
+				if (e.isPropagationStopped()) {
+					return false;
+				}
+			}, true);
+		};
+	};
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
+	/**
+	 * mui delegate events
+	 * @param {type} event
+	 * @param {type} selector
+	 * @param {type} callback
+	 * @returns {undefined}
+	 */
+	$.fn.on = function(event, selector, callback) { //仅支持简单的事件委托,主要是tap事件使用，类似mouse,focus之类暂不封装支持
+		return this.each(function() {
+			var element = this;
+			mid(element);
+			mid(callback);
+			var isAddEventListener = false;
+			var delegateEvents = delegates[element._mid] || (delegates[element._mid] = {});
+			var delegateCallbackObjs = delegateEvents[event] || ((delegateEvents[event] = {}));
+			if ($.isEmptyObject(delegateCallbackObjs)) {
+				isAddEventListener = true;
+			}
+			var delegateCallbacks = delegateCallbackObjs[selector] || (delegateCallbackObjs[selector] = []);
+			delegateCallbacks.push(callback);
+			if (isAddEventListener) {
+				delegateFns[mid(element)] = delegateFn(element, event, selector, callback);
+				element.addEventListener(event, delegateFns[mid(element)]);
+				if (event === 'tap') { //TODO 需要找个更好的解决方案
+					element.addEventListener('click', function(e) {
+						if (e.target) {
+							var tagName = e.target.tagName;
+							if (!preventDefaultException.test(tagName)) {
+								if (tagName === 'A') {
+									var href = e.target.href;
+									if (!(href && ~href.indexOf('tel:'))) {
+										e.preventDefault();
+									}
+								} else {
+									e.preventDefault();
+								}
+							}
+						}
+					});
+				}
+			}
+		});
+	};
+	$.fn.off = function(event, selector, callback) {
+		return this.each(function() {
+			var _mid = mid(this);
+			if (!callback) {
+				if (delegates[_mid] && delegates[_mid][event]) {
+					delete delegates[_mid][event][selector];
+				}
+			} else {
+				var delegateCallbacks = delegates[_mid] && delegates[_mid][event] && delegates[_mid][event][selector];
+				$.each(delegateCallbacks, function(index, delegateCallback) {
+					if (mid(delegateCallback) === mid(callback)) {
+						delegateCallbacks.splice(index, 1);
+						return false;
+					}
+				}, true);
+			}
+			//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
+			if (delegates[_mid] && $.isEmptyObject(delegates[_mid][event])) {
+				this.removeEventListener(event, delegateFns[_mid]);
+				delete delegateFns[_mid];
+			}
+		})
+	};
+})(mui);
 /**
  * mui gestures
  * @param {type} $
@@ -819,7 +1066,7 @@ var mui = (function(document, undefined) {
 	};
 	var detectTouchStart = function(event) {
 		$.gestures.stoped = false;
-		var now = Date.now();
+		var now = $.now();
 		var point = event.touches ? event.touches[0] : event;
 		$.gestures.touch = {
 			target: event.target,
@@ -854,20 +1101,22 @@ var mui = (function(document, undefined) {
 			drag: false,
 			swipe: false,
 			hold: false,
+			holdStartTime: 0,
+			holdIdentifier: ($.gestures.touch && $.gestures.touch.holdIdentifier) ? $.gestures.touch.holdIdentifier : 0,
 			gesture: event
 		};
 
 		detect(event, $.gestures.touch);
 	};
 	var detectTouchMove = function(event) {
-		if ($.gestures.stoped) {
+		if ($.gestures.stoped || !$.gestures.touch) {
 			return;
 		}
 		var touch = $.gestures.touch;
 		if (event.target != touch.target) {
 			return;
 		}
-		var now = Date.now();
+		var now = $.now();
 		var point = event.touches ? event.touches[0] : event;
 		touch.touchTime = now - touch.startTime;
 		touch.move = {
@@ -890,14 +1139,14 @@ var mui = (function(document, undefined) {
 		detect(event, touch);
 	};
 	var detectTouchEnd = function(event) {
-		if ($.gestures.stoped) {
+		if ($.gestures.stoped || !$.gestures.touch) {
 			return;
 		}
 		var touch = $.gestures.touch;
 		if (event.target != touch.target) {
 			return;
 		}
-		var now = Date.now();
+		var now = $.now();
 		touch.touchTime = now - touch.startTime;
 		touch.flickTime = now - touch.flickStartTime;
 		touch.flickDistanceX = touch.move.x - touch.flickStart.x;
@@ -919,49 +1168,7 @@ var mui = (function(document, undefined) {
 		}
 	}, true);
 
-	/**
-	 * mui delegate events
-	 * @param {type} event
-	 * @param {type} selector
-	 * @param {type} callback
-	 * @returns {undefined}
-	 */
-	$.fn.on = function(event, selector, callback) {
-		this.each(function() {
-			var element = this;
-			element.addEventListener(event, function(e) {
-				var delegates = $.qsa(selector, element);
-				var target = e.target;
-				if (delegates && delegates.length > 0) {
-					for (; target && target !== document; target = target.parentNode) {
-						if (target === element) {
-							break;
-						}
-						if (target && ~delegates.indexOf(target)) {
-							if (!e.detail) {
-								e.detail = {
-									currentTarget: target
-								};
-							} else {
-								e.detail.currentTarget = target;
-							}
-							callback.call(target, e);
-						}
-					}
-				}
-			});
-			////避免多次on的时候重复绑定
-			element.removeEventListener($.EVENT_CLICK, preventDefault);
-			//click event preventDefault
-			element.addEventListener($.EVENT_CLICK, preventDefault);
-		});
-	};
-	var preventDefault = function(e) {
-		var tagName = e.target && e.target.tagName;
-		if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
-			e.preventDefault();
-		}
-	};
+
 	//增加原生滚动识别
 	$.isScrolling = false;
 	var scrollingTimeout = null;
@@ -1095,13 +1302,13 @@ var mui = (function(document, undefined) {
 				if ($.options.gestureConfig.doubletap && touch.lastTarget && (touch.lastTarget === event.target)) { //same target
 					if (touch.lastTapTime && (touch.startTime - touch.lastTapTime) < options.tapMaxInterval) {
 						$.trigger(event.target, 'doubletap', touch);
-						touch.lastTapTime = Date.now();
+						touch.lastTapTime = $.now();
 						touch.lastTarget = event.target;
 						return;
 					}
 				}
 				$.trigger(event.target, name, touch);
-				touch.lastTapTime = Date.now();
+				touch.lastTapTime = $.now();
 				touch.lastTarget = event.target;
 			}
 		}
@@ -1175,19 +1382,30 @@ var mui = (function(document, undefined) {
 		var options = this.options;
 		switch (event.type) {
 			case $.EVENT_START:
-				clearTimeout(timer);
-				timer = setTimeout(function() {
-					touch.hold = true;
-					$.trigger(event.target, name, touch);
-				}, options.holdTimeout);
+				if ($.options.gestureConfig.hold && event.changedTouches.length && !touch.holdIdentifier) {
+					touch.holdIdentifier = event.changedTouches[0].identifier + 1; //确保identifier>0
+					timer && clearTimeout(timer);
+					timer = setTimeout(function() {
+						touch.hold = true;
+						touch.holdStartTime = $.now();
+						$.trigger(event.target, name, touch);
+					}, options.holdTimeout);
+				}
 				break;
 			case $.EVENT_MOVE:
 				break;
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
-				clearTimeout(timer);
-				if ($.options.gestureConfig.hold && touch.hold) {
-					$.trigger(event.target, 'release', touch);
+				if (event.changedTouches.length) {
+					for (var i = 0, len = event.changedTouches.length; i < len; i++) {
+						if (event.changedTouches[i].identifier === (touch.holdIdentifier - 1)) {
+							timer && clearTimeout(timer) && (timer = null);
+							$.trigger(event.target, 'release', touch);
+							touch.hold = false; //reset
+							touch.holdIdentifier = 0;
+							break;
+						}
+					}
 				}
 				break;
 		}
@@ -1269,20 +1487,37 @@ var mui = (function(document, undefined) {
 	};
 	$(function() {
 		var classList = document.body.classList;
-		var os = '';
+		var os = [];
 		if ($.os.ios) {
-			os = 'ios';
+			os.push({
+				os: 'ios',
+				version: $.os.version
+			});
 			classList.add('mui-ios');
 		} else if ($.os.android) {
-			os = 'android';
+			os.push({
+				os: 'android',
+				version: $.os.version
+			});
 			classList.add('mui-android');
 		}
-		if (os && $.os.version) {
-			var version = '';
-			var classArray = [];
-			$.each($.os.version.split('.'), function(i, v) {
-				version = version + (version ? '-' : '') + v;
-				classList.add($.className(os + '-' + version));
+		if ($.os.wechat) {
+			os.push({
+				os: 'wechat',
+				version: $.os.wechat.version
+			});
+			classList.add('mui-wechat');
+		}
+		if (os.length) {
+			$.each(os, function(index, osObj) {
+				var version = '';
+				var classArray = [];
+				if (osObj.version) {
+					$.each(osObj.version.split('.'), function(i, v) {
+						version = version + (version ? '-' : '') + v;
+						classList.add($.className(osObj.os + '-' + version));
+					});
+				}
 			});
 		}
 	});
@@ -1356,7 +1591,9 @@ var mui = (function(document, undefined) {
 	 */
 	$.plusReady = function(callback) {
 		if (window.plus) {
-			callback();
+			setTimeout(function() { //解决callback与plusready事件的执行时机问题(典型案例:showWaiting,closeWaiting)
+				callback();
+			}, 0);
 		} else {
 			document.addEventListener("plusready", function() {
 				callback();
@@ -1468,6 +1705,17 @@ var mui = (function(document, undefined) {
 			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 			return webview;
 		} else { //新窗口
+			if (options.createNew !== true) {
+				webview = plus.webview.getWebviewById(id);
+				if (webview) { //如果已存在
+					nShow = $.showOptions(options.show);
+					webview.show(nShow.aniShow, nShow.duration, function() {
+						triggerPreload(webview);
+						trigger(webview, 'pagebeforeshow', false);
+					});
+					return webview;
+				}
+			}
 			//显示waiting
 			var waitingConfig = $.waitingOptions(options.waiting);
 			if (waitingConfig.autoShow) {
@@ -1478,6 +1726,7 @@ var mui = (function(document, undefined) {
 				id: id,
 				url: url
 			});
+
 			webview = $.createWindow(options);
 			//显示
 			nShow = $.showOptions(options.show);
@@ -1635,10 +1884,14 @@ var mui = (function(document, undefined) {
 		if (!$.webviews[id]) { //保证执行一遍
 			//TODO 这里也有隐患，比如某个webview不是作为subpage创建的，而是作为target webview的话；
 			webview = plus.webview.create(options.url, id, options.styles, options.extras);
-			//TODO 理论上，子webview也应该计算到预加载队列中，但这样就麻烦了，要退必须退整体，否则可能出现问题；
-			webview.addEventListener('loaded', function() {
-				plus.webview.currentWebview().append(webview);
-			});
+			//之前的实现方案：子窗口loaded之后再append到父窗口中；
+			//问题：部分子窗口loaded事件发生较晚，此时执行父窗口的children方法会返回空，导致父子通讯失败；
+			//     比如父页面执行完preload事件后，需触发子页面的preload事件，此时未append的话，就无法触发；
+			//修改方式：不再监控loaded事件，直接append
+			//by chb@20150521
+			// webview.addEventListener('loaded', function() {
+			plus.webview.currentWebview().append(webview);
+			// });
 			$.webviews[id] = options;
 		}
 		return webview;
@@ -1793,7 +2046,7 @@ var mui = (function(document, undefined) {
 			index: 5,
 			handle: function() {
 				//popover
-				if ($.targets._popover) {
+				if ($.targets._popover && $.targets._popover.classList.contains('mui-active')) {
 					$($.targets._popover).popover('hide');
 					return true;
 				}
@@ -1820,24 +2073,24 @@ var mui = (function(document, undefined) {
 			var parent = wobj.parent();
 			if (parent) {
 				parent.evalJS('mui&&mui.back();');
-			}else{
+			} else {
 				wobj.canBack(function(e) {
 					//by chb 暂时注释，在碰到类似popover之类的锚点的时候，需多次点击才能返回；
 					if (e.canBack) { //webview history back
 						window.history.back();
 					} else { //webview close or hide
-						var opener = wobj.opener();
-						if (opener) {
+						//fixed by fxy 此处不应该用opener判断，因为用户有可能自己close掉当前窗口的opener。这样的话。opener就为空了，导致不能执行close
+						if (wobj.id === plus.runtime.appid) { //首页
+							//首页不存在opener的情况下，后退实际上应该是退出应用；
+							//这个交给项目具体实现，框架暂不处理；
+							//plus.runtime.quit();	
+						} else { //其他页面，
 							if (wobj.preload) {
 								wobj.hide("auto");
 							} else {
 								//关闭页面时，需要将其打开的所有子页面全部关闭；
 								$.closeAll(wobj);
 							}
-						} else {
-							//首页不存在opener的情况下，后退实际上应该是退出应用；
-							//这个交给项目具体实现，框架暂不处理；
-							//plus.runtime.quit();
 						}
 					}
 				});
@@ -1850,7 +2103,7 @@ var mui = (function(document, undefined) {
 	$.menu = function() {
 		var menu = document.querySelector('.mui-action-menu');
 		if (menu) {
-			$.trigger(menu, 'touchstart');//临时处理menu无touchstart的话，找不到当前targets的问题
+			$.trigger(menu, 'touchstart'); //临时处理menu无touchstart的话，找不到当前targets的问题
 			$.trigger(menu, 'tap');
 		} else { //执行父窗口的menu
 			if (window.plus) {
@@ -1862,17 +2115,33 @@ var mui = (function(document, undefined) {
 			}
 		}
 	};
+	var __back = function() {
+		$.back();
+	};
+	var __menu = function() {
+		$.menu();
+	};
+	//默认监听
+	$.plusReady(function() {
+		if ($.options.keyEventBind.backbutton) {
+			plus.key.addEventListener('backbutton', __back, false);
+		}
+		if ($.options.keyEventBind.menubutton) {
+			plus.key.addEventListener('menubutton', __menu, false);
+		}
+	});
 	//处理按键监听事件
 	$.registerInit({
 		name: 'keyEventBind',
 		index: 1000,
 		handle: function() {
 			$.plusReady(function() {
-				if ($.options.keyEventBind.backbutton) {
-					plus.key.addEventListener('backbutton', $.back, false);
+				//如果不为true，则移除默认监听
+				if (!$.options.keyEventBind.backbutton) {
+					plus.key.removeEventListener('backbutton', __back);
 				}
-				if ($.options.keyEventBind.menubutton) {
-					plus.key.addEventListener('menubutton', $.menu, false);
+				if (!$.options.keyEventBind.menubutton) {
+					plus.key.removeEventListener('menubutton', __menu);
 				}
 			});
 		}
@@ -2065,7 +2334,7 @@ var mui = (function(document, undefined) {
 		var dataType = settings.dataType;
 
 		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
-			settings.url = appendQuery(settings.url, '_=' + Date.now());
+			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
 		var mime = settings.accepts[dataType];
 		var headers = {};
@@ -2073,7 +2342,7 @@ var mui = (function(document, undefined) {
 			headers[name.toLowerCase()] = [name, value];
 		};
 		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-		var xhr = settings.xhr(protocol);
+		var xhr = settings.xhr(settings);
 		var nativeSetHeader = xhr.setRequestHeader;
 		var abortTimeout;
 
@@ -2216,13 +2485,25 @@ var mui = (function(document, undefined) {
  * 5+ ajax
  */
 (function($) {
+	var originAnchor = document.createElement('a');
+	originAnchor.href = window.location.href;
 	$.plusReady(function() {
 		$.ajaxSettings = $.extend($.ajaxSettings, {
-			xhr: function(protocol) {
-				if (protocol === 'file:') { //本地文件使用标准XMLHttpRequest
-					return new window.XMLHttpRequest();
+			xhr: function(settings) {
+				if (settings.crossDomain) { //强制使用plus跨域
+					return new plus.net.XMLHttpRequest();
 				}
-				return new plus.net.XMLHttpRequest();
+				//仅在webview的url为远程文件，且ajax请求的资源不同源下使用plus.net.XMLHttpRequest
+				if (originAnchor.protocol !== 'file:') {
+					var urlAnchor = document.createElement('a');
+					urlAnchor.href = settings.url;
+					urlAnchor.href = urlAnchor.href;
+					settings.crossDomain = (originAnchor.protocol + '//' + originAnchor.host) !== (urlAnchor.protocol + '//' + urlAnchor.host);
+					if (settings.crossDomain) {
+						return new plus.net.XMLHttpRequest();
+					}
+				}
+				return new window.XMLHttpRequest();
 			}
 		});
 	});
@@ -2260,6 +2541,7 @@ var mui = (function(document, undefined) {
 		duration = duration || 1000;
 		var scroll = function(duration) {
 			if (duration <= 0) {
+				window.scrollTo(0, scrollTop);
 				callback && callback();
 				return;
 			}
@@ -2333,6 +2615,9 @@ var mui = (function(document, undefined) {
 	var CLASS_PULL = 'mui-pull';
 	var CLASS_PULL_LOADING = 'mui-pull-loading';
 	var CLASS_PULL_CAPTION = 'mui-pull-caption';
+	var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
+	var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
+	var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
 
 	var CLASS_ICON = 'mui-icon';
 	var CLASS_SPINNER = 'mui-spinner';
@@ -2362,6 +2647,7 @@ var mui = (function(document, undefined) {
 				},
 				up: {
 					height: 50,
+					auto: false,
 					contentdown: '上拉显示更多',
 					contentrefresh: '正在加载...',
 					contentnomore: '没有更多数据了',
@@ -2428,6 +2714,21 @@ var mui = (function(document, undefined) {
 				loading.className = CLASS_LOADING_DOWN;
 			}
 		},
+		_setCaptionClass: function(isPulldown, caption, title) {
+			if (!isPulldown) {
+				switch (title) {
+					case this.options.up.contentdown:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+						break;
+					case this.options.up.contentrefresh:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
+						break;
+					case this.options.up.contentnomore:
+						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
+						break;
+				}
+			}
+		},
 		_setCaption: function(title, reset) {
 			if (this.loading) {
 				return;
@@ -2437,13 +2738,15 @@ var mui = (function(document, undefined) {
 			var caption = this.pullCaption;
 			var loading = this.pullLoading;
 			var isPulldown = this.pulldown;
+			var self = this;
 			if (pocket) {
 				if (reset) {
 					setTimeout(function() {
-						caption.innerHTML = title;
+						caption.innerHTML = self.lastTitle = title;
 						if (isPulldown) {
 							loading.className = CLASS_LOADING_DOWN;
 						} else {
+							self._setCaptionClass(false, caption, title);
 							loading.className = CLASS_LOADING;
 						}
 						loading.style.webkitAnimation = "";
@@ -2472,6 +2775,7 @@ var mui = (function(document, undefined) {
 							} else {
 								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
 							}
+							self._setCaptionClass(false, caption, title);
 						}
 						this.lastTitle = title;
 					}
@@ -2747,6 +3051,7 @@ var mui = (function(document, undefined) {
 					break;
 				case 'scrollend':
 					this._scrollend(e);
+					e.stopPropagation();
 					break;
 				case 'orientationchange':
 				case 'resize':
@@ -2761,7 +3066,7 @@ var mui = (function(document, undefined) {
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition) {
+			if (this.isInTransition && this.moved) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
@@ -3384,7 +3689,9 @@ var mui = (function(document, undefined) {
 		handleEvent: function(e) {
 			this._super(e);
 			if (e.type === 'scrollbottom') {
-				this._scrollbottom();
+				if (e.target === this.scroller) {
+					this._scrollbottom();
+				}
 			}
 		},
 		_scrollbottom: function() {
@@ -3417,20 +3724,20 @@ var mui = (function(document, undefined) {
 		//API
 		resetPosition: function(time) {
 			if (this.pulldown && this.y >= this.options.down.height) {
-				this.pulldownLoading(0, time || 0);
+				this.pulldownLoading(undefined, time || 0);
 				return true;
 			}
 			return this._super(time);
 		},
-		pulldownLoading: function(x, time) {
-			x = x || 0;
-			this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
+		pulldownLoading: function(y, time) {
+			typeof y === 'undefined' && (y = this.options.down.height); //默认高度
+			this.scrollTo(0, y, time, this.options.bounceEasing);
 			if (this.loading) {
 				return;
 			}
-			if (!this.pulldown) {
-				this._initPulldownRefresh();
-			}
+			//			if (!this.pulldown) {
+			this._initPulldownRefresh();
+			//			}
 			this._setCaption(this.options.down.contentrefresh);
 			this.loading = true;
 			this.indicators.map(function(indicator) {
@@ -3470,6 +3777,7 @@ var mui = (function(document, undefined) {
 			if (self.bottomPocket && self.loading && !this.pulldown) {
 				self.loading = false;
 				if (finished) {
+					this.finished = true;
 					self._setCaption(self.options.up.contentnomore);
 					//					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
@@ -3483,13 +3791,12 @@ var mui = (function(document, undefined) {
 			}
 		},
 		refresh: function(isReset) {
-			if (isReset) {
-				//				var classList = this.bottomPocket.classList;
-				//				if (classList.contains(CLASS_HIDDEN)) {
-				//					classList.remove(CLASS_HIDDEN);
-				//				this._setCaption(self.options.up.contentdown);
+			if (isReset && this.finished) {
+				this._initPullupRefresh();
+				this.bottomPocket.classList.remove(CLASS_HIDDEN);
+				this._setCaption(this.options.up.contentdown);
 				this.wrapper.addEventListener('scrollbottom', this);
-				//				}
+				this.finished = false;
 			}
 			this._super();
 		},
@@ -3497,23 +3804,27 @@ var mui = (function(document, undefined) {
 	$.fn.pullRefresh = function(options) {
 		if (this.length === 1) {
 			var self = this[0];
-			var pullrefreshApi = null;
+			var pullRefreshApi = null;
+			options = options || {};
 			var id = self.getAttribute('data-pullrefresh');
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = pullrefreshApi = new PullRefresh(self, options);
+				$.data[id] = pullRefreshApi = new PullRefresh(self, options);
 				self.setAttribute('data-pullrefresh', id);
 			} else {
-				pullrefreshApi = $.data[id];
+				pullRefreshApi = $.data[id];
+			}
+			if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+				pullRefreshApi.pullupLoading();
 			}
 			//暂不提供这种调用方式吧			
 			//			if (typeof options === 'string') {
-			//				var methodValue = pullrefreshApi[options].apply(pullrefreshApi, $.slice.call(arguments, 1));
+			//				var methodValue = pullRefreshApi[options].apply(pullRefreshApi, $.slice.call(arguments, 1));
 			//				if (methodValue !== undefined) {
 			//					return methodValue;
 			//				}
 			//			}
-			return pullrefreshApi;
+			return pullRefreshApi;
 		}
 	};
 })(mui, window, document);
@@ -3586,7 +3897,6 @@ var mui = (function(document, undefined) {
 			self.wrapper.addEventListener('scrollend', function() {
 				self.isInTransition = false;
 				var page = self.currentPage;
-				var oldSlideNumber = self.slideNumber;
 				self.slideNumber = self._fixedSlideNumber();
 				if (self.loop) {
 					if (self.slideNumber === 0) {
@@ -3595,11 +3905,13 @@ var mui = (function(document, undefined) {
 						self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
 					}
 				}
-				if (oldSlideNumber != self.slideNumber) {
+				if (self.lastSlideNumber != self.slideNumber) {
+					self.lastSlideNumber = self.slideNumber;
 					$.trigger(self.wrapper, 'slide', {
 						slideNumber: self.slideNumber
 					});
 				}
+				self._initTimer();
 			});
 
 			self.wrapper.addEventListener('slide', function(e) {
@@ -3669,6 +3981,10 @@ var mui = (function(document, undefined) {
 			this._super(e);
 			var direction = e.detail.direction;
 			if (direction === 'left' || direction === 'right') {
+				//拖拽期间取消定时
+				var slidershowTimer = this.wrapper.getAttribute('data-slidershowTimer');
+				slidershowTimer && window.clearTimeout(slidershowTimer);
+
 				e.stopPropagation();
 			}
 		},
@@ -3760,8 +4076,10 @@ var mui = (function(document, undefined) {
 				}
 				this.currentPage = currentPage[0];
 				this.slideNumber = 0;
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? 0 : this.lastSlideNumber;
 			} else {
 				this.slideNumber = this._fixedSlideNumber();
+				this.lastSlideNumber = typeof this.lastSlideNumber === 'undefined' ? this.slideNumber : this.lastSlideNumber;
 			}
 			this.options.startX = this.currentPage.x || 0;
 		},
@@ -3794,12 +4112,11 @@ var mui = (function(document, undefined) {
 			return this.pages[slideNumber][0];
 		},
 		_gotoItem: function(slideNumber, time) {
-			this.currentPage = this._getPage(slideNumber);
+			this.currentPage = this._getPage(slideNumber, true); //此处传true。可保证程序切换时，动画与人手操作一致(第一张，最后一张的切换动画)
 			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
-			this._initTimer();
 		},
 		//API
 		setTranslate: function(x, y) {
@@ -3821,7 +4138,7 @@ var mui = (function(document, undefined) {
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(slideNumber, time || this.options.bounceTime);
+			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.bounceTime : time);
 		},
 		nextItem: function() {
 			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);
@@ -3849,7 +4166,7 @@ var mui = (function(document, undefined) {
 			if (!this.classList.contains(CLASS_SLIDER)) {
 				sliderElement = this.querySelector('.' + CLASS_SLIDER);
 			}
-			if (sliderElement) {
+			if (sliderElement && sliderElement.querySelector(SELECTOR_SLIDER_ITEM)) {
 				var id = sliderElement.getAttribute('data-slider');
 				if (!id) {
 					id = ++$.uuid;
@@ -3891,6 +4208,11 @@ var mui = (function(document, undefined) {
 	var CLASS_VISIBILITY = 'mui-visibility';
 	var CLASS_HIDDEN = 'mui-hidden';
 	var CLASS_BLOCK = 'mui-block';
+
+	var CLASS_PULL_CAPTION = 'mui-pull-caption';
+	var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
+	var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
+	var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
 
 	var PlusPullRefresh = $.Class.extend({
 		init: function(element, options) {
@@ -4008,8 +4330,8 @@ var mui = (function(document, undefined) {
 			}
 		},
 		pulldownLoading: function() {
-			//TODO
-			throw new Error('暂不支持');
+			var callback = $.options.pullRefresh.down.callback;
+			callback && callback.call(this);
 		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
@@ -4041,6 +4363,7 @@ var mui = (function(document, undefined) {
 				self.pullLoading.classList.add(CLASS_VISIBILITY);
 				self.pullLoading.classList.remove(CLASS_HIDDEN);
 				self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
+				self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH;
 				self.pullCaption.innerHTML = self.options.up.contentrefresh;
 				callback = callback || self.options.up.callback;
 				callback && callback.call(self);
@@ -4053,12 +4376,15 @@ var mui = (function(document, undefined) {
 				self.pullLoading.classList.add(CLASS_HIDDEN);
 				self.isLoading = false;
 				if (finished) {
+					self.finished = true;
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
 					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					//					document.removeEventListener('plusscrollbottom', self);
 					window.removeEventListener('dragup', self);
 				} else { //初始化时隐藏，后续不再隐藏
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 					self.pullCaption.innerHTML = self.options.up.contentdown;
 					//					setTimeout(function() {
 					//						self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
@@ -4070,13 +4396,13 @@ var mui = (function(document, undefined) {
 			$.scrollTo(x, y, time);
 		},
 		refresh: function(isReset) {
-			if (isReset) {
-				//				var classList = this.bottomPocket.classList;
-				//				if (classList.contains(CLASS_HIDDEN)) {
-				//					classList.remove(CLASS_HIDDEN);
-				//				document.addEventListener('plusscrollbottom', this);
+			if (isReset && this.finished) {
+				this._initPullupRefresh();
+				this.bottomPocket.classList.remove(CLASS_HIDDEN);
+				this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+				this.pullCaption.innerHTML = this.options.up.contentdown;
 				window.addEventListener('dragup', this);
-				//				}
+				this.finished = false;
 			}
 		}
 	}, $.PullRefresh));
@@ -4092,12 +4418,11 @@ var mui = (function(document, undefined) {
 			self = this[0];
 		}
 		//一个父需要支持多个子下拉刷新
-		options = options || {
-			webviewId: plus.webview.currentWebview().id || plus.webview.currentWebview().getURL()
-		}
+		options = options || {}
 		if (typeof options === 'string') {
 			options = $.parseJSON(options);
-		}
+		};
+		!options.webviewId && (options.webviewId = (plus.webview.currentWebview().id || plus.webview.currentWebview().getURL()));
 		var pullRefreshApi = null;
 		var attrWebviewId = options.webviewId && options.webviewId.replace(/\//g, "_"); //替换所有"/"
 		var id = self.getAttribute('data-pullrefresh-plus-' + attrWebviewId);
@@ -4108,6 +4433,9 @@ var mui = (function(document, undefined) {
 			$.data[id] = pullRefreshApi = new PlusPullRefresh(self, options);
 		} else {
 			pullRefreshApi = $.data[id];
+		}
+		if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+			pullRefreshApi.pullupLoading();
 		}
 		return pullRefreshApi;
 	};
@@ -4149,29 +4477,39 @@ var mui = (function(document, undefined) {
 				this.initEvent();
 			}
 		},
-		refresh: function() {
-			this.classList.remove(CLASS_ACTIVE);
+		refresh: function(offCanvas) {
+			//			offCanvas && !offCanvas.classList.contains(CLASS_ACTIVE) && this.classList.remove(CLASS_ACTIVE);
 			this.slideIn = this.classList.contains(CLASS_SLIDE_IN);
 			this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
-			this.scroller.classList.remove(CLASS_TRANSITIONING);
-			this.scroller.setAttribute('style', '');
-			this.offCanvasRight = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT);
-			this.offCanvasLeft = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT);
+			//			!offCanvas && this.scroller.classList.remove(CLASS_TRANSITIONING);
+			//			!offCanvas && this.scroller.setAttribute('style', '');
+			this.offCanvasLefts = this.wrapper.querySelectorAll('.' + CLASS_OFF_CANVAS_LEFT);
+			this.offCanvasRights = this.wrapper.querySelectorAll('.' + CLASS_OFF_CANVAS_RIGHT);
+			if (offCanvas) {
+				if (offCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT)) {
+					this.offCanvasLeft = offCanvas;
+				} else if (offCanvas.classList.contains(CLASS_OFF_CANVAS_RIGHT)) {
+					this.offCanvasRight = offCanvas;
+				}
+			} else {
+				this.offCanvasRight = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT);
+				this.offCanvasLeft = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT);
+			}
 			this.offCanvasRightWidth = this.offCanvasLeftWidth = 0;
 			this.offCanvasLeftSlideIn = this.offCanvasRightSlideIn = false;
 			if (this.offCanvasRight) {
 				this.offCanvasRightWidth = this.offCanvasRight.offsetWidth;
 				this.offCanvasRightSlideIn = this.slideIn && (this.offCanvasRight.parentNode === this.wrapper);
-				this.offCanvasRight.classList.remove(CLASS_TRANSITIONING);
-				this.offCanvasRight.classList.remove(CLASS_ACTIVE);
-				this.offCanvasRight.setAttribute('style', '');
+				//				this.offCanvasRight.classList.remove(CLASS_TRANSITIONING);
+				//				this.offCanvasRight.classList.remove(CLASS_ACTIVE);
+				//				this.offCanvasRight.setAttribute('style', '');
 			}
 			if (this.offCanvasLeft) {
 				this.offCanvasLeftWidth = this.offCanvasLeft.offsetWidth;
 				this.offCanvasLeftSlideIn = this.slideIn && (this.offCanvasLeft.parentNode === this.wrapper);
-				this.offCanvasLeft.classList.remove(CLASS_TRANSITIONING);
-				this.offCanvasLeft.classList.remove(CLASS_ACTIVE);
-				this.offCanvasLeft.setAttribute('style', '');
+				//				this.offCanvasLeft.classList.remove(CLASS_TRANSITIONING);
+				//				this.offCanvasLeft.classList.remove(CLASS_ACTIVE);
+				//				this.offCanvasLeft.setAttribute('style', '');
 			}
 			this.backdrop = this.scroller.querySelector('.' + CLASS_ACTION_BACKDEOP);
 
@@ -4392,7 +4730,13 @@ var mui = (function(document, undefined) {
 						this.rightShowing = false;
 						if (x > 0) {
 							if (this.offCanvasLeft) {
-								this.offCanvasLeft.style.zIndex = 0;
+								$.each(this.offCanvasLefts, function(index, offCanvas) {
+									if (offCanvas === this.offCanvasLeft) {
+										this.offCanvasLeft.style.zIndex = 0;
+									} else {
+										offCanvas.style.zIndex = -1;
+									}
+								}.bind(this));
 							}
 							if (this.offCanvasRight) {
 								this.offCanvasRight.style.zIndex = -1;
@@ -4402,7 +4746,13 @@ var mui = (function(document, undefined) {
 						this.rightShowing = true;
 						this.leftShowing = false;
 						if (this.offCanvasRight) {
-							this.offCanvasRight.style.zIndex = 0;
+							$.each(this.offCanvasRights, function(index, offCanvas) {
+								if (offCanvas === this.offCanvasRight) {
+									offCanvas.style.zIndex = 0;
+								} else {
+									offCanvas.style.zIndex = -1;
+								}
+							}.bind(this));
 						}
 						if (this.offCanvasLeft) {
 							this.offCanvasLeft.style.zIndex = -1;
@@ -4458,11 +4808,11 @@ var mui = (function(document, undefined) {
 				}
 			} else {
 				if (direction === 'left') {
-					shown = this.offCanvasLeft && this.offCanvasLeft.classList.contains(CLASS_ACTIVE);
+					shown = this.classList.contains(CLASS_ACTIVE) && this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
 				} else if (direction === 'right') {
-					shown = this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE);
+					shown = this.classList.contains(CLASS_ACTIVE) && this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE);
 				} else {
-					shown = (this.offCanvasLeft && this.offCanvasLeft.classList.contains(CLASS_ACTIVE)) || (this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE));
+					shown = this.classList.contains(CLASS_ACTIVE) && (this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE));
 				}
 			}
 			return shown;
@@ -4470,7 +4820,7 @@ var mui = (function(document, undefined) {
 		close: function() {
 			this._initOffCanvasVisible();
 			if (this.slideIn) {
-				this.scroller = this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE) ? this.offCanvasRight : this.offCanvasLeft;
+				this.scroller = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
 			}
 			if (this.scroller) {
 				this.scroller.classList.add(CLASS_TRANSITIONING);
@@ -4480,7 +4830,7 @@ var mui = (function(document, undefined) {
 		show: function(direction) {
 			this._initOffCanvasVisible();
 			if (this.isShown(direction)) {
-				return;
+				return false;
 			}
 			if (!direction) {
 				direction = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT) ? 'right' : 'left';
@@ -4492,12 +4842,16 @@ var mui = (function(document, undefined) {
 				this.scroller.classList.add(CLASS_TRANSITIONING);
 				this.openPercentage(direction === 'left' ? 100 : -100);
 			}
+			return true;
 		},
-		toggle: function(direction) {
-			if (this.isShown(direction)) {
+		toggle: function(directionOrOffCanvas) {
+			var direction = directionOrOffCanvas;
+			if (directionOrOffCanvas && directionOrOffCanvas.classList) {
+				direction = directionOrOffCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT) ? 'left' : 'right';
+				this.refresh(directionOrOffCanvas);
+			}
+			if (!this.show(direction)) {
 				this.close();
-			} else {
-				this.show(direction);
 			}
 		}
 	});
@@ -4523,7 +4877,6 @@ var mui = (function(document, undefined) {
 				var container = findOffCanvasContainer(offcanvas);
 				if (container) {
 					$.targets._container = container;
-					event.preventDefault(); //fixed hashchange
 					return offcanvas;
 				}
 			}
@@ -4548,7 +4901,8 @@ var mui = (function(document, undefined) {
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
-				$($.targets._container).offCanvas().toggle($.targets.offcanvas.classList.contains(CLASS_OFF_CANVAS_LEFT) ? 'left' : 'right');
+				e.detail.gesture.preventDefault(); //fixed hashchange
+				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;
 			}
@@ -4594,7 +4948,9 @@ var mui = (function(document, undefined) {
 
 	var handle = function(event, target) {
 		if (target.className && ~target.className.indexOf(CLASS_ACTION)) {
-			event.preventDefault();
+			if (target.classList.contains('mui-action-back')) {
+				event.preventDefault();
+			}
 			return target;
 		}
 		return false;
@@ -4624,7 +4980,6 @@ var mui = (function(document, undefined) {
 		if (target.tagName === 'A' && target.hash) {
 			var modal = document.getElementById(target.hash.replace('#', ''));
 			if (modal && modal.classList.contains(CLASS_MODAL)) {
-				event.preventDefault(); //fixed hashchange
 				return modal;
 			}
 		}
@@ -4642,6 +4997,7 @@ var mui = (function(document, undefined) {
 
 	window.addEventListener('tap', function(event) {
 		if ($.targets.modal) {
+			event.detail.gesture.preventDefault(); //fixed hashchange
 			$.targets.modal.classList.toggle('mui-active');
 		}
 	});
@@ -4673,7 +5029,6 @@ var mui = (function(document, undefined) {
 		if (target.tagName === 'A' && target.hash) {
 			$.targets._popover = document.getElementById(target.hash.replace('#', ''));
 			if ($.targets._popover && $.targets._popover.classList.contains(CLASS_POPOVER)) {
-				event.preventDefault(); //fixed hashchange
 				return target;
 			} else {
 				$.targets._popover = null;
@@ -4704,7 +5059,7 @@ var mui = (function(document, undefined) {
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
-		setStyle(this,'none');
+		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener('touchmove', $.preventDefault);
 		fixedPopoverScroll(false);
@@ -4748,6 +5103,7 @@ var mui = (function(document, undefined) {
 			}
 		}
 		if (toggle) {
+			e.detail.gesture.preventDefault(); //fixed hashchange
 			togglePopover($.targets._popover, $.targets.popover);
 		}
 
@@ -4896,8 +5252,9 @@ var mui = (function(document, undefined) {
 			if (mask._show) {
 				mask._show = false;
 				element.setAttribute('style', 'opacity:0');
-				setTimeout(function() {
-					document.body.removeChild(element);
+				$.later(function() {
+					var body = document.body;
+					element.parentNode === body && body.removeChild(element);
 				}, 350);
 			}
 			return mask;
@@ -5138,10 +5495,10 @@ var mui = (function(document, undefined) {
 		var classList = this.classList;
 		if (classList.contains(CLASS_ACTIVE)) {
 			classList.remove(CLASS_ACTIVE);
-			this.handle.style.webkitTransform = 'translate3d(0,0,0)';
+			this.handle.style.webkitTransform = 'translate(0,0)';
 		} else {
 			classList.add(CLASS_ACTIVE);
-			this.handle.style.webkitTransform = 'translate3d(' + this.handleX + 'px,0,0)';
+			this.handle.style.webkitTransform = 'translate(' + this.handleX + 'px,0)';
 		}
 		$.trigger(this.element, 'toggle', {
 			isActive: this.classList.contains(CLASS_ACTIVE)
@@ -5157,10 +5514,10 @@ var mui = (function(document, undefined) {
 		}
 		if (this.lastChanged !== isChanged) {
 			if (isChanged) {
-				this.handle.style.webkitTransform = 'translate3d(' + (this.initialState ? 0 : this.handleX) + 'px,0,0)';
+				this.handle.style.webkitTransform = 'translate(' + (this.initialState ? 0 : this.handleX) + 'px,0)';
 				this.classList[this.initialState ? 'remove' : 'add'](CLASS_ACTIVE);
 			} else {
-				this.handle.style.webkitTransform = 'translate3d(' + (this.initialState ? this.handleX : 0) + 'px,0,0)';
+				this.handle.style.webkitTransform = 'translate(' + (this.initialState ? this.handleX : 0) + 'px,0)';
 				this.classList[this.initialState ? 'add' : 'remove'](CLASS_ACTIVE);
 			}
 			this.lastChanged = isChanged;
@@ -5168,7 +5525,7 @@ var mui = (function(document, undefined) {
 
 	});
 
-	$.fn.switch = function(options) {
+	$.fn['switch'] = function(options) {
 		var switchApis = [];
 		this.each(function() {
 			var switchApi = null;
@@ -5185,7 +5542,7 @@ var mui = (function(document, undefined) {
 		return switchApis.length > 1 ? switchApis : switchApis[0];
 	};
 	$.ready(function() {
-		$('.' + CLASS_SWITCH).switch();
+		$('.' + CLASS_SWITCH)['switch']();
 	});
 })(mui, window, 'toggle');
 /**
@@ -5200,6 +5557,7 @@ var mui = (function(document, undefined) {
 	var CLASS_ACTIVE = 'mui-active';
 	var CLASS_SELECTED = 'mui-selected';
 	var CLASS_GRID_VIEW = 'mui-grid-view';
+	var CLASS_RADIO_VIEW = 'mui-table-view-radio';
 	var CLASS_TABLE_VIEW_CELL = 'mui-table-view-cell';
 	var CLASS_COLLAPSE_CONTENT = 'mui-collapse-content';
 	var CLASS_DISABLED = 'mui-disabled';
@@ -5222,7 +5580,7 @@ var mui = (function(document, undefined) {
 
 	var isMoved = isOpened = openedActions = progress = false;
 	var sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
-	var translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
+	var timer = translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
 
 
 
@@ -5234,6 +5592,7 @@ var mui = (function(document, undefined) {
 				cell.classList.add(CLASS_ACTIVE);
 			}
 		} else {
+			timer && timer.cancel();
 			if (a) {
 				a.classList.remove(CLASS_ACTIVE);
 			} else if (cell) {
@@ -5309,7 +5668,7 @@ var mui = (function(document, undefined) {
 					cell = target;
 					//TODO swipe to delete close
 					var selected = cell.parentNode.querySelector(SELECTOR_SELECTED);
-					if (selected && selected !== cell) {
+					if (!cell.parentNode.classList.contains(CLASS_RADIO_VIEW) && selected && selected !== cell) {
 						$.swipeoutClose(selected);
 						cell = isDisabled = false;
 						return;
@@ -5320,12 +5679,20 @@ var mui = (function(document, undefined) {
 							a = link;
 						}
 					}
-					if (cell.querySelector(SELECTOR_SLIDER_HANDLE)) {
+					var handle = cell.querySelector(SELECTOR_SLIDER_HANDLE);
+					if (handle) {
 						toggleEvents(cell);
 						event.stopPropagation();
 					}
 					if (!isDisabled) {
-						if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
+						if (handle) {
+							if (timer) {
+								timer.cancel();
+							}
+							timer = $.later(function() {
+								toggleActive(true);
+							}, 100);
+						} else if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
 							toggleActive(true);
 						}
 					}
@@ -5610,12 +5977,14 @@ var mui = (function(document, undefined) {
 		if (classList.contains('mui-radio')) {
 			var input = cell.querySelector('input[type=radio]');
 			if (input) {
-				input.click();
+				//				input.click();
+				input.checked = !input.checked;
 			}
 		} else if (classList.contains('mui-checkbox')) {
 			var input = cell.querySelector('input[type=checkbox]');
 			if (input) {
-				input.click();
+				//				input.click();
+				input.checked = !input.checked;
 			}
 		}
 	};
@@ -5630,14 +5999,38 @@ var mui = (function(document, undefined) {
 			radioOrCheckboxClick();
 		}
 	});
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	window.addEventListener('tap', function(event) {
 		if (!cell) {
 			return;
 		}
+		var type = event.target && event.target.type;
+		if (type === 'radio' || type === 'checkbox') {
+			radioOrCheckboxClick();
+			return;
+		}
 		var isExpand = false;
 		var classList = cell.classList;
+		var ul = cell.parentNode;
+		if (ul && ul.classList.contains(CLASS_RADIO_VIEW)) {
+			if (classList.contains(CLASS_SELECTED)) {
+				return;
+			}
+			var selected = ul.querySelector('li' + SELECTOR_SELECTED);
+			if (selected) {
+				selected.classList.remove(CLASS_SELECTED);
+			}
+			classList.add(CLASS_SELECTED);
+			$.trigger(cell, 'selected', {
+				el: cell
+			});
+			return;
+		}
 		if (classList.contains('mui-collapse') && !cell.parentNode.classList.contains('mui-unfold')) {
-			event.detail.gesture.preventDefault();
+			if (!preventDefaultException.test(event.target.tagName)) {
+				event.detail.gesture.preventDefault();
+			}
+
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
 				var collapse = cell.parentNode.querySelector('.mui-collapse.mui-active');
 				if (collapse) {
@@ -5663,8 +6056,9 @@ var mui = (function(document, undefined) {
 				// 	$.scrollTo(cellHeight - height + scrollTop, 300);
 				// }
 			}
+		} else {
+			radioOrCheckboxClick();
 		}
-		radioOrCheckboxClick();
 	});
 })(mui, window, document);
 (function($, window) {
@@ -5698,25 +6092,33 @@ var mui = (function(document, undefined) {
 	/**
 	 * 确认消息框
 	 */
-	$.confirm = function(message,title,btnArray,callback) {
+	$.confirm = function(message, title, btnArray, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
-				if(typeof title ==='function'){
+			} else {
+				if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnArray = null;
-				}else if(typeof btnArray ==='function'){
+				} else if (typeof btnArray === 'function') {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.confirm(message,callback,title,btnArray);
+				plus.nativeUI.confirm(message, callback, title, btnArray);
 			}
 
-		}else{
-			//TODO H5版本
-			window.confirm(message);
+		} else {
+			//H5版本，0为确认，1为取消
+			if (window.confirm(message)) {
+				callback({
+					index: 0
+				});
+			} else {
+				callback({
+					index: 1
+				});
+			}
 		}
 	};
 
@@ -5725,31 +6127,42 @@ var mui = (function(document, undefined) {
 	/**
 	 * 输入对话框
 	 */
-	$.prompt = function(text,defaultText,title,btnArray,callback) {
+	$.prompt = function(text, defaultText, title, btnArray, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
+			} else {
 
-				if(typeof defaultText ==='function'){
+				if (typeof defaultText === 'function') {
 					callback = defaultText;
 					defaultText = null;
 					title = null;
 					btnArray = null;
-				}else if(typeof title === 'function'){
+				} else if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnArray = null;
-				}else if(typeof btnArray ==='function'){
+				} else if (typeof btnArray === 'function') {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.prompt(text,callback,title,defaultText,btnArray);
+				plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
 			}
 
-		}else{
-			//TODO H5版本
-			window.prompt(text);
+		} else {
+			//H5版本(确认index为0，取消index为1)
+			var result = window.prompt(text);
+			if (result) {
+				callback({
+					index: 0,
+					value: result
+				});
+			} else {
+				callback({
+					index: 1,
+					value: ''
+				});
+			}
 		}
 	};
 
@@ -5814,7 +6227,7 @@ var mui = (function(document, undefined) {
 			this.sliderActionSelector = SELECTOR_TOOLTIP;
 		} else { //clear,speech,search
 			if (~this.options.actions.indexOf('clear')) {
-				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + (element.value ? '' : (' ' + CLASS_HIDDEN));
+				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR +' '+ CLASS_HIDDEN;
 				this.clearActionSelector = SELECTOR_ICON_CLOSE;
 			}
 			if (~this.options.actions.indexOf('speech')) { //only for 5+
@@ -5870,8 +6283,11 @@ var mui = (function(document, undefined) {
 			var action = document.createElement('span');
 			action.className = actionClass;
 			if (actionClass === this.searchActionClass) {
-				action.innerHTML = '<span class="' + CLASS_ICON + ' ' + CLASS_ICON_SEARCH + '"></span>' + this.element.getAttribute('placeholder');
+				action.innerHTML = '<span class="' + CLASS_ICON + ' ' + CLASS_ICON_SEARCH + '"></span><span>' + this.element.getAttribute('placeholder') + '</span>';
 				this.element.setAttribute('placeholder', '');
+				if (this.element.value.trim()) {
+					row.classList.add('mui-active');
+				}
 			}
 			row.insertBefore(action, this.element.nextSibling);
 		}
@@ -5913,12 +6329,15 @@ var mui = (function(document, undefined) {
 				if (!action) {
 					return;
 				}
-				$.each(['keyup', 'change', 'input', 'focus', 'blur', 'cut', 'paste'], function(index, type) {
+				$.each(['keyup', 'change', 'input', 'focus', 'cut', 'paste'], function(index, type) {
 					(function(type) {
 						element.addEventListener(type, function() {
 							action.classList[element.value.trim() ? 'remove' : 'add'](CLASS_HIDDEN);
 						});
 					})(type);
+				});
+				element.addEventListener('blur', function() {
+					action.classList.add(CLASS_HIDDEN);
 				});
 			}
 			if (this.searchActionClass) {
@@ -5933,6 +6352,14 @@ var mui = (function(document, undefined) {
 			}
 		}
 	};
+	Input.prototype.setPlaceholder = function(text) {
+		if (this.searchActionClass) {
+			var placeholder = this.element.parentNode.querySelector(SELECTOR_PLACEHOLDER);
+			placeholder && (placeholder.getElementsByTagName('span')[1].innerText = text);
+		} else {
+			this.element.setAttribute('placeholder', text);
+		}
+	};
 	Input.prototype.clearActionClick = function(event) {
 		var self = this;
 		self.element.value = '';
@@ -5943,6 +6370,7 @@ var mui = (function(document, undefined) {
 	Input.prototype.speechActionClick = function(event) {
 		if (window.plus) {
 			var self = this;
+			var oldValue = self.element.value;
 			self.element.value = '';
 			document.body.classList.add(CLASS_FOCUSIN);
 			plus.speech.startRecognize({
@@ -5954,6 +6382,10 @@ var mui = (function(document, undefined) {
 				$.trigger(self.element, 'recognized', {
 					value: self.element.value
 				});
+				if (oldValue !== self.element.value) {
+					$.trigger(self.element, 'change');
+					$.trigger(self.element, 'input');
+				}
 				// document.body.classList.remove(CLASS_FOCUSIN);
 			}, function(e) {
 				document.body.classList.remove(CLASS_FOCUSIN);
@@ -5964,7 +6396,9 @@ var mui = (function(document, undefined) {
 		event.preventDefault();
 	};
 	$.fn.input = function(options) {
+		var inputApis = [];
 		this.each(function() {
+			var inputApi = null;
 			var actions = [];
 			var row = findRow(this.parentNode);
 			if (this.type === 'range' && row.classList.contains('mui-input-range')) {
@@ -5984,17 +6418,120 @@ var mui = (function(document, undefined) {
 			var id = this.getAttribute('data-input-' + actions[0]);
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = new Input(this, {
+				inputApi = $.data[id] = new Input(this, {
 					actions: actions.join(',')
 				});
 				for (var i = 0, len = actions.length; i < len; i++) {
 					this.setAttribute('data-input-' + actions[i], id);
 				}
+			} else {
+				inputApi = $.data[id];
 			}
-
+			inputApis.push(inputApi);
 		});
+		return inputApis.length === 1 ? inputApis[0] : inputApis;
 	};
 	$.ready(function() {
 		$('.mui-input-row input').input();
 	});
 })(mui, window, document);
+/**
+ * 数字输入框
+ * varstion 1.0.1
+ * by Houfeng
+ * Houfeng@DCloud.io
+ */
+
+(function($) {
+
+	var touchSupport = ('ontouchstart' in document);
+	var tapEventName = touchSupport ? 'tap' : 'click';
+	var changeEventName = 'change';
+	var holderClassName = 'mui-numbox';
+	var plusClassName = 'mui-numbox-btn-plus';
+	var minusClassName = 'mui-numbox-btn-minus';
+	var inputClassName = 'mui-numbox-input';
+
+	var Numbox = $.Numbox = $.Class.extend({
+		init: function(holder, options) {
+			var self = this;
+			if (!holder) {
+				throw "构造 numbox 时缺少容器元素";
+			}
+			self.holder = holder;
+			//避免重复初始化开始
+			if (self.holder.__numbox_inited) return;
+			self.holder.__numbox_inited = true;
+			//避免重复初始化结束
+			options = options || {};
+			options.step = parseInt(options.step || 1);
+			self.options = options;
+			self.input = $.qsa('.' + inputClassName, self.holder)[0];
+			self.plus = $.qsa('.' + plusClassName, self.holder)[0];
+			self.minus = $.qsa('.' + minusClassName, self.holder)[0];
+			self.checkValue();
+			self.initEvent();
+		},
+		initEvent: function() {
+			var self = this;
+			self.plus.addEventListener(tapEventName, function(event) {
+				var val = parseInt(self.input.value) + self.options.step;
+				self.input.value = val.toString();
+				$.trigger(self.input, changeEventName, null);
+			});
+			self.minus.addEventListener(tapEventName, function(event) {
+				var val = parseInt(self.input.value) - self.options.step;
+				self.input.value = val.toString();
+				$.trigger(self.input, changeEventName, null);
+			});
+			self.input.addEventListener(changeEventName, function(event) {
+				self.checkValue();
+			});
+		},
+		checkValue: function() {
+			var self = this;
+			var val = self.input.value;
+			if (val == null || val == '' || isNaN(val)) {
+				self.input.value = self.options.min || 0;
+				self.minus.disabled = self.options.min != null;
+			} else {
+				var val = parseInt(val);
+				if (self.options.max != null && !isNaN(self.options.max) && val >= parseInt(self.options.max)) {
+					val = self.options.max;
+					self.plus.disabled = true;
+				} else {
+					self.plus.disabled = false;
+				}
+				if (self.options.min != null && !isNaN(self.options.min) && val <= parseInt(self.options.min)) {
+					val = self.options.min;
+					self.minus.disabled = true;
+				} else {
+					self.minus.disabled = false;
+				}
+				self.input.value = val;
+			}
+		}
+	});
+
+	$.fn.numbox = function(options) {
+		//遍历选择的元素
+		this.each(function(i, element) {
+			if (options) {
+				new Numbox(element, options);
+			} else {
+				var optionsText = element.getAttribute('data-numbox-options');
+				var options = optionsText ? JSON.parse(optionsText) : {};
+				options.step = element.getAttribute('data-numbox-step') || options.step;
+				options.min = element.getAttribute('data-numbox-min') || options.min;
+				options.max = element.getAttribute('data-numbox-max') || options.max;
+				new Numbox(element, options);
+			}
+		});
+		return this;
+	}
+
+	//自动处理 class='mui-locker' 的 dom
+	$.ready(function() {
+		$('.' + holderClassName).numbox();
+	});
+}(mui))
