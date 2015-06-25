@@ -145,7 +145,7 @@
 							timer = $.later(function() {
 								toggleActive(true);
 							}, 100);
-						} else if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
+						} else{
 							toggleActive(true);
 						}
 					}
@@ -425,7 +425,11 @@
 		toggleActive(false);
 		sliderHandle && toggleEvents(cell, true);
 	});
-	var radioOrCheckboxClick = function() {
+	var radioOrCheckboxClick = function(event) {
+		var type = event.target&&event.target.type||'';
+		if(type==='radio'||type==='checkbox'){
+			return;
+		}
 		var classList = cell.classList;
 		if (classList.contains($.className('radio'))) {
 			var input = cell.querySelector('input[type=radio]');
@@ -449,17 +453,12 @@
 	});
 	window.addEventListener('doubletap', function(event) {
 		if (cell) {
-			radioOrCheckboxClick();
+			radioOrCheckboxClick(event);
 		}
 	});
 	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	window.addEventListener('tap', function(event) {
 		if (!cell) {
-			return;
-		}
-		var type = event.target && event.target.type;
-		if (type === 'radio' || type === 'checkbox') {
-			radioOrCheckboxClick();
 			return;
 		}
 		var isExpand = false;
@@ -510,7 +509,7 @@
 				// }
 			}
 		} else {
-			radioOrCheckboxClick();
+			radioOrCheckboxClick(event);
 		}
 	});
 })(mui, window, document);
