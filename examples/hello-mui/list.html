@@ -358,6 +358,23 @@
 						image viewer（图片预览）
 					</a>
 				</li>
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">
+						indexed list（索引列表）
+					</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type = "common" href="examples/indexed-list.html">
+								展示模式
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type = "common" href="examples/indexed-list-select.html">
+								选择模式
+							</a>
+						</li>
+					</ul>
+				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/lazyload-image.html">
 						lazyload（懒加载） 
@@ -395,18 +412,16 @@
 				//Android平台暂时使用slide-in-right动画
 				aniShow = "slide-in-right"
 			}
-			 //初始化，并预加载webview模式的选项卡
-			mui.init({
-				preloadPages: [{
-					url: 'examples/tab-webview-main.html'
-				},
-				{
+			//初始化，并预加载webview模式的选项卡			
+			function preload () {
+				mui.preload({url:'examples/tab-webview-main.html'});
+				mui.preload({
 					url:"examples/pullrefresh_main.html",
 					styles:{
 						popGesture:'hide'
 					}
-				}]
-			});
+				});
+			}
 			var templates = {};
 			var getTemplate = function(name, header, content) {
 				var template = templates[name];
@@ -459,10 +474,36 @@
 				getTemplate('default', 'examples/template.html');
 			};
 			mui.plusReady(function() {
-				//初始化模板
-				initTemplates(); //预加载所有模板	
-				//关闭splash页面；
-				plus.navigator.closeSplashscreen();
+				//读取本地存储，检查是否为首次启动
+				var showGuide = plus.storage.getItem("lauchFlag");
+				if(showGuide){
+					//有值，说明已经显示过了，无需显示；
+					//关闭splash页面；
+					plus.navigator.closeSplashscreen();
+					//初始化模板
+					initTemplates(); 
+					//预加载
+					preload();
+				}else{
+					//显示启动导航
+					mui.openWindow({
+						id:'guilde',
+						url:'examples/guide.html',
+						show:{
+							aniShow:'none'
+						},
+						waiting:{
+							autoShow:false
+						}
+					});
+					//延迟的原因：优先打开启动导航页面，避免资源争夺
+					setTimeout(function () {
+						//初始化模板
+						initTemplates(); 
+						//预加载
+						preload();
+					},200);
+				}
 			});
 			 //主列表点击事件
 			mui('#list').on('tap', 'a', function() {
