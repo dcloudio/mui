@@ -202,6 +202,7 @@
 				background-color: rgba(0, 0, 0, 0.7);
 				border-radius: 5px;
 				display: none;
+				-webkit-transition: .15s;
 			}
 			.rschedule {
 				background-color: rgba(0, 0, 0, 0);
@@ -220,6 +221,32 @@
 				margin-top: -23px;
 				-webkit-animation: spin 1s infinite linear;
 				animation: spin 1s infinite linear;
+			}
+			.r-sigh{
+				display: none;
+				border-radius: 50px;
+				box-shadow: 0 0 15px #2187e7;
+				width: 46px;
+				height: 46px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -23px;
+				margin-top: -23px;
+				text-align: center;
+				line-height: 46px;
+				font-size: 40px;
+				font-weight: bold;
+				color: #2187e7;
+			}
+			.rprogress-sigh{
+				background-image: none !important;
+			}
+			.rprogress-sigh .rschedule{
+				display: none !important;
+			}
+			.rprogress-sigh .r-sigh{
+				display: block !important;
 			}
 			.rsalert {
 				font-size: 12px;
@@ -278,16 +305,15 @@
 		<script id='msg-template' type="text/template">
 			<% for(var i in record){ var item=record[i]; %>
 				<div class="msg-item <%= (item.sender=='self'?' msg-item-self':'') %>" msg-type='<%=(item.type)%>' msg-content='<%=(item.content)%>'>
-					<% if(item.sender=='self') { %>
+					<% if(item.sender=='self' ) { %>
 						<i class="msg-user mui-icon mui-icon-person"></i>
 					<% } else { %>
 						<img class="msg-user-img" src="../images/logo.png" alt="" />
 					<% } %>
-					
 					<div class="msg-content">
 						<div class="msg-content-inner">
 							<% if(item.type=='text' ) { %>
-								<%= (item.content|| '&nbsp;&nbsp;') %>
+								<%=( item.content|| '&nbsp;&nbsp;') %>
 							<% } else if(item.type=='image' ) { %>
 								<img class="msg-content-image" src="<%=(item.content)%>" style="max-width: 100px;" />
 							<% } else if(item.type=='sound' ) { %>
@@ -299,11 +325,10 @@
 					</div>
 					<div class="mui-item-clear"></div>
 				</div>
-				<% } %>
+			<% } %>
 		</script>
 		<div class="mui-content">
 			<div id='msg-list'>
-
 			</div>
 		</div>
 		<footer>
@@ -320,6 +345,7 @@
 		</footer>
 		<div id='sound-alert' class="rprogress">
 			<div class="rschedule"></div>
+			<div class="r-sigh">!</div>
 			<div id="audio_tips" class="rsalert">手指上滑，取消发送</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
@@ -327,6 +353,7 @@
 		<script src="../js/arttmpl.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			(function($, doc) {
+				var MIN_SOUND_TIME = 800;
 				$.init({
 					gestureConfig: {
 						tap: true, //默认为true
@@ -338,7 +365,7 @@
 						release: true //默认为false，不监听
 					}
 				});
-				template.config('escape',false);
+				template.config('escape', false);
 				//$.plusReady=function(fn){fn();};
 				$.plusReady(function() {
 					plus.webview.currentWebview().setStyle({
@@ -357,7 +384,7 @@
 							var imm = main.getSystemService(Context.INPUT_METHOD_SERVICE);
 							imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 							//var view = ((ViewGroup)main.findViewById(android.R.id.content)).getChildAt(0);
-							imm.showSoftInput(main.getWindow().getDecorView(),InputMethodManager.SHOW_IMPLICIT); 
+							imm.showSoftInput(main.getWindow().getDecorView(), InputMethodManager.SHOW_IMPLICIT);
 							//alert("ll");
 						}
 					};
@@ -444,16 +471,14 @@
 							bindMsgList();
 						});
 					};
-					
-					function msgTextFocus () {
-						ui.boxMsgText.focus();
-						setTimeout(function() {
+
+					function msgTextFocus() {
 							ui.boxMsgText.focus();
-						}, 150);
-					}
-					
-					
-					//解决长按“发送”按钮，导致键盘关闭的问题；
+							setTimeout(function() {
+								ui.boxMsgText.focus();
+							}, 150);
+						}
+						//解决长按“发送”按钮，导致键盘关闭的问题；
 					ui.footerRight.addEventListener('touchstart', function(event) {
 						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
 							msgTextFocus();
@@ -467,19 +492,18 @@
 							event.preventDefault();
 						}
 					});
-//					ui.footerRight.addEventListener('touchcancel', function(event) {
-//						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
-//							msgTextFocus();
-//							event.preventDefault();
-//						}
-//					});
-//					ui.footerRight.addEventListener('touchend', function(event) {
-//						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
-//							msgTextFocus();
-//							event.preventDefault();
-//						}
-//					});
-					
+					//					ui.footerRight.addEventListener('touchcancel', function(event) {
+					//						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
+					//							msgTextFocus();
+					//							event.preventDefault();
+					//						}
+					//					});
+					//					ui.footerRight.addEventListener('touchend', function(event) {
+					//						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
+					//							msgTextFocus();
+					//							event.preventDefault();
+					//						}
+					//					});
 					ui.footerRight.addEventListener('release', function(event) {
 						if (ui.btnMsgType.classList.contains('mui-icon-paperplane')) {
 							//showKeyboard();
@@ -487,11 +511,11 @@
 							setTimeout(function() {
 								ui.boxMsgText.focus();
 							}, 150);
-//							event.detail.gesture.preventDefault();
+							//							event.detail.gesture.preventDefault();
 							send({
 								sender: 'self',
 								type: 'text',
-								content: ui.boxMsgText.value.replace(new RegExp('\n','gm'),'<br/>')
+								content: ui.boxMsgText.value.replace(new RegExp('\n', 'gm'), '<br/>')
 							});
 							ui.boxMsgText.value = '';
 							$.trigger(ui.boxMsgText, 'input', null);
@@ -551,18 +575,37 @@
 									break;
 							}
 						});
-					}, false);
+					}, false); 
+					var setSoundAlertVisable=function(show){
+						if(show){
+							ui.boxSoundAlert.style.display = 'block';
+							ui.boxSoundAlert.style.opacity = 1;
+						}else{
+							ui.boxSoundAlert.style.opacity = 0;
+							//fadeOut 完成再真正隐藏
+							setTimeout(function(){
+								ui.boxSoundAlert.style.display = 'none';
+							},200);
+						}
+					};
 					var recordCancel = false;
 					var recorder = null;
 					var audio_tips = document.getElementById("audio_tips");
+					var startTimestamp = null;
+					var stopTimestamp = null;
+					var stopTimer = null;
 					ui.boxMsgSound.addEventListener('hold', function(event) {
 						recordCancel = false;
-						ui.boxSoundAlert.style.display = 'block';
+						if(stopTimer)clearTimeout(stopTimer);
+						audio_tips.innerHTML = "手指上划，取消发送";
+						ui.boxSoundAlert.classList.remove('rprogress-sigh');
+						setSoundAlertVisable(true);
 						recorder = plus.audio.getRecorder();
 						if (recorder == null) {
 							plus.nativeUI.toast("不能获取录音对象");
 							return;
 						}
+						startTimestamp = (new Date()).getTime();
 						recorder.record({
 							filename: "_doc/audio/"
 						}, function(path) {
@@ -602,7 +645,18 @@
 							audio_tips.classList.remove("cancel");
 							audio_tips.innerHTML = "手指上划，取消发送";
 						}
-						ui.boxSoundAlert.style.display = 'none';
+						//
+						stopTimestamp = (new Date()).getTime();
+						if (stopTimestamp - startTimestamp < MIN_SOUND_TIME) {
+							audio_tips.innerHTML = "录音时间太短";
+							ui.boxSoundAlert.classList.add('rprogress-sigh');
+							recordCancel = true;
+							stopTimer=setTimeout(function(){
+								setSoundAlertVisable(false);
+							},800);
+						}else{
+							setSoundAlertVisable(false);
+						}
 						recorder.stop();
 					}, false);
 					ui.boxMsgSound.addEventListener("touchstart", function(e) {
@@ -612,7 +666,7 @@
 					ui.boxMsgText.addEventListener('input', function(event) {
 						ui.btnMsgType.classList[ui.boxMsgText.value == '' ? 'remove' : 'add']('mui-icon-paperplane');
 						ui.btnMsgType.setAttribute("for", ui.boxMsgText.value == '' ? '' : 'msg-text');
-						ui.h.innerText = ui.boxMsgText.value.replace(new RegExp('\n','gm'),'\n-') || '-';
+						ui.h.innerText = ui.boxMsgText.value.replace(new RegExp('\n', 'gm'), '\n-') || '-';
 						ui.footer.style.height = (ui.h.offsetHeight + footerPadding) + 'px';
 						ui.content.style.paddingBottom = ui.footer.style.height;
 					});
