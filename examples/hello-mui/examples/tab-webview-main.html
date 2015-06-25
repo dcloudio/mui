@@ -49,13 +49,20 @@
 				top: '46px',
 				bottom: '50px'
 			};
+			
+			var aniShow = {};
+			
 			 //创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
 				for (var i = 0; i < 4; i++) {
+					var temp = {};
 					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
 					if (i > 0) {
 						sub.hide();
+					}else{
+						temp[subpages[i]] = "true";
+						mui.extend(aniShow,temp);
 					}
 					self.append(sub);
 				}
@@ -72,7 +79,14 @@
 				//更换标题
 				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 				//显示目标选项卡
-				plus.webview.show(targetTab);
+				if(aniShow[targetTab]){
+					plus.webview.show(targetTab);
+				}else{
+					var temp = {};
+					temp[targetTab] = "true";
+					mui.extend(aniShow,temp);
+					plus.webview.show(targetTab,"fade-in",300);
+				}
 				//隐藏当前;
 				plus.webview.hide(activeTab);
 				//更改当前活跃的选项卡
