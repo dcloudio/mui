@@ -40,17 +40,20 @@
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<h5 class="mui-content-padded">普通示例</h5>
-				<button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>显示选择人员 ...</button>
+				<button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>一级选择示例 ...</button>
 				<div id='userResult' class="ui-alert"></div>
 				<h5 class="mui-content-padded">级联示例</h5>
-				<button id='showCityPicker' class="mui-btn mui-btn-block" type='button'>显示选择城市 ...</button>
+				<button id='showCityPicker' class="mui-btn mui-btn-block" type='button'>二级联动示例 ...</button>
 				<div id='cityResult' class="ui-alert"></div>
+				<button id='showCityPicker3' class="mui-btn mui-btn-block" type='button'>三级联动示例 ...</button>
+				<div id='cityResult3' class="ui-alert"></div>
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/mui.listpicker.js"></script>
 		<script src="../js/mui.poppicker.js"></script>
 		<script src="../js/city.data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			(function($, doc) {
 				$.init();
@@ -94,7 +97,7 @@
 						userPicker.show(function(items) {
 							userResult.innerText = JSON.stringify(items[0]);
 						});
-					}, false); 
+					}, false);  
 					//-----------------------------------------
 					//级联示例
 					var cityPicker = new $.PopPicker({
@@ -105,7 +108,20 @@
 					var cityResult = doc.getElementById('cityResult');
 					showCityPickerButton.addEventListener('tap', function(event) {
 						cityPicker.show(function(items) {
-							cityResult.innerText ="你选择的城市是:" + items[0].text + items[1].text;
+							cityResult.innerText ="你选择的城市是:" + items[0].text+" " + items[1].text;
+						});
+					}, false);
+					//-----------------------------------------
+//					//级联示例
+					var cityPicker3 = new $.PopPicker({
+						layer: 3
+					}); 
+					cityPicker3.setData(cityData3);
+					var showCityPickerButton = doc.getElementById('showCityPicker3');
+					var cityResult3 = doc.getElementById('cityResult3');
+					showCityPickerButton.addEventListener('tap', function(event) {
+						cityPicker3.show(function(items) {
+							cityResult3.innerText ="你选择的城市是:" + items[0].text+" "  + items[1].text+" " + items[2].text;
 						});
 					}, false);
 				});

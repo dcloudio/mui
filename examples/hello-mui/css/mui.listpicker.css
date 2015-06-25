@@ -46,6 +46,9 @@
 	padding: 8px;
 	text-align: center;
 	color: #555;
+	white-space:nowrap; 
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .mui-listpicker ul li:last-child {
 	border-bottom: none;
