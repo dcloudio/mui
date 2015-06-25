@@ -10,6 +10,19 @@
 	bottom: 0px;
 	-webkit-transform: translateY(300px);
 }
+.mui-dtpicker.mui-active {
+	-webkit-transform: translateY(0px);
+}
+.mui-android-5-1 .mui-dtpicker {
+	bottom: -300px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-android-5-1 .mui-dtpicker.mui-active {
+	bottom: 0px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
 .mui-dtpicker-header {
 	padding: 6px;
 	font-size: 14px;
