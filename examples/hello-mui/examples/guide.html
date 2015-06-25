@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			
+			.mui-slider-item, .mui-slider-item a {
+				width: 100%;
+				height: 100%;
+			}
+			.mui-slider-item a img{
+				width: 100%;
+				min-height: 100%;
+			}
+			#close {
+				position: absolute;
+				width: 160px;
+				left: 50%;
+				margin-left: -80px;
+				bottom: 15%;
+				padding: 10px;
+				color: #fff;
+				border-color: #fff;
+			}
+			.animate{position: absolute;left: 0;bottom: 150px;width: 100%;color: #fff;display: -moz-box;}
+			.animate h2{text-align: center;margin-bottom: 20px;} 
+			.animate li{width: 50%;height:30px;line-height: 30px;list-style: none;font-size: 16px;}
+			.animate li{text-align: right;} 
+			.animate li:nth-child(3){text-align: left;float: right;}
+
+
+		</style>
+	</head> 
+  
+	<body>
+		<div id="slider" class="mui-slider mui-fullscreen" style="background-color: black;">
+			<div class="mui-slider-group"> 
+				<!-- 第一张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img id="guilde1" src="../images/guide-1.png">
+					<div class="animate">
+						<h2>小巧高能</h2> 
+						<li>几十K的JS和CSS</li>
+						<li>上百种控件样式和模板</li>
+					</div> 
+					</a>
+				</div>
+				<!-- 第二张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="../images/guide-2.png">
+						<div class="animate">
+						<h2>原生UI</h2> 
+						<li>以iOS原生UI为基础</li>
+						<li>补充Android特有样式</li>
+					</div> 
+					</a>
+				</div>
+				<!-- 第三张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="../images/guide-3.png">
+						<div class="animate">
+						<h2>流畅体验</h2> 
+						<li>下拉刷新、转场动画</li>
+						<li>整个世界都流畅了</li>
+					</div> 
+					</a>
+				</div>
+				<!-- 第四张 -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="../images/guide-4.png">
+						<button id='close' class="mui-btn mui-btn-warning mui-btn-outlined">立即体验</button>
+					</a>
+				</div>
+			</div>
+			<div class="mui-slider-indicator">
+				<div class="mui-indicator mui-active"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+			mui.back = function(){};
+			mui.plusReady(function () {
+				//设置宽高
+				plus.navigator.setFullscreen(true);
+				document.getElementById("guilde1").style.height = plus.screen.resolutionHeight + "px";
+				document.getElementById("guilde1").offsetHeight;
+				//关闭splash页面；
+				setTimeout(function () {
+					plus.navigator.closeSplashscreen();
+				},10);
+				var enterButton = document.getElementById("close");
+				enterButton.addEventListener('tap', function(event) {
+					plus.storage.setItem("lauchFlag","true");
+					plus.navigator.setFullscreen(false);
+					plus.webview.currentWebview().close();
+				}, false);
+			});
+		</script>
+	</body>
+
+</html>
