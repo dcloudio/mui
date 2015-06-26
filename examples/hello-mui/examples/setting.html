@@ -456,6 +456,9 @@
 								<a id="rate" class="mui-navigate-right">评分鼓励</a>
 							</li>
 							<li class="mui-table-view-cell">
+								<a id="welcome" class="mui-navigate-right">欢迎页</a>
+							</li>
+							<li class="mui-table-view-cell">
 								<a id="share" class="mui-navigate-right">分享推荐</a>
 							</li>
 							<li class="mui-table-view-cell">
@@ -603,7 +606,6 @@
 					mui.toast('Hello MUI 已是最新版本~')
 				} 
 			});
-
 		});
 		var view = viewApi.view;
 		(function($) {
@@ -713,7 +715,21 @@
 		 
 		document.getElementById("head-img1").addEventListener('tap',function (e) {
 			e.stopPropagation();
-			
+		});
+		
+		document.getElementById("welcome").addEventListener('tap',function (e) {
+			//显示启动导航
+			mui.openWindow({
+				id:'guide',
+				url:'guide.html',
+				show:{
+					aniShow:'fade-in',
+					duration:300
+				},
+				waiting:{
+					autoShow:false
+				}
+			});
 		});
 		
 		function initImgPreview () {
