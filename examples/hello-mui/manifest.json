@@ -10,6 +10,7 @@
 	"icons": {
 		"72": "icon.png"
 	},
+	"fullscreen":true,
 	"launch_path": "index.html",/*必选，应用的入口页面，默认为根目录下的index.html；也可以是网络地址，网络地址必须以http://或https://开头*/
 	"developer": {
 		"email": "",/*可选，开发者名称*/

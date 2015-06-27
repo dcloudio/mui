@@ -239,13 +239,7 @@
 		<script>
 			mui.back = function() {};
 			mui.plusReady(function() {
-				//设置宽高
-				plus.navigator.setFullscreen(true);
-				//关闭splash页面；
-				setTimeout(function() {
-					plus.navigator.closeSplashscreen();
-				}, 10);
-				
+				plus.navigator.closeSplashscreen();
 			});
 			//立即体验按钮点击事件
 			document.getElementById("close").addEventListener('tap', function(event) {
