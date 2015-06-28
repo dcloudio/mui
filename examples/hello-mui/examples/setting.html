@@ -501,7 +501,7 @@
 				initImgPreview();
 			},500);
 		});
-		 //分享链接点击事件
+		//分享链接点击事件
 		document.getElementById("share").addEventListener('tap', function() {
 			var ids = [{
 					id: "weixin",
@@ -513,6 +513,8 @@
 					id: "sinaweibo"
 				}, {
 					id: "tencentweibo"
+				},{
+					id:"qq"
 				}],
 				bts = [{
 					title: "发送给微信好友"
@@ -522,15 +524,9 @@
 					title: "分享到新浪微博"
 				}, {
 					title: "分享到腾讯微博"
-				}];
-			if (plus.os.name == "iOS") {
-				ids.push({
-					id: "qq"
-				});
-				bts.push({
+				},{
 					title: "分享到QQ"
-				});
-			}
+				}];
 			plus.nativeUI.actionSheet({
 				cancel: "取消",
 				buttons: bts
