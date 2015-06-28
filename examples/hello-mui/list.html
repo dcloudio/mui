@@ -410,7 +410,9 @@
 					}
 				}
 				//Android平台暂时使用slide-in-right动画
-				// aniShow = "slide-in-right"
+				if(mui.os.android&&parseFloat(mui.os.version)<4.4){
+					aniShow = "slide-in-right"
+				}
 			}
 			//初始化，并预加载webview模式的选项卡			
 			function preload () {
@@ -562,22 +564,26 @@
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(headerWebview, 'updateHeader', {
 							title: title,
-							showMenu: showMenu
+							showMenu: showMenu,
+							target:href,
+							aniShow: aniShow
 						});
 						
-						var reload = true;
-						if (!template.loaded) {
-							if (contentWebview.getURL() != this.href) {
-								contentWebview.loadURL(this.href);
+						if(mui.os.ios||(mui.os.android&&parseFloat(mui.os.version)<4.4)){
+							var reload = true;
+							if (!template.loaded) {
+								if (contentWebview.getURL() != this.href) {
+									contentWebview.loadURL(this.href);
+								} else {
+									reload = false;
+								}
 							} else {
 								reload = false;
 							}
-						} else {
-							reload = false;
+							(!reload) && contentWebview.show();
+							
+							headerWebview.show(aniShow, 150);
 						}
-						(!reload) && contentWebview.show();
-						
-						headerWebview.show(aniShow, 150);
 					}
 				}
 			});

@@ -80,12 +80,17 @@
 				doubletap:true
 			}
 		});
-		var contentWebview = null;
+		var contentWebview = null,self = null;
+		var titleElem = document.getElementById("title");
+		mui.plusReady(function () {
+			self = plus.webview.currentWebview();
+		});
 		mui.back = function() {
 			var current = plus.webview.currentWebview();
 			current.hide('auto');
 			setTimeout(function() {
-				document.getElementById("title").className = 'mui-title mui-fadeout';
+				titleElem.className = 'mui-title mui-fadeout';
+				titleElem.innerText = '';
 				if(contentWebview==null){
 					contentWebview = current.children()[0];
 				}
@@ -93,12 +98,14 @@
 			}, 350);
 		}
 		
-		var titleElem = document.getElementById("title")
+		
 		var menu = document.getElementById("menu")
 
 		 window.addEventListener("updateHeader", function(e) {
 			var title = e.detail.title;
 			var showMenu = e.detail.showMenu;
+			var href = e.detail.target;
+			var aniShow = e.detail.aniShow;
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
 			var display = showMenu ? "" : "none";
@@ -109,6 +116,20 @@
 			}
 			menu.style.display = display;
 			
+			if(mui.os.android&&parseFloat(mui.os.version)>=4.4){
+				if(contentWebview==null){
+					contentWebview = self.children()[0];
+				}
+				
+				if (contentWebview.getURL() != href) {
+					contentWebview.loadURL(href);
+				} else {
+					contentWebview.show();
+				}
+				setTimeout(function () {
+					self.show(aniShow);
+				},10);
+			}
 		});
 		
 		document.getElementById("menu").addEventListener('tap', function(e) {

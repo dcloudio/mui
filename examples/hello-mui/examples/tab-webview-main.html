@@ -79,7 +79,7 @@
 				//更换标题
 				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 				//显示目标选项卡
-				if(aniShow[targetTab]){
+				if(mui.os.ios||aniShow[targetTab]){
 					plus.webview.show(targetTab);
 				}else{
 					var temp = {};
