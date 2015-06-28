@@ -539,14 +539,18 @@
 				if (i > 0) {
 					var s_id = ids[i - 1].id;
 					var share = shares[s_id];
-					if (share.authenticated) {
-						shareMessage(share, ids[i - 1].ex);
-					} else {
-						share.authorize(function() {
+					if(share){
+						if (share.authenticated) {
 							shareMessage(share, ids[i - 1].ex);
-						}, function(e) {
-							console.log("认证授权失败：" + e.code + " - " + e.message);
-						});
+						} else {
+							share.authorize(function() {
+								shareMessage(share, ids[i - 1].ex);
+							}, function(e) {
+								console.log("认证授权失败：" + e.code + " - " + e.message);
+							});
+						}
+					}else{
+						mui.toast("无法获取分享服务，请检查manifest.json中分享插件参数配置，并重新打包")
 					}
 				}
 			});
