@@ -2626,6 +2626,7 @@ var mui = (function(document, undefined) {
 				scrollY: true,
 				scrollX: false,
 				indicators: true,
+				deceleration:0.003,
 				down: {
 					height: 50,
 					contentdown: '下拉可以刷新',
