@@ -63,8 +63,8 @@
 	background-color: #fafafa;
 }
 .mui-group-list-bar {
-	width: 30px;
-	background-color: rgba(0, 0, 0, 0.1);
+	width: 23px;
+	background-color: lightgrey;
 	position: absolute;
 	height: 100%;
 	z-index: 10;
@@ -81,7 +81,7 @@
 	color: #aaa;
 }
 .mui-group-list-bar.active {
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgb(200,200,200);
 }
 .mui-group-list-bar.active a {
 	color: #333;
