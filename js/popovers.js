@@ -166,15 +166,18 @@
 		if (!popover || !anchor) {
 			return;
 		}
+		
+		if (isActionSheet) { //actionsheet
+			setStyle(popover, 'block')
+			return;
+		}
+
 		var wWidth = window.innerWidth;
 		var wHeight = window.innerHeight;
 
 		var pWidth = popover.offsetWidth;
 		var pHeight = popover.offsetHeight;
-		if (isActionSheet) { //actionsheet
-			setStyle(popover, 'block', (wHeight - pHeight + window.pageYOffset), (wWidth - pWidth) / 2)
-			return;
-		}
+
 		var aWidth = anchor.offsetWidth;
 		var aHeight = anchor.offsetHeight;
 		var offset = $.offset(anchor);

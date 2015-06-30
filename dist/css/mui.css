@@ -3388,6 +3388,10 @@ select:focus
 {
     display: none;
 }
+.mui-popover.mui-popover-action.mui-popover-bottom
+{
+    position: fixed;
+}
 .mui-popover.mui-popover-action.mui-active
 {
     -webkit-transform: translate3d(0, 0, 0);
