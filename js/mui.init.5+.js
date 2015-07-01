@@ -241,17 +241,25 @@
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
 				//preload
-				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
-					preload: true
-				}, options.extras));
-				if (options.subpages) {
-					$.each(options.subpages, function(index, subpage) {
-						//TODO 子窗口也可能已经创建，比如公用模板的情况；
-						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
-							preload: true
-						}, subpage.extras));
-						webview.append(subWebview);
-					});
+				//判断是否携带createNew参数，默认为false
+				if (options.createNew !== true) {
+					webview = plus.webview.getWebviewById(id);
+				}
+
+				//之前没有，那就新创建	
+				if(!webview){
+					webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
+						preload: true
+					}, options.extras));
+					if (options.subpages) {
+						$.each(options.subpages, function(index, subpage) {
+							//TODO 子窗口也可能已经创建，比如公用模板的情况；
+							var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
+								preload: true
+							}, subpage.extras));
+							webview.append(subWebview);
+						});
+					}
 				}
 			}
 
