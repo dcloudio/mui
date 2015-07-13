@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v1.8.0 (https://github.com/dcloudio/mui)
+ * Mui v1.9.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -2588,6 +2588,9 @@ select:focus {
 }
 .mui-popover.mui-popover-action .mui-popover-arrow {
   display: none;
+}
+.mui-popover.mui-popover-action.mui-popover-bottom {
+  position: fixed;
 }
 .mui-popover.mui-popover-action.mui-active {
   -webkit-transform: translate3d(0, 0, 0);
