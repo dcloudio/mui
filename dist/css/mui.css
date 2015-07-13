@@ -4436,6 +4436,11 @@ select:focus
     content: '\e263';
 }
 
+.mui-icon-qq:before
+{
+    content: '\e264';
+}
+
 .mui-icon-videocam:before
 {
     content: '\e300';
