@@ -46,20 +46,13 @@
 			}
 			.mui-preview-image.mui-preview-in {
 				display: block;
-				-webkit-animation: previewImageIn 400ms forwards;
-				animation: previewImageIn 400ms forwards;
 			}
-			.mui-preview-image.mui-preview-out {
-				-webkit-animation: previewImageOut 400ms forwards;
-				animation: previewImageOut 400ms forwards;
+			.mui-preview-image.mui-transitioning {
+				background: none;
 			}
-			.mui-android-4-1 .mui-preview-image.mui-preview-in {
-				-webkit-animation: previewImageIn 0.001s forwards;
-				animation: previewImageIn 0.001s forwards;
-			}
-			.mui-android-4-1 .mui-preview-image.mui-preview-out {
-				-webkit-animation: previewImageOut 0.001s forwards;
-				animation: previewImageOut 0.001s forwards;
+			.mui-preview-image.mui-transitioning .mui-preview-header,
+			.mui-preview-image.mui-transitioning .mui-preview-footer {
+				display: none;
 			}
 			.mui-zoom-scroller {
 				position: absolute;
@@ -98,52 +91,36 @@
 			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
 				width: 100%;
 			}
-			@-webkit-keyframes previewImageIn {
-				0% {
-					-webkit-transform: translate3d(0, 0, 0) scale(0.5);
-					opacity: 0;
-				}
-				100% {
-					-webkit-transform: translate3d(0, 0, 0) scale(1);
-					opacity: 1;
-				}
-			}
-			@keyframes previewImageIn {
-				0% {
-					transform: translate3d(0, 0, 0) scale(0.5);
-					opacity: 0;
-				}
-				100% {
-					transform: translate3d(0, 0, 0) scale(1);
-					opacity: 1;
-				}
-			}
-			@-webkit-keyframes previewImageOut {
-				0% {
-					-webkit-transform: translate3d(0, 0, 0) scale(1);
-					opacity: 1;
-				}
-				100% {
-					-webkit-transform: translate3d(0, 0, 0) scale(0.5);
-					opacity: 0;
-				}
-			}
-			@keyframes previewImageOut {
-				0% {
-					transform: translate3d(0, 0, 0) scale(1);
-					opacity: 1;
-				}
-				100% {
-					transform: translate3d(0, 0, 0) scale(0.5);
-					opacity: 0;
-				}
-			}
 			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
 				display: inline-table;
 			}
 			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
 				display: table-cell;
 				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
 			}
 		</style>
 
@@ -160,7 +137,7 @@
 				<p>
 					<img src="../images/yuantiao.jpg" data-preview-src="" data-preview-group="1" />
 				</p>
-				<p>图片全屏后，左右滑动可查看本页其它图片，点击会关闭预览</p>
+				<p>图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看同组(data-preview-group相同的图片为一组)其它图片，点击会关闭预览</p>
 				<p>
 					<img src="../images/muwu.jpg" data-preview-src="" data-preview-group="1" />
 				</p>
@@ -168,25 +145,6 @@
 				<p>
 					<img src="../images/shuijiao.jpg" data-preview-src="" data-preview-group="1" />
 				</p>
-
-				<!--<ul class="mui-table-view mui-grid-view">
-					<li class="mui-table-view-cell mui-media mui-col-xs-4">
-						<a href="#">
-							<img class="mui-media-object" src="../images/shuijiao.jpg">
-						</a>
-					</li>
-					<li class="mui-table-view-cell mui-media mui-col-xs-4">
-						<a href="#">
-							<img class="mui-media-object" src="../images/muwu.jpg">
-						</a>
-					</li>
-					<li class="mui-table-view-cell mui-media mui-col-xs-4">
-						<a href="#">
-							<img class="mui-media-object" src="../images/cbd.jpg">
-						</a>
-					</li>
-				</ul>-->
-
 			</div>
 		</div>
 	</body>

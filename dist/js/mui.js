@@ -4223,6 +4223,7 @@ var mui = (function(document, undefined) {
 			self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
 		},
 		_handleIndicatorTap: function(event) {
+			var self = this;
 			var target = event.target;
 			if (target.classList.contains(CLASS_ACTION_PREVIOUS) || target.classList.contains(CLASS_ACTION_NEXT)) {
 				self[target.classList.contains(CLASS_ACTION_PREVIOUS) ? 'prevItem' : 'nextItem']();

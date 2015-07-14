@@ -358,7 +358,7 @@
 						chat（聊天窗口） 
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li id='feedback' class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/feedback.html">
 						feedback（问题反馈） 
 					</a>
@@ -421,7 +421,8 @@
 				}
 				//Android平台暂时使用slide-in-right动画
 				if(mui.os.android&&parseFloat(mui.os.version)<4.4){
-					aniShow = "slide-in-right"
+					aniShow = "slide-in-right";
+					document.getElementById('feedback').style.display = 'none';
 				}
 			}
 			//初始化，并预加载webview模式的选项卡			

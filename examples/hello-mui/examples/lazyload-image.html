@@ -12,14 +12,34 @@
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<style type="text/css">
+			p{
+				text-indent: 22px;
+			}
+			.des {
+				margin: .5em 0;
+			}
+			.des>li {
+				font-size: 14px;
+				color: #8f8f94;
+			}
+		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">图片懒加载</h1>
+			<h1 class="mui-title">lazyload（延迟加载） </h1>
 		</header>
 		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>延迟加载的理念：页面初始化时，暂不加载处于屏幕可见区域之外的图片。该方案会有如下几大好处：</p>
+				<ul class="des">
+					<li>加快页面渲染速度</li>
+					<li>提升页面滚动性能</li>
+					<li>默认不下载屏幕外的图片，减少网络流量</li>
+				</ul>
+			</div>
 			<ul id="list" class="mui-table-view mui-table-view-chevron">
 
 			</ul>
