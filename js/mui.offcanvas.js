@@ -95,10 +95,10 @@
 				case 'drag':
 					var detail = e.detail;
 					if (!this.startX) {
-						this.startX = detail.move.x;
+						this.startX = detail.center.x;
 						this.lastX = this.startX;
 					} else {
-						this.lastX = detail.move.x;
+						this.lastX = detail.center.x;
 					}
 					if (!this.isDragging && Math.abs(this.lastX - this.startX) > this.options.dragThresholdX && (detail.direction === 'left' || (detail.direction === 'right'))) {
 						if (this.slideIn) {
@@ -118,8 +118,8 @@
 							this.startX = this.lastX;
 							this.isDragging = true;
 
-							$.gestures.touch.lockDirection = true; //锁定方向
-							$.gestures.touch.startDirection = detail.direction;
+							$.gestures.session.lockDirection = true; //锁定方向
+							$.gestures.session.startDirection = detail.direction;
 
 							this.scroller.classList.remove(CLASS_TRANSITIONING);
 							this.offsetX = this.getTranslateX();

@@ -13,6 +13,11 @@
 .mui-poppicker.mui-active {
 	-webkit-transform: translateY(0px);
 }
+/*用于将 html body 禁止滚动条*/
+
+.mui-poppicker-active-for-page {
+	overflow: hidden !important;
+}
 .mui-android-5-1 .mui-poppicker {
 	bottom: -300px;
 	-webkit-transition-property: bottom;
@@ -50,6 +55,12 @@
 	width: 100%;
 	height: 200px;
 	border-top: solid 1px #ddd;
+}
+.mui-ios .mui-poppicker-body {
+	-webkit-perspective: 1200px;
+	perspective: 1200px;
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
 }
 .mui-poppicker-body .mui-listpicker {
 	width: 100%;

@@ -13,6 +13,11 @@
 .mui-dtpicker.mui-active {
 	-webkit-transform: translateY(0px);
 }
+/*用于将 html body 禁止滚动条*/
+
+.mui-dtpicker-active-for-page {
+	overflow: hidden !important;
+}
 .mui-android-5-1 .mui-dtpicker {
 	bottom: -300px;
 	-webkit-transition-property: bottom;
@@ -42,6 +47,12 @@
 	border-top: solid 1px #eee;
 	background-color: #fff;
 }
+.mui-ios .mui-dtpicker-body {
+	-webkit-perspective: 1200px;
+	perspective: 1200px;
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
 .mui-dtpicker-title h5 {
 	display: inline-block;
 	width: 20%;
@@ -57,9 +68,6 @@
 	margin: 0px;
 	float: left;
 	border: none;
-}
-.mui-dtpicker .mui-listpicker ul li {
-	padding: 10px;
 }
 /*年月日时分*/
 

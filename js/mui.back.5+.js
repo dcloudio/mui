@@ -21,6 +21,11 @@
 					$(offCanvas).offCanvas('close');
 					return true;
 				}
+				var previewImage = $.isFunction($.getPreviewImage) && $.getPreviewImage();
+				if (previewImage && previewImage.isShown()) {
+					previewImage.close();
+					return true;
+				}
 			}
 		});
 	}

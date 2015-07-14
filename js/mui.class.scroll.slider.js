@@ -18,10 +18,10 @@
 	var SELECTOR_SLIDER_INDICATOR = '.' + CLASS_SLIDER_INDICATOR;
 	var SELECTOR_SLIDER_PROGRESS_BAR = $.classSelector('.slider-progress-bar');
 
-
-	var Slider = $.Scroll.extend({
+	var Slider = $.Slider = $.Scroll.extend({
 		init: function(element, options) {
 			this._super(element, $.extend(true, {
+				fingers: 1,
 				interval: 0, //设置为0，则不定时轮播
 				scrollY: false,
 				scrollX: true,
@@ -60,91 +60,100 @@
 				this._initTimer();
 			}
 		},
-		_initEvent: function() {
+		_triggerSlide: function() {
 			var self = this;
-			self._super();
-			self.wrapper.addEventListener('swiperight', $.stopPropagation);
-			self.wrapper.addEventListener('scrollend', function() {
-				self.isInTransition = false;
-				var page = self.currentPage;
-				self.slideNumber = self._fixedSlideNumber();
-				if (self.loop) {
-					if (self.slideNumber === 0) {
-						self.setTranslate(self.pages[1][0].x, 0);
-					} else if (self.slideNumber === self.itemLength - 3) {
-						self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
+			self.isInTransition = false;
+			var page = self.currentPage;
+			self.slideNumber = self._fixedSlideNumber();
+			if (self.loop) {
+				if (self.slideNumber === 0) {
+					self.setTranslate(self.pages[1][0].x, 0);
+				} else if (self.slideNumber === self.itemLength - 3) {
+					self.setTranslate(self.pages[self.itemLength - 2][0].x, 0);
+				}
+			}
+			if (self.lastSlideNumber != self.slideNumber) {
+				self.lastSlideNumber = self.slideNumber;
+				self.lastPage = self.currentPage;
+				$.trigger(self.wrapper, 'slide', {
+					slideNumber: self.slideNumber
+				});
+			}
+			self._initTimer();
+		},
+		_handleSlide: function(e) {
+			var self = this;
+			if (e.target !== self.wrapper) {
+				return;
+			}
+			var detail = e.detail;
+			detail.slideNumber = detail.slideNumber || 0;
+			var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var _slideNumber = detail.slideNumber;
+			if (self.loop) {
+				_slideNumber += 1;
+			}
+			if (!self.wrapper.classList.contains($.className('segmented-control'))) {
+				for (var i = 0, len = items.length; i < len; i++) {
+					var item = items[i];
+					if (item.parentNode === self.scroller) {
+						if (i === _slideNumber) {
+							item.classList.add(CLASS_ACTIVE);
+						} else {
+							item.classList.remove(CLASS_ACTIVE);
+						}
 					}
 				}
-				if (self.lastSlideNumber != self.slideNumber) {
-					self.lastSlideNumber = self.slideNumber;
-					$.trigger(self.wrapper, 'slide', {
-						slideNumber: self.slideNumber
-					});
+			}
+			var indicatorWrap = self.wrapper.querySelector($.classSelector('.slider-indicator'));
+			if (indicatorWrap) {
+				if (indicatorWrap.getAttribute('data-scroll')) { //scroll
+					$(indicatorWrap).scroll().gotoPage(detail.slideNumber);
 				}
-				self._initTimer();
-			});
+				var indicators = indicatorWrap.querySelectorAll($.classSelector('.indicator'));
+				if (indicators.length > 0) { //图片轮播
+					for (var i = 0, len = indicators.length; i < len; i++) {
+						indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
+					}
+				} else {
+					var number = indicatorWrap.querySelector($.classSelector('.number span'));
+					if (number) { //图文表格
+						number.innerText = (detail.slideNumber + 1);
+					} else { //segmented controls
+						var controlItems = self.wrapper.querySelectorAll($.classSelector('.control-item'));
+						for (var i = 0, len = controlItems.length; i < len; i++) {
+							controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
+						}
+					}
+				}
+			}
+			e.stopPropagation();
+		},
+		_handleTabShow: function(e) {
+			var self = this;
+			self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
+		},
+		_handleIndicatorTap: function(event) {
+			var target = event.target;
+			if (target.classList.contains(CLASS_ACTION_PREVIOUS) || target.classList.contains(CLASS_ACTION_NEXT)) {
+				self[target.classList.contains(CLASS_ACTION_PREVIOUS) ? 'prevItem' : 'nextItem']();
+				event.stopPropagation();
+			}
+		},
+		_initEvent: function(detach) {
+			var self = this;
+			self._super(detach);
+			var action = detach ? 'removeEventListener' : 'addEventListener';
+			self.wrapper[action]('swiperight', $.stopPropagation);
+			self.wrapper[action]('scrollend', self._triggerSlide.bind(this));
 
-			self.wrapper.addEventListener('slide', function(e) {
-				if (e.target !== self.wrapper) {
-					return;
-				}
-				var detail = e.detail;
-				detail.slideNumber = detail.slideNumber || 0;
-				var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
-				var _slideNumber = detail.slideNumber;
-				if (self.loop) {
-					_slideNumber += 1;
-				}
-				if (!self.wrapper.classList.contains($.className('segmented-control'))) {
-					for (var i = 0, len = items.length; i < len; i++) {
-						var item = items[i];
-						if (item.parentNode === self.scroller) {
-							if (i === _slideNumber) {
-								item.classList.add(CLASS_ACTIVE);
-							} else {
-								item.classList.remove(CLASS_ACTIVE);
-							}
-						}
-					}
-				}
-				var indicatorWrap = self.wrapper.querySelector($.classSelector('.slider-indicator'));
-				if (indicatorWrap) {
-					if (indicatorWrap.getAttribute('data-scroll')) { //scroll
-						$(indicatorWrap).scroll().gotoPage(detail.slideNumber);
-					}
-					var indicators = indicatorWrap.querySelectorAll($.classSelector('.indicator'));
-					if (indicators.length > 0) { //图片轮播
-						for (var i = 0, len = indicators.length; i < len; i++) {
-							indicators[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
-						}
-					} else {
-						var number = indicatorWrap.querySelector($.classSelector('.number span'));
-						if (number) { //图文表格
-							number.innerText = (detail.slideNumber + 1);
-						} else { //segmented controls
-							var controlItems = self.wrapper.querySelectorAll($.classSelector('.control-item'));
-							for (var i = 0, len = controlItems.length; i < len; i++) {
-								controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
-							}
-						}
-					}
-				}
-				e.stopPropagation();
-			});
+			self.wrapper[action]('slide', self._handleSlide.bind(this));
 
-			self.wrapper.addEventListener($.eventName('shown', 'tab'), function(e) { //tab
-				self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
-			});
+			self.wrapper[action]($.eventName('shown', 'tab'), self._handleTabShow.bind(this));
 			//indicator
 			var indicator = self.wrapper.querySelector(SELECTOR_SLIDER_INDICATOR);
 			if (indicator) {
-				indicator.addEventListener('tap', function(event) {
-					var target = event.target;
-					if (target.classList.contains(CLASS_ACTION_PREVIOUS) || target.classList.contains(CLASS_ACTION_NEXT)) {
-						self[target.classList.contains(CLASS_ACTION_PREVIOUS) ? 'prevItem' : 'nextItem']();
-						event.stopPropagation();
-					}
-				});
+				indicator[action]('tap', self._handleIndicatorTap.bind(this));
 			}
 		},
 		_drag: function(e) {
@@ -224,7 +233,7 @@
 			//				return;
 			//			}
 			if (e.type === 'flick') {
-				if (detail.touchTime < 200) { //flick，太容易触发，额外校验一下touchtime
+				if (detail.deltaTime < 200) { //flick，太容易触发，额外校验一下deltaTime
 					this.x = this._getPage((this.slideNumber + (direction === 'right' ? -1 : 1)), true).x;
 				}
 				this.resetPosition(this.options.bounceTime);
@@ -327,6 +336,11 @@
 			} else {
 				this._super();
 			}
+		},
+		destory: function() {
+			this._initEvent(true); //detach
+			delete $.data[this.wrapper.getAttribute('data-slider')];
+			this.wrapper.setAttribute('data-slider', '');
 		}
 	});
 	$.fn.slider = function(options) {

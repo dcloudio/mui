@@ -145,7 +145,7 @@
 							timer = $.later(function() {
 								toggleActive(true);
 							}, 100);
-						} else{
+						} else {
 							toggleActive(true);
 						}
 					}
@@ -426,8 +426,8 @@
 		sliderHandle && toggleEvents(cell, true);
 	});
 	var radioOrCheckboxClick = function(event) {
-		var type = event.target&&event.target.type||'';
-		if(type==='radio'||type==='checkbox'){
+		var type = event.target && event.target.type || '';
+		if (type === 'radio' || type === 'checkbox') {
 			return;
 		}
 		var classList = cell.classList;

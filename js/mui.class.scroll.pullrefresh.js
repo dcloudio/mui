@@ -41,9 +41,13 @@
 		},
 		//API
 		resetPosition: function(time) {
-			if (this.pulldown && this.y >= this.options.down.height) {
-				this.pulldownLoading(undefined, time || 0);
-				return true;
+			if (this.pulldown) {
+				if (this.y >= this.options.down.height) {
+					this.pulldownLoading(undefined, time || 0);
+					return true;
+				} else {
+					this.topPocket.classList.remove(CLASS_VISIBILITY);
+				}
 			}
 			return this._super(time);
 		},
@@ -132,7 +136,9 @@
 			} else {
 				pullRefreshApi = $.data[id];
 			}
-			if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+			if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
+				pullRefreshApi.pulldownLoading(options.down.autoY);
+			} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
 				pullRefreshApi.pullupLoading();
 			}
 			//暂不提供这种调用方式吧			

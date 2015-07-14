@@ -41,7 +41,7 @@
 	};
 	//简单的wrap对象_mid
 	var mid = function(obj) {
-		return obj._mid || (obj._mid = _mid++);
+		return obj && (obj._mid || (obj._mid = _mid++));
 	};
 	//事件委托对象绑定的事件回调列表
 	var delegateFns = {};

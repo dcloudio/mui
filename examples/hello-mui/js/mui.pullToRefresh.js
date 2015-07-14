@@ -178,8 +178,8 @@
 					this.isDragging = true;
 					this.removing = false;
 					this.startDeltaY = detail.deltaY;
-					$.gestures.touch.lockDirection = true; //锁定方向
-					$.gestures.touch.startDirection = detail.direction;
+					$.gestures.session.lockDirection = true; //锁定方向
+					$.gestures.session.startDirection = detail.direction;
 					this._pullStart(this.startDeltaY);
 				}
 			}

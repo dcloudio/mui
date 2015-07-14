@@ -5,23 +5,33 @@
  * @returns {undefined}
  */
 (function($, name) {
+	var lastTarget;
+	var lastTapTime;
 	var handle = function(event, touch) {
-		//if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
-		if (event.type === $.EVENT_END) { //ignore touchcancel
-			var options = this.options;
-			if (touch.distance < options.tapMaxDistance && touch.touchTime < options.tapMaxTime) {
-				if ($.options.gestureConfig.doubletap && touch.lastTarget && (touch.lastTarget === event.target)) { //same target
-					if (touch.lastTapTime && (touch.startTime - touch.lastTapTime) < options.tapMaxInterval) {
-						$.trigger(event.target, 'doubletap', touch);
-						touch.lastTapTime = $.now();
-						touch.lastTarget = event.target;
-						return;
-					}
+		var options = this.options;
+		switch (event.type) {
+			case $.EVENT_END:
+				if (!touch.isFinal) {
+					return;
 				}
-				$.trigger(event.target, name, touch);
-				touch.lastTapTime = $.now();
-				touch.lastTarget = event.target;
-			}
+				var target = event.target;
+				if (!target || (target.disabled || target.classList.contains($.className('disabled')))) {
+					return;
+				}
+				if (touch.distance < options.tapMaxDistance && touch.deltaTime < options.tapMaxTime) {
+					if ($.options.gestureConfig.doubletap && lastTarget && (lastTarget === target)) { //same target
+						if (lastTapTime && (touch.timestamp - lastTapTime) < options.tapMaxInterval) {
+							$.trigger(target, 'doubletap', touch);
+							lastTapTime = $.now();
+							lastTarget = target;
+							return;
+						}
+					}
+					$.trigger(target, name, touch);
+					lastTapTime = $.now();
+					lastTarget = event.target;
+				}
+				break;
 		}
 	};
 	/**
@@ -32,6 +42,7 @@
 		index: 30,
 		handle: handle,
 		options: {
+			fingers: 1,
 			tapMaxInterval: 300,
 			tapMaxDistance: 5,
 			tapMaxTime: 250

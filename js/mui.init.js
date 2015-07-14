@@ -12,7 +12,8 @@
 			hold: false,
 			flick: true,
 			swipe: true,
-			drag: true
+			drag: true,
+			pinch: false
 		}
 	};
 	/**

@@ -5,9 +5,9 @@
  * Houfeng@DCloud.io
  */
 
-(function($) {
+(function($, document) {
 
-	//create dom
+	//创建 DOM
 	$.dom = function(str) {
 		if (typeof(str) !== 'string') {
 			if ((str instanceof Array) || (str[0] && str.length)) {
@@ -23,6 +23,8 @@
 		return [].slice.call($.__create_dom_div__.childNodes);
 	};
 
+	var _listpickerId = 0;
+
 	var ListPicker = $.ListPicker = $.Class.extend({
 		init: function(box, options) {
 			var self = this;
@@ -31,16 +33,23 @@
 			}
 			self.box = box;
 			//避免重复初始化开始
-			if (self.box.__listpicker_inited) return;
-			self.box.__listpicker_inited = true;
+			if (self.box.listpickerId) return;
+			self.listpickerId = self.box.listpickerId = "listpicker-" + (++_listpickerId);
 			//避免重复初始化结束
+			self.box.setAttribute('data-listpicker-id', self.box.listpickerId);
+			//处理 options
 			options = options || {};
 			options.fiexdDur = options.fiexdDur || 150;
-			//ios 默认用 h5 模式
-			if (options.enabledH5 === null || typeof options.enabledH5 === 'undefined') {
-				options.enabledH5 = $.os.ios;
+			options.highlightStyle = options.highlightStyle || 'color: green;';
+			//在 ios 上启用 h5 模式，
+			if ($.os.ios) {
+				options.enabledH5 = true;
 			}
-			//options.enabledH5 = true;
+			//如果没有设定 enabled3d，将默认用 3d 模式
+			if (options.enabled3d === null || typeof options.enabled3d === 'undefined') {
+				options.enabled3d = $.os.ios;
+			}
+			//
 			self.options = options;
 			self._create();
 			self._handleShim();
@@ -53,7 +62,9 @@
 			self.boxInner = $('.mui-listpicker-inner', self.box)[0];
 			self.boxHeight = self.box.offsetHeight;
 			self.list = $('ul', self.boxInner)[0];
-			var firstItem = $('li', self.list)[0];
+			//refresh 中会执行 self.itemElementArray = [].slice.call($('li', self.list));
+			self.refresh();
+			var firstItem = self.itemElementArray[0];
 			self.itemHeight = 0;
 			if (firstItem) {
 				self.itemHeight = firstItem.offsetHeight;
@@ -64,19 +75,31 @@
 				self.list.innerHTML = '';
 			}
 			self.list.style.paddingTop = self.list.style.paddingBottom = (self.boxHeight / 2 - self.itemHeight / 2) + 'px';
+			//创建中间选中项的高亮行
 			self.rule = $.dom('<div class="mui-listpicker-rule"> </div>')[0];
 			self.rule.style.height = self.itemHeight + 'px';
 			self.rule.style.marginTop = -(self.itemHeight / 2) + 'px';
 			self.box.appendChild(self.rule);
-			if ($.os.ios) {
-				self.boxInner.classList.add('mui-listpicker-inner-ios');
+			self.middle = self.boxInner.offsetHeight / 2;
+			self.showLine = parseInt((self.boxInner.offsetHeight / self.itemHeight).toFixed(0));
+			//是否启用 3d 效果
+			if (self.options.enabled3d) {
+				self.box.classList.add('three-dimensional');
 			}
 		},
+		//根据 options 处理不同平台兼容问题
 		_handleShim: function() {
 			var self = this;
 			if (self.options.enabledH5) {
 				self.options.fiexdDur *= 2;
-				self._scrollerApi = $(self.boxInner).scroll();
+				self.boxInner.classList.add($.className('scroll-wrapper'));
+				self.list.classList.add($.className('scroll'));
+				self._scrollerApi = $(self.boxInner).scroll({
+					deceleration: 0.002
+				});
+				//增加惯性滚动时的 scroll 触发处理
+				//shimTetTranslate(self._scrollerApi);
+				//--
 				self.setScrollTop = function(y, dur, callback) {
 					self._scrollerApi.scrollTo(0, -y, dur);
 				};
@@ -102,7 +125,7 @@
 						if (!self.isTouchDown || !$.os.ios) {
 							$.trigger(self.boxInner, 'scrollend');
 						}
-					}, 100);
+					}, 150);
 				}, false);
 				self.aniScrollTop = function(y, dur, callback) {
 					self.disabledScroll = true;
@@ -151,34 +174,39 @@
 		_handleHighlight: function() {
 			var self = this;
 			var scrollTop = self.getScrollTop();
-			var fiexd = (scrollTop / self.itemHeight).toFixed(0);
-			var itemElements = $('li', self.list);
-			for (var index in itemElements) {
-				var itemElement = itemElements[index];
-				if (!itemElement || !itemElement.classList) continue;
+			var fiexd = parseInt((scrollTop / self.itemHeight).toFixed(0));
+			var lastIndex = self.itemElementArray.length - 1;
+			var displayRange = parseInt((self.showLine / 2).toFixed(0));
+			var displayBegin = fiexd - displayRange;
+			var displayEnd = fiexd + displayRange;
+			if (displayBegin < 0) {
+				displayBegin = 0;
+			}
+			if (displayEnd > lastIndex) {
+				displayEnd = lastIndex;
+			}
+			//高亮选中行开始
+			for (var index = displayBegin; index <= displayEnd; index++) {
+				var itemElement = self.itemElementArray[index];
 				if (index == fiexd) {
-					itemElement.classList.add('mui-listpicker-highlight');
+					itemElement.classList.add($.className('listpicker-item-selected'));
+					//itemElement.classList.remove($.className('listpicker-item-before'));
+					//itemElement.classList.remove($.className('listpicker-item-after'));
 				} else {
-					itemElement.classList.remove('mui-listpicker-highlight');
+					//itemElement.classList.add($.className('listpicker-item-' + (fiexd > index ? 'before' : 'after')));
+					itemElement.classList.remove($.className('listpicker-item-selected'));
+				}
+				if (self.options.enabled3d) {
+					//3d 处理开始
+					var itemOffset = self.middle - (itemElement.offsetTop - scrollTop + self.itemHeight / 2) + 1;
+					var percentage = itemOffset / self.itemHeight;
+					var angle = (18 * percentage);
+					//if (angle > 180) angle = 180;
+					//if (angle < -180) angle = -180;
+					itemElement.style.webkitTransform = 'rotateX(' + angle + 'deg) translate3d(0px,0px,' + (0 - Math.abs(percentage * 12)) + 'px)';
+					//3d 处理结束
 				}
 			}
-			/*
-			var opacity = 1;
-			for (var index = fiexd; index >= 0; index--) {
-				var itemElement = itemElements[index];
-				itemElement.style.opacity = opacity;
-				opacity -= 0.25;
-				if (opacity < 0) opacity = 0;
-			}
-			opacity = 1;
-			var length = itemElements.length;
-			for (var index = fiexd; index < itemElements.length; index++) {
-				var itemElement = itemElements[index];
-				itemElement.style.opacity = opacity;
-				opacity -= 0.25;
-				if (opacity < 0) opacity = 0;
-			}
-			*/
 		},
 		_triggerChange: function() {
 			var self = this;
@@ -253,6 +281,10 @@
 				value: itemElement.getAttribute('data-value')
 			};
 		},
+		refresh: function() {
+			var self = this;
+			self.itemElementArray = [].slice.call($('li', self.list));
+		},
 		setItems: function(items) {
 			var self = this;
 			var buffer = [];
@@ -265,10 +297,10 @@
 				buffer.push("<li data-value='" + item.value + "' data-item='" + itemJson + "'>" + item.text + "</li>");
 			};
 			self.list.innerHTML = buffer.join('');
-			//self._scrollEndHandle();
 			if (self._scrollerApi && self._scrollerApi.refresh) {
 				self._scrollerApi.refresh();
 			}
+			self.refresh();
 			self._handleHighlight();
 			self._triggerChange();
 		},
@@ -349,18 +381,19 @@
 				new ListPicker(element, options);
 			} else {
 				var optionsText = element.getAttribute('data-listpicker-options');
-				var options = optionsText ? JSON.parse(optionsText) : {};
-				options.enabledH5 = element.getAttribute('data-listpicker-enabledh5') || options.enabledH5;
-				options.fixedDur = element.getAttribute('data-listpicker-fixddur') || options.fixedDur;
-				new ListPicker(element, options);
+				var _options = optionsText ? JSON.parse(optionsText) : {};
+				_options.enabledH5 = element.getAttribute('data-listpicker-enabledh5') || _options.enabledH5;
+				_options.enabled3d = element.getAttribute('data-listpicker-enabled3d') || _options.enabled3d;
+				_options.fixedDur = element.getAttribute('data-listpicker-fixddur') || _options.fixedDur;
+				new ListPicker(element, _options);
 			}
 		});
 		return this;
 	};
 
-	//auto apply
+	//自动初始化
 	$.ready(function() {
 		$('.mui-listpicker').listpicker();
 	});
 
-})(mui);
+})(mui, document);

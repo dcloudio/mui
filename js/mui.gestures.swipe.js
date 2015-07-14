@@ -8,8 +8,9 @@
 	var handle = function(event, touch) {
 		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
 			var options = this.options;
-			if (touch.direction && options.swipeMaxTime > touch.touchTime && touch.distance > options.swipeMinDistince) {
+			if (touch.direction && options.swipeMaxTime > touch.deltaTime && touch.distance > options.swipeMinDistince) {
 				touch.swipe = true;
+				$.trigger(event.target, name, touch);
 				$.trigger(event.target, name + touch.direction, touch);
 			}
 		}

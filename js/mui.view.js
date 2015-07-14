@@ -85,8 +85,8 @@
 
 					if (this.previousPage && this.activePage) {
 						this.dragging = true;
-						$.gestures.touch.lockDirection = true; //锁定方向
-						$.gestures.touch.startDirection = detail.direction;
+						$.gestures.session.lockDirection = true; //锁定方向
+						$.gestures.session.startDirection = detail.direction;
 					}
 				}
 			}

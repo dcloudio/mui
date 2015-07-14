@@ -10,18 +10,20 @@
 		var options = this.options;
 		switch (event.type) {
 			case $.EVENT_START:
-				clearTimeout(timer);
-				timer = setTimeout(function() {
-					touch.hold = true;
-					$.trigger(event.target, name, touch);
-				}, options.holdTimeout);
+				if ($.options.gestureConfig.hold) {
+					timer && clearTimeout(timer);
+					timer = setTimeout(function() {
+						touch.hold = true;
+						$.trigger(event.target, name, touch);
+					}, options.holdTimeout);
+				}
 				break;
 			case $.EVENT_MOVE:
 				break;
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
-				clearTimeout(timer);
-				if ($.options.gestureConfig.hold && touch.hold) {
+				if (timer) {
+					clearTimeout(timer) && (timer = null);
 					$.trigger(event.target, 'release', touch);
 				}
 				break;
@@ -35,6 +37,7 @@
 		index: 10,
 		handle: handle,
 		options: {
+			fingers: 1,
 			holdTimeout: 0
 		}
 	});

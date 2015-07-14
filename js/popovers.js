@@ -166,7 +166,7 @@
 		if (!popover || !anchor) {
 			return;
 		}
-		
+
 		if (isActionSheet) { //actionsheet
 			setStyle(popover, 'block')
 			return;

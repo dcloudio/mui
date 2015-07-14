@@ -5,7 +5,7 @@
  * Houfeng@DCloud.io
  */
 
-(function($) {
+(function($, document) {
 	var domBuffer = '<div class="mui-dtpicker" data-type="datetime">\
 		<div class="mui-dtpicker-header">\
 			<button data-id="btn-cancel" class="mui-btn">取消</button>\
@@ -70,8 +70,10 @@
 				self.hide();
 			}, false);
 			ui.ok.addEventListener('tap', function() {
-				self.hide();
-				self.callback(self.getSelected());
+				var rs = self.callback(self.getSelected());
+				if (rs !== false) {
+					self.hide();
+				}
 			}, false);
 			ui.y.addEventListener('change', function() {
 				self._createDay();
@@ -122,6 +124,16 @@
 					break;
 			}
 			return selected;
+		},
+		setSelectedValue: function(value) {
+			var self = this;
+			var ui = self.ui;
+			var parsedValue = self._parseValue(value);
+			ui.y.setSelectedValue(parsedValue.y, true);
+			ui.m.setSelectedValue(parsedValue.m, true);
+			ui.d.setSelectedValue(parsedValue.d, true);
+			ui.h.setSelectedValue(parsedValue.h, true);
+			ui.i.setSelectedValue(parsedValue.i, true);
 		},
 		isLeapYear: function(year) {
 			return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -270,12 +282,11 @@
 			ui.cancel.innerText = options.buttons[0];
 			ui.ok.innerText = options.buttons[1];
 		},
-		_getInitValue: function() {
+		_parseValue: function(value) {
 			var self = this;
-			var options = self.options;
 			var rs = {};
-			if (options.value) {
-				var parts = options.value.replace(":", "-").replace(" ", "-").split("-");
+			if (value) {
+				var parts = value.replace(":", "-").replace(" ", "-").split("-");
 				rs.y = parts[0];
 				rs.m = parts[1];
 				rs.d = parts[2];
@@ -302,7 +313,6 @@
 			var now = new Date();
 			options.beginYear = options.beginYear || (now.getFullYear() - 5);
 			options.endYear = options.endYear || (now.getFullYear() + 5);
-			var initValue = self._getInitValue();
 			var ui = self.ui;
 			//设定label
 			self._setLabels();
@@ -315,14 +325,8 @@
 			self._createDay();
 			self._createHours();
 			self._createMinutes();
-			setTimeout(function() {
-				//设定默认值
-				ui.y.setSelectedValue(initValue.y);
-				ui.m.setSelectedValue(initValue.m);
-				ui.d.setSelectedValue(initValue.d);
-				ui.h.setSelectedValue(initValue.h);
-				ui.i.setSelectedValue(initValue.i);
-			}, 160);
+			//设定默认值
+			self.setSelectedValue(options.value);
 		},
 		//显示
 		show: function(callback) {
@@ -330,14 +334,16 @@
 			var ui = self.ui;
 			self.callback = callback || $.noop;
 			ui.mask.show();
-			ui.picker.style.webkitTransform = 'translateY(0px)';
+			document.body.classList.add($.className('dtpicker-active-for-page'));
+			ui.picker.classList.add($.className('active'));
 		},
 		hide: function() {
 			var self = this;
 			var ui = self.ui;
-			ui.picker.style.webkitTransform = 'translateY(300px)';
-			ui.mask.close()
+			ui.picker.classList.remove($.className('active'));
+			ui.mask.close();
+			document.body.classList.remove($.className('dtpicker-active-for-page'));
 		}
 	});
 
-})(mui);
+})(mui, document);

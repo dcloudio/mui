@@ -12,9 +12,7 @@
 			case $.EVENT_START:
 				clearTimeout(timer);
 				timer = setTimeout(function() {
-					if (!touch.drag) {
-						$.trigger(event.target, name, touch);
-					}
+					$.trigger(event.target, name, touch);
 				}, options.holdTimeout);
 				break;
 			case $.EVENT_MOVE:
@@ -36,6 +34,7 @@
 		index: 10,
 		handle: handle,
 		options: {
+			fingers: 1,
 			holdTimeout: 500,
 			holdThreshold: 2
 		}
