@@ -30,15 +30,25 @@
 				font-size: 16px;
 			}
 		</style>
-	</head> 
+	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">list picker（选择列表）</h1>
+			<h1 class="mui-title">picker（选择器）</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
+				<h5 class="mui-content-padded">原生 SELECT</h5>
+				<select class="mui-btn mui-btn-block">
+					<option value="item-1">item-1</option>
+					<option value="item-2">item-2</option>
+					<option value="item-3">item-3</option>
+					<option value="item-4">item-4</option>
+					<option value="item-5">item-5</option>
+				</select>
+				<br />
+				<p>原生 SELECT（选择框）在不同的设备上UI可能会有差异，并且不支持多级联动(多个 SELECT 可实现，但较麻烦)，故mui封装了picker组件，参见如下示例。</p>
 				<h5 class="mui-content-padded">普通示例</h5>
 				<button id='showUserPicker' class="mui-btn mui-btn-block" type='button'>一级选择示例 ...</button>
 				<div id='userResult' class="ui-alert"></div>
@@ -96,32 +106,38 @@
 					showUserPickerButton.addEventListener('tap', function(event) {
 						userPicker.show(function(items) {
 							userResult.innerText = JSON.stringify(items[0]);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
 						});
-					}, false);  
+					}, false);
 					//-----------------------------------------
 					//级联示例
 					var cityPicker = new $.PopPicker({
 						layer: 2
-					}); 
+					});
 					cityPicker.setData(cityData);
 					var showCityPickerButton = doc.getElementById('showCityPicker');
 					var cityResult = doc.getElementById('cityResult');
 					showCityPickerButton.addEventListener('tap', function(event) {
 						cityPicker.show(function(items) {
-							cityResult.innerText ="你选择的城市是:" + items[0].text+" " + items[1].text;
+							cityResult.innerText = "你选择的城市是:" + items[0].text + " " + items[1].text;
+							//返回 false 可以阻止选择框的关闭
+							//return false;
 						});
 					}, false);
 					//-----------------------------------------
-//					//级联示例
+					//					//级联示例
 					var cityPicker3 = new $.PopPicker({
 						layer: 3
-					}); 
+					});
 					cityPicker3.setData(cityData3);
 					var showCityPickerButton = doc.getElementById('showCityPicker3');
 					var cityResult3 = doc.getElementById('cityResult3');
 					showCityPickerButton.addEventListener('tap', function(event) {
 						cityPicker3.show(function(items) {
-							cityResult3.innerText ="你选择的城市是:" + items[0].text+" "  + items[1].text+" " + items[2].text;
+							cityResult3.innerText = "你选择的城市是:" + (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+							//返回 false 可以阻止选择框的关闭
+							//return false;
 						});
 					}, false);
 				});
