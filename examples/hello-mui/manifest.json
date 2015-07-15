@@ -39,9 +39,6 @@
 		"Storage": {
 			"description": "管理应用本地数据"
 		},
-		"UI": {
-			"description": "管理系统原生控件"
-		},
 		"Runtime": {
 			"description": "访问运行期环境"
 		},
@@ -53,6 +50,15 @@
 		},
 		"Zip": {
 			"description": "文件压缩与解压缩"
+		},
+		"Webview":{
+			"description": "窗口管理"
+		},
+		"NativeUI":{
+			"description": "原生UI控件"
+		},
+		"Navigator":{
+			"description": "浏览器信息"
 		}
 	},
 	"plus": {

@@ -1,7 +1,7 @@
 {
     "@platforms": ["android", "iPhone", "iPad"],
-    "id": "H583F81D0",/*应用的标识，创建应用时自动生成，勿手动修改*/
-    "name": "login-demo",/*应用名称，程序桌面图标名称*/
+    "id": "mui-login-setting",/*应用的标识，创建应用时自动生成，勿手动修改*/
+    "name": "mui-login-setting",/*应用名称，程序桌面图标名称*/
     "version": {
         "name": "1.0.0",/*应用版本名称*/
         "code": "83"
@@ -68,9 +68,6 @@
         "Storage": {
             "description": "管理应用本地数据"
         },
-        "UI": {
-            "description": "管理系统原生控件"
-        },
         "Uploader": {
             "description": "管理文件上传任务"
         },
@@ -103,6 +100,15 @@
         },
         "Statistic": {
             "description": "管理统计插件"
+        },
+        "Webview":{
+        	"description": "窗口管理"
+        },
+        "NativeUI":{
+        	"description": "原生UI控件"
+        },
+        "Navigator":{
+        	"description": "浏览器信息"
         }
     },
     "plus": {
