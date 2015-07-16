@@ -77,6 +77,7 @@
 			}
 			.mui-navbar .mui-bar .mui-title {
 				display: inline-block;
+				position: static;
 				width: auto;
 			}
 			.mui-page-shadow {
@@ -134,6 +135,7 @@
 				display: none;
 			}
 		</style>
+		<link rel="stylesheet" type="text/css" href="./css/feedback-page.css" />
 	</head>
 
 	<body>
@@ -170,6 +172,9 @@
 							</li>
 							<li class="mui-table-view-cell">
 								<a id="tel" class="mui-navigate-right">客服电话</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
 							</li>
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
@@ -235,11 +240,42 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="feedback" class="mui-page feedback">
+			<div class="mui-navbar-inner mui-bar mui-bar-nav">
+				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+					<span class="mui-icon mui-icon-left-nav"></span>设置
+				</button>
+				<h1 class="mui-center mui-title">问题反馈</h1>
+			</div>
+			<div class="mui-page-content">
+				<p>问题和意见</p>
+				<div class="row mui-input-row">
+					<textarea id='question' class="mui-input-clear question" placeholder="请详细描述你的问题和意见..."></textarea>
+				</div>
+				<p>图片(选填,提供问题截图)</p>
+				<div id='image-list' class="row image-list">
+				</div>
+				<p>QQ/邮箱</p>
+				<div class="mui-input-row">
+					<input id='contact' type="text" class="mui-input-clear  contact" placeholder="(选填,方便我们联系你 )" />
+				</div>
+				<button id='submit' type="button" class="mui-btn mui-btn-green">提交</button>
+			</div>
+			<p>此示例基于环信 “WebIM SDK” + 环信 “移动客服” 实现，在环信 “移动客服面板” 能够查阅反馈信息。</p>
+		</div>
+
 	</body>
 	<script src="./js/mui.min.js "></script>
 	<script src="./js/mui.view.js "></script>
-	<script src="js/mui.locker.js"></script>
-	<script src="js/app.js"></script>
+	<script src='./libs/easymob-webim-sdk/jquery-1.11.1.js'></script>
+	<script src='./libs/easymob-webim-sdk/strophe-custom-2.0.0.js'></script>
+	<script src='./libs/easymob-webim-sdk/json2.js'></script>
+	<script src="./libs/easymob-webim-sdk/easemob.im-1.0.5.js"></script>
+	<script src='./js/feedback.js'></script>
+	<script src="./js/feedback-page.js"></script>
+	<script src="./js/mui.locker.js"></script>
+	<script src="./js/app.js"></script>
 	<script>
 		mui.init();
 		 //初始化单页view
@@ -248,7 +284,7 @@
 		});
 		 //初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
-		 //分享操作
+		 //分享操作 
 		var shares = {};
 		mui.plusReady(function() {
 			plus.share.getServices(function(s) {
@@ -274,6 +310,8 @@
 					id: "sinaweibo"
 				}, {
 					id: "tencentweibo"
+				}, {
+					id: "qq"
 				}],
 				bts = [{
 					title: "发送给微信好友"
@@ -283,15 +321,9 @@
 					title: "分享到新浪微博"
 				}, {
 					title: "分享到腾讯微博"
-				}];
-			if (plus.os.name == "iOS") {
-				ids.push({
-					id: "qq"
-				});
-				bts.push({
+				}, {
 					title: "分享到QQ"
-				});
-			}
+				}];
 			plus.nativeUI.actionSheet({
 				cancel: "取消",
 				buttons: bts
@@ -337,11 +369,11 @@
 			if (mui.os.ios) {
 				location.href = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
 			} else if (mui.os.android) {
-				 plus.runtime.openURL( "market://details?id=io.dcloud.HelloMUI", function(e){ 
-		        		plus.runtime.openURL( "market://details?id=io.dcloud.HelloMUI", function(e){ 
-				        mui.alert("360手机助手和应用宝，你一个都没装，暂时无法评分，感谢支持"); 
-		        		}, "com.qihoo.appstore" );
-			    }, "com.tencent.android.qqdownloader" ); 
+				plus.runtime.openURL("market://details?id=io.dcloud.HelloMUI", function(e) {
+					plus.runtime.openURL("market://details?id=io.dcloud.HelloMUI", function(e) {
+						mui.alert("360手机助手和应用宝，你一个都没装，暂时无法评分，感谢支持");
+					}, "com.qihoo.appstore");
+				}, "com.tencent.android.qqdownloader");
 			}
 		});
 		 //客服电话
@@ -350,18 +382,18 @@
 		});
 		 //退出操作******************
 		document.getElementById('exit').addEventListener('tap', function() {
-			if(mui.os.ios){
+			if (mui.os.ios) {
 				app.setState({});
-						mui.openWindow({
-							url: 'login.html',
-							id: 'login',
-							show: {
-									aniShow: 'pop-in'
-							},
-							waiting: {
-								autoShow: false
-							}
-						});
+				mui.openWindow({
+					url: 'login.html',
+					id: 'login',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
 				return;
 			}
 			var btnArray = [{
@@ -381,7 +413,7 @@
 							url: 'login.html',
 							id: 'login',
 							show: {
-									aniShow: 'pop-in'
+								aniShow: 'pop-in'
 							},
 							waiting: {
 								autoShow: false
@@ -408,6 +440,7 @@
 					var isActive = event.detail.isActive;
 					locker.style.display = isActive ? 'block' : 'none';
 					if (!isActive) {
+						//						alert(0);
 						settings.gestures = '';
 						app.setSettings(settings);
 					}

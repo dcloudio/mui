@@ -175,7 +175,7 @@
 									plus.nativeUI.toast("登录认证成功");
 									//alert(JSON.stringify(auth.authResult));
 									auth.getUserInfo(function() {
-										plus.nativeUI.toast("获取用户信息成功：");
+										plus.nativeUI.toast("获取用户信息成功");
 										//alert(JSON.stringify(auth.userInfo));
 										var name = auth.userInfo.nickname || auth.userInfo.name;
 										app.createState(name, function() {
