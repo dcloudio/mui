@@ -62,7 +62,11 @@
 			if (file) {
 				var reader = new FileReader();
 				reader.onload = function() {
-					placeholder.style.backgroundImage = 'url("' + reader.result + '")';
+					//处理 android 4.1 兼容问题
+					var base64 = reader.result.split(',')[1];
+					var dataUrl = 'data:image/png;base64,' + base64;
+					//
+					placeholder.style.backgroundImage = 'url(' + dataUrl + ')';
 				}
 				reader.readAsDataURL(file);
 				placeholder.classList.remove('space');
@@ -79,7 +83,7 @@
 			(ui.contact.value != '' &&
 				ui.contact.value.search(/^(\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+)|([1-9]\d{4,9})$/) != 0)) {
 			return mui.toast('信息填写不符合规范');
-		}
+		} 
 		plus.nativeUI.showWaiting();
 		feedback.send({
 			question: ui.question.value,

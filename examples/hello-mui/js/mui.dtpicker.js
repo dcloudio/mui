@@ -339,10 +339,23 @@
 		},
 		hide: function() {
 			var self = this;
+			if (self.disposed) return;
 			var ui = self.ui;
 			ui.picker.classList.remove($.className('active'));
 			ui.mask.close();
 			document.body.classList.remove($.className('dtpicker-active-for-page'));
+		},
+		dispose: function() {
+			var self = this;
+			self.hide();
+			setTimeout(function() {
+				self.ui.picker.parentNode.removeChild(self.ui.picker);
+				for (var name in self) {
+					self[name] = null;
+					delete self[name];
+				};
+				self.disposed = true;
+			}, 300);
 		}
 	});
 

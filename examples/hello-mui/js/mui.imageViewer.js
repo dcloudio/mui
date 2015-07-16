@@ -127,7 +127,7 @@
 				if (touches.length == 2) {
 					var p1 = touches[0];
 					var p2 = touches[1];
-					var x = p1.pageX = p2.pageX; //x1-x2
+					var x = p1.pageX - p2.pageX; //x1-x2
 					var y = p1.pageY - p2.pageY; //y1-y2
 					self.scaleStart = Math.sqrt(x * x + y * y);
 					self.isMultiTouch = true;
@@ -143,7 +143,7 @@
 					event.cancelBubble = true;
 					var p1 = touches[0];
 					var p2 = touches[1];
-					var x = p1.pageX = p2.pageX;
+					var x = p1.pageX - p2.pageX;
 					var y = p1.pageY - p2.pageY;
 					self.scaleEnd = Math.sqrt(x * x + y * y);
 					self._scaleValue = (self.scaleValue * (self.scaleEnd / self.scaleStart));

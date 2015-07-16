@@ -1,5 +1,5 @@
 /**
- * 分组列表
+ * IndexedList
  * 类似联系人应用中的联系人列表，可以按首字母分组
  * 右侧的字母定位工具条，可以快速定位列表位置
  * varstion 1.0.0
@@ -13,16 +13,16 @@
 		return '.' + $.className(name);
 	}
 
-	var GroupList = $.GroupList = $.Class.extend({
+	var IndexedList = $.IndexedList = $.Class.extend({
 		/**
-		 * 通过 element 和 options 构造 GroupList 实例
+		 * 通过 element 和 options 构造 IndexedList 实例
 		 **/
 		init: function(holder, options) {
 			var self = this;
 			self.options = options || {};
 			self.box = holder;
 			if (!self.box) {
-				throw "实例 GroupList 时需要指定 element";
+				throw "实例 IndexedList 时需要指定 element";
 			}
 			self.createDom();
 			self.findElements();

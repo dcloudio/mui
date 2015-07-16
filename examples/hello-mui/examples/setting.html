@@ -136,14 +136,20 @@
 				width: 40px;
 				height: 40px;
 			}
-			#head-img1{
+			#head-img1 {
 				position: absolute;
-				bottom: 10px;right: 40px;
-				width: 40px;height: 40px;
+				bottom: 10px;
+				right: 40px;
+				width: 40px;
+				height: 40px;
 			}
-			.update{font-style: normal;color: #999999;margin-right: -25px;font-size: 15px}
-			
-			.mui-fullscreen{
+			.update {
+				font-style: normal;
+				color: #999999;
+				margin-right: -25px;
+				font-size: 15px
+			}
+			.mui-fullscreen {
 				position: fixed;
 				z-index: 20;
 				background-color: #000;
@@ -152,6 +158,7 @@
 				position: static;
 			}
 		</style>
+		<link rel="stylesheet" type="text/css" href="../css/feedback-page.css" />
 	</head>
 
 	<body>
@@ -207,7 +214,7 @@
 							</li>
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell"> 
+							<li class="mui-table-view-cell">
 								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V2.0.0</i></a>
 							</li>
 						</ul>
@@ -448,7 +455,7 @@
 				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
 					<span class="mui-icon mui-icon-left-nav"></span>设置
 				</button>
-				<h1 class="mui-center mui-title">关于MUI</h1> 
+				<h1 class="mui-center mui-title">关于MUI</h1>
 			</div>
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
@@ -467,6 +474,9 @@
 								<a id="tel" class="mui-navigate-right">客服电话</a>
 							</li>
 							<li class="mui-table-view-cell">
+								<a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
+							</li>
+							<li class="mui-table-view-cell">
 								<a id="update" class="mui-navigate-right">检查更新</a>
 							</li>
 						</ul>
@@ -474,9 +484,40 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="feedback" class="mui-page feedback">
+			<div class="mui-navbar-inner mui-bar mui-bar-nav">
+				<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+					<span class="mui-icon mui-icon-left-nav"></span>关于MUI
+				</button>
+				<h1 class="mui-center mui-title">问题反馈</h1>
+			</div>
+			<div class="mui-page-content">
+				<p>问题和意见</p>
+				<div class="row mui-input-row">
+					<textarea id='question' class="mui-input-clear question" placeholder="请详细描述你的问题和意见..."></textarea>
+				</div>
+				<p>图片(选填,提供问题截图)</p>
+				<div id='image-list' class="row image-list">
+				</div>
+				<p>QQ/邮箱</p>
+				<div class="mui-input-row">
+					<input id='contact' type="text" class="mui-input-clear  contact" placeholder="(选填,方便我们联系你 )" />
+				</div>
+				<button id='submit' type="button" class="mui-btn mui-btn-green">提交</button>
+			</div>
+			<p>此示例基于环信 “WebIM SDK” + 环信 “移动客服” 实现，在环信 “移动客服面板” 能够查阅反馈信息。</p>
+		</div>
+
 	</body>
 	<script src="../js/mui.min.js "></script>
 	<script src="../js/mui.view.js "></script>
+	<script src='../libs/easymob-webim-sdk/jquery-1.11.1.js'></script>
+	<script src='../libs/easymob-webim-sdk/strophe-custom-2.0.0.js'></script>
+	<script src='../libs/easymob-webim-sdk/json2.js'></script>
+	<script src="../libs/easymob-webim-sdk/easemob.im-1.0.5.js"></script>
+	<script src='../js/feedback.js'></script>
+	<script src="../js/feedback-page.js"></script>
 	<script>
 		mui.init();
 		 //初始化单页view
@@ -499,11 +540,11 @@
 				console.log("获取分享服务列表失败");
 			});
 			defaultImg();
-			setTimeout(function () {
+			setTimeout(function() {
 				initImgPreview();
-			},500);
+			}, 500);
 		});
-		//分享链接点击事件
+		 //分享链接点击事件
 		document.getElementById("share").addEventListener('tap', function() {
 			var ids = [{
 					id: "weixin",
@@ -515,8 +556,8 @@
 					id: "sinaweibo"
 				}, {
 					id: "tencentweibo"
-				},{
-					id:"qq"
+				}, {
+					id: "qq"
 				}],
 				bts = [{
 					title: "发送给微信好友"
@@ -526,7 +567,7 @@
 					title: "分享到新浪微博"
 				}, {
 					title: "分享到腾讯微博"
-				},{
+				}, {
 					title: "分享到QQ"
 				}];
 			plus.nativeUI.actionSheet({
@@ -537,7 +578,7 @@
 				if (i > 0) {
 					var s_id = ids[i - 1].id;
 					var share = shares[s_id];
-					if(share){
+					if (share) {
 						if (share.authenticated) {
 							shareMessage(share, ids[i - 1].ex);
 						} else {
@@ -547,7 +588,7 @@
 								console.log("认证授权失败：" + e.code + " - " + e.message);
 							});
 						}
-					}else{
+					} else {
 						mui.toast("无法获取分享服务，请检查manifest.json中分享插件参数配置，并重新打包")
 					}
 				}
@@ -589,26 +630,29 @@
 		document.getElementById("tel").addEventListener('tap', function() {
 			plus.device.dial("114");
 		});
-//		//意见反馈
-//		document.getElementById("quest").addEventListener('tap', function() {
-//			
-//		});
-//		
+		 //		//意见反馈
+		 //		document.getElementById("quest").addEventListener('tap', function() {
+		 //			
+		 //		});
+		 //		
 		 //检查更新
 		document.getElementById("update").addEventListener('tap', function() {
-			var server="http://www.dcloud.io/check/update";//获取升级描述文件服务器地址
-			mui.getJSON(server,{"appid":plus.runtime.appid,"version":plus.runtime.version,"imei":plus.device.imei},function (data) {
-				if(data.status){
-					plus.ui.confirm( data.note, function(i){
-						if ( 0==i ) {
-							plus.runtime.openURL( data.url );
+			var server = "http://www.dcloud.io/check/update"; //获取升级描述文件服务器地址
+			mui.getJSON(server, {
+				"appid": plus.runtime.appid,
+				"version": plus.runtime.version,
+				"imei": plus.device.imei
+			}, function(data) {
+				if (data.status) {
+					plus.ui.confirm(data.note, function(i) {
+						if (0 == i) {
+							plus.runtime.openURL(data.url);
 						}
-					}, data.title, ["立即更新","取　　消"] );
-				}else{
+					}, data.title, ["立即更新", "取　　消"]);
+				} else {
 					mui.toast('Hello MUI 已是最新版本~')
-				} 
+				}
 			});
-
 		});
 		var view = viewApi.view;
 		(function($) {
@@ -636,7 +680,7 @@
 				//				console.log(e.detail.page.id + ' back');
 			});
 		})(mui);
-		//更换头像
+		 //更换头像
 		mui(".mui-table-view-cell").on("tap", "#head", function(e) {
 			var a = [{
 				title: "拍照"
@@ -687,40 +731,40 @@
 		function galleryImg() {
 			plus.gallery.pick(function(a) {
 				plus.io.resolveLocalFileSystemURL(a, function(entry) {
-					plus.io.resolveLocalFileSystemURL("_doc/", function (root) {
-						root.getFile("head.jpg",{},function (file) {
+					plus.io.resolveLocalFileSystemURL("_doc/", function(root) {
+						root.getFile("head.jpg", {}, function(file) {
 							//文件已存在
-							file.remove(function () {
+							file.remove(function() {
 								console.log("file remove success");
 								entry.copyTo(root, 'head.jpg', function(e) {
-									var e = e.fullPath + "?version=" + new Date().getTime();
-									document.getElementById("head-img").src = e;
-									document.getElementById("head-img1").src = e;
-									//变更大图预览的src
-									//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-									document.querySelector("#__mui-imageview__group .mui-slider-item img").src = e + "?version=" + new Date().getTime();;
-								},
-								function(e) {
-									console.log('copy image fail:'+e.message);
-								});
-							},function () {
-								console.log("delete image fail:"+e.message);
+										var e = e.fullPath + "?version=" + new Date().getTime();
+										document.getElementById("head-img").src = e;
+										document.getElementById("head-img1").src = e;
+										//变更大图预览的src
+										//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
+										document.querySelector("#__mui-imageview__group .mui-slider-item img").src = e + "?version=" + new Date().getTime();;
+									},
+									function(e) {
+										console.log('copy image fail:' + e.message);
+									});
+							}, function() {
+								console.log("delete image fail:" + e.message);
 							});
-						},function () {
+						}, function() {
 							//文件不存在
 							entry.copyTo(root, 'head.jpg', function(e) {
-								var path = e.fullPath + "?version=" + new Date().getTime();
-								document.getElementById("head-img").src = path;
-								document.getElementById("head-img1").src = path;
-								//变更大图预览的src
-								//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-								document.querySelector("#__mui-imageview__group .mui-slider-item img").src = path;
-							},
-							function(e) {
-								console.log('copy image fail:'+e.message);
-							});
+									var path = e.fullPath + "?version=" + new Date().getTime();
+									document.getElementById("head-img").src = path;
+									document.getElementById("head-img1").src = path;
+									//变更大图预览的src
+									//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
+									document.querySelector("#__mui-imageview__group .mui-slider-item img").src = path;
+								},
+								function(e) {
+									console.log('copy image fail:' + e.message);
+								});
 						});
-					},function (e) {
+					}, function(e) {
 						console.log("get _www folder fail");
 					})
 				}, function(e) {
@@ -733,7 +777,7 @@
 
 		function defaultImg() {
 			plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
-				var s = entry.fullPath+ "?version=" + new Date().getTime();;
+				var s = entry.fullPath + "?version=" + new Date().getTime();;
 				document.getElementById("head-img").src = s;
 				document.getElementById("head-img1").src = s;
 			}, function(e) {
@@ -741,68 +785,62 @@
 				document.getElementById("head-img1").src = '../images/logo.png';
 			})
 		}
-		 
-		document.getElementById("head-img1").addEventListener('tap',function (e) {
+		document.getElementById("head-img1").addEventListener('tap', function(e) {
 			e.stopPropagation();
 		});
-		
-		document.getElementById("welcome").addEventListener('tap',function (e) {
+		document.getElementById("welcome").addEventListener('tap', function(e) {
 			//显示启动导航
 			mui.openWindow({
-				id:'guide',
-				url:'guide.html',
-				show:{
-					aniShow:'fade-in',
-					duration:300
+				id: 'guide',
+				url: 'guide.html',
+				show: {
+					aniShow: 'fade-in',
+					duration: 300
 				},
-				waiting:{
-					autoShow:false
+				waiting: {
+					autoShow: false
 				}
 			});
 		});
-		
-		function initImgPreview () {
+
+		function initImgPreview() {
 			var imgs = document.querySelectorAll("img.mui-action-preview");
 			imgs = mui.slice.call(imgs);
-			if(imgs&&imgs.length>0){
+			if (imgs && imgs.length > 0) {
 				var slider = document.createElement("div");
-				slider.setAttribute("id","__mui-imageview__");
+				slider.setAttribute("id", "__mui-imageview__");
 				slider.classList.add("mui-slider");
 				slider.classList.add("mui-fullscreen");
 				slider.style.display = "none";
-				slider.addEventListener("tap",function () {
+				slider.addEventListener("tap", function() {
 					slider.style.display = "none";
 				});
-				slider.addEventListener("touchmove",function (event) {
+				slider.addEventListener("touchmove", function(event) {
 					event.preventDefault();
 				})
-				
 				var slider_group = document.createElement("div");
-				slider_group.setAttribute("id","__mui-imageview__group");
+				slider_group.setAttribute("id", "__mui-imageview__group");
 				slider_group.classList.add("mui-slider-group");
-				
-				imgs.forEach(function (value,index,array) {
+				imgs.forEach(function(value, index, array) {
 					//给图片添加点击事件，触发预览显示；
-					value.addEventListener('tap',function () {
+					value.addEventListener('tap', function() {
 						slider.style.display = "block";
 						_slider.refresh();
-						_slider.gotoItem(index,0);
+						_slider.gotoItem(index, 0);
 					})
-					
 					var item = document.createElement("div");
 					item.classList.add("mui-slider-item");
 					var a = document.createElement("a");
 					var img = document.createElement("img");
-					img.setAttribute("src",value.src);
+					img.setAttribute("src", value.src);
 					a.appendChild(img)
 					item.appendChild(a);
 					slider_group.appendChild(item);
 				});
-				
 				slider.appendChild(slider_group);
 				document.body.appendChild(slider);
 				var _slider = mui(slider).slider();
-			}			
+			}
 		}
 	</script>
 

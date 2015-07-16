@@ -280,14 +280,14 @@
 				new Locker(element, options);
 			} else {
 				var optionsText = element.getAttribute('data-locker-options');
-				var options = optionsText ? JSON.parse(optionsText) : {};
-				options.lineColor = element.getAttribute('data-locker-line-color') || options.lineColor;
-				options.ringColor = element.getAttribute('data-locker-ring-color') || options.ringColor;
-				options.fillColor = element.getAttribute('data-locker-fill-color') || options.fillColor;
-				options.pointColor = element.getAttribute('data-locker-point-color') || options.pointColor;
-				options.width = element.getAttribute('data-locker-width') || options.width;
-				options.height = element.getAttribute('data-locker-height') || options.height;
-				new Locker(element, options);
+				var _options = optionsText ? JSON.parse(optionsText) : {};
+				_options.lineColor = element.getAttribute('data-locker-line-color') || _options.lineColor;
+				_options.ringColor = element.getAttribute('data-locker-ring-color') || _options.ringColor;
+				_options.fillColor = element.getAttribute('data-locker-fill-color') || _options.fillColor;
+				_options.pointColor = element.getAttribute('data-locker-point-color') || _options.pointColor;
+				_options.width = element.getAttribute('data-locker-width') || _options.width;
+				_options.height = element.getAttribute('data-locker-height') || _options.height;
+				new Locker(element, _options);
 			}
 		});
 		return this;
