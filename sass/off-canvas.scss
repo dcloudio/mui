@@ -1,0 +1,84 @@
+//.#{$namespace}android{
+.#{$namespace}off-canvas-wrap{
+    .#{$namespace}bar{//fix android
+       position: absolute!important;
+    }
+   } 
+//}
+
+.#{$namespace}off-canvas-wrap{
+    position: relative;
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: z("default");
+    .#{$namespace}inner-wrap{
+        position: relative;
+        width: 100%;
+        height:100%;
+        z-index: z("default");
+        &.#{$namespace}transitioning{
+            -webkit-transition: -webkit-transform 200ms ease;
+            transition: transform 200ms ease;    
+        }
+        .#{$namespace}off-canvas-left {
+            @include transform(translate3d(-100%, 0, 0));
+        }
+        .#{$namespace}off-canvas-right{
+            @include transform(translate3d(100%, 0, 0));
+        }
+    }
+    &.#{$namespace}active{
+         overflow:hidden;
+         height:100%;
+         .#{$namespace}off-canvas-backdrop{
+             -webkit-backface-visibility: hidden;
+            transition: background 200ms ease;
+            box-shadow: -4px 0 4px rgba(0, 0, 0, 0.5), 4px 0 4px rgba(0, 0, 0, 0.5);
+            display: block;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.4);
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: z("backdrop");
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);   
+         } 
+    }
+    &.#{$namespace}slide-in{
+        .#{$namespace}off-canvas-right {
+            -webkit-transform: translate3d(100%, 0px, 0px);
+            z-index: z("max")!important;
+        }
+        .#{$namespace}off-canvas-left {
+            -webkit-transform: translate3d(-100%, 0px, 0px);
+            z-index: z("max")!important;
+        }
+    }
+}
+
+
+.#{$namespace}off-canvas-left, .#{$namespace}off-canvas-right {
+    -webkit-backface-visibility: hidden;
+    width: 70%;
+    min-height:100%;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    background: #333;
+    box-sizing: content-box;
+    -webkit-overflow-scrolling: touch;
+    z-index: -1;
+    visibility: hidden;
+    &.#{$namespace}transitioning{
+        -webkit-transition: -webkit-transform 200ms ease;
+        transition: transform 200ms ease;    
+    }
+}
+.#{$namespace}off-canvas-left {
+    left: 0;
+}
+.#{$namespace}off-canvas-right {
+    right: 0;
+}

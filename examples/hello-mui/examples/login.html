@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<style>
+			h5,
+			p,
+			ol,
+			li {
+				color: #666;
+				font-size: 14px;
+			}
+			h5 {
+				font-weight: bold;
+			}
+			p,
+			ol {
+				padding: 5px auto;
+				margin-bottom: 20px;
+			}
+			p,
+			li {
+				color: #999;
+			}
+			img {
+				width: 90%;
+				border: solid 1px #ddd;
+				border-radius: 5px;
+				box-shadow: 0px 0px 5px 1px #aaa;
+				margin: 5px auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">login（登录）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<h5>简单说明</h5>
+				<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们为 “登录模板” 制作了一独立的 “演示应用”，包括 “账号密码登录、第三方账号登录、账号注册、手势锁屏、分享” 等功能演示。
+				</p>
+				<h5>体验方式</h5>
+				<ol>
+					<li>在 HBuilder 中新建“移动App”工程，选择 “mui登录模板” ；</li>
+					<li>在 GitHub 上查看或下载 <a _src='https://github.com/dcloudio/mui/tree/master/examples/login'>登录模板源码</a> 。
+					</li>
+				</ol>
+				<h5>演示截图</h5>
+				<p style="text-align: center;">
+					<img src="../images/login-1.png" />
+				</p>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			(function(mui, window, document, undefined) {
+				mui.init();
+				var qsa = function() {
+					return [].slice.call(document.querySelectorAll.apply(document, arguments));
+				};
+				qsa("[_src]").forEach(function(item) {
+					item.addEventListener('tap', function() {
+						var url = this.getAttribute('_src');
+						if (url) {
+							plus.runtime.openURL(url);
+						};
+					}, false);
+				});
+			})(mui, window, document, undefined);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,11 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+.mui-android header.mui-bar{
+	display: none;
+}
+.mui-android .mui-bar-nav~.mui-content{
+	padding: 0;
+}

@@ -1,0 +1,203 @@
+//
+// Popovers (to be used with popovers.js)
+// --------------------------------------------------
+
+.#{$namespace}popover {
+    position: absolute;
+    z-index: z("popover","popover");
+    display: none;
+    width: 280px;
+    background-color: $chrome-color;
+    border-radius: 7px;
+    opacity: 0;
+    @include box-shadow(0 0 15px rgba(0, 0, 0, .1));
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
+    -webkit-transform: none;
+    transform: none;
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+   .#{$namespace}popover-arrow{
+        width: 26px;
+        height: 26px;
+        position: absolute;
+        left: 0px;
+        top: -25px;
+        z-index: z("popover","arrow");
+        overflow: hidden;
+        &:after {
+            content: ' ';
+            background: $chrome-color;
+            width: 26px;
+            height: 26px;
+            position: absolute;
+            left: 0;
+            top: 19px;
+            border-radius: 3px;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        &.#{$namespace}bottom{
+            left:-26px;
+            top: 100%;
+            margin-top: -1px;
+            &:after {
+                left: 0;
+                top: -19px;
+            }
+        }
+   }
+   
+   &.#{$namespace}popover-action{
+        //display: block;//加上后可实现从底部出来动画效果，但会导致html页面高度增加
+        bottom:0;
+        width: 100%;
+        border-radius:0;
+        @include transform(translate3d(0, 100%, 0));
+        -webkit-transition: -webkit-transform .3s, opacity .3s;
+        transition: transform .3s, opacity .3s;
+        background: none;
+        @include box-shadow(none);
+        .#{$namespace}popover-arrow{
+            display: none;
+        }
+
+        &.#{$namespace}popover-bottom{
+            position: fixed;
+        }
+
+        // Active modal
+        &.#{$namespace}active {
+            @include transform(translate3d(0, 0, 0));
+        }
+        .#{$namespace}table-view {
+            margin: 8px;
+            border-radius:4px;
+            text-align: center;
+            color: $primary-color;
+            .#{$namespace}table-view-cell {
+                @include hairline(single, #c8c7cc, 0); // Single grey border with 15px offset.
+            }
+            small{
+                line-height: 1.3;
+                font-weight: 400;
+                display: block;
+            }
+        }
+
+    }
+
+    // Popover transition
+    // --------------------------------------------------
+
+    &.#{$namespace}active {
+        display: block;
+        opacity: 1;
+    }
+
+    // Give correct spacing to the content if there is a bar inside the popover.
+    .#{$namespace}bar ~ .#{$namespace}table-view {
+        padding-top: $bar-base-height;
+    }
+}
+
+// Backdrop (used as invisible touch escape)
+// --------------------------------------------------
+
+.#{$namespace}backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: z("backdrop");
+    background-color: rgba(0,0,0,.3);
+}
+
+.#{$namespace}bar-backdrop.#{$namespace}backdrop{
+    bottom: 50px;
+    background:none;
+}
+.#{$namespace}backdrop-action.#{$namespace}backdrop{
+   // bottom:50px;
+    background-color: rgba(0,0,0,.3);
+}
+.#{$namespace}bar-backdrop.#{$namespace}backdrop,.#{$namespace}backdrop-action.#{$namespace}backdrop{
+    opacity:0;
+    &.#{$namespace}active {
+        opacity: 1;
+        @include transition(all 0.4s ease);
+    }
+}
+// Block level buttons in popovers
+// --------------------------------------------------
+
+.#{$namespace}popover .#{$namespace}btn-block {
+    margin-bottom: 5px;
+
+    // Remove extra margin on bottom of last button
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+// Popovers with nav bars
+// --------------------------------------------------
+.#{$namespace}popover .#{$namespace}bar {
+    @include box-shadow(none);
+}
+.#{$namespace}popover .#{$namespace}bar-nav {
+    border-bottom: 1px solid rgba(0,0,0,.15);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    @include box-shadow(none);
+}
+
+// scroll in popovers
+.#{$namespace}popover .#{$namespace}scroll-wrapper{
+    background-clip: padding-box;
+    border-radius: 7px;
+    margin: 7px 0;// border radius not work(fixed android)
+}
+// Table views in popovers
+// --------------------------------------------------
+.#{$namespace}popover .#{$namespace}scroll .#{$namespace}table-view{
+    max-height: none;
+}
+.#{$namespace}popover .#{$namespace}table-view {
+    max-height: 300px;
+    margin-bottom: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: $chrome-color;
+    background-image: none;
+    border-radius: 7px;
+    &:before,&:after{
+        height: 0;
+    }
+    .#{$namespace}table-view-cell:first-child{
+        &,
+        > a:not(.mui-btn){
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;     
+        }
+    }
+    .#{$namespace}table-view-cell:last-child{
+        &,
+        > a:not(.mui-btn){
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+    }
+}
+.#{$namespace}popover.#{$namespace}bar-popover .#{$namespace}table-view{
+    width:106px;
+    .#{$namespace}table-view-cell{
+        padding:11px 15px 11px 15px;
+        background-position:0px 100%;
+    }
+    .#{$namespace}table-view-cell > a:not(.#{$namespace}btn){
+        margin:-11px -15px -11px -15px;
+    }
+}

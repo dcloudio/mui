@@ -1,0 +1,123 @@
+.mui-imageviewer {
+	position: absolute;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.9);
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+	left: 0px;
+	top: 0px;
+	display: none;
+	opacity: 0;
+	-webkit-transition: all 0.6s ease-in-out;
+	transition: all 0.6s ease-in-out;
+	-webkit-transform-style: preserve-3d;
+	-webkit-backface-visibility: hidden;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+.mui-imageviewer-mask {
+	position: absolute;
+	z-index: 11;
+	width: 100%;
+	height: 100%;
+	left: 0px;
+	top: 0px;
+	display: none;
+}
+.mui-imageviewer .mui-imageviewer-header {
+	position: absolute;
+	height: 45px;
+	width: 100%;
+	left: 0px;
+	top: 0px;
+	z-index: 10;
+	background-color: rgba(0, 0, 0, 0.5);
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+.mui-imageviewer .mui-imageviewer-state {
+	display: block;
+	width: 100%;
+	height: 100%;
+	line-height: 100%;
+	color: #eee;
+	text-align: center;
+	font-size: 16px;
+	padding: 15px;
+}
+.mui-imageviewer .mui-imageviewer-header .mui-imageviewer-close {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 32px;
+	color: #aaa;
+}
+.mui-imageviewer .mui-imageviewer-header .mui-imageviewer-close:active {
+	color: #FF5053;
+}
+.mui-imageviewer .mui-imageviewer-item {
+	width: 100%;
+	height: 100%;
+	left: 0px;
+	top: 0px;
+	position: absolute;
+	z-index: 0;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	-webkit-transition: -webkit-transform 500ms ease-in-out;
+	transition: transform 500ms ease-in-out;
+	display: table;
+	overflow: hidden;
+}
+.mui-imageviewer .mui-imageviewer-item-center {
+	-webkit-transform: translateX(0);
+	transform: translateX(0);
+}
+.mui-imageviewer .mui-imageviewer-item-left {
+	-webkit-transform: translateX(-100%);
+	transform: translateX(-100%);
+}
+.mui-imageviewer .mui-imageviewer-item-right {
+	-webkit-transform: translateX(100%);
+	transform: translateX(100%);
+}
+.mui-imageviewer .mui-imageviewer-item span {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	font-size: 100%;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	overflow: auto;
+}
+.mui-imageviewer .mui-imageviewer-item img {
+	backface-visibility: hidden;
+	transform-origin: 50% 50% 0px;
+	max-width: 100%;
+}
+.mui-imageviewer-left,
+.mui-imageviewer-right {
+	position: absolute;
+	z-index: 2;
+	color: #aaa;
+	top: 50%;
+	margin-top: -18px;
+	font-size: 36px;
+}
+.mui-imageviewer-left {
+	left: 5px;
+}
+.mui-imageviewer-right {
+	right: 5px;
+}
+.mui-imageviewer-left:active,
+.mui-imageviewer-right:active {
+	color: #fff;
+}

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				min-height: 100%;
+				background-color: #efeff4;
+			}
+			.animated {
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			@-webkit-keyframes bounceInDown {
+				0%, 60%, 75%, 90%, 100% {
+					-webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+					transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+				}
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+				60% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 25px, 0);
+					transform: translate3d(0, 25px, 0);
+				}
+				75% {
+					-webkit-transform: translate3d(0, -10px, 0);
+					transform: translate3d(0, -10px, 0);
+				}
+				90% {
+					-webkit-transform: translate3d(0, 5px, 0);
+					transform: translate3d(0, 5px, 0);
+				}
+				100% {
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+			@keyframes bounceInDown {
+				0%, 60%, 75%, 90%, 100% {
+					-webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+					transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+				}
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+				60% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 25px, 0);
+					transform: translate3d(0, 25px, 0);
+				}
+				75% {
+					-webkit-transform: translate3d(0, -10px, 0);
+					transform: translate3d(0, -10px, 0);
+				}
+				90% {
+					-webkit-transform: translate3d(0, 5px, 0);
+					transform: translate3d(0, 5px, 0);
+				}
+				100% {
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+			.bounce-in-down {
+				-webkit-animation-name: bounceInDown;
+				animation-name: bounceInDown;
+			}
+			@-webkit-keyframes fadeInDown {
+				0%, 60%, 75%, 90%, 100% {
+					-webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+					transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+				}
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+				60% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				75% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				90% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				100% {
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+			@keyframes fadeInDown {
+				0%, 60%, 75%, 90%, 100% {
+					-webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+					transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+				}
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+				60% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				75% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				90% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				100% {
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+			.fade-in-down {
+				-webkit-animation-name: fadeInDown;
+				animation-name: fadeInDown;
+			}
+			@-webkit-keyframes bounceOutUp {
+				20% {
+					-webkit-transform: translate3d(0, -10px, 0);
+					transform: translate3d(0, -10px, 0);
+				}
+				40%,
+				45% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 20px, 0);
+					transform: translate3d(0, 20px, 0);
+				}
+				100% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+			}
+			@keyframes bounceOutUp {
+				20% {
+					-webkit-transform: translate3d(0, -10px, 0);
+					transform: translate3d(0, -10px, 0);
+				}
+				40%,
+				45% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 20px, 0);
+					transform: translate3d(0, 20px, 0);
+				}
+				100% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+			}
+			.bounce-out-up {
+				-webkit-animation-name: bounceOutUp;
+				animation-name: bounceOutUp;
+			}
+			@-webkit-keyframes fadeOutUp {
+				20% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				40%,
+				45% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				100% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+			}
+			@keyframes fadeOutUp {
+				20% {
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				40%,
+				45% {
+					opacity: 1;
+					-webkit-transform: translate3d(0, 0px, 0);
+					transform: translate3d(0, 0px, 0);
+				}
+				100% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+			}
+			.fade-out-up {
+				-webkit-animation-name: fadeOutUp;
+				animation-name: fadeOutUp;
+			}
+			.menu-open {
+				height: 100%;
+				width: 100%;
+			}
+			.menu-open .mui-scroll-wrapper {
+				position: absolute;
+				top: 48;
+				bottom: 0;
+				left: 0;
+				z-index: 1;
+				width: 100%;
+				overflow: hidden;
+				-webkit-backface-visibility: hidden;
+			}
+			.menu-backdrop {
+				display: none;
+			}
+			.menu-open .menu-backdrop {
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				height: 100%;
+				width: 100%;
+				display: block;
+				z-index: 998;
+			}
+			.menu-wrapper {
+				position: absolute;
+				top: 48px;
+				left: 0;
+				right: 0;
+				z-index: 999;
+				text-align: center;
+				background-color: #333;
+				width: 100%;
+			}
+			.menu-wrapper.hidden {
+				-webkit-transform: translate3d(0, -100%, 0);
+				transform: translate3d(0, -100%, 0);
+				z-index: -1;
+			}
+			.menu {
+				width: 100%;
+			}
+			.menu .mui-table-view-inverted {
+				color: gray;
+				font-size: 19px;
+			}
+			.menu .mui-table-view-inverted .mui-table-view-cell:after {
+				height: 2px;
+				left: 0;
+				right: 0;
+			}
+			.menu-wrapper.mui-active,
+			.menu-wrapper.mui-active .menu {
+				-webkit-transform: translate3d(0, 0, 0);
+				transform: translate3d(0, 0, 0);
+			}
+			#info{
+			  	padding: 20px 10px ;
+			 }
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a id="icon-menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-left"></a>
+			<a class="mui-action-back mui-btn mui-btn-link mui-pull-right">关闭</a>
+			<h1 class="mui-title">div模式下拉菜单</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" >
+				<p>这是div模式下沉菜单示例，主页面和菜单在一个HTML文件中，
+					
+					当前页面为主界面，你可以在主界面放置任何内容；
+					 打开侧滑菜单有多种方式：  1、点击页面左上角的
+					<span class="mui-icon mui-icon-bars"></span> 图标；
+					 2、通过JS API触发（例如点击如下蓝色按钮体验）；
+					 <span class="android-only">3、Android手机按menu键；</span>
+				</p>
+				<p style="padding: 5px 20px;margin-bottom: 5px;">
+					<button id="menu-btn" type="button" class="mui-btn mui-btn-primary mui-btn-block" style="padding: 10px;">
+						显示下拉菜单
+					</button>
+				</p>
+				<div id="info"></div>
+			</div>
+			
+		</div>
+		<div id="menu-wrapper" class="menu-wrapper hidden">
+			<div id="menu" class="menu">
+				<ul class="mui-table-view mui-table-view-inverted">
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 1</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 2</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 3</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 4</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 5</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 6</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="javascript:;">Item 7</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="menu-backdrop" class="menu-backdrop"></div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+			var menuWrapper = document.getElementById("menu-wrapper");
+			var menu = document.getElementById("menu");
+			var menuWrapperClassList = menuWrapper.classList;
+			var backdrop = document.getElementById("menu-backdrop");
+			var info = document.getElementById("info");
+			
+			backdrop.addEventListener('tap', toggleMenu);
+			document.getElementById("menu-btn").addEventListener('tap', toggleMenu);
+			document.getElementById("icon-menu").addEventListener('tap',toggleMenu)
+			//下沉菜单中的点击事件
+			mui('#menu').on('tap', 'a', function() {
+				toggleMenu();
+				info.innerHTML = '你已选择：'+this.innerHTML;
+			});
+			var busying = false;
+
+			function toggleMenu() {
+				if (busying) {
+					return;
+				}
+				busying = true;
+				if (menuWrapperClassList.contains('mui-active')) {
+					document.body.classList.remove('menu-open');
+					menuWrapper.className = 'menu-wrapper fade-out-up animated';
+					menu.className = 'menu bounce-out-up animated';
+					setTimeout(function() {
+						backdrop.style.opacity = 0;
+						menuWrapper.classList.add('hidden');
+					}, 500);
+				} else {
+					document.body.classList.add('menu-open');
+					menuWrapper.className = 'menu-wrapper fade-in-down animated mui-active';
+					menu.className = 'menu bounce-in-down animated';
+					backdrop.style.opacity = 1;
+				}
+				setTimeout(function() {
+					busying = false;
+				}, 500);
+			}
+		</script>
+	</body>
+
+</html>

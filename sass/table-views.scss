@@ -1,0 +1,482 @@
+//
+// Table views
+// --------------------------------------------------
+
+.#{$namespace}table-view {
+    position: relative;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style: none; // Remove usual bullet styles from table view
+    background-color: #fff;
+//  border-color:#c8c7cc;
+//  border-width: 1px 0px 1px 0px;
+//  border-style: solid;
+    @include hairline(double, #c8c7cc, 0); // Double grey border.
+
+}
+//.#{$namespace}table-view-striped>li:nth-child(odd){
+//  background-color: #f9f9f9;
+//  >.#{$namespace}slider-cell{
+//      >.#{$namespace}slider-left ~ .#{$namespace}slider-handle,>.#{$namespace}slider-right ~ .#{$namespace}slider-handle{
+//          background-color:#f9f9f9;
+//      }
+//  }
+//}
+.#{$namespace}table-view-icon .#{$namespace}table-view-cell{
+    .#{$namespace}navigate-right .#{$namespace}icon{
+        font-size: 20px;
+        margin-left: -5px;
+        margin-right: 5px;
+        margin-top: -1px;
+    }
+   &:after{
+       left:40px;
+   }
+}
+.#{$namespace}table-view-chevron .#{$namespace}table-view-cell{
+    padding-right: 65px;
+    > a:not(.#{$namespace}btn) {
+        margin-right: -65px;
+    }
+}
+.#{$namespace}table-view-radio .#{$namespace}table-view-cell{
+    padding-right: 65px;
+    > a:not(.#{$namespace}btn) {
+        margin-right: -65px;
+    }
+    .#{$namespace}navigate-right:after{
+        right:9px;
+        content: '';
+        color:$primary-color;
+        font-size: 30px;
+        font-weight: 600;
+    }
+    &.#{$namespace}selected .#{$namespace}navigate-right:after{
+        content: '\e472';
+    }
+}
+//.#{$namespace}table-view-slider .#{$namespace}table-view-cell{
+//  padding:11px 0;
+//  > a:not(.#{$namespace}btn) {
+//      margin-right: 0;
+//  }
+//}
+.#{$namespace}table-view-inverted {
+    background: #333;
+    color: #fff;
+    @include hairline(double, #222, 0); // Double grey border.
+    .#{$namespace}table-view-cell{
+        @include hairline(single, #222, 15px); // Single grey border with 15px offset.
+        &.#{$namespace}active {
+                background-color: #242424;
+            } 
+        > a:not(.#{$namespace}btn) {
+            &.#{$namespace}active {
+                background-color: #242424;
+            }
+        } 
+    }
+}
+// Pad each table view item and add dividers
+.#{$namespace}table-view-cell {
+    position: relative;
+    padding: 11px 15px;
+    overflow: hidden;
+    background-color: inherit;
+    @include hairline(single, #c8c7cc, 15px); // Single grey border with 15px offset.
+    -webkit-touch-callout: none;//禁止长按出现打开菜单；
+    &.#{$namespace}radio input[type=radio],&.#{$namespace}checkbox input[type=checkbox]{
+        top:8px;
+    }
+    &.#{$namespace}radio.#{$namespace}left,&.#{$namespace}checkbox.#{$namespace}left{
+        padding-left: 58px;
+    }
+    &.#{$namespace}active {
+        background-color: #eee;
+//      >.#{$namespace}slider-cell{
+//          >.#{$namespace}slider-left ~ .#{$namespace}slider-handle,>.#{$namespace}slider-right ~ .#{$namespace}slider-handle{
+//              background-color:#eee;
+//          }
+//      }
+    }
+    // Remove the border from the last table view item
+    &:last-child {
+        //background-image: none;
+        &:before,&:after{
+            height:0;
+        }
+    }
+    // If it's a table view of links, make sure the child <a> takes up full table view item tap area (want to avoid selecting child buttons though)
+    > a:not(.#{$namespace}btn) {
+        position: relative;
+        display: block;
+        padding: inherit;
+        margin: -11px -15px; // Make the entire list item tappable.
+        overflow: hidden;
+        color: inherit;
+        white-space: nowrap;        
+        text-overflow: ellipsis;
+        /*&:active {
+            background-color: #eee;
+        }*/
+        &.#{$namespace}active {
+            background-color: #eee;
+        }
+    }
+    p {
+        margin-bottom: 0;
+    }
+//  >.#{$namespace}slider-cell{
+//      margin-top:1px;
+//      margin-bottom:1px;
+//      >.#{$namespace}slider-handle{
+//          position:absolute;
+//          left:0;
+//          right:0;
+//          top:0;
+//          bottom:0;
+//          @include transform(translate3d(100%, 0px, 0px));
+//      }
+//      >.#{$namespace}slider-left ~ .#{$namespace}slider-handle,>.#{$namespace}slider-right ~ .#{$namespace}slider-handle{
+//          position:relative;
+//          z-index:z("default");
+//          background-color:#fff;
+//          padding-left:15px;
+//          left:auto;
+//          right:auto;
+//          top:auto;
+//          bottom:auto;
+//          @include transform(translate3d(0px, 0px, 0px));
+//      }
+//      >.#{$namespace}slider-left,>.#{$namespace}slider-right{
+//          top:1px;
+//          bottom:1px;
+//      }
+//  }
+}
+.#{$namespace}table-view-cell {
+    &.#{$namespace}transitioning{
+    >.#{$namespace}slider-handle,>.#{$namespace}slider-left .#{$namespace}btn,>.#{$namespace}slider-right .#{$namespace}btn{
+        -webkit-transition: -webkit-transform 300ms ease;
+        transition: transform 300ms ease; 
+        }
+    }
+    &.#{$namespace}active>.#{$namespace}slider-handle{
+        background-color: #eee;
+    }
+    >.#{$namespace}slider-handle{
+        background-color: #fff;
+        position: relative;
+        &.#{$namespace}navigate-right:after,.#{$namespace}navigate-right:after{
+            right: 0;
+        }
+    }
+    >.#{$namespace}slider-handle,>.#{$namespace}slider-left .#{$namespace}btn,>.#{$namespace}slider-right .#{$namespace}btn{
+        -webkit-transition: -webkit-transform 0ms ease;
+        transition: transform 0ms ease;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        }
+     >.#{$namespace}slider-left,>.#{$namespace}slider-right{
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        position: absolute;
+        top: 0;
+        height: 100%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        >.#{$namespace}btn{
+          padding: 0 30px;
+          color: #fff;
+          border-radius:0;
+          border:0;
+//        background: #c7c7cc;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+          position: relative;
+          left: 0;
+          &:after{
+              content: '';
+              position: absolute;
+              top: 0;
+              width: 600%;
+              height: 100%;
+              background: inherit;
+              z-index: -1;
+          }
+          &.#{$namespace}icon{
+              font-size: 30px;
+          }
+        }   
+     }
+     >.#{$namespace}slider-right{
+      right: 0%;
+      -webkit-transform: translateX(100%);
+      transform: translateX(100%);
+      -webkit-transition: -webkit-transform 0ms ease;
+      transition: transform 0ms ease;
+  }
+  >.#{$namespace}slider-left{
+        left: 0;
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        -webkit-transition: -webkit-transform 0ms ease;
+        transition: transform 0ms ease;
+    > .#{$namespace}btn:after{
+        right: 100%;
+        margin-right: -1px;
+    }
+  }
+  
+}
+
+// Table view dividers
+// --------------------------------------------------
+
+.#{$namespace}table-view-divider {
+    position: relative;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 15px;
+    margin-top: -1px; // Hides the border of the previous list item
+    margin-left: 0;
+    font-weight: $font-weight;
+    color: #999;
+    background-color: #fafafa;
+    @include hairline(double, #c8c7cc, 0);  // Double (top and bottom) grey border with no offset.
+}
+
+
+// Table-views with media (images,avatars, icons)
+// --------------------------------------------------
+
+.#{$namespace}table-view .#{$namespace}media,
+.#{$namespace}table-view .#{$namespace}media-body {
+    overflow: hidden;
+}
+
+.#{$namespace}table-view {
+    .#{$namespace}media-large .#{$namespace}media-object {
+        max-width: 80px;
+        height: 80px;
+        line-height: 80px;
+    }
+    .#{$namespace}media .#{$namespace}subtitle{
+        color: #000;
+    }
+    .#{$namespace}media-object {
+        max-width: 42px;
+        height: 42px;
+        line-height: 42px;
+        &.#{$namespace}pull-left {
+            margin-right: 10px;
+        }
+        &.#{$namespace}pull-right {
+            margin-left: 10px;
+        }
+    }
+    .#{$namespace}table-view-cell.#{$namespace}media-icon{
+       .#{$namespace}media-object {
+            max-width: 29px;
+            height: 29px;
+            line-height: 29px;
+            margin:-4px 0;
+            img{
+                max-width: 29px;
+                height: 29px;
+                line-height: 29px;    
+            }
+            &.#{$namespace}pull-left {
+                margin-right: 10px;
+            }
+            .#{$namespace}icon{
+                font-size: 29px;
+            }
+        }
+        .#{$namespace}media-body{
+            @include hairline(single, #c8c7cc, 55px); // single grey border.
+        }
+       &:after{
+           height:0!important;
+       }  
+    }
+}
+.#{$namespace}table-view.#{$namespace}unfold{
+    .#{$namespace}table-view-cell.#{$namespace}collapse .#{$namespace}table-view{
+        display: block;
+        &:before,&:after{
+            height:0!important;
+        } 
+    }
+    .#{$namespace}table-view-cell.#{$namespace}media-icon.#{$namespace}collapse{
+        .#{$namespace}media-body{
+            @include hairline(single, #c8c7cc, 70px); // single grey border.
+        }
+    }
+}
+
+// Table-views with buttons, badges and switchs
+// --------------------------------------------------
+.#{$namespace}table-view-cell,
+.#{$namespace}table-view-cell > a {
+    > .#{$namespace}btn,
+    > .#{$namespace}badge,
+    > .#{$namespace}switch {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        @include transform(translateY(-50%));
+    }
+
+    // If the cell has a chevron, give some more room.
+    .#{$namespace}navigate-left,
+    .#{$namespace}navigate-right,
+    .#{$namespace}push-left,
+    .#{$namespace}push-right {
+        > .#{$namespace}btn,
+        > .#{$namespace}badge,
+        > .#{$namespace}switch {
+            right: 35px;
+        }
+    }
+}
+
+// If the table view is the first component, give it extra margin on top.
+.#{$namespace}content > .#{$namespace}table-view:first-child {
+    margin-top: 15px;
+}
+
+//collapse
+.#{$namespace}table-view-cell.#{$namespace}collapse{
+    .#{$namespace}table-view:after{
+        left:15px;
+    }
+    //二级列表默认为向下箭头；
+    >.#{$namespace}navigate-right:after, >.#{$namespace}push-right:after {
+        content: '\e581';
+    }
+
+    &.#{$namespace}active{
+        
+        .#{$namespace}table-view,.#{$namespace}collapse-content{
+            display: block;
+        }
+        //二级列表展开后，变为向上箭头；
+        >.#{$namespace}navigate-right:after, >.#{$namespace}push-right:after {
+            content: '\e580';
+        }
+    }
+    .#{$namespace}collapse-content{
+        display:none;
+        padding: 8px 15px;
+        margin: 11px -15px -11px;
+        background: white;
+        border: 1px solid #ddd;
+        position: relative;
+        overflow: hidden;
+        -webkit-transition: height .35s ease;
+        -o-transition: height .35s ease;
+        transition: height .35s ease;
+        >.#{$namespace}input-group,>.#{$namespace}slider{
+            margin:-8px -15px;
+            width:auto;
+            height:auto;
+        }
+        >.#{$namespace}slider{
+            margin:-8px -16px;
+        }
+    }
+    .#{$namespace}table-view{
+        display: none;
+        margin-bottom: -11px;
+        margin-top: 11px;
+        margin-right: -15px;
+        margin-left:-15px;
+        border: 0;
+        &.#{$namespace}table-view-chevron{
+            margin-right:-65px;
+        }
+        .#{$namespace}table-view-cell{
+            padding-left: 31px;
+            background-position: 31px 100%;
+            @include hairline(single, #c8c7cc, 30px);
+        }
+    }
+}
+//grid
+.#{$namespace}table-view.#{$namespace}grid-view{
+    display:block;
+    padding:0 10px 10px 0;
+    width:100%;
+    white-space:normal;
+    font-size:0;
+    .#{$namespace}table-view-cell{
+        font-size: $font-size-default;
+        display: inline-block;
+        padding:10px 0 0 14px;
+        background:none;
+        text-align:center;
+        vertical-align: middle;
+        margin-right:-4px;
+        .#{$namespace}media-object{
+            width:100%;
+            max-width:100%;
+            height: auto;
+        }
+        > a:not(.#{$namespace}btn){
+            margin:-10px 0 0 -14px;
+            &:active,&.#{$namespace}active{
+                background: none;
+            }
+        }
+        .#{$namespace}media-body{
+            display: block;
+            height: 15px;
+            line-height: 15px;
+            color:#333;
+            font-size: 15px;
+            margin-top:8px;
+            width:100%;
+            text-overflow: ellipsis;
+        }
+        &:before,&:after{
+            height:0;
+        }
+    }
+}
+//grid-9
+.#{$namespace}grid-view.#{$namespace}grid-9{
+    padding-right: 0;
+    background-color: #f2f2f2;
+    padding: 1px 0 1px 0;
+    .#{$namespace}table-view-cell {
+        vertical-align: top;
+        padding:11px 15px;
+        border-left: 1px solid #EEE;
+        border-top: 1px solid #EEE;
+        margin: -1px 0 0 -1px;
+        &.#{$namespace}active{
+            background-color:#eee;
+        }
+        > a:not(.#{$namespace}btn){
+              padding: 10px 0;
+              margin: 0;
+        }
+    }
+    &:before{
+        height: 0;
+    }
+    .#{$namespace}media {
+        color: #797979;
+        .#{$namespace}icon{
+            font-size: 2.4em;
+            position: relative;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+.#{$namespace}plus-visible,.#{$namespace}wechat-visible{
+    display: none!important;
+}
+.#{$namespace}plus-hidden,.#{$namespace}wechat-hidden{
+    display: block!important;
+}
+.#{$namespace}plus .#{$namespace}plus-visible,.#{$namespace}wechat .#{$namespace}wechat-visible{
+	display: block!important;
+}
+.#{$namespace}plus .#{$namespace}plus-hidden,.#{$namespace}wechat .#{$namespace}wechat-hidden{
+    display: none!important;
+}

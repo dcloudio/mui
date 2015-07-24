@@ -1,0 +1,212 @@
+//
+// Mixins
+// --------------------------------------------------
+
+// General
+// --------------------------------------------------
+
+// Utilities
+// -------------------------
+$z-layers: (
+  "default":            1,
+  "below":             -1,
+  "max":            10000,
+  "bar": (
+    "bar":           10,
+    "btn":           20,
+    "icon":          20
+  ),
+  "backdrop":         998,
+  "modal":            999,
+  "popover":(
+    "popover":        999,
+    "arrow":          1000,
+  ),
+  "scroll": (
+    "scrollbar":      9998,
+   ),
+  "toast":            9999,
+);
+@function map-has-nested-keys($map, $keys...) {
+  @each $key in $keys {
+    @if not map-has-key($map, $key) {
+      @return false;
+    }
+    $map: map-get($map, $key);
+  }
+  
+  @return true;
+}
+
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+ 
+  @return $map;
+}
+
+@function z($layers...) {
+  @if not map-has-nested-keys($z-layers, $layers...) {
+    @warn "No layer found for `#{inspect($layers...)}` in $z-layers map. Property omitted.";
+  }
+ 
+  @return map-deep-get($z-layers, $layers...);
+}
+// Clearfix
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+//
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    contenteditable attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that are clearfixed.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+@mixin clearfix() {
+  &:before,
+  &:after {
+    display: table; // 2
+    content: " "; // 1
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// Box shadow
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow: $shadow;
+          box-shadow: $shadow;
+}
+
+// Gradients
+@mixin linear-gradient($color-from, $color-to) {
+  background-color: $color-from; // Old browsers
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$color-from), color-stop(100%,$color-to)); // Chrome, Safari4+
+  background-image: -webkit-linear-gradient(top, $color-from 0%, $color-to 100%);           // Chrome10+, Safari5.1+
+//  background-image:    -moz-linear-gradient(top, $color-from 0%, $color-to 100%);           // FF3.6+
+//  background-image:     -ms-linear-gradient(top, $color-from 0%, $color-to 100%);           // IE10+
+  //background-image:      -o-linear-gradient(top, $color-from 0%, $color-to 100%);           // Opera 11.10+
+  background-image:         linear-gradient(to bottom, $color-from 0%, $color-to 100%);     // W3C
+//  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$color-from}', endColorstr='#{$color-to}', GradientType=0 ); // IE6-9
+}
+@mixin directional-gradient($color-from, $color-to, $deg: 45deg) {
+  background-color: $color-from; // Old browsers
+  background-image: -webkit-gradient(linear, left bottom, right top, color-stop(0%,$color-from), color-stop(100%,$color-to)); // Chrome, Safari4+
+  background-image: -webkit-linear-gradient(45deg, $color-from 0%, $color-to 100%);           // Chrome10+, Safari5.1+
+//  background-image:    -moz-linear-gradient(45deg, $color-from 0%, $color-to 100%);           // FF3.6+
+//  background-image:     -ms-linear-gradient(45deg, $color-from 0%, $color-to 100%);           // IE10+
+  //background-image:      -o-linear-gradient(45deg, $color-from 0%, $color-to 100%);           // Opera 11.10+
+  background-image:         linear-gradient(45deg, $color-from 0%, $color-to 100%);     // W3C
+//  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$color-from}', endColorstr='#{$color-to}', GradientType=1 ); // IE6-9
+}
+
+
+// Transforms
+// --------------------------------------------------
+@mixin transform($transform...) {
+  -webkit-transform: $transform;
+//      -ms-transform: $transform;
+          transform: $transform;
+}
+
+
+// Transitions
+// --------------------------------------------------
+@mixin transition($transition...) {
+  -webkit-transition: $transition;
+//     -moz-transition: $transition;
+          transition: $transition;
+}
+@mixin transition-property($property...) {
+  -webkit-transition-property: $property;
+//     -moz-transition-property: $property;
+          transition-property: $property;
+}
+@mixin transition-duration($duration...) {
+  -webkit-transition-duration: $duration;
+//     -moz-transition-duration: $duration;
+          transition-duration: $duration;
+}
+@mixin transition-timing-function($function...) {
+  -webkit-transition-timing-function: $function;
+//     -moz-transition-timing-function: $function;
+          transition-timing-function: $function;
+}
+
+
+// Animations
+// --------------------------------------------------
+@mixin animation-name($name) {
+  -webkit-animation-name: $name;
+//     -moz-animation-name: $name;
+          animation-name: $name;
+}
+@mixin animation-duration($duration) {
+  -webkit-animation-duration: $duration;
+//     -moz-animation-duration: $duration;
+          animation-duration: $duration;
+}
+@mixin animation-direction($direction) {
+  -webkit-animation-direction: $direction;
+//     -moz-animation-direction: $direction;
+          animation-direction: $direction;
+}
+
+
+// Misc
+// --------------------------------------------------
+@mixin hairline($type, $color, $offset) {
+    &:after{
+        position: absolute;
+        left: $offset;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background-color: $color;
+        content:'';
+        -webkit-transform: scaleY(0.5);
+        transform: scaleY(0.5);
+    }
+    @if $type == double {
+        &:before{
+            position: absolute;
+            left: $offset;
+            right: 0;
+            top: 0;
+            height: 1px;
+            background-color: $color;
+            content:'';
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+        }
+    }
+//  background: repeat-x bottom left 
+//  url(data:image/gif;base64,R0lGODlhAQACAPABAMjHzP///yH/C1hNUCBEYXRhWE1QAz94cAAh+QQFAAABACwAAAAAAQACAAACAgwKADs=);
+//  background-size: 100% 1px;
+//@if $type == single {
+//  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='1'><rect fill='#{$color}' x='0' y='0' width='100%' height='0.5'/></svg>");
+//  background-position: $offset 100%;
+//
+//} @else if $type == double {
+//  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='1'><rect fill='#{$color}' x='0' y='0' width='100%' height='0.5'/></svg>"),
+//                    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='1'><rect fill='#{$color}' x='0' y='0' width='100%' height='0.5'/></svg>");
+//  background-position: $offset 100%, $offset 0;
+//}
+//background-repeat: no-repeat;
+}
+
+//button
+@mixin btn($color){
+    color: #fff;
+    background-color: $color;
+    border: 1px solid $color;
+
+    &:enabled:active,
+        &.#{$namespace}active:enabled {
+        color: #fff;
+        background-color: darken($color, 10%);
+        border: 1px solid darken($color, 10%);
+    }
+}

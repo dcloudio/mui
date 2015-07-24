@@ -10,44 +10,36 @@
 
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,body {
 				background-color: #efeff4;
 			}
-			header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding: 0;
-			}
 		</style>
 		<script>
-			mui.init();
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
 		</script>
 	</head>
-
 	<body>
-
-<header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">Modals</h1>
-</header>
-<div class="mui-content">
-    <div class="mui-content-padded">
-        <a href="#modal" class="mui-btn mui-btn-primary mui-btn-block">Click</a>
-    </div>
-    <div id="modal" class="mui-modal">
-        <header class="mui-bar mui-bar-nav">
-            <a class="mui-icon mui-icon-close mui-pull-right" href="#modal"></a>
-            <h1 class="mui-title">Modal</h1>
-        </header>
-        <div class="mui-content">
-            <p class="mui-content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
-        </div>
-    </div>
-</div>
-
-</body>
+		<div class="mui-content">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">modal（弹出窗口）</h1>
+			</header>
+			<div class="mui-content">
+				<a href="#modal" class="mui-btn mui-btn-primary mui-btn-block">Click</a>
+			</div>
+			<div id="modal" class="mui-modal">
+				<header class="mui-bar mui-bar-nav">
+					<a class="mui-icon mui-icon-close mui-pull-right" href="#modal"></a>
+					<h1 class="mui-title">Modal</h1>
+				</header>
+				<div class="mui-content" style="height: 100%;">
+					<p class="mui-content-padded">The contents of my modal go here. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
+				</div>
+			</div>
+		</div>
+	</body>
 
 </html>
