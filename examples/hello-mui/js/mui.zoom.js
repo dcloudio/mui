@@ -113,10 +113,15 @@
 			zoom.scrollerTransition(zoom.options.speed).scrollerTransform(0, 0);
 			zoom.zoomerTransition(zoom.options.speed).zoomerTransform(scale);
 		};
-		zoom.toggleZoom = function(position) {
+		zoom.toggleZoom = function(position, speed) {
+			if (typeof position === 'number') {
+				speed = position;
+				position = undefined;
+			}
+			speed = typeof speed === 'undefined' ? zoom.options.speed : speed;
 			if (scale && scale !== 1) {
 				scale = currentScale = 1;
-				zoom.scrollerTransition(zoom.options.speed).scrollerTransform(0, 0);
+				zoom.scrollerTransition(speed).scrollerTransform(0, 0);
 			} else {
 				scale = currentScale = zoom.options.maxZoom;
 				if (position) {
@@ -142,12 +147,12 @@
 					}
 					offsetX = Math.min(Math.max(offsetX, imageMinX), imageMaxX);
 					offsetY = Math.min(Math.max(offsetY, imageMinY), imageMaxY);
-					zoom.scrollerTransition(zoom.options.speed).scrollerTransform(offsetX, offsetY);
+					zoom.scrollerTransition(speed).scrollerTransform(offsetX, offsetY);
 				} else {
-					zoom.scrollerTransition(zoom.options.speed).scrollerTransform(0, 0);
+					zoom.scrollerTransition(speed).scrollerTransform(0, 0);
 				}
 			}
-			zoom.zoomerTransition(zoom.options.speed).zoomerTransform(scale);
+			zoom.zoomerTransition(speed).zoomerTransform(scale);
 		};
 
 		zoom._cal = function() {

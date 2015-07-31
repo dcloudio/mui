@@ -40,22 +40,37 @@
 	proto.initEvent = function() {
 		var self = this;
 		$(document.body).on('tap', 'img[data-preview-src]', function() {
+			if (self.isAnimationing()) {
+				return false;
+			}
 			self.open(this);
+			return false;
 		});
 		var laterClose = null;
-		this.loader.addEventListener('tap', function(e) {
-			laterClose = $.later(function() {
+		var laterCloseEvent = function() {
+			!laterClose && (laterClose = $.later(function() {
+				self.isInAnimation = true;
+				self.loader.removeEventListener('tap', laterCloseEvent);
+				self.scroller.removeEventListener('tap', laterCloseEvent);
 				self.close();
-			}, 300);
-		});
-		this.scroller.addEventListener('tap', function() {
-			laterClose = $.later(function() {
-				self.close();
-			}, 300);
-		});
+			}, 300));
+		};
 		this.scroller.addEventListener('doubletap', function() {
-			laterClose && laterClose.cancel();
-			laterClose = null;
+			if (laterClose) {
+				laterClose.cancel();
+				laterClose = null;
+			}
+		});
+		this.element.addEventListener('webkitAnimationEnd', function() {
+			if (self.element.classList.contains($.className('preview-out'))) { //close
+				self.element.style.display = 'none';
+				self.element.classList.remove($.className('preview-out'));
+				laterClose = null;
+			} else { //open
+				self.loader.addEventListener('tap', laterCloseEvent);
+				self.scroller.addEventListener('tap', laterCloseEvent);
+			}
+			self.isInAnimation = false;
 		});
 		this.element.addEventListener('slide', function(e) {
 			if (self.options.zoom) {
@@ -70,6 +85,13 @@
 			self._loadItem(slideNumber);
 
 		});
+	};
+	proto.isAnimationing = function() {
+		if (this.isInAnimation) {
+			return true;
+		}
+		this.isInAnimation = true;
+		return false;
 	};
 	proto.addImages = function(group, index) {
 		this.groups = {};
@@ -123,10 +145,6 @@
 	proto.empty = function() {
 		this.scroller.innerHTML = '';
 	};
-	proto.openByGroup = function(index, group, anchorEl) {
-		index = Math.min(Math.max(0, index), this.groups[group].length - 1);
-		this.refresh(index, this.groups[group], anchorEl);
-	};
 	proto._initImgData = function(itemData, imgEl) {
 		if (!itemData.sWidth) {
 			var img = itemData.el;
@@ -139,43 +157,7 @@
 		}
 		imgEl.style.webkitTransform = 'translate3d(0,0,0) scale(' + itemData.sScale + ')';
 	};
-	proto.refresh = function(index, groupArray, anchorEl) {
-		this.currentGroup = groupArray;
-		//		anchorEl && this.position(anchorEl);
-		//重新生成slider
-		var length = groupArray.length;
-		var itemHtml = [];
-		var currentRange = this.getRangeByIndex(index, length);
-		var from = currentRange.from;
-		var to = currentRange.to + 1;
-		var currentIndex = index;
-		var className = '';
-		var itemStr = '';
-		var wWidth = window.innerWidth;
-		var wHeight = window.innerHeight;
-		for (var i = 0; from < to; from++, i++) {
-			var itemData = groupArray[from];
-			var style = '';
-			if (itemData.sWidth) {
-				style = '-webkit-transform:translate3d(0,0,0) scale(' + itemData.sScale + ');transform:translate3d(0,0,0) scale(' + itemData.sScale + ')';
-			}
-			itemStr = itemTemplate.replace('{{src}}', itemData.src).replace('{{lazyload}}', itemData.lazyload).replace('{{style}}', style);
-			if (from === index) {
-				currentIndex = i;
-				className = $.className('active');
-			} else {
-				className = '';
-			}
-			itemHtml.push(itemStr.replace('{{className}}', className));
-		}
-		this.scroller.innerHTML = itemHtml.join('');
-		this.element.classList.add($.className('preview-in'));
-		this.lastIndex = currentIndex;
-		this.element.offsetHeight;
-		$(this.element).slider().gotoItem(currentIndex, 0);
-		this.indicator && (this.indicator.innerText = (currentIndex + 1) + '/' + this.currentGroup.length);
-		this._loadItem(currentIndex);
-	};
+
 	proto._getScale = function(from, to) {
 		var scaleX = from.width / to.width;
 		var scaleY = from.height / to.height;
@@ -192,22 +174,25 @@
 		img.classList.remove($.className('transitioning'));
 		img.removeEventListener('webkitTransitionEnd', this._imgTransitionEnd.bind(this));
 	};
-	proto._closeTransitionEnd = function(e) {
-		var img = e.target;
-		img.classList.remove($.className('transitioning'));
-		img.removeEventListener('webkitTransitionEnd', this._closeTransitionEnd.bind(this));
-		this.element.classList.remove($.className('preview-in'));
-		this.element.classList.remove($.className('transitioning'));
-	};
-	proto._loadItem = function(index, callback) { //TODO 暂时仅支持img
+	proto._loadItem = function(index, isOpening) { //TODO 暂时仅支持img
 		var itemEl = this.scroller.querySelector($.classSelector('.slider-item:nth-child(' + (index + 1) + ')'));
 		var itemData = this.currentGroup[index];
 		var imgEl = itemEl.querySelector('img');
 		this._initImgData(itemData, imgEl);
+		if (isOpening) {
+			var posi = this._getPosition(itemData);
+			imgEl.style.webkitTransitionDuration = '0ms';
+			imgEl.style.webkitTransform = 'translate3d(' + posi.x + 'px,' + posi.y + 'px,0) scale(' + itemData.sScale + ')';
+			imgEl.offsetHeight;
+		}
 		if (!itemData.loaded && imgEl.getAttribute('data-preview-lazyload')) {
 			var self = this;
 			self.loader.classList.add($.className('active'));
-			imgEl && this.loadImage(imgEl, function() {
+			//移动位置动画
+			imgEl.style.webkitTransitionDuration = '0.5s';
+			imgEl.addEventListener('webkitTransitionEnd', self._imgTransitionEnd.bind(self));
+			imgEl.style.webkitTransform = 'translate3d(0,0,0) scale(' + itemData.sScale + ')';
+			this.loadImage(imgEl, function() {
 				itemData.loaded = true;
 				imgEl.src = itemData.lazyload;
 				self._initZoom(itemEl, this.width, this.height);
@@ -215,7 +200,6 @@
 				imgEl.addEventListener('webkitTransitionEnd', self._imgTransitionEnd.bind(self));
 				imgEl.setAttribute('style', '');
 				imgEl.offsetHeight;
-				callback && callback.call(itemEl);
 				self.loader.classList.remove($.className('active'));
 			});
 		} else {
@@ -225,7 +209,6 @@
 			imgEl.addEventListener('webkitTransitionEnd', this._imgTransitionEnd.bind(this));
 			imgEl.setAttribute('style', '');
 			imgEl.offsetHeight;
-			callback && callback.call(itemEl);
 		}
 		this._preloadItem(index + 1);
 		this._preloadItem(index - 1);
@@ -293,7 +276,64 @@
 		//			to: to
 		//		};
 	};
+
+	proto._getPosition = function(itemData) {
+		var sLeft = itemData.sLeft - window.pageXOffset;
+		var sTop = itemData.sTop - window.pageYOffset;
+		var left = (window.innerWidth - itemData.sWidth) / 2;
+		var top = (window.innerHeight - itemData.sHeight) / 2;
+		return {
+			left: sLeft,
+			top: sTop,
+			x: sLeft - left,
+			y: sTop - top
+		};
+	};
+	proto.refresh = function(index, groupArray) {
+		this.currentGroup = groupArray;
+		//重新生成slider
+		var length = groupArray.length;
+		var itemHtml = [];
+		var currentRange = this.getRangeByIndex(index, length);
+		var from = currentRange.from;
+		var to = currentRange.to + 1;
+		var currentIndex = index;
+		var className = '';
+		var itemStr = '';
+		var wWidth = window.innerWidth;
+		var wHeight = window.innerHeight;
+		for (var i = 0; from < to; from++, i++) {
+			var itemData = groupArray[from];
+			var style = '';
+			if (itemData.sWidth) {
+				style = '-webkit-transform:translate3d(0,0,0) scale(' + itemData.sScale + ');transform:translate3d(0,0,0) scale(' + itemData.sScale + ')';
+			}
+			itemStr = itemTemplate.replace('{{src}}', itemData.src).replace('{{lazyload}}', itemData.lazyload).replace('{{style}}', style);
+			if (from === index) {
+				currentIndex = i;
+				className = $.className('active');
+			} else {
+				className = '';
+			}
+			itemHtml.push(itemStr.replace('{{className}}', className));
+		}
+		this.scroller.innerHTML = itemHtml.join('');
+		this.element.style.display = 'block';
+		this.element.classList.add($.className('preview-in'));
+		this.lastIndex = currentIndex;
+		this.element.offsetHeight;
+		$(this.element).slider().gotoItem(currentIndex, 0);
+		this.indicator && (this.indicator.innerText = (currentIndex + 1) + '/' + this.currentGroup.length);
+		this._loadItem(currentIndex, true);
+	};
+	proto.openByGroup = function(index, group) {
+		index = Math.min(Math.max(0, index), this.groups[group].length - 1);
+		this.refresh(index, this.groups[group]);
+	};
 	proto.open = function(index, group) {
+		if (this.element.classList.contains($.className('preview-in'))) {
+			return;
+		}
 		if (typeof index === "number") {
 			group = group || defaultGroupName;
 			this.addImages(group, index); //刷新当前group
@@ -302,27 +342,30 @@
 			group = index.getAttribute('data-preview-group');
 			group = group || defaultGroupName;
 			this.addImages(group, index); //刷新当前group
-			this.openByGroup(this.groups[group].indexOf(index.__mui_img_data), group, index);
+			this.openByGroup(this.groups[group].indexOf(index.__mui_img_data), group);
 		}
 	};
 	proto.close = function(index, group) {
-		this.element.classList.add($.className('transitioning'));
+		this.element.classList.remove($.className('preview-in'));
+		this.element.classList.add($.className('preview-out'));
 		var itemEl = this.scroller.querySelector($.classSelector('.slider-item:nth-child(' + (this.lastIndex + 1) + ')'));
 		var imgEl = itemEl.querySelector('img');
 		if (imgEl) {
 			imgEl.classList.add($.className('transitioning'));
 			var itemData = this.currentGroup[this.lastIndex];
-			var sLeft = itemData.sLeft - window.pageXOffset;
-			var sTop = itemData.sTop - window.pageYOffset;
+			var posi = this._getPosition(itemData);
+			var sLeft = posi.left;
+			var sTop = posi.top;
 			if (sTop > window.innerHeight || sLeft > window.innerWidth || sTop < 0 || sLeft < 0) { //out viewport
-				imgEl.addEventListener('webkitTransitionEnd', this._closeTransitionEnd.bind(this));
 				imgEl.style.opacity = 0;
+				imgEl.style.webkitTransitionDuration = '0.5s';
 				imgEl.style.webkitTransform = 'scale(' + itemData.sScale + ')';
 			} else {
-				var left = (window.innerWidth - itemData.sWidth) / 2;
-				var top = (window.innerHeight - itemData.sHeight) / 2;
-				imgEl.addEventListener('webkitTransitionEnd', this._closeTransitionEnd.bind(this));
-				imgEl.style.webkitTransform = 'translate3d(' + (sLeft - left) + 'px,' + (sTop - top) + 'px,0) scale(' + itemData.sScale + ')';
+				if (this.options.zoom) {
+					$(imgEl.parentNode.parentNode).zoom().toggleZoom(0);
+				}
+				imgEl.style.webkitTransitionDuration = '0.5s';
+				imgEl.style.webkitTransform = 'translate3d(' + posi.x + 'px,' + posi.y + 'px,0) scale(' + itemData.sScale + ')';
 			}
 		}
 		var zoomers = this.element.querySelectorAll($.classSelector('.zoom-wrapper'));
