@@ -169,6 +169,8 @@
 			 //变换侧滑动画移动效果；
 			mui('.mui-input-group').on('change', 'input', function() {
 				if (this.checked) {
+					offCanvasSide.classList.remove('mui-transitioning');
+					offCanvasSide.setAttribute('style', '');
 					classList.remove('mui-slide-in');
 					classList.remove('mui-scalable');
 					switch (this.value) {
@@ -196,8 +198,6 @@
 							break;
 					}
 					offCanvasWrapper.offCanvas().refresh();
-					offCanvasSide.classList.remove('mui-transitioning');
-					offCanvasSide.setAttribute('style', '');
 				}
 			});
 			document.getElementById('offCanvasShow').addEventListener('tap', function() {

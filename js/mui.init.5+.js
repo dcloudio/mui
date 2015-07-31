@@ -86,9 +86,11 @@
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			data = data || {};
-			if ($.isPlainObject(data)) {
-				data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
+			if (data !== '') {
+				data = data || {};
+				if ($.isPlainObject(data)) {
+					data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
+				}
 			}
 			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
 		}
@@ -102,7 +104,9 @@
 	$.receive = function(eventType, data) {
 		if (eventType) {
 			try {
-				data = JSON.parse(data);
+				if (data) {
+					data = JSON.parse(data);
+				}
 			} catch (e) {}
 			$.trigger(document, eventType, data);
 		}
