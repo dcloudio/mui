@@ -6517,23 +6517,25 @@ var mui = (function(document, undefined) {
 	/**
 	 * 警告消息框
 	 */
-	$.alert = function(message,title,btnValue,callback) {
+	$.alert = function(message, title, btnValue, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
-				if(typeof title ==='function'){
+			} else {
+				if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnValue = '确定';
-				}else if(typeof btnValue ==='function'){
+				} else if (typeof btnValue === 'function') {
 					callback = btnValue;
 					btnValue = null;
 				}
-				plus.nativeUI.alert(message,callback,title,btnValue);
+				$.plusReady(function() {
+					plus.nativeUI.alert(message, callback, title, btnValue);
+				});
 			}
 
-		}else{
+		} else {
 			//TODO H5版本
 			window.alert(message);
 		}
@@ -6557,7 +6559,9 @@ var mui = (function(document, undefined) {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.confirm(message, callback, title, btnArray);
+				$.plusReady(function() {
+					plus.nativeUI.confirm(message, callback, title, btnArray);
+				});
 			}
 
 		} else {
@@ -6598,7 +6602,9 @@ var mui = (function(document, undefined) {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
+				$.plusReady(function() {
+					plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
+				});
 			}
 
 		} else {
@@ -6624,17 +6630,21 @@ var mui = (function(document, undefined) {
 	 * 自动消失提示框
 	 */
 	$.toast = function(message) {
-		if($.os.plus){
+		if ($.os.plus) {
 			//默认显示在底部；
-			plus.nativeUI.toast(message,{verticalAlign:'bottom'});
-		}else{
+			$.plusReady(function() {
+				plus.nativeUI.toast(message, {
+					verticalAlign: 'bottom'
+				});
+			});
+		} else {
 			var toast = document.createElement('div');
 			toast.classList.add('mui-toast-container');
-			toast.innerHTML = '<div class="'+'mui-toast-message'+'">'+message+'</div>';
+			toast.innerHTML = '<div class="' + 'mui-toast-message' + '">' + message + '</div>';
 			document.body.appendChild(toast);
-			setTimeout(function(){
-		  		document.body.removeChild(toast);
-			},2000);
+			setTimeout(function() {
+				document.body.removeChild(toast);
+			}, 2000);
 		}
 	};
 

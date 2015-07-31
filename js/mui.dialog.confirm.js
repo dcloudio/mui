@@ -15,7 +15,9 @@
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.confirm(message, callback, title, btnArray);
+				$.plusReady(function() {
+					plus.nativeUI.confirm(message, callback, title, btnArray);
+				});
 			}
 
 		} else {
