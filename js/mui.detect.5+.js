@@ -14,10 +14,10 @@
 			});
 			if (ua.match(/StreamApp/i)) { //TODO 最好有流应用自己的标识
 				this.os.stream = true;
+				$(function() {
+					document.body.classList.add($.className('plus-stream'));
+				});
 			}
-			$(function() {
-				document.body.classList.add($.className('plus-stream'));
-			});
 		}
 	}
 	detect.call($, navigator.userAgent);

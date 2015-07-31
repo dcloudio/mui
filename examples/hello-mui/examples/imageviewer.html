@@ -43,15 +43,22 @@
 			}
 			.mui-preview-image {
 				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
 			}
 			.mui-preview-image.mui-preview-in {
-				display: block;
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
 			}
-			.mui-preview-image.mui-transitioning {
+			.mui-preview-image.mui-preview-out {
 				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
 			}
-			.mui-preview-image.mui-transitioning .mui-preview-header,
-			.mui-preview-image.mui-transitioning .mui-preview-footer {
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
 				display: none;
 			}
 			.mui-zoom-scroller {
@@ -77,10 +84,6 @@
 			.mui-zoom {
 				-webkit-transform-style: preserve-3d;
 				transform-style: preserve-3d;
-			}
-			p img {
-				max-width: 100%;
-				height: auto;
 			}
 			.mui-slider .mui-slider-group .mui-slider-item img {
 				width: auto;
@@ -121,6 +124,42 @@
 			.mui-preview-image img.mui-transitioning {
 				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
 				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
 			}
 		</style>
 

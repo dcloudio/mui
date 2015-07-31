@@ -23,6 +23,7 @@
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
+			e.preventDefault();
 			this._super(e);
 		},
 		_drag: function(e) {
@@ -112,12 +113,20 @@
 				}
 			}
 		},
+		disablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.className = $.className('pull-bottom-pocket') + ' ' + CLASS_HIDDEN;
+			this.wrapper.removeEventListener('scrollbottom', this);
+		},
+		enablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.classList.remove(CLASS_HIDDEN);
+			this._setCaption(this.options.up.contentdown);
+			this.wrapper.addEventListener('scrollbottom', this);
+		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				this._initPullupRefresh();
-				this.bottomPocket.classList.remove(CLASS_HIDDEN);
-				this._setCaption(this.options.up.contentdown);
-				this.wrapper.addEventListener('scrollbottom', this);
+				this.enablePullupToRefresh();
 				this.finished = false;
 			}
 			this._super();

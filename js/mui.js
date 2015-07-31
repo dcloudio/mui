@@ -320,19 +320,28 @@ var mui = (function(document, undefined) {
 		}
 		return result;
 	};
-
-	$.registerHandler = function(type, handler) {
-		var handlers = $[type];
-		if (!handlers) {
-			handlers = [];
+	$.hooks = {};
+	$.addAction = function(type, hook) {
+		var hooks = $.hooks[type];
+		if (!hooks) {
+			hooks = [];
 		}
-		handler.index = handler.index || 1000;
-		handlers.push(handler);
-		handlers.sort(function(a, b) {
+		hook.index = hook.index || 1000;
+		hooks.push(hook);
+		hooks.sort(function(a, b) {
 			return a.index - b.index;
 		});
-		$[type] = handlers;
-		return $[type];
+		$.hooks[type] = hooks;
+		return $.hooks[type];
+	};
+	$.doAction = function(type, callback) {
+		if ($.isFunction(callback)) { //指定了callback
+			$.each($.hooks[type], callback);
+		} else { //未指定callback，直接执行
+			$.each($.hooks[type], function(index, hook) {
+				return !hook.handle();
+			});
+		}
 	};
 	/**
 	 * setTimeout封装

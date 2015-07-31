@@ -7,6 +7,7 @@
 (function($, name) {
 	var timer;
 	var handle = function(event, touch) {
+		var session = $.gestures.session;
 		var options = this.options;
 		switch (event.type) {
 			case $.EVENT_START:
@@ -14,7 +15,7 @@
 					timer && clearTimeout(timer);
 					timer = setTimeout(function() {
 						touch.hold = true;
-						$.trigger(event.target, name, touch);
+						$.trigger(session.target, name, touch);
 					}, options.holdTimeout);
 				}
 				break;
@@ -24,7 +25,7 @@
 			case $.EVENT_CANCEL:
 				if (timer) {
 					clearTimeout(timer) && (timer = null);
-					$.trigger(event.target, 'release', touch);
+					$.trigger(session.target, 'release', touch);
 				}
 				break;
 		}
@@ -32,7 +33,7 @@
 	/**
 	 * mui gesture hold
 	 */
-	$.registerGesture({
+	$.addGesture({
 		name: name,
 		index: 10,
 		handle: handle,

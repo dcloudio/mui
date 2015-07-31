@@ -27,15 +27,15 @@
 
 				if (!session.drag) {
 					session.drag = true;
-					$.trigger(event.target, name + 'start', touch);
+					$.trigger(session.target, name + 'start', touch);
 				}
-				$.trigger(event.target, name, touch);
-				$.trigger(event.target, name + touch.direction, touch);
+				$.trigger(session.target, name, touch);
+				$.trigger(session.target, name + touch.direction, touch);
 				break;
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
 				if (session.drag && touch.isFinal) {
-					$.trigger(event.target, name + 'end', touch);
+					$.trigger(session.target, name + 'end', touch);
 				}
 				break;
 		}
@@ -43,7 +43,7 @@
 	/**
 	 * mui gesture drag
 	 */
-	$.registerGesture({
+	$.addGesture({
 		name: name,
 		index: 20,
 		handle: handle,

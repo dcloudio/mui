@@ -8,13 +8,14 @@
 	var lastTarget;
 	var lastTapTime;
 	var handle = function(event, touch) {
+		var session = $.gestures.session;
 		var options = this.options;
 		switch (event.type) {
 			case $.EVENT_END:
 				if (!touch.isFinal) {
 					return;
 				}
-				var target = event.target;
+				var target = session.target;
 				if (!target || (target.disabled || target.classList.contains($.className('disabled')))) {
 					return;
 				}
@@ -29,7 +30,7 @@
 					}
 					$.trigger(target, name, touch);
 					lastTapTime = $.now();
-					lastTarget = event.target;
+					lastTarget = target;
 				}
 				break;
 		}
@@ -37,7 +38,7 @@
 	/**
 	 * mui gesture tap
 	 */
-	$.registerGesture({
+	$.addGesture({
 		name: name,
 		index: 30,
 		handle: handle,

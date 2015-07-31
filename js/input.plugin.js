@@ -38,7 +38,7 @@
 			this.sliderActionSelector = SELECTOR_TOOLTIP;
 		} else { //clear,speech,search
 			if (~this.options.actions.indexOf('clear')) {
-				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR +' '+ CLASS_HIDDEN;
+				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + ' ' + CLASS_HIDDEN;
 				this.clearActionSelector = SELECTOR_ICON_CLOSE;
 			}
 			if (~this.options.actions.indexOf('speech')) { //only for 5+
@@ -119,7 +119,7 @@
 			var showTip = function() {
 				tooltip.classList.remove(CLASS_HIDDEN);
 				tooltipWidth = tooltipWidth || tooltip.offsetWidth;
-				var scaleWidth = Math.abs(element.value) / distince * width;
+				var scaleWidth = (width / distince) * Math.abs(element.value - element.min);
 				tooltip.style.left = (14 + offsetLeft + scaleWidth - tooltipWidth / 2) + 'px';
 				tooltip.innerText = element.value;
 				if (timer) {

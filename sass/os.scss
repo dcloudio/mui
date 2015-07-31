@@ -4,8 +4,14 @@
 .#{$namespace}plus-hidden,.#{$namespace}wechat-hidden{
     display: block!important;
 }
+.#{$namespace}tab-item.#{$namespace}plus-hidden,.#{$namespace}tab-item.#{$namespace}wechat-hidden{
+    display: table-cell!important;
+}
 .#{$namespace}plus .#{$namespace}plus-visible,.#{$namespace}wechat .#{$namespace}wechat-visible{
 	display: block!important;
+}
+.#{$namespace}plus .#{$namespace}tab-item.#{$namespace}plus-visible,.#{$namespace}wechat .#{$namespace}tab-item.#{$namespace}wechat-visible{
+    display: table-cell!important;
 }
 .#{$namespace}plus .#{$namespace}plus-hidden,.#{$namespace}wechat .#{$namespace}wechat-hidden{
     display: none!important;

@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.0.0 (https://github.com/dcloudio/mui)
+ * Mui v2.1.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -824,6 +824,9 @@ p
 .mui-off-canvas-wrap .mui-bar
 {
     position: absolute !important;
+
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
 }
 
 .mui-off-canvas-wrap
@@ -929,6 +932,47 @@ p
 .mui-off-canvas-right
 {
     right: 0;
+}
+
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable
+{
+    background-color: #333;
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-left, .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-right
+{
+    width: 80%;
+
+    -webkit-transform: scale(.8);
+            transform: scale(.8);
+
+    opacity: .1;
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-left.mui-transitioning, .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-right.mui-transitioning
+{
+    -webkit-transition: -webkit-transform 200ms ease, opacity 200ms ease;
+            transition:         transform 200ms ease, opacity 200ms ease;
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-left
+{
+    -webkit-transform-origin: -100%;
+            transform-origin: -100%;
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-right
+{
+    -webkit-transform-origin: 200%;
+            transform-origin: 200%;
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable.mui-active > .mui-inner-wrap
+{
+    -webkit-transform: scale(.8);
+            transform: scale(.8);
+}
+.mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable.mui-active > .mui-off-canvas-left, .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable.mui-active > .mui-off-canvas-right
+{
+    -webkit-transform: scale(1);
+            transform: scale(1);
+
+    opacity: 1;
 }
 
 .mui-loading .mui-spinner
@@ -1689,6 +1733,11 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     margin: 0 auto;
 }
 
+.mui-bar.mui-bar-header-secondary .mui-segmented-control
+{
+    top: 0;
+}
+
 .mui-badge
 {
     font-size: 12px;
@@ -2316,9 +2365,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%);
 }
-.mui-table-view-cell .mui-navigate-left > .mui-btn,
-.mui-table-view-cell .mui-navigate-left > .mui-badge,
-.mui-table-view-cell .mui-navigate-left > .mui-switch,
 .mui-table-view-cell .mui-navigate-right > .mui-btn,
 .mui-table-view-cell .mui-navigate-right > .mui-badge,
 .mui-table-view-cell .mui-navigate-right > .mui-switch,
@@ -2328,9 +2374,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 .mui-table-view-cell .mui-push-right > .mui-btn,
 .mui-table-view-cell .mui-push-right > .mui-badge,
 .mui-table-view-cell .mui-push-right > .mui-switch,
-.mui-table-view-cell > a .mui-navigate-left > .mui-btn,
-.mui-table-view-cell > a .mui-navigate-left > .mui-badge,
-.mui-table-view-cell > a .mui-navigate-left > .mui-switch,
 .mui-table-view-cell > a .mui-navigate-right > .mui-btn,
 .mui-table-view-cell > a .mui-navigate-right > .mui-badge,
 .mui-table-view-cell > a .mui-navigate-right > .mui-switch,
@@ -4062,7 +4105,6 @@ select:focus
             transform: translate3d(100%, 0, 0);
 }
 
-.mui-navigate-left:after,
 .mui-navigate-right:after,
 .mui-push-left:after,
 .mui-push-right:after
@@ -4085,7 +4127,6 @@ select:focus
     -webkit-font-smoothing: antialiased;
 }
 
-.mui-navigate-left:after,
 .mui-push-left:after
 {
     left: 15px;
@@ -4787,7 +4828,7 @@ select:focus
     width: 100%;
     height: 100%;
 }
-.mui-fullscreen .mui-slider-group
+.mui-fullscreen.mui-slider .mui-slider-group
 {
     height: 100%;
 }
@@ -4800,7 +4841,7 @@ select:focus
     width: 100%;
     height: auto;
 }
-.mui-fullscreen .mui-slider-item > a
+.mui-fullscreen.mui-slider .mui-slider-item > a
 {
     top: 50%;
 
@@ -4842,9 +4883,19 @@ select:focus
     display: block !important;
 }
 
+.mui-tab-item.mui-plus-hidden, .mui-tab-item.mui-wechat-hidden
+{
+    display: table-cell !important;
+}
+
 .mui-plus .mui-plus-visible, .mui-wechat .mui-wechat-visible
 {
     display: block !important;
+}
+
+.mui-plus .mui-tab-item.mui-plus-visible, .mui-wechat .mui-tab-item.mui-wechat-visible
+{
+    display: table-cell !important;
 }
 
 .mui-plus .mui-plus-hidden, .mui-wechat .mui-wechat-hidden

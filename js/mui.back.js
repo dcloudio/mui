@@ -10,13 +10,13 @@
 	 * @param {type} back
 	 * @returns {$.gestures}
 	 */
-	$.registerBack = function(back) {
-		return $.registerHandler('backs', back);
+	$.addBack = function(back) {
+		return $.addAction('backs', back);
 	};
 	/**
 	 * default
 	 */
-	$.registerBack({
+	$.addBack({
 		name: 'browser',
 		index: 100,
 		handle: function() {
@@ -36,9 +36,7 @@
 				return;
 			}
 		}
-		$.each($.backs, function(index, back) {
-			return !back.handle();
-		});
+		$.doAction('backs');
 	};
 	window.addEventListener('tap', function(e) {
 		var action = $.targets.action;

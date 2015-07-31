@@ -201,16 +201,24 @@
 				}
 			}
 		},
+		disablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.className = $.className('pull-bottom-pocket') + ' ' + CLASS_HIDDEN;
+			window.removeEventListener('dragup', this);
+		},
+		enablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.classList.remove(CLASS_HIDDEN);
+			this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+			this.pullCaption.innerHTML = this.options.up.contentdown;
+			window.addEventListener('dragup', this);
+		},
 		scrollTo: function(x, y, time) {
 			$.scrollTo(x, y, time);
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				this._initPullupRefresh();
-				this.bottomPocket.classList.remove(CLASS_HIDDEN);
-				this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
-				this.pullCaption.innerHTML = this.options.up.contentdown;
-				window.addEventListener('dragup', this);
+				this.enablePullupToRefresh();
 				this.finished = false;
 			}
 		}
