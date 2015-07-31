@@ -3,6 +3,8 @@
     .#{$namespace}bar{//fix android
        position: absolute!important;
        @include transform(translate3d(0, 0, 0));//fix ios(offcanvas scalable的时候,bar会消失)
+       -webkit-box-shadow: none;
+       box-shadow: none;
     }
    } 
 //}
