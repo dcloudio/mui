@@ -6440,12 +6440,14 @@ var mui = (function(document, undefined) {
 			if (input) {
 				//				input.click();
 				input.checked = !input.checked;
+				$.trigger(input, 'change');
 			}
 		} else if (classList.contains('mui-checkbox')) {
 			var input = cell.querySelector('input[type=checkbox]');
 			if (input) {
 				//				input.click();
 				input.checked = !input.checked;
+				$.trigger(input, 'change');
 			}
 		}
 	};

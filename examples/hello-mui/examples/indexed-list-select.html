@@ -270,12 +270,20 @@
 					var checkedValues = [];
 					checkboxArray.forEach(function(box){
 						if(box.checked){
-//							checkedValues.push(box.parentNode.getAttribute('data-value'));
 							checkedValues.push(box.parentNode.innerText);
 						}
 					});
-					mui.alert('你选择了: '+checkedValues);
+					if(checkedValues.length>0){
+						mui.alert('你选择了: '+checkedValues);
+					}else{
+						mui.alert('你没选择任何机场');						
+					}
 				},false);
+				mui('.mui-indexed-list-inner').on('change', 'input', function() {
+					var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
+					var value = count?"确定("+count+")":"确定";
+					done.innerHTML = value;
+				});
 			});
 		</script>
 	</body>
