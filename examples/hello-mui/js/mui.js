@@ -1305,7 +1305,7 @@ var mui = (function(document, undefined) {
 	};
 	var targetIds = {};
 	var getTouches = function(event, touch) {
-		var allTouches = $.slice.call(event.touches);
+		var allTouches = $.slice.call(event.touches || event);
 
 		var type = event.type;
 
@@ -1322,7 +1322,7 @@ var mui = (function(document, undefined) {
 			var i = 0;
 			var targetTouches = [];
 			var changedTargetTouches = [];
-			var changedTouches = $.slice.call(event.changedTouches);
+			var changedTouches = $.slice.call(event.changedTouches || event);
 
 			touch.target = event.target;
 			var sessionTarget = $.gestures.session.target || event.target;
@@ -5351,7 +5351,7 @@ var mui = (function(document, undefined) {
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
-				e.detail.gesture.preventDefault(); //fixed hashchange
+				e.detail && e.detail.gesture && e.detail.gesture.preventDefault(); //fixed hashchange
 				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;

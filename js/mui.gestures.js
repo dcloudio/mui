@@ -317,7 +317,7 @@
 	};
 	var targetIds = {};
 	var getTouches = function(event, touch) {
-		var allTouches = $.slice.call(event.touches);
+		var allTouches = $.slice.call(event.touches || event);
 
 		var type = event.type;
 
@@ -334,7 +334,7 @@
 			var i = 0;
 			var targetTouches = [];
 			var changedTargetTouches = [];
-			var changedTouches = $.slice.call(event.changedTouches);
+			var changedTouches = $.slice.call(event.changedTouches || event);
 
 			touch.target = event.target;
 			var sessionTarget = $.gestures.session.target || event.target;

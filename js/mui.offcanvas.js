@@ -519,7 +519,7 @@
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
-				e.detail.gesture.preventDefault(); //fixed hashchange
+				e.detail && e.detail.gesture && e.detail.gesture.preventDefault(); //fixed hashchange
 				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;
