@@ -27,7 +27,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">选择机场</h1>
-			<button id='done' class="mui-btn mui-pull-right mui-btn-blue">完成</button>
+			<button id='done' class="mui-btn mui-pull-right mui-btn-blue mui-disabled">确定</button>
 		</header>
 		<div class="mui-content">
 			<div id='list' class="mui-indexed-list">
@@ -283,6 +283,15 @@
 					var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
 					var value = count?"确定("+count+")":"确定";
 					done.innerHTML = value;
+					if(count){
+						if(done.classList.contains("mui-disabled")){
+							done.classList.remove("mui-disabled");
+						}
+					}else{
+						if(!done.classList.contains("mui-disabled")){
+							done.classList.add("mui-disabled");
+						}
+					}
 				});
 			});
 		</script>
