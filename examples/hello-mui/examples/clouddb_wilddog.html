@@ -106,13 +106,18 @@
 		</div>
 		
 		<script type="text/javascript">
-			var ref = new Wilddog("https://muidemo.wilddogio.com/demo");
-			if(!ref){
-				mui.toast("当前网络不给力，请稍后再试");
-			}else{
-				 //dom ready之后就可以直接获取数据了
-				mui.ready(getList);
-			}
+			var network = false;
+			var ref = null;
+			mui.plusReady(function () {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE){
+					mui.toast("当前网络不给力，无法连接云端数据库~");
+				}else{
+					network = true;
+					ref = new Wilddog("https://muidemo.wilddogio.com/demo");
+					getList();
+				}
+			});
+
 			var list = document.getElementById("list");
 			var col1 = document.getElementById("col1");
 			var col2 = document.getElementById("col2");
@@ -124,7 +129,7 @@
 			var title = document.getElementById("title");
 
 			document.getElementById("open").addEventListener('tap',function () {
-				if(!ref){
+				if(!network){
 					mui.toast("当前网络不给力，请稍后再试");
 				}else{
 					//清空数据
