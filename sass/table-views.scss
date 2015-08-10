@@ -353,8 +353,13 @@
 
 //collapse
 .#{$namespace}table-view-cell.#{$namespace}collapse{
-    .#{$namespace}table-view:after{
-        left:15px;
+    .#{$namespace}table-view{
+         &:before,&:after{
+            height:0;
+        }
+        .#{$namespace}table-view-cell:last-child:after{
+            height:0;
+        }
     }
     //二级列表默认为向下箭头；
     >.#{$namespace}navigate-right:after, >.#{$namespace}push-right:after {
@@ -362,7 +367,7 @@
     }
 
     &.#{$namespace}active{
-        
+        margin-top: -1px;
         .#{$namespace}table-view,.#{$namespace}collapse-content{
             display: block;
         }
@@ -376,7 +381,7 @@
         padding: 8px 15px;
         margin: 11px -15px -11px;
         background: white;
-        border: 1px solid #ddd;
+//      border: 1px solid #ddd;
         position: relative;
         overflow: hidden;
         -webkit-transition: height .35s ease;

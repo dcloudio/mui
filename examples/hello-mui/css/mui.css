@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.1.0 (https://github.com/dcloudio/mui)
+ * Mui v2.2.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -2395,13 +2395,21 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     margin-top: 15px;
 }
 
-.mui-table-view-cell.mui-collapse .mui-table-view:after
+.mui-table-view-cell.mui-collapse .mui-table-view:before, .mui-table-view-cell.mui-collapse .mui-table-view:after
 {
-    left: 15px;
+    height: 0;
+}
+.mui-table-view-cell.mui-collapse .mui-table-view .mui-table-view-cell:last-child:after
+{
+    height: 0;
 }
 .mui-table-view-cell.mui-collapse > .mui-navigate-right:after, .mui-table-view-cell.mui-collapse > .mui-push-right:after
 {
     content: '\e581';
+}
+.mui-table-view-cell.mui-collapse.mui-active
+{
+    margin-top: -1px;
 }
 .mui-table-view-cell.mui-collapse.mui-active .mui-table-view, .mui-table-view-cell.mui-collapse.mui-active .mui-collapse-content
 {
@@ -2425,7 +2433,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
          -o-transition: height .35s ease;
             transition: height .35s ease;
 
-    border: 1px solid #ddd;
     background: white;
 }
 .mui-table-view-cell.mui-collapse .mui-collapse-content > .mui-input-group, .mui-table-view-cell.mui-collapse .mui-collapse-content > .mui-slider

@@ -47,7 +47,7 @@
 					this.pulldownLoading(undefined, time || 0);
 					return true;
 				} else {
-					this.topPocket.classList.remove(CLASS_VISIBILITY);
+					!this.loading && this.topPocket.classList.remove(CLASS_VISIBILITY);
 				}
 			}
 			return this._super(time);
@@ -97,7 +97,7 @@
 		},
 		endPullupToRefresh: function(finished) {
 			var self = this;
-			if (self.bottomPocket && self.loading && !this.pulldown) {
+			if (self.bottomPocket) { // && self.loading && !this.pulldown
 				self.loading = false;
 				if (finished) {
 					this.finished = true;
@@ -107,9 +107,9 @@
 					self.wrapper.removeEventListener('scrollbottom', self);
 				} else {
 					self._setCaption(self.options.up.contentdown);
-					setTimeout(function() {
-						self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					}, 350);
+					//					setTimeout(function() {
+					self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					//					}, 300);
 				}
 			}
 		},

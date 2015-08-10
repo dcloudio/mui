@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.1.0 (https://github.com/dcloudio/mui)
+ * Mui v2.2.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -918,6 +918,22 @@ var mui = (function(document, undefined) {
 			}, true);
 		};
 	};
+	var findDelegateFn = function(element, event) {
+		var delegateCallbacks = delegateFns[mid(element)];
+		var result = false;
+		if (delegateCallbacks) {
+			result = [];
+			if (event) {
+				var filterFn = function(fn) {
+					return fn.type === event;
+				}
+				return delegateCallbacks.filter(filterFn);
+			} else {
+				result = delegateCallbacks;
+			}
+		}
+		return result;
+	};
 	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	/**
 	 * mui delegate events
@@ -940,8 +956,16 @@ var mui = (function(document, undefined) {
 			var delegateCallbacks = delegateCallbackObjs[selector] || (delegateCallbackObjs[selector] = []);
 			delegateCallbacks.push(callback);
 			if (isAddEventListener) {
-				delegateFns[mid(element)] = delegateFn(element, event, selector, callback);
-				element.addEventListener(event, delegateFns[mid(element)]);
+				var delegateFnArray = delegateFns[mid(element)];
+				if (!delegateFnArray) {
+					delegateFnArray = [];
+				}
+				var delegateCallback = delegateFn(element, event, selector, callback);
+				delegateFnArray.push(delegateCallback);
+				delegateCallback.i = delegateFnArray.length - 1;
+				delegateCallback.type = event;
+				delegateFns[mid(element)] = delegateFnArray;
+				element.addEventListener(event, delegateCallback);
 				if (event === 'tap') { //TODO 需要找个更好的解决方案
 					element.addEventListener('click', function(e) {
 						if (e.target) {
@@ -965,11 +989,13 @@ var mui = (function(document, undefined) {
 	$.fn.off = function(event, selector, callback) {
 		return this.each(function() {
 			var _mid = mid(this);
-			if (!callback) {
-				if (delegates[_mid] && delegates[_mid][event]) {
-					delete delegates[_mid][event][selector];
-				}
-			} else {
+			if (!event) { //mui(selector).off();
+				delegates[_mid] && delete delegates[_mid];
+			} else if (!selector) { //mui(selector).off(event);
+				delegates[_mid] && delete delegates[_mid][event];
+			} else if (!callback) { //mui(selector).off(event,selector);
+				delegates[_mid] && delegates[_mid][event] && delete delegates[_mid][event][selector];
+			} else { //mui(selector).off(event,selector,callback);
 				var delegateCallbacks = delegates[_mid] && delegates[_mid][event] && delegates[_mid][event][selector];
 				$.each(delegateCallbacks, function(index, delegateCallback) {
 					if (mid(delegateCallback) === mid(callback)) {
@@ -978,12 +1004,23 @@ var mui = (function(document, undefined) {
 					}
 				}, true);
 			}
-			//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
-			if (delegates[_mid] && $.isEmptyObject(delegates[_mid][event])) {
-				this.removeEventListener(event, delegateFns[_mid]);
-				delete delegateFns[_mid];
+			if (delegates[_mid]) {
+				//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
+				if ((!delegates[_mid][event] || $.isEmptyObject(delegates[_mid][event]))) {
+					findDelegateFn(this, event).forEach(function(fn) {
+						this.removeEventListener(fn.type, fn);
+						delete delegateFns[_mid][fn.i];
+					}.bind(this));
+				}
+			} else {
+				//如果delegates[_mid]已不存在，删除所有
+				findDelegateFn(this).forEach(function(fn) {
+					this.removeEventListener(fn.type, fn);
+					delete delegateFns[_mid][fn.i];
+				}.bind(this));
 			}
-		})
+		});
+
 	};
 })(mui);
 /**
@@ -4073,7 +4110,7 @@ var mui = (function(document, undefined) {
 					this.pulldownLoading(undefined, time || 0);
 					return true;
 				} else {
-					this.topPocket.classList.remove(CLASS_VISIBILITY);
+					!this.loading && this.topPocket.classList.remove(CLASS_VISIBILITY);
 				}
 			}
 			return this._super(time);
@@ -4123,7 +4160,7 @@ var mui = (function(document, undefined) {
 		},
 		endPullupToRefresh: function(finished) {
 			var self = this;
-			if (self.bottomPocket && self.loading && !this.pulldown) {
+			if (self.bottomPocket) { // && self.loading && !this.pulldown
 				self.loading = false;
 				if (finished) {
 					this.finished = true;
@@ -4133,9 +4170,9 @@ var mui = (function(document, undefined) {
 					self.wrapper.removeEventListener('scrollbottom', self);
 				} else {
 					self._setCaption(self.options.up.contentdown);
-					setTimeout(function() {
-						self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					}, 350);
+					//					setTimeout(function() {
+					self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					//					}, 300);
 				}
 			}
 		},
