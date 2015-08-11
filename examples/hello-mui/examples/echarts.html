@@ -38,16 +38,39 @@
 				<div class="chart" id="barChart"></div>
 				<h5>线图示例</h5>
 				<div class="chart" id="lineChart"></div>
+				<h5>饼图示例</h5>
+				<div class="chart" id="pieChart"></div>
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../libs/echarts-all.js"></script>
 		<script>
 			var getOption = function(chartType) {
-				var chartOption = {
-					tooltip: {
-						trigger: 'axis'
-					},
+				var chartOption = chartType == 'pie' ? {
+					calculable: false,
+					series: [{
+						name: '访问来源',
+						type: 'pie',
+						radius: '65%',
+						center: ['50%', '50%'],
+						data: [{
+							value: 335,
+							name: '直接访问'
+						}, {
+							value: 310,
+							name: '邮件营销'
+						}, {
+							value: 234,
+							name: '联盟广告'
+						}, {
+							value: 135,
+							name: '视频广告'
+						}, {
+							value: 1548,
+							name: '搜索引擎'
+						}]
+					}]
+				} : {
 					legend: {
 						data: ['蒸发量', '降水量']
 					},
@@ -102,10 +125,15 @@
 				};
 				return chartOption;
 			};
-			var barChart = echarts.init(document.getElementById('barChart'));
+			var byId = function(id) {
+				return document.getElementById(id);
+			};
+			var barChart = echarts.init(byId('barChart'));
 			barChart.setOption(getOption('bar'));
-			var lineChart = echarts.init(document.getElementById('lineChart'));
+			var lineChart = echarts.init(byId('lineChart'));
 			lineChart.setOption(getOption('line'));
+			var pieChart = echarts.init(byId('pieChart'));
+			pieChart.setOption(getOption('pie'));
 		</script>
 	</body>
 
