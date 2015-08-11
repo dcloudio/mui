@@ -375,6 +375,11 @@
         >.#{$namespace}navigate-right:after, >.#{$namespace}push-right:after {
             content: '\e580';
         }
+        //二级列表展开后，高亮时宽度100%
+        .#{$namespace}table-view-cell>a:not(.#{$namespace}btn).#{$namespace}active{
+            margin-left: -31px;
+            padding-left: 47px;
+        }
     }
     .#{$namespace}collapse-content{
         display:none;

@@ -2419,6 +2419,11 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 {
     content: '\e580';
 }
+.mui-table-view-cell.mui-collapse.mui-active .mui-table-view-cell > a:not(.mui-btn).mui-active
+{
+    margin-left: -31px;
+    padding-left: 47px;
+}
 .mui-table-view-cell.mui-collapse .mui-collapse-content
 {
     position: relative;
