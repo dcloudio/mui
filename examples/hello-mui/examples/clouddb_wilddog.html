@@ -91,7 +91,7 @@
 						<input type="text" class="mui-input-clear" id="col2" placeholder="请输入">
 					</div>
 					<div class="mui-input-row">
-						<label>字段2：</label>
+						<label>字段3：</label>
 						<input type="text" class="mui-input-clear" id="col3" placeholder="请输入">
 					</div>
 				</form>
@@ -106,6 +106,12 @@
 		</div>
 		
 		<script type="text/javascript">
+		
+			function trim(str){ //删除左右两端的空格
+		　　     return str.replace(/(^\s*)|(\s*$)/g, "");
+		　　 }
+		
+		
 			var network = false;
 			var ref = null;
 			mui.plusReady(function () {
@@ -150,33 +156,55 @@
 				if(!ref){
 					mui.toast("当前网络不给力，请稍后再试");
 				}else{
-					var newRef = ref.push({
-						"col1": col1.value,
-						"col2": col2.value,
-						"col3": col3.value,
+					var check = true;
+					mui(".mui-input-group input").each(function () {
+						if(!this.value||trim(this.value)==""){
+							var label = this.previousElementSibling;
+							mui.alert(label.innerText+"不允许为空");
+							check = false;
+							return false;
+						}
 					});
-					add_div.classList.add("mui-hidden");
-					//关闭modal
-					mui("#popover").popover("toggle");
-					mui.toast("添加成功~");
-					//刷新界面
-					getList();
+					if(check){
+						var newRef = ref.push({
+							"col1": col1.value,
+							"col2": col2.value,
+							"col3": col3.value,
+						});
+						add_div.classList.add("mui-hidden");
+						//关闭modal
+						mui("#popover").popover("toggle");
+						mui.toast("添加成功~");
+						//刷新界面
+						getList();
+					}
 				}
 				
 			});
 			document.getElementById("update").addEventListener("tap", function() {
-				var newRef = ref.child(document.getElementById("col1").getAttribute("demoid"));
-				newRef.update({
-					"col1": col1.value,
-					"col2": col2.value,
-					"col3": col3.value,
+				var check = true;
+				mui(".mui-input-group input").each(function () {
+					if(!this.value||trim(this.value)==""){
+						var label = this.previousElementSibling;
+						mui.alert(label.innerText+"不允许为空");
+						check = false;
+						return false;
+					}
 				});
-				//关闭modal
-				mui("#popover").popover("toggle");
-				edit_div.classList.add("mui-hidden");
-				mui.toast("修改成功~");
-				//刷新界面
-				getList();
+				if(check){
+					var newRef = ref.child(document.getElementById("col1").getAttribute("demoid"));
+					newRef.update({
+						"col1": col1.value,
+						"col2": col2.value,
+						"col3": col3.value,
+					});
+					//关闭modal
+					mui("#popover").popover("toggle");
+					edit_div.classList.add("mui-hidden");
+					mui.toast("修改成功~");
+					//刷新界面
+					getList();
+				}
 			})
 			document.getElementById("del").addEventListener("tap", function() {
 				var newRef = ref.child(document.getElementById("col1").getAttribute("demoid"));
