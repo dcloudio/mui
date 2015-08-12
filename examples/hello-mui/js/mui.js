@@ -1593,7 +1593,7 @@ var mui = (function(document, undefined) {
 					return;
 				}
 				var target = session.target;
-				if (!target || (target.disabled || target.classList.contains('mui-disabled'))) {
+				if (!target || (target.disabled || (target.classList && target.classList.contains('mui-disabled')))) {
 					return;
 				}
 				if (touch.distance < options.tapMaxDistance && touch.deltaTime < options.tapMaxTime) {
@@ -1925,7 +1925,7 @@ var mui = (function(document, undefined) {
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		return $.extend(defaultShow, options);
+		return $.extend(true,{},defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
