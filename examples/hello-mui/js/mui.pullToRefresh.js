@@ -188,6 +188,7 @@
 				e.detail.gesture.preventDefault();
 				var deltaY = detail.deltaY - this.startDeltaY;
 				deltaY = Math.min(deltaY, 1.5 * this.options.down.height);
+				this.deltaY = deltaY;
 				this._pulling(deltaY);
 				var state = deltaY > this.options.down.height ? STATE_AFTERCHANGEOFFSET : STATE_BEFORECHANGEOFFSET;
 				if (this.state !== state) {
@@ -200,6 +201,13 @@
 						this.isNeedRefresh = false;
 					}
 					this['_' + state](deltaY);
+				}
+				if ($.os.ios && parseFloat($.os.version) >= 8) {
+					var clientY = detail.gesture.touches[0].clientY;
+					if ((clientY + 10) > window.innerHeight || clientY < 10) {
+						this._dragend(e);
+						return;
+					}
 				}
 			}
 		},
@@ -313,7 +321,11 @@
 			this.pullUpTips && this.pullUpTips.classList.remove(CLASS_HIDDEN);
 			this.pullDownTips.classList.add(CLASS_TRANSITIONING);
 			this.pullDownTips.style.webkitTransform = 'translate3d(0,0,0)';
-			this.removing = true;
+			if (this.deltaY <= 0) {
+				this.removePullDownTips();
+			} else {
+				this.removing = true;
+			}
 		},
 		endPullUpToRefresh: function(finished) {
 			if (finished) {
