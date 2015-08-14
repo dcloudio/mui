@@ -4974,6 +4974,7 @@ var mui = (function(document, undefined) {
 					}
 					if (!this.isDragging && Math.abs(this.lastX - this.startX) > this.options.dragThresholdX && (detail.direction === 'left' || (detail.direction === 'right'))) {
 						if (this.slideIn) {
+							this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
 							if (this.classList.contains(CLASS_ACTIVE)) {
 								if (this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE)) {
 									this.offCanvas = this.offCanvasRight;
@@ -5012,7 +5013,7 @@ var mui = (function(document, undefined) {
 								}
 							}
 						}
-						if (this.offCanvas) {
+						if (this.offCanvas && this.scroller) {
 							this.startX = this.lastX;
 							this.isDragging = true;
 
