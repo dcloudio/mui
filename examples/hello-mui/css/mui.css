@@ -1867,14 +1867,14 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     border-bottom: 0;
     border-radius: 6px;
 }
-.mui-card .mui-table-view .mui-table-view-divider:first-child
+.mui-card .mui-table-view .mui-table-view-divider:first-child, .mui-card .mui-table-view .mui-table-view-cell:first-child
 {
     top: 0;
 
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
-.mui-card .mui-table-view .mui-table-view-divider:last-child
+.mui-card .mui-table-view .mui-table-view-divider:last-child, .mui-card .mui-table-view .mui-table-view-cell:last-child
 {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
