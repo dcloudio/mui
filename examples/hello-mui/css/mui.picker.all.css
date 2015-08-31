@@ -1,0 +1,285 @@
+/**
+ * 选择列表插件
+ * varstion 2.0.0
+ * by Houfeng
+ * Houfeng@DCloud.io
+ */
+
+.mui-picker {
+    background-color: #ddd;
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    border: solid 1px rgba(0, 0, 0, 0.1);
+    -webkit-user-select: none;
+    user-select: none;
+    box-sizing: border-box;
+}
+.mui-picker-inner {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-mask-box-image: -webkit-linear-gradient(bottom, transparent, transparent 5%, #fff 20%, #fff 80%, transparent 95%, transparent);
+    -webkit-mask-box-image: linear-gradient(top, transparent, transparent 5%, #fff 20%, #fff 80%, transparent 95%, transparent);
+}
+.mui-pciker-list,
+.mui-pciker-rule {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    margin-top: -18px;
+}
+.mui-pciker-rule-bg {
+    z-index: 0;
+    /*background-color: #cfd5da;*/
+}
+.mui-pciker-rule-ft {
+    z-index: 2;
+    border-top: solid 1px rgba(0, 0, 0, 0.1);
+    border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+    /*-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);*/
+    /*box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);*/
+}
+.mui-pciker-list {
+    z-index: 1;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+}
+.mui-pciker-list li {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    color: #888;
+    padding: 0px 8px;
+    white-space: nowrap;
+    -webkit-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: default;
+    visibility: hidden;
+}
+.mui-pciker-list li.highlight,
+.mui-pciker-list li.visible {
+    visibility: visible;
+}
+.mui-pciker-list li.highlight {
+    color: #222;
+}
+.mui-poppicker {
+	position: fixed;
+	left: 0px;
+	width: 100%;
+	z-index: 999;
+	background-color: #eee;
+	border-top: solid 1px #ccc;
+	box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+	-webkit-transition: .3s;
+	bottom: 0px;
+	-webkit-transform: translateY(300px);
+}
+.mui-poppicker.mui-active {
+	-webkit-transform: translateY(0px);
+}
+.mui-android-5-1 .mui-poppicker {
+	bottom: -300px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-android-5-1 .mui-poppicker.mui-active {
+	bottom: 0px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-poppicker-header {
+	padding: 6px;
+	font-size: 14px;
+	color: #888;
+}
+.mui-poppicker-header .mui-btn {
+	font-size: 12px;
+	padding: 5px 10px;
+}
+.mui-poppicker-btn-cancel {
+	float: left;
+}
+.mui-poppicker-btn-ok {
+	float: right;
+}
+.mui-poppicker-clear {
+	clear: both;
+	height: 0px;
+	line-height: 0px;
+	font-size: 0px;
+	overflow: hidden;
+}
+.mui-poppicker-body {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	border-top: solid 1px #ddd;
+	/*-webkit-perspective: 1200px;
+	perspective: 1200px;
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;*/
+}
+.mui-poppicker-body .mui-picker {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	border: none;
+	float: left;
+}
+.mui-dtpicker {
+	position: fixed;
+	left: 0px;
+	width: 100%;
+	z-index: 999999;
+	background-color: #eee;
+	border-top: solid 1px #ccc;
+	box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+	-webkit-transition: .3s;
+	bottom: 0px;
+	-webkit-transform: translateY(300px);
+}
+.mui-dtpicker.mui-active {
+	-webkit-transform: translateY(0px);
+}
+/*用于将 html body 禁止滚动条*/
+
+.mui-dtpicker-active-for-page {
+	overflow: hidden !important;
+}
+.mui-android-5-1 .mui-dtpicker {
+	bottom: -300px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-android-5-1 .mui-dtpicker.mui-active {
+	bottom: 0px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-dtpicker-header {
+	padding: 6px;
+	font-size: 14px;
+	color: #888;
+}
+.mui-dtpicker-header button {
+	font-size: 12px;
+	padding: 5px 10px;
+}
+.mui-dtpicker-header button:last-child {
+	float: right;
+}
+.mui-dtpicker-body {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	/*border-top: solid 1px #eee;
+	background-color: #fff;*/
+}
+.mui-ios .mui-dtpicker-body {
+	-webkit-perspective: 1200px;
+	perspective: 1200px;
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-dtpicker-title h5 {
+	display: inline-block;
+	width: 20%;
+	margin: 0px;
+	padding: 8px;
+	text-align: center;
+	border-top: solid 1px #ddd;
+	background-color: #f0f0f0;
+	border-bottom: solid 1px #ccc;
+}
+.mui-dtpicker .mui-picker {
+	width: 20%;
+	height: 100%;
+	margin: 0px;
+	float: left;
+	border: none;
+}
+/*年月日时分*/
+
+[data-type="datetime"] .mui-picker,
+[data-type="time"] .mui-dtpicker-title h5 {
+	width: 20%;
+}
+[data-type="datetime"] [data-id="picker-h"],
+[data-type="datetime"] [data-id="title-h"] {
+	border-left: dotted 1px #ccc;
+}
+/*年月日*/
+
+[data-type="date"] .mui-picker,
+[data-type="date"] .mui-dtpicker-title h5 {
+	width: 33.3%;
+}
+[data-type="date"] [data-id="picker-h"],
+[data-type="date"] [data-id="picker-i"],
+[data-type="date"] [data-id="title-h"],
+[data-type="date"] [data-id="title-i"] {
+	display: none;
+}
+/*年月日时*/
+
+[data-type="hour"] .mui-picker,
+[data-type="hour"] .mui-dtpicker-title h5 {
+	width: 25%;
+}
+[data-type="hour"] [data-id="picker-i"],
+[data-type="hour"] [data-id="title-i"] {
+	display: none;
+}
+[data-type="hour"] [data-id="picker-h"],
+[data-type="hour"] [data-id="title-h"] {
+	border-left: dotted 1px #ccc;
+}
+/*时分*/
+
+[data-type="time"] .mui-picker,
+[data-type="time"] .mui-dtpicker-title h5 {
+	width: 50%;
+}
+[data-type="time"] [data-id="picker-y"],
+[data-type="time"] [data-id="picker-m"],
+[data-type="time"] [data-id="picker-d"],
+[data-type="time"] [data-id="title-y"],
+[data-type="time"] [data-id="title-m"],
+[data-type="time"] [data-id="title-d"] {
+	display: none;
+}
+/*年月*/
+
+[data-type="month"] .mui-picker,
+[data-type="month"] .mui-dtpicker-title h5 {
+	width: 50%;
+}
+[data-type="month"] [data-id="picker-d"],
+[data-type="month"] [data-id="picker-h"],
+[data-type="month"] [data-id="picker-i"],
+[data-type="month"] [data-id="title-d"],
+[data-type="month"] [data-id="title-h"],
+[data-type="month"] [data-id="title-i"] {
+	display: none;
+}

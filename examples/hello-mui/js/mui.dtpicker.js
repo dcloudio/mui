@@ -6,6 +6,23 @@
  */
 
 (function($, document) {
+	
+	//创建 DOM
+	$.dom = function(str) {
+		if (typeof(str) !== 'string') {
+			if ((str instanceof Array) || (str[0] && str.length)) {
+				return [].slice.call(str);
+			} else {
+				return [str];
+			}
+		}
+		if (!$.__create_dom_div__) {
+			$.__create_dom_div__ = document.createElement('div');
+		}
+		$.__create_dom_div__.innerHTML = str;
+		return [].slice.call($.__create_dom_div__.childNodes);
+	};
+	
 	var domBuffer = '<div class="mui-dtpicker" data-type="datetime">\
 		<div class="mui-dtpicker-header">\
 			<button data-id="btn-cancel" class="mui-btn">取消</button>\
@@ -13,39 +30,48 @@
 		</div>\
 		<div class="mui-dtpicker-title"><h5 data-id="title-y">年</h5><h5 data-id="title-m">月</h5><h5 data-id="title-d">日</h5><h5 data-id="title-h">时</h5><h5 data-id="title-i">分</h5></div>\
 		<div class="mui-dtpicker-body">\
-			<div data-id="picker-y" class="mui-listpicker">\
-				<div class="mui-listpicker-inner">\
-					<ul>\
+			<div data-id="picker-y" class="mui-picker">\
+				<div class="mui-picker-inner">\
+					<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+					<ul class="mui-pciker-list">\
 					</ul>\
+					<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 				</div>\
 			</div>\
-			<div data-id="picker-m" class="mui-listpicker">\
-				<div class="mui-listpicker-inner">\
-					<ul>\
+			<div data-id="picker-m" class="mui-picker">\
+				<div class="mui-picker-inner">\
+					<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+					<ul class="mui-pciker-list">\
 					</ul>\
+					<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 				</div>\
 			</div>\
-			<div data-id="picker-d" class="mui-listpicker">\
-				<div class="mui-listpicker-inner">\
-					<ul>\
+			<div data-id="picker-d" class="mui-picker">\
+				<div class="mui-picker-inner">\
+					<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+					<ul class="mui-pciker-list">\
 					</ul>\
+					<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 				</div>\
 			</div>\
-			<div data-id="picker-h" class="mui-listpicker">\
-				<div class="mui-listpicker-inner">\
-					<ul>\
+			<div data-id="picker-h" class="mui-picker">\
+				<div class="mui-picker-inner">\
+					<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+					<ul class="mui-pciker-list">\
 					</ul>\
+					<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 				</div>\
 			</div>\
-			<div data-id="picker-i" class="mui-listpicker">\
-				<div class="mui-listpicker-inner">\
-					<ul>\
+			<div data-id="picker-i" class="mui-picker">\
+				<div class="mui-picker-inner">\
+					<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+					<ul class="mui-pciker-list">\
 					</ul>\
+					<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 				</div>\
 			</div>\
 		</div>\
 	</div>';
-
 
 	//plugin
 	var DtPicker = $.DtPicker = $.Class.extend({
@@ -53,7 +79,7 @@
 			var self = this;
 			var _picker = $.dom(domBuffer)[0];
 			document.body.appendChild(_picker);
-			$('[data-id*="picker"]', _picker).listpicker();
+			$('[data-id*="picker"]', _picker).picker();
 			var ui = self.ui = {
 				picker: _picker,
 				mask: $.createMask(),
@@ -85,6 +111,13 @@
 				self.hide();
 			}, false);
 			self._create(options);
+			//防止滚动穿透
+			self.ui.picker.addEventListener('touchstart',function(event){
+				event.preventDefault();  
+			},false);
+			self.ui.picker.addEventListener('touchmove',function(event){
+				event.preventDefault();  
+			},false);
 		},
 		getSelected: function() {
 			var self = this;
@@ -92,11 +125,11 @@
 			var type = self.options.type;
 			var selected = {
 				type: type,
-				y: ui.y.getSelectedItem(),
-				m: ui.m.getSelectedItem(),
-				d: ui.d.getSelectedItem(),
-				h: ui.h.getSelectedItem(),
-				i: ui.i.getSelectedItem(),
+				y: ui.y.picker.getSelectedItem(),
+				m: ui.m.picker.getSelectedItem(),
+				d: ui.d.picker.getSelectedItem(),
+				h: ui.h.picker.getSelectedItem(),
+				i: ui.i.picker.getSelectedItem(),
 				toString: function() {
 					return this.value;
 				}
@@ -129,11 +162,11 @@
 			var self = this;
 			var ui = self.ui;
 			var parsedValue = self._parseValue(value);
-			ui.y.setSelectedValue(parsedValue.y, true);
-			ui.m.setSelectedValue(parsedValue.m, true);
-			ui.d.setSelectedValue(parsedValue.d, true);
-			ui.h.setSelectedValue(parsedValue.h, true);
-			ui.i.setSelectedValue(parsedValue.i, true);
+			ui.y.picker.setSelectedValue(parsedValue.y, 0);
+			ui.m.picker.setSelectedValue(parsedValue.m, 0);
+			ui.d.picker.setSelectedValue(parsedValue.d, 0);
+			ui.h.picker.setSelectedValue(parsedValue.h, 0);
+			ui.i.picker.setSelectedValue(parsedValue.i, 0);
 		},
 		isLeapYear: function(year) {
 			return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -182,8 +215,8 @@
 					});
 				}
 			}
-			ui.y.setItems(yArray);
-			//ui.y.setSelectedValue(current);
+			ui.y.picker.setItems(yArray);
+			//ui.y.picker.setSelectedValue(current);
 		},
 		_createMonth: function(current) {
 			var self = this;
@@ -202,8 +235,8 @@
 					});
 				}
 			}
-			ui.m.setItems(mArray);
-			//ui.m.setSelectedValue(current);
+			ui.m.picker.setItems(mArray);
+			//ui.m.picker.setSelectedValue(current);
 		},
 		_createDay: function(current) {
 			var self = this;
@@ -214,7 +247,7 @@
 			if (options.customData.d) {
 				dArray = options.customData.d;
 			} else {
-				var maxDay = self.getDayNum(parseInt(ui.y.getSelectedValue()), parseInt(ui.m.getSelectedValue()));
+				var maxDay = self.getDayNum(parseInt(ui.y.picker.getSelectedValue()), parseInt(ui.m.picker.getSelectedValue()));
 				for (var d = 1; d <= maxDay; d++) {
 					var val = self._fill(d);
 					dArray.push({
@@ -223,9 +256,9 @@
 					});
 				}
 			}
-			ui.d.setItems(dArray);
-			current = current || ui.d.getSelectedValue();
-			//ui.d.setSelectedValue(current);
+			ui.d.picker.setItems(dArray);
+			current = current || ui.d.picker.getSelectedValue();
+			//ui.d.picker.setSelectedValue(current);
 		},
 		_createHours: function(current) {
 			var self = this;
@@ -244,8 +277,8 @@
 					});
 				}
 			}
-			ui.h.setItems(hArray);
-			//ui.h.setSelectedValue(current);
+			ui.h.picker.setItems(hArray);
+			//ui.h.picker.setSelectedValue(current);
 		},
 		_createMinutes: function(current) {
 			var self = this;
@@ -264,8 +297,8 @@
 					});
 				}
 			}
-			ui.i.setItems(iArray);
-			//ui.i.setSelectedValue(current);
+			ui.i.picker.setItems(iArray);
+			//ui.i.picker.setSelectedValue(current);
 		},
 		_setLabels: function() {
 			var self = this;
@@ -336,6 +369,11 @@
 			ui.mask.show();
 			document.body.classList.add($.className('dtpicker-active-for-page'));
 			ui.picker.classList.add($.className('active'));
+			//处理物理返回键
+			self.__back = $.back;
+			$.back = function() {
+				self.hide();
+			};
 		},
 		hide: function() {
 			var self = this;
@@ -344,6 +382,8 @@
 			ui.picker.classList.remove($.className('active'));
 			ui.mask.close();
 			document.body.classList.remove($.className('dtpicker-active-for-page'));
+			//处理物理返回键
+			$.back=self.__back;
 		},
 		dispose: function() {
 			var self = this;

@@ -1,12 +1,28 @@
 /**
  * 弹出选择列表插件
- * 此组件依赖 listpcker ，请在页面中先引入 mui.listpicker.css + mui.listpicker.js
+ * 此组件依赖 listpcker ，请在页面中先引入 mui.picker.css + mui.picker.js
  * varstion 1.0.1
  * by Houfeng
  * Houfeng@DCloud.io
  */
 
 (function($, document) {
+
+	//创建 DOM
+	$.dom = function(str) {
+		if (typeof(str) !== 'string') {
+			if ((str instanceof Array) || (str[0] && str.length)) {
+				return [].slice.call(str);
+			} else {
+				return [str];
+			}
+		}
+		if (!$.__create_dom_div__) {
+			$.__create_dom_div__ = document.createElement('div');
+		}
+		$.__create_dom_div__.innerHTML = str;
+		return [].slice.call($.__create_dom_div__.childNodes);
+	};
 
 	var panelBuffer = '<div class="mui-poppicker">\
 		<div class="mui-poppicker-header">\
@@ -18,10 +34,12 @@
 		</div>\
 	</div>';
 
-	var pickerBuffer = '<div class="mui-listpicker">\
-		<div class="mui-listpicker-inner">\
-			<ul>\
+	var pickerBuffer = '<div class="mui-picker">\
+		<div class="mui-picker-inner">\
+			<div class="mui-pciker-rule mui-pciker-rule-ft"></div>\
+			<ul class="mui-pciker-list">\
 			</ul>\
+			<div class="mui-pciker-rule mui-pciker-rule-bg"></div>\
 		</div>\
 	</div>';
 
@@ -54,25 +72,32 @@
 			self.mask[0].addEventListener('tap', function() {
 				self.hide();
 			}, false);
-			self._createListPicker();
+			self._createPicker();
+			//防止滚动穿透
+			self.panel.addEventListener('touchstart', function(event) {
+				event.preventDefault();
+			}, false);
+			self.panel.addEventListener('touchmove', function(event) {
+				event.preventDefault();
+			}, false);
 		},
-		_createListPicker: function() {
+		_createPicker: function() {
 			var self = this;
 			var layer = self.options.layer || 1;
 			var width = (100 / layer) + '%';
 			self.pickers = [];
 			for (var i = 1; i <= layer; i++) {
-				var picker = $.dom(pickerBuffer)[0];
-				picker.style.width = width;
-				self.body.appendChild(picker);
-				$(picker).listpicker();
+				var pickerElement = $.dom(pickerBuffer)[0];
+				pickerElement.style.width = width;
+				self.body.appendChild(pickerElement);
+				var picker = $(pickerElement).picker();
 				self.pickers.push(picker);
-				picker.addEventListener('change', function(event) {
-					var nextPicker = this.nextSibling;
-					if (nextPicker && nextPicker.listpickerId) {
+				pickerElement.addEventListener('change', function(event) {
+					var nextPickerElement = this.nextSibling;
+					if (nextPickerElement && nextPickerElement.picker) {
 						var eventData = event.detail || {};
 						var preItem = eventData.item || {};
-						nextPicker.setItems(preItem.children);
+						nextPickerElement.picker.setItems(preItem.children);
 					}
 				}, false);
 			}
@@ -100,6 +125,11 @@
 			self.mask.show();
 			document.body.classList.add($.className('poppicker-active-for-page'));
 			self.panel.classList.add($.className('active'));
+			//处理物理返回键
+			self.__back = $.back;
+			$.back = function() {
+				self.hide();
+			};
 		},
 		//隐藏
 		hide: function() {
@@ -108,6 +138,8 @@
 			self.panel.classList.remove($.className('active'));
 			self.mask.close();
 			document.body.classList.remove($.className('poppicker-active-for-page'));
+			//处理物理返回键
+			$.back=self.__back;
 		},
 		dispose: function() {
 			var self = this;
