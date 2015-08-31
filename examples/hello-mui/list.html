@@ -296,23 +296,6 @@
 						range（滑块）
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-collapse">
-					<a class="mui-navigate-right" href="#">
-						segment（分段选择）
-					</a>
-					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tab-with-segmented-control.html">
-								按钮式选项卡
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tab-with-viewpagerindicator.html">
-								可拖动选项卡(仿Android)
-							</a>
-						</li>
-					</ul>
-				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/switches.html">
 						switch（开关）
@@ -580,7 +563,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html')&&!~id.indexOf('tab-with-viewpagerindicator.html')&&mui.os.ios) {
+					if (!~id.indexOf('popovers.html')&&mui.os.ios) {
 						mui.openWindow({
 							id: id,
 							url: this.href,
