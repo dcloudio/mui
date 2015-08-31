@@ -10,6 +10,7 @@
 
 	var CLASS_CONTROL_ITEM = $.className('control-item');
 	var CLASS_SEGMENTED_CONTROL = $.className('segmented-control');
+	var CLASS_SEGMENTED_CONTROL_VERTICAL = $.className('segmented-control-vertical');
 	var CLASS_CONTROL_CONTENT = $.className('control-content');
 	var CLASS_TAB_BAR = $.className('bar-tab');
 	var CLASS_TAB_ITEM = $.className('tab-item');
@@ -17,7 +18,11 @@
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
-			event.preventDefault(); //stop hash change
+			if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains(CLASS_SEGMENTED_CONTROL_VERTICAL)) {
+				//vertical 如果preventDefault会导致无法滚动
+			} else {
+				event.preventDefault(); //stop hash change				
+			}
 			//			if (target.hash) {
 			return target;
 			//			}
@@ -67,7 +72,6 @@
 		if (!targetTab.hash) {
 			return;
 		}
-
 		targetBody = document.getElementById(targetTab.hash.replace('#', ''));
 
 		if (!targetBody) {

@@ -23,7 +23,6 @@
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
-			e.preventDefault();
 			this._super(e);
 		},
 		_drag: function(e) {

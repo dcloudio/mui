@@ -435,15 +435,19 @@
 			var input = cell.querySelector('input[type=radio]');
 			if (input) {
 				//				input.click();
-				input.checked = !input.checked;
-				$.trigger(input, 'change');
+				if (!input.disabled && !input.readOnly) {
+					input.checked = !input.checked;
+					$.trigger(input, 'change');
+				}
 			}
 		} else if (classList.contains($.className('checkbox'))) {
 			var input = cell.querySelector('input[type=checkbox]');
 			if (input) {
 				//				input.click();
-				input.checked = !input.checked;
-				$.trigger(input, 'change');
+				if (!input.disabled && !input.readOnly) {
+					input.checked = !input.checked;
+					$.trigger(input, 'change');
+				}
 			}
 		}
 	};

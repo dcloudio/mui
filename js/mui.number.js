@@ -16,16 +16,15 @@
 	var inputClassName = $.className('numbox-input');
 
 	var Numbox = $.Numbox = $.Class.extend({
+		/**
+		 * 构造函数
+		 **/
 		init: function(holder, options) {
 			var self = this;
 			if (!holder) {
 				throw "构造 numbox 时缺少容器元素";
 			}
 			self.holder = holder;
-			//避免重复初始化开始
-			if (self.holder.__numbox_inited) return;
-			self.holder.__numbox_inited = true;
-			//避免重复初始化结束
 			options = options || {};
 			options.step = parseInt(options.step || 1);
 			self.options = options;
@@ -35,6 +34,9 @@
 			self.checkValue();
 			self.initEvent();
 		},
+		/**
+		 * 初始化事件绑定
+		 **/
 		initEvent: function() {
 			var self = this;
 			self.plus.addEventListener(tapEventName, function(event) {
@@ -51,6 +53,9 @@
 				self.checkValue();
 			});
 		},
+		/**
+		 * 验证当前值是法合法
+		 **/
 		checkValue: function() {
 			var self = this;
 			var val = self.input.value;
@@ -73,28 +78,38 @@
 				}
 				self.input.value = val;
 			}
+		},
+		/**
+		 * 更新选项
+		 **/
+		setOption: function(name, value) {
+			var self = this;
+			self.options[name] = value;
 		}
 	});
 
 	$.fn.numbox = function(options) {
+		var instanceArray = [];
 		//遍历选择的元素
 		this.each(function(i, element) {
+			if (element.numbox) return;
 			if (options) {
-				new Numbox(element, options);
+				element.numbox = new Numbox(element, options);
 			} else {
 				var optionsText = element.getAttribute('data-numbox-options');
 				var options = optionsText ? JSON.parse(optionsText) : {};
 				options.step = element.getAttribute('data-numbox-step') || options.step;
 				options.min = element.getAttribute('data-numbox-min') || options.min;
 				options.max = element.getAttribute('data-numbox-max') || options.max;
-				new Numbox(element, options);
+				element.numbox = new Numbox(element, options);
 			}
 		});
-		return this;
+		return this[0] ? this[0].numbox : null;
 	}
 
 	//自动处理 class='mui-locker' 的 dom
 	$.ready(function() {
 		$('.' + holderClassName).numbox();
 	});
+
 }(mui))

@@ -1,3 +1,13 @@
+.#{$namespace}row {
+    @include clearfix();
+}
+.#{$namespace}col-xs-1, .#{$namespace}col-sm-1, .#{$namespace}col-xs-2, .#{$namespace}col-sm-2, .#{$namespace}col-xs-3, .#{$namespace}col-sm-3, .#{$namespace}col-xs-4, .#{$namespace}col-sm-4,  .#{$namespace}col-xs-5, .#{$namespace}col-sm-5, .#{$namespace}col-xs-6, .#{$namespace}col-sm-6, .#{$namespace}col-xs-7, .#{$namespace}col-sm-7, .#{$namespace}col-xs-8, .#{$namespace}col-sm-8, .#{$namespace}col-xs-9, .#{$namespace}col-sm-9, .#{$namespace}col-xs-10, .#{$namespace}col-sm-10,  .#{$namespace}col-xs-11, .#{$namespace}col-sm-11, .#{$namespace}col-xs-12, .#{$namespace}col-sm-12 {
+  position: relative;
+  min-height: 1px;
+}
+.#{$namespace}row>[class*="#{$namespace}col-"]{
+  float: left;  
+}
 .#{$namespace}col-xs-12 {
     width: 100%;
 }

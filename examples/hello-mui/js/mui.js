@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.2.0 (https://github.com/dcloudio/mui)
+ * Mui v2.3.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -1758,6 +1758,7 @@ var mui = (function(document, undefined) {
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
 				if ($.options.gestureConfig.pinch && session.pinch && touch.touches.length === 2) {
+					session.pinch = false;
 					$.trigger(session.target, name + 'end', touch);
 				}
 				break;
@@ -3192,28 +3193,28 @@ var mui = (function(document, undefined) {
 			this.stopped = false;
 
 			this.options = $.extend(true, {
-				scrollY: true,//是否竖向滚动
-				scrollX: false,//是否横向滚动
-				startX: 0,//初始化时滚动至x
-				startY: 0,//初始化时滚动至y
-				indicators: true,//是否显示滚动条
+				scrollY: true, //是否竖向滚动
+				scrollX: false, //是否横向滚动
+				startX: 0, //初始化时滚动至x
+				startY: 0, //初始化时滚动至y
+				indicators: true, //是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
 				fixedBadAndorid: false,
 				preventDefaultException: {
-					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
+					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|VIDEO)$/
 				},
 				momentum: true,
 
-				snap: false,//图片轮播，拖拽式选项卡
+				snap: false, //图片轮播，拖拽式选项卡
 
-				bounce: true,//是否启用回弹
-				bounceTime: 300,//回弹动画时间
-				bounceEasing: ease.circular.style,//回弹动画曲线
+				bounce: true, //是否启用回弹
+				bounceTime: 300, //回弹动画时间
+				bounceEasing: ease.circular.style, //回弹动画曲线
 
 				directionLockThreshold: 5,
 
-				parallaxElement: false,//视差元素
+				parallaxElement: false, //视差元素
 				parallaxRatio: 0.5
 			}, options);
 
@@ -3439,14 +3440,15 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_start: function(e) {
+			e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition && this.moved) {
+			if (this.isInTransition) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
-				this.resetPosition(); //reset
+				//				this.resetPosition(); //reset
 				$.trigger(this.scroller, 'scrollend', this);
 				//				e.stopPropagation();
 				e.preventDefault();
@@ -4086,7 +4088,6 @@ var mui = (function(document, undefined) {
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
-			e.preventDefault();
 			this._super(e);
 		},
 		_drag: function(e) {
@@ -4899,12 +4900,23 @@ var mui = (function(document, undefined) {
 				this.options = $.extend(true, {
 					dragThresholdX: 10,
 					scale: 0.8,
-					opacity: 0.1
+					opacity: 0.1,
+					preventDefaultException: {
+						tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|VIDEO)$/
+					},
 				}, options);
 				document.body.classList.add('mui-fullscreen'); //fullscreen
 				this.refresh();
 				this.initEvent();
 			}
+		},
+		_preventDefaultException: function(el, exceptions) {
+			for (var i in exceptions) {
+				if (exceptions[i].test(el[i])) {
+					return true;
+				}
+			}
+			return false;
 		},
 		refresh: function(offCanvas) {
 			//			offCanvas && !offCanvas.classList.contains(CLASS_ACTIVE) && this.classList.remove(CLASS_ACTIVE);
@@ -4954,10 +4966,7 @@ var mui = (function(document, undefined) {
 		handleEvent: function(e) {
 			switch (e.type) {
 				case 'touchstart':
-					var tagName = e.target && e.target.tagName;
-					if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
-						e.preventDefault();
-					}
+					e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 					break;
 				case 'webkitTransitionEnd': //有个bug需要处理，需要考虑假设没有触发webkitTransitionEnd的情况
 					if (e.target === this.scroller) {
@@ -5788,6 +5797,7 @@ var mui = (function(document, undefined) {
 
 	var CLASS_CONTROL_ITEM = 'mui-control-item';
 	var CLASS_SEGMENTED_CONTROL = 'mui-segmented-control';
+	var CLASS_SEGMENTED_CONTROL_VERTICAL = 'mui-segmented-control-vertical';
 	var CLASS_CONTROL_CONTENT = 'mui-control-content';
 	var CLASS_TAB_BAR = 'mui-bar-tab';
 	var CLASS_TAB_ITEM = 'mui-tab-item';
@@ -5795,7 +5805,11 @@ var mui = (function(document, undefined) {
 
 	var handle = function(event, target) {
 		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
-			event.preventDefault(); //stop hash change
+			if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains(CLASS_SEGMENTED_CONTROL_VERTICAL)) {
+				//vertical 如果preventDefault会导致无法滚动
+			} else {
+				event.preventDefault(); //stop hash change				
+			}
 			//			if (target.hash) {
 			return target;
 			//			}
@@ -5845,7 +5859,6 @@ var mui = (function(document, undefined) {
 		if (!targetTab.hash) {
 			return;
 		}
-
 		targetBody = document.getElementById(targetTab.hash.replace('#', ''));
 
 		if (!targetBody) {
@@ -6477,15 +6490,19 @@ var mui = (function(document, undefined) {
 			var input = cell.querySelector('input[type=radio]');
 			if (input) {
 				//				input.click();
-				input.checked = !input.checked;
-				$.trigger(input, 'change');
+				if (!input.disabled && !input.readOnly) {
+					input.checked = !input.checked;
+					$.trigger(input, 'change');
+				}
 			}
 		} else if (classList.contains('mui-checkbox')) {
 			var input = cell.querySelector('input[type=checkbox]');
 			if (input) {
 				//				input.click();
-				input.checked = !input.checked;
-				$.trigger(input, 'change');
+				if (!input.disabled && !input.readOnly) {
+					input.checked = !input.checked;
+					$.trigger(input, 'change');
+				}
 			}
 		}
 	};
@@ -6959,16 +6976,15 @@ var mui = (function(document, undefined) {
 	var inputClassName = 'mui-numbox-input';
 
 	var Numbox = $.Numbox = $.Class.extend({
+		/**
+		 * 构造函数
+		 **/
 		init: function(holder, options) {
 			var self = this;
 			if (!holder) {
 				throw "构造 numbox 时缺少容器元素";
 			}
 			self.holder = holder;
-			//避免重复初始化开始
-			if (self.holder.__numbox_inited) return;
-			self.holder.__numbox_inited = true;
-			//避免重复初始化结束
 			options = options || {};
 			options.step = parseInt(options.step || 1);
 			self.options = options;
@@ -6978,6 +6994,9 @@ var mui = (function(document, undefined) {
 			self.checkValue();
 			self.initEvent();
 		},
+		/**
+		 * 初始化事件绑定
+		 **/
 		initEvent: function() {
 			var self = this;
 			self.plus.addEventListener(tapEventName, function(event) {
@@ -6994,6 +7013,9 @@ var mui = (function(document, undefined) {
 				self.checkValue();
 			});
 		},
+		/**
+		 * 验证当前值是法合法
+		 **/
 		checkValue: function() {
 			var self = this;
 			var val = self.input.value;
@@ -7016,28 +7038,38 @@ var mui = (function(document, undefined) {
 				}
 				self.input.value = val;
 			}
+		},
+		/**
+		 * 更新选项
+		 **/
+		setOption: function(name, value) {
+			var self = this;
+			self.options[name] = value;
 		}
 	});
 
 	$.fn.numbox = function(options) {
+		var instanceArray = [];
 		//遍历选择的元素
 		this.each(function(i, element) {
+			if (element.numbox) return;
 			if (options) {
-				new Numbox(element, options);
+				element.numbox = new Numbox(element, options);
 			} else {
 				var optionsText = element.getAttribute('data-numbox-options');
 				var options = optionsText ? JSON.parse(optionsText) : {};
 				options.step = element.getAttribute('data-numbox-step') || options.step;
 				options.min = element.getAttribute('data-numbox-min') || options.min;
 				options.max = element.getAttribute('data-numbox-max') || options.max;
-				new Numbox(element, options);
+				element.numbox = new Numbox(element, options);
 			}
 		});
-		return this;
+		return this[0] ? this[0].numbox : null;
 	}
 
 	//自动处理 class='mui-locker' 的 dom
 	$.ready(function() {
 		$('.' + holderClassName).numbox();
 	});
+
 }(mui))
