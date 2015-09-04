@@ -307,3 +307,6 @@
     margin: 0 auto;
     width: auto;
 }
+.#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}segmented-control {
+    top: 0px;
+}

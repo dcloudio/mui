@@ -86,7 +86,13 @@
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c") + "')");
+			if (data !== '') {
+				data = data || {};
+				if ($.isPlainObject(data)) {
+					data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
+				}
+			}
+			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
 		}
 	};
 	/**
@@ -97,7 +103,11 @@
 	 */
 	$.receive = function(eventType, data) {
 		if (eventType) {
-			data = JSON.parse(data);
+			try {
+				if (data) {
+					data = JSON.parse(data);
+				}
+			} catch (e) {}
 			$.trigger(document, eventType, data);
 		}
 	};
@@ -247,7 +257,7 @@
 				}
 
 				//之前没有，那就新创建	
-				if(!webview){
+				if (!webview) {
 					webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
 						preload: true
 					}, options.extras));
@@ -389,7 +399,7 @@
 	$.plusReady(function() {
 		$.currentWebview = plus.webview.currentWebview();
 	});
-	$.registerInit({
+	$.addInit({
 		name: '5+',
 		index: 100,
 		handle: function() {

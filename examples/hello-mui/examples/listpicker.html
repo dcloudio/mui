@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<link href="../css/mui.listpicker.css" rel="stylesheet" />
 		<style>
 			html,
@@ -21,9 +22,6 @@
 			}
 			h5.mui-content-padded:first-child {
 				margin-top: 12px !important;
-			}
-			#userPicker {
-				height: 185px;
 			}
 			.mui-btn {
 				font-size: 16px;
@@ -46,6 +44,10 @@
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">listpicker (选择列表)</h1>
+		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<div id='userPicker' class="mui-listpicker">
@@ -73,7 +75,6 @@
 					<button data-method='setSelectedValue' data-args='zhz' class="mui-btn api-btn" type='button'>设置选中的值(智子)</button>
 				</p>
 				<div id='result' class="ui-alert"></div>
-
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
@@ -85,10 +86,10 @@
 					//
 					var userPicker = doc.getElementById('userPicker');
 					var result = doc.getElementById('result');
-					userPicker.setSelectedValue('ymt');
+					//userPicker.setSelectedValue('ymt');
 					userPicker.addEventListener('change', function(event) {
 						var index = event.detail.index;
-						console.log(index);
+						//console.log(index);
 					}, false);
 					var apiBtns = [].slice.call($('.api-btn'));
 					for (var i in apiBtns) {
@@ -104,6 +105,7 @@
 					}
 				});
 			})(mui, document);
+			
 		</script>
 	</body>
 

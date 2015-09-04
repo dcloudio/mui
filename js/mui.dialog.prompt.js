@@ -21,7 +21,9 @@
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
+				$.plusReady(function() {
+					plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
+				});
 			}
 
 		} else {

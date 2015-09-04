@@ -28,11 +28,11 @@
 			this.stopped = false;
 
 			this.options = $.extend(true, {
-				scrollY: true,
-				scrollX: false,
-				startX: 0,
-				startY: 0,
-				indicators: true,
+				scrollY: true,//是否竖向滚动
+				scrollX: false,//是否横向滚动
+				startX: 0,//初始化时滚动至x
+				startY: 0,//初始化时滚动至y
+				indicators: true,//是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
 				fixedBadAndorid: false,
@@ -41,15 +41,15 @@
 				},
 				momentum: true,
 
-				snap: false,
+				snap: false,//图片轮播，拖拽式选项卡
 
-				bounce: true,
-				bounceTime: 300,
-				bounceEasing: ease.circular.style,
+				bounce: true,//是否启用回弹
+				bounceTime: 300,//回弹动画时间
+				bounceEasing: ease.circular.style,//回弹动画曲线
 
 				directionLockThreshold: 5,
 
-				parallaxElement: false,
+				parallaxElement: false,//视差元素
 				parallaxRatio: 0.5
 			}, options);
 
@@ -353,7 +353,7 @@
 			} else {
 				isReturn = true;
 			}
-			if (isPreventDefault) {
+			if (this.moved || isPreventDefault) {
 				e.stopPropagation(); //阻止冒泡(scroll类嵌套)
 				detail.gesture && detail.gesture.preventDefault();
 			}

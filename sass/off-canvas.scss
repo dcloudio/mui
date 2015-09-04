@@ -2,6 +2,9 @@
 .#{$namespace}off-canvas-wrap{
     .#{$namespace}bar{//fix android
        position: absolute!important;
+       @include transform(translate3d(0, 0, 0));//fix ios(offcanvas scalable的时候,bar会消失)
+       -webkit-box-shadow: none;
+       box-shadow: none;
     }
    } 
 //}
@@ -81,4 +84,36 @@
 }
 .#{$namespace}off-canvas-right {
     right: 0;
+}
+
+//scalable
+.#{$namespace}off-canvas-wrap:not(.#{$namespace}slide-in).#{$namespace}scalable {
+    background-color: #333;
+    >.#{$namespace}off-canvas-left,>.#{$namespace}off-canvas-right{
+        width: 80%;
+        @include transform(scale(0.8));
+        opacity: 0.1;
+        &.#{$namespace}transitioning{
+            -webkit-transition: -webkit-transform 200ms ease, opacity 200ms ease;
+            transition: transform 200ms ease, opacity 200ms ease;
+        }
+    }
+    >.#{$namespace}off-canvas-left{
+        -webkit-transform-origin: -100%;
+        transform-origin: -100%;
+    }
+    >.#{$namespace}off-canvas-right{
+        -webkit-transform-origin: 200%;
+        transform-origin: 200%;
+    }
+    &.#{$namespace}active{
+         >.#{$namespace}inner-wrap{
+             @include transform(scale(0.8));
+         }
+         >.#{$namespace}off-canvas-left,>.#{$namespace}off-canvas-right{
+             @include transform(scale(1));
+             opacity: 1;
+         }
+    }
+    
 }

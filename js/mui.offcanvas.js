@@ -9,7 +9,7 @@
 (function($, window, document, name) {
 	var CLASS_OFF_CANVAS_LEFT = $.className('off-canvas-left');
 	var CLASS_OFF_CANVAS_RIGHT = $.className('off-canvas-right');
-	var CLASS_ACTION_BACKDEOP = $.className('off-canvas-backdrop');
+	var CLASS_ACTION_BACKDROP = $.className('off-canvas-backdrop');
 	var CLASS_OFF_CANVAS_WRAP = $.className('off-canvas-wrap');
 
 	var CLASS_SLIDE_IN = $.className('slide-in');
@@ -28,7 +28,9 @@
 			this.classList = this.wrapper.classList;
 			if (this.scroller) {
 				this.options = $.extend(true, {
-					dragThresholdX: 10
+					dragThresholdX: 10,
+					scale: 0.8,
+					opacity: 0.1
 				}, options);
 				document.body.classList.add($.className('fullscreen')); //fullscreen
 				this.refresh();
@@ -38,6 +40,7 @@
 		refresh: function(offCanvas) {
 			//			offCanvas && !offCanvas.classList.contains(CLASS_ACTIVE) && this.classList.remove(CLASS_ACTIVE);
 			this.slideIn = this.classList.contains(CLASS_SLIDE_IN);
+			this.scalable = this.classList.contains($.className('scalable')) && !this.slideIn;
 			this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
 			//			!offCanvas && this.scroller.classList.remove(CLASS_TRANSITIONING);
 			//			!offCanvas && this.scroller.setAttribute('style', '');
@@ -69,7 +72,7 @@
 				//				this.offCanvasLeft.classList.remove(CLASS_ACTIVE);
 				//				this.offCanvasLeft.setAttribute('style', '');
 			}
-			this.backdrop = this.scroller.querySelector('.' + CLASS_ACTION_BACKDEOP);
+			this.backdrop = this.scroller.querySelector('.' + CLASS_ACTION_BACKDROP);
 
 			this.options.dragThresholdX = this.options.dragThresholdX || 10;
 
@@ -103,24 +106,51 @@
 					if (!this.isDragging && Math.abs(this.lastX - this.startX) > this.options.dragThresholdX && (detail.direction === 'left' || (detail.direction === 'right'))) {
 						if (this.slideIn) {
 							if (this.classList.contains(CLASS_ACTIVE)) {
-								this.scroller = this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE) ? this.offCanvasRight : this.offCanvasLeft;
+								if (this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE)) {
+									this.offCanvas = this.offCanvasRight;
+									this.offCanvasWidth = this.offCanvasRightWidth;
+								} else {
+									this.offCanvas = this.offCanvasLeft;
+									this.offCanvasWidth = this.offCanvasLeftWidth;
+								}
 							} else {
 								if (detail.direction === 'left' && this.offCanvasRight) {
-									this.scroller = this.offCanvasRight;
+									this.offCanvas = this.offCanvasRight;
+									this.offCanvasWidth = this.offCanvasRightWidth;
 								} else if (detail.direction === 'right' && this.offCanvasLeft) {
-									this.scroller = this.offCanvasLeft;
+									this.offCanvas = this.offCanvasLeft;
+									this.offCanvasWidth = this.offCanvasLeftWidth;
 								} else {
 									this.scroller = null;
 								}
 							}
+						} else {
+							if (this.classList.contains(CLASS_ACTIVE)) {
+								if (detail.direction === 'left') {
+									this.offCanvas = this.offCanvasLeft;
+									this.offCanvasWidth = this.offCanvasLeftWidth;
+								} else {
+									this.offCanvas = this.offCanvasRight;
+									this.offCanvasWidth = this.offCanvasRightWidth;
+								}
+							} else {
+								if (detail.direction === 'right') {
+									this.offCanvas = this.offCanvasLeft;
+									this.offCanvasWidth = this.offCanvasLeftWidth;
+								} else {
+									this.offCanvas = this.offCanvasRight;
+									this.offCanvasWidth = this.offCanvasRightWidth;
+								}
+							}
 						}
-						if (this.scroller) {
+						if (this.offCanvas) {
 							this.startX = this.lastX;
 							this.isDragging = true;
 
 							$.gestures.session.lockDirection = true; //锁定方向
 							$.gestures.session.startDirection = detail.direction;
 
+							this.offCanvas.classList.remove(CLASS_TRANSITIONING);
 							this.scroller.classList.remove(CLASS_TRANSITIONING);
 							this.offsetX = this.getTranslateX();
 							this._initOffCanvasVisible();
@@ -137,10 +167,10 @@
 						var detail = e.detail;
 						var direction = detail.direction;
 						this.isDragging = false;
+						this.offCanvas.classList.add(CLASS_TRANSITIONING);
 						this.scroller.classList.add(CLASS_TRANSITIONING);
 						var ratio = 0;
 						var x = this.getTranslateX();
-
 						if (!this.slideIn) {
 							if (x >= 0) {
 								ratio = (this.offCanvasLeftWidth && (x / this.offCanvasLeftWidth)) || 0;
@@ -317,7 +347,7 @@
 						}
 					}
 				} else {
-					if (this.scroller.classList.contains(CLASS_OFF_CANVAS_RIGHT)) {
+					if (this.offCanvas.classList.contains(CLASS_OFF_CANVAS_RIGHT)) {
 						if (x < 0) {
 							this.setTranslateX(0);
 							return;
@@ -343,12 +373,35 @@
 		},
 		setTranslateX: $.animationFrame(function(x) {
 			if (this.scroller) {
-				this.scroller.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+				if (this.scalable && this.offCanvas.parentNode === this.wrapper) {
+					var percent = Math.abs(x) / this.offCanvasWidth;
+					var zoomOutScale = 1 - (1 - this.options.scale) * percent;
+					var zoomInScale = this.options.scale + (1 - this.options.scale) * percent;
+					var zoomOutOpacity = 1 - (1 - this.options.opacity) * percent;
+					var zoomInOpacity = this.options.opacity + (1 - this.options.opacity) * percent;
+					if (this.offCanvas.classList.contains(CLASS_OFF_CANVAS_LEFT)) {
+						this.offCanvas.style.webkitTransformOrigin = '-100%';
+						this.scroller.style.webkitTransformOrigin = 'left';
+					} else {
+						this.offCanvas.style.webkitTransformOrigin = '200%';
+						this.scroller.style.webkitTransformOrigin = 'right';
+					}
+					this.offCanvas.style.opacity = zoomInOpacity;
+					this.offCanvas.style.webkitTransform = 'translate3d(0,0,0) scale(' + zoomInScale + ')';
+					this.scroller.style.webkitTransform = 'translate3d(' + x + 'px,0,0) scale(' + zoomOutScale + ')';
+				} else {
+					if (this.slideIn) {
+						this.offCanvas.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+					} else {
+						this.scroller.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+					}
+				}
 			}
 		}),
 		getTranslateX: function() {
-			if (this.scroller) {
-				var result = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
+			if (this.offCanvas) {
+				var scroller = this.slideIn ? this.offCanvas : this.scroller;
+				var result = $.parseTranslateMatrix($.getStyles(scroller, 'webkitTransform'));
 				return (result && result.x) || 0;
 			}
 			return 0;
@@ -377,10 +430,11 @@
 		},
 		close: function() {
 			this._initOffCanvasVisible();
-			if (this.slideIn) {
-				this.scroller = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
-			}
+			this.offCanvas = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT + '.' + CLASS_ACTIVE) || this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_LEFT + '.' + CLASS_ACTIVE);
+			this.offCanvasWidth = this.offCanvas.offsetWidth;
 			if (this.scroller) {
+				this.offCanvas.offsetHeight;
+				this.offCanvas.classList.add(CLASS_TRANSITIONING);
 				this.scroller.classList.add(CLASS_TRANSITIONING);
 				this.openPercentage(0);
 			}
@@ -393,10 +447,16 @@
 			if (!direction) {
 				direction = this.wrapper.querySelector('.' + CLASS_OFF_CANVAS_RIGHT) ? 'right' : 'left';
 			}
-			if (this.slideIn) {
-				this.scroller = direction === 'right' ? this.offCanvasRight : this.offCanvasLeft;
+			if (direction === 'right') {
+				this.offCanvas = this.offCanvasRight;
+				this.offCanvasWidth = this.offCanvasRightWidth;
+			} else {
+				this.offCanvas = this.offCanvasLeft;
+				this.offCanvasWidth = this.offCanvasLeftWidth;
 			}
 			if (this.scroller) {
+				this.offCanvas.offsetHeight;
+				this.offCanvas.classList.add(CLASS_TRANSITIONING);
 				this.scroller.classList.add(CLASS_TRANSITIONING);
 				this.openPercentage(direction === 'left' ? 100 : -100);
 			}
@@ -459,7 +519,7 @@
 		var target = e.target;
 		for (; target && target !== document; target = target.parentNode) {
 			if (target.tagName === 'A' && target.hash && target.hash === ('#' + $.targets.offcanvas.id)) {
-				e.detail.gesture.preventDefault(); //fixed hashchange
+				e.detail && e.detail.gesture && e.detail.gesture.preventDefault(); //fixed hashchange
 				$($.targets._container).offCanvas().toggle($.targets.offcanvas);
 				$.targets.offcanvas = $.targets._container = null;
 				break;

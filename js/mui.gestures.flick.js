@@ -24,8 +24,8 @@
 					touch.flickTime = now - flickStartTime;
 					touch.flickDistanceX = touch.center.x - session.flickStart.x;
 					touch.flickDistanceY = touch.center.y - session.flickStart.y;
-					$.trigger(event.target, name, touch);
-					$.trigger(event.target, name + touch.direction, touch);
+					$.trigger(session.target, name, touch);
+					$.trigger(session.target, name + touch.direction, touch);
 				}
 				break;
 		}
@@ -34,7 +34,7 @@
 	/**
 	 * mui gesture flick
 	 */
-	$.registerGesture({
+	$.addGesture({
 		name: name,
 		index: 5,
 		handle: handle,

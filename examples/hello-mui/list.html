@@ -359,6 +359,16 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/echarts.html">
+						chart（EChart 图表）
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" open-type="common" href="examples/clouddb_wilddog.html">
+						cloud DB（云端数据库）
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/im-chat.html">
 						chat（聊天窗口） 
 					</a>
@@ -425,9 +435,8 @@
 					}
 				}
 				//Android平台暂时使用slide-in-right动画
-				if(mui.os.android&&parseFloat(mui.os.version)<4.4){
+				if(parseFloat(mui.os.version)<4.4){
 					aniShow = "slide-in-right";
-					// document.getElementById('feedback').style.display = 'none';
 				}
 			}
 			//初始化，并预加载webview模式的选项卡			

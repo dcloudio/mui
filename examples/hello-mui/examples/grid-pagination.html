@@ -11,7 +11,7 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<style>
 			.mui-slider-indicator {
 				bottom: 0;
@@ -21,6 +21,7 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -211,7 +212,7 @@
 							</li>
 						</ul>
 					</div>
-		
+
 				</div>
 				<div class="mui-slider-indicator">
 					<div class="mui-indicator mui-active"></div>
@@ -234,27 +235,32 @@
 			//克隆最后一个节点
 			var last = items[items.length - 1].cloneNode(true);
 			last.classList.add('mui-slider-item-duplicate');
-	
 			//处理是否循环逻辑，若支持循环，需支持两点：
 			//1、在.mui-slider-group节点上增加.mui-slider-loop类
 			//2、重复增加2个循环节点，图片顺序变为：N、1、2...N、1
+			var sliderApi = mui(slider).slider();
+
 			function toggleLoop(loop) {
-				if (loop) {
-					group.classList.add('mui-slider-loop');
-					group.insertBefore(last, group.firstChild);
-					group.appendChild(first);
-				} else {
-					group.classList.remove('mui-slider-loop');
-					group.removeChild(first);
-					group.removeChild(last);
+					if (loop) {
+						group.classList.add('mui-slider-loop');
+						group.insertBefore(last, group.firstChild);
+						group.appendChild(first);
+						sliderApi.refresh();
+						sliderApi.gotoItem(0);
+					} else {
+						group.classList.remove('mui-slider-loop');
+						group.removeChild(first);
+						group.removeChild(last);
+						sliderApi.refresh();
+						sliderApi.gotoItem(0);
+					}
 				}
-			}
-	
-			//按下“循环”按钮的处理逻辑；
+				//按下“循环”按钮的处理逻辑；
 			document.getElementById('Gallery_Toggle').addEventListener('toggle', function(e) {
 				var loop = e.detail.isActive;
 				toggleLoop(loop);
 			});
 		});
 	</script>
+
 </html>

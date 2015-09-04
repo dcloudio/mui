@@ -2,23 +2,25 @@
 	/**
 	 * 警告消息框
 	 */
-	$.alert = function(message,title,btnValue,callback) {
+	$.alert = function(message, title, btnValue, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
-				if(typeof title ==='function'){
+			} else {
+				if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnValue = '确定';
-				}else if(typeof btnValue ==='function'){
+				} else if (typeof btnValue === 'function') {
 					callback = btnValue;
 					btnValue = null;
 				}
-				plus.nativeUI.alert(message,callback,title,btnValue);
+				$.plusReady(function() {
+					plus.nativeUI.alert(message, callback, title, btnValue);
+				});
 			}
 
-		}else{
+		} else {
 			//TODO H5版本
 			window.alert(message);
 		}
