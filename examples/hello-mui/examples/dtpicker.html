@@ -9,8 +9,9 @@
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="../css/app.css" />
-		<link href="../css/mui.listpicker.css" rel="stylesheet" />
-		<link href="../css/mui.dtpicker.css" rel="stylesheet" />
+		<!--<link href="../css/mui.picker.css" rel="stylesheet" />
+		<link href="../css/mui.dtpicker.css" rel="stylesheet" />-->
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
 		<style>
 			html,
 			body,
@@ -62,8 +63,9 @@
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/mui.listpicker.js"></script>
-		<script src="../js/mui.dtpicker.js"></script>
+		<!--<script src="../js/mui.picker.js"></script>
+		<script src="../js/mui.dtpicker.js"></script>-->
+		<script src="../js/mui.picker.min.js"></script>
 		<script>
 			(function($) {
 				$.init();
@@ -91,19 +93,17 @@
 							 * rs.i 分（minutes 的第二个字母），用法同年
 							 */
 							result.innerText = '选择结果: ' + rs.text;
-							
 							/* 
 							 * 返回 false 可以阻止选择框的关闭
 							 * return false;
 							 */
-							
 							/*
 							 * 释放组件资源，释放后将将不能再操作组件
 							 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
 							 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
-							 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实实。
+							 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
 							 */
-							picker.dispose(); 
+							picker.dispose();
 						});
 					}, false);
 				});

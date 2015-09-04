@@ -44,8 +44,8 @@
 	position: relative;
 	width: 100%;
 	height: 200px;
-	border-top: solid 1px #eee;
-	background-color: #fff;
+	/*border-top: solid 1px #eee;
+	background-color: #fff;*/
 }
 .mui-ios .mui-dtpicker-body {
 	-webkit-perspective: 1200px;
@@ -60,9 +60,10 @@
 	padding: 8px;
 	text-align: center;
 	border-top: solid 1px #ddd;
-	background-color: #fafafa;
+	background-color: #f0f0f0;
+	border-bottom: solid 1px #ccc;
 }
-.mui-dtpicker .mui-listpicker {
+.mui-dtpicker .mui-picker {
 	width: 20%;
 	height: 100%;
 	margin: 0px;
@@ -71,17 +72,17 @@
 }
 /*年月日时分*/
 
-[data-type="datetime"] .mui-listpicker,
+[data-type="datetime"] .mui-picker,
 [data-type="time"] .mui-dtpicker-title h5 {
 	width: 20%;
 }
 [data-type="datetime"] [data-id="picker-h"],
 [data-type="datetime"] [data-id="title-h"] {
-	border-left: dotted 1px #ddd;
+	border-left: dotted 1px #ccc;
 }
 /*年月日*/
 
-[data-type="date"] .mui-listpicker,
+[data-type="date"] .mui-picker,
 [data-type="date"] .mui-dtpicker-title h5 {
 	width: 33.3%;
 }
@@ -93,7 +94,7 @@
 }
 /*年月日时*/
 
-[data-type="hour"] .mui-listpicker,
+[data-type="hour"] .mui-picker,
 [data-type="hour"] .mui-dtpicker-title h5 {
 	width: 25%;
 }
@@ -103,11 +104,11 @@
 }
 [data-type="hour"] [data-id="picker-h"],
 [data-type="hour"] [data-id="title-h"] {
-	border-left: dotted 1px #ddd;
+	border-left: dotted 1px #ccc;
 }
 /*时分*/
 
-[data-type="time"] .mui-listpicker,
+[data-type="time"] .mui-picker,
 [data-type="time"] .mui-dtpicker-title h5 {
 	width: 50%;
 }
@@ -121,7 +122,7 @@
 }
 /*年月*/
 
-[data-type="month"] .mui-listpicker,
+[data-type="month"] .mui-picker,
 [data-type="month"] .mui-dtpicker-title h5 {
 	width: 50%;
 }

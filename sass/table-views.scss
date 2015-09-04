@@ -461,15 +461,21 @@
 }
 //grid-9
 .#{$namespace}grid-view.#{$namespace}grid-9{
-    padding-right: 0;
     background-color: #f2f2f2;
-    padding: 1px 0 1px 0;
+    padding: 0;
+    margin:0;
+    border-left:1px solid #EEE;
+    border-top:1px solid #EEE;
+    @include clearfix();
+    &:after{
+        position:static;
+    }
     .#{$namespace}table-view-cell {
         vertical-align: top;
         padding:11px 15px;
-        border-left: 1px solid #EEE;
-        border-top: 1px solid #EEE;
-        margin: -1px 0 0 -1px;
+        margin:0;
+        border-right: 1px solid #EEE;
+        border-bottom: 1px solid #EEE;
         &.#{$namespace}active{
             background-color:#eee;
         }

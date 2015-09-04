@@ -47,7 +47,7 @@
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		return $.extend(defaultShow, options);
+		return $.extend(true,{},defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置

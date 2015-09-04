@@ -14,7 +14,16 @@
     border: 1px solid $primary-color;
     border-radius: 3px;
     -webkit-touch-callout: none;//(iOS平台)分段选择禁止长按弹出菜单；
-
+    &.#{$namespace}segmented-control-vertical{
+        border-radius:0;
+        border-width: 0;
+        border-collapse: collapse;
+     .#{$namespace}control-item{
+         display: block;
+         border-left-width: 0;
+         border-bottom: 1px solid #c8c7cc;
+     }   
+    }
     &.#{$namespace}scroll-wrapper{
         height: 38px;
         .#{$namespace}scroll{
@@ -61,6 +70,14 @@
         width:100%;
         border:0;
         border-radius:0;
+        &.#{$namespace}segmented-control-vertical{
+             .#{$namespace}control-item{
+                 border-bottom: 1px solid #c8c7cc;
+                 &.#{$namespace}active {
+                   border-bottom: 1px solid #c8c7cc;
+                 }
+             }
+        }
         .#{$namespace}control-item {
             border:0;
             color: inherit;

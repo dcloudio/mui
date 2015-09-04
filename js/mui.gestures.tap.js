@@ -16,7 +16,7 @@
 					return;
 				}
 				var target = session.target;
-				if (!target || (target.disabled || target.classList.contains($.className('disabled')))) {
+				if (!target || (target.disabled || (target.classList && target.classList.contains($.className('disabled'))))) {
 					return;
 				}
 				if (touch.distance < options.tapMaxDistance && touch.deltaTime < options.tapMaxTime) {

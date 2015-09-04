@@ -117,10 +117,10 @@
 		if (!this.groups[group]) {
 			this.groups[group] = [];
 		}
-		if (img.__mui_img_data) {
+		var src = img.getAttribute('src');
+		if (img.__mui_img_data && img.__mui_img_data.src === src) { //已缓存且图片未变化
 			this.groups[group].push(img.__mui_img_data);
 		} else {
-			var src = img.getAttribute('src');
 			var lazyload = img.getAttribute('data-preview-src');
 			if (!lazyload) {
 				lazyload = src;

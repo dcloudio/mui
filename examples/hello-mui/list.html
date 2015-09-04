@@ -296,23 +296,6 @@
 						range（滑块）
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-collapse">
-					<a class="mui-navigate-right" href="#">
-						segment（分段选择）
-					</a>
-					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tab-with-segmented-control.html">
-								按钮式选项卡
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a class="mui-navigate-right" href="examples/tab-with-viewpagerindicator.html">
-								可拖动选项卡(仿Android)
-							</a>
-						</li>
-					</ul>
-				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/switches.html">
 						switch（开关）
@@ -325,22 +308,37 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tabbar.html">
-								div模式
+								底部选项卡-div模式
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" open-type="common" href="examples/tab-webview-main.html">
-								webview模式
+								底部选项卡-webview模式
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<!-- <li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tabbar-labels-only.html">
-								文字选项卡
+								底部选项卡-文字选项卡
 							</a>
-						</li>
+						</li> -->
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tabbar-with-submenus.html">
-								含二级菜单的选项卡
+								底部选项卡-二级菜单(div)
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/tab-with-segmented-control.html">
+								顶部选项卡-div模式
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/tab-with-viewpagerindicator.html">
+								顶部选项卡-可左右拖动(div)
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/tab-with-segmented-control-vertical.html">
+								左侧选项卡-div模式
 							</a>
 						</li>
 					</ul>
@@ -441,7 +439,12 @@
 			}
 			//初始化，并预加载webview模式的选项卡			
 			function preload () {
-				mui.preload({url:'examples/tab-webview-main.html'});
+				mui.preload({
+					url:'examples/tab-webview-main.html',
+					styles: {
+						popGesture: 'hide'
+					}
+				});
 				mui.preload({
 					url:"examples/pullrefresh_main.html",
 					styles:{
@@ -560,7 +563,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html')&&!~id.indexOf('tab-with-viewpagerindicator.html')&&mui.os.ios) {
+					if (!~id.indexOf('popovers.html')&&mui.os.ios) {
 						mui.openWindow({
 							id: id,
 							url: this.href,
