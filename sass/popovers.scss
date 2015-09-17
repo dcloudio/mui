@@ -61,6 +61,11 @@
         .#{$namespace}popover-arrow{
             display: none;
         }
+
+        &.#{$namespace}popover-bottom{
+            position: fixed;
+        }
+
         // Active modal
         &.#{$namespace}active {
             @include transform(translate3d(0, 0, 0));

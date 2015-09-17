@@ -28,11 +28,11 @@
 			this.stopped = false;
 
 			this.options = $.extend(true, {
-				scrollY: true,
-				scrollX: false,
-				startX: 0,
-				startY: 0,
-				indicators: true,
+				scrollY: true,//是否竖向滚动
+				scrollX: false,//是否横向滚动
+				startX: 0,//初始化时滚动至x
+				startY: 0,//初始化时滚动至y
+				indicators: true,//是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
 				fixedBadAndorid: false,
@@ -41,15 +41,15 @@
 				},
 				momentum: true,
 
-				snap: false,
+				snap: false,//图片轮播，拖拽式选项卡
 
-				bounce: true,
-				bounceTime: 300,
-				bounceEasing: ease.circular.style,
+				bounce: true,//是否启用回弹
+				bounceTime: 300,//回弹动画时间
+				bounceEasing: ease.circular.style,//回弹动画曲线
 
 				directionLockThreshold: 5,
 
-				parallaxElement: false,
+				parallaxElement: false,//视差元素
 				parallaxRatio: 0.5
 			}, options);
 
@@ -113,29 +113,6 @@
 				this.indicators.push(new Indicator(this, indicators[i]));
 			}
 
-			this.wrapper.addEventListener('scrollend', function() {
-				self.indicators.map(function(indicator) {
-					indicator.fade();
-				});
-			});
-
-			this.wrapper.addEventListener('scrollstart', function() {
-				self.indicators.map(function(indicator) {
-					indicator.fade(1);
-				});
-			});
-
-			//			this.wrapper.addEventListener('beforescrollstart', function() {
-			//				self.indicators.map(function(indicator) {
-			//					indicator.fade(1, true);
-			//				});
-			//			});
-
-			this.wrapper.addEventListener('refresh', function() {
-				self.indicators.map(function(indicator) {
-					indicator.refresh();
-				});
-			});
 		},
 		_initSnap: function() {
 			this.currentPage = {};
@@ -214,26 +191,48 @@
 				pageX: 0
 			};
 		},
-		_initEvent: function() {
-			window.addEventListener('orientationchange', this);
-			window.addEventListener('resize', this);
+		_initEvent: function(detach) {
+			var action = detach ? 'removeEventListener' : 'addEventListener';
+			window[action]('orientationchange', this);
+			window[action]('resize', this);
 
-			this.scroller.addEventListener('webkitTransitionEnd', this);
+			this.scroller[action]('webkitTransitionEnd', this);
 
-			this.wrapper.addEventListener('touchstart', this);
-			this.wrapper.addEventListener('touchcancel', this);
-			this.wrapper.addEventListener('touchend', this);
-			this.wrapper.addEventListener('drag', this);
-			this.wrapper.addEventListener('dragend', this);
-			this.wrapper.addEventListener('flick', this);
-			this.wrapper.addEventListener('scrollend', this);
+			this.wrapper[action]('touchstart', this);
+			this.wrapper[action]('touchcancel', this);
+			this.wrapper[action]('touchend', this);
+			this.wrapper[action]('drag', this);
+			this.wrapper[action]('dragend', this);
+			this.wrapper[action]('flick', this);
+			this.wrapper[action]('scrollend', this);
 			if (this.options.scrollX) {
-				this.wrapper.addEventListener('swiperight', this);
+				this.wrapper[action]('swiperight', this);
 			}
 			var segmentedControl = this.wrapper.querySelector($.classSelector('.segmented-control'));
 			if (segmentedControl) { //靠，这个bug排查了一下午，阻止hash跳转，一旦hash跳转会导致可拖拽选项卡的tab不见
-				mui(segmentedControl).on('click', 'a', $.preventDefault);
+				mui(segmentedControl)[detach ? 'off' : 'on']('click', 'a', $.preventDefault);
 			}
+
+			this.wrapper[action]('scrollend', this._handleIndicatorScrollend.bind(this));
+
+			this.wrapper[action]('scrollstart', this._handleIndicatorScrollstart.bind(this));
+
+			this.wrapper[action]('refresh', this._handleIndicatorRefresh.bind(this));
+		},
+		_handleIndicatorScrollend: function() {
+			this.indicators.map(function(indicator) {
+				indicator.fade();
+			});
+		},
+		_handleIndicatorScrollstart: function() {
+			this.indicators.map(function(indicator) {
+				indicator.fade(1);
+			});
+		},
+		_handleIndicatorRefresh: function() {
+			this.indicators.map(function(indicator) {
+				indicator.refresh();
+			});
 		},
 		handleEvent: function(e) {
 			if (this.stopped) {
@@ -278,7 +277,7 @@
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition) {
+			if (this.isInTransition && this.moved) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
@@ -329,8 +328,8 @@
 						//						if (direction !== 'left' && direction !== 'right') {
 						//							isReturn = true;
 						//						} else {
-						$.gestures.touch.lockDirection = true; //锁定方向
-						$.gestures.touch.startDirection = detail.direction;
+						$.gestures.session.lockDirection = true; //锁定方向
+						$.gestures.session.startDirection = detail.direction;
 						//						}
 					}
 				} else if (this.options.scrollY && !this.moved) {
@@ -345,8 +344,8 @@
 					//						}
 					//					}
 					if (!this.moved) {
-						$.gestures.touch.lockDirection = true; //锁定方向
-						$.gestures.touch.startDirection = detail.direction;
+						$.gestures.session.lockDirection = true; //锁定方向
+						$.gestures.session.startDirection = detail.direction;
 					}
 				} else if (this.options.scrollX && !this.moved) {
 					isReturn = true;
@@ -354,7 +353,7 @@
 			} else {
 				isReturn = true;
 			}
-			if (isPreventDefault) {
+			if (this.moved || isPreventDefault) {
 				e.stopPropagation(); //阻止冒泡(scroll类嵌套)
 				detail.gesture && detail.gesture.preventDefault();
 			}
@@ -372,8 +371,8 @@
 				deltaX = detail.deltaX;
 				deltaY = detail.deltaY;
 			} else { //move
-				deltaX = detail.deltaX - detail.lastDeltaX;
-				deltaY = detail.deltaY - detail.lastDeltaY;
+				deltaX = detail.deltaX - $.gestures.session.prevTouch.deltaX;
+				deltaY = detail.deltaY - $.gestures.session.prevTouch.deltaY;
 			}
 			var absDeltaX = Math.abs(detail.deltaX);
 			var absDeltaY = Math.abs(detail.deltaY);
@@ -647,6 +646,7 @@
 			}
 			this.lastX = this.x;
 			this.lastY = this.y;
+			$.trigger(this.scroller, 'scroll', this);
 		},
 		reLayout: function() {
 			this.wrapper.offsetHeight;
@@ -719,6 +719,11 @@
 		},
 		gotoPage: function(index) {
 			this._gotoPage(index);
+		},
+		destory: function() {
+			this._initEvent(true); //detach
+			delete $.data[this.wrapper.getAttribute('data-scroll')];
+			this.wrapper.setAttribute('data-scroll', '');
 		}
 	});
 	//Indicator

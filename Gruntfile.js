@@ -62,6 +62,7 @@ module.exports = function(grunt) {
 					'js/mui.gestures.tap.js',
 					'js/mui.gestures.longtap.js',
 					'js/mui.gestures.hold.js',
+					'js/mui.gestures.pinch.js',
 					'js/mui.init.js',
 					'js/mui.init.5+.js',
 					'js/mui.back.js',

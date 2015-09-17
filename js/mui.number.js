@@ -18,10 +18,17 @@
 	var Numbox = $.Numbox = $.Class.extend({
 		init: function(holder, options) {
 			var self = this;
+			if (!holder) {
+				throw "构造 numbox 时缺少容器元素";
+			}
+			self.holder = holder;
+			//避免重复初始化开始
+			if (self.holder.__numbox_inited) return;
+			self.holder.__numbox_inited = true;
+			//避免重复初始化结束
 			options = options || {};
 			options.step = parseInt(options.step || 1);
 			self.options = options;
-			self.holder = holder;
 			self.input = $.qsa('.' + inputClassName, self.holder)[0];
 			self.plus = $.qsa('.' + plusClassName, self.holder)[0];
 			self.minus = $.qsa('.' + minusClassName, self.holder)[0];

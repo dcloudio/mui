@@ -2,31 +2,44 @@
 	/**
 	 * 输入对话框
 	 */
-	$.prompt = function(text,defaultText,title,btnArray,callback) {
+	$.prompt = function(text, defaultText, title, btnArray, callback) {
 		if ($.os.plus) {
-			if(typeof message === undefined){
+			if (typeof message === undefined) {
 				return;
-			}else{
+			} else {
 
-				if(typeof defaultText ==='function'){
+				if (typeof defaultText === 'function') {
 					callback = defaultText;
 					defaultText = null;
 					title = null;
 					btnArray = null;
-				}else if(typeof title === 'function'){
+				} else if (typeof title === 'function') {
 					callback = title;
 					title = null;
 					btnArray = null;
-				}else if(typeof btnArray ==='function'){
+				} else if (typeof btnArray === 'function') {
 					callback = btnArray;
 					btnArray = null;
 				}
-				plus.nativeUI.prompt(text,callback,title,defaultText,btnArray);
+				$.plusReady(function() {
+					plus.nativeUI.prompt(text, callback, title, defaultText, btnArray);
+				});
 			}
 
-		}else{
-			//TODO H5版本
-			window.prompt(text);
+		} else {
+			//H5版本(确认index为0，取消index为1)
+			var result = window.prompt(text);
+			if (result) {
+				callback({
+					index: 0,
+					value: result
+				});
+			} else {
+				callback({
+					index: 1,
+					value: ''
+				});
+			}
 		}
 	};
 

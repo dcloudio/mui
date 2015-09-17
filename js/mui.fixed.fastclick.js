@@ -40,6 +40,7 @@
 			clickEvent.initMouseEvent('click', true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
 			clickEvent.forwardedTouchEvent = true;
 			targetElement.dispatchEvent(clickEvent);
+			event.detail && event.detail.gesture.preventDefault();
 		}
 	};
 	window.addEventListener('tap', dispatchEvent);

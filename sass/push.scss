@@ -33,7 +33,6 @@
 }
 
 // Add chevrons to elements
-.#{$namespace}navigate-left,
 .#{$namespace}navigate-right,
 .#{$namespace}push-left,
 .#{$namespace}push-right {
@@ -51,7 +50,6 @@
   }
 }
 
-.#{$namespace}navigate-left:after,
 .#{$namespace}push-left:after {
   left: 15px;
   content: '\e582';

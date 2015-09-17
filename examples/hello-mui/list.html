@@ -86,6 +86,23 @@
 						checkbox（复选框）
 					</a>
 				</li>
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">
+						date time（日期时间）
+					</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/dtpicker.html">
+								H5模式
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/date.html">
+								native模式
+							</a>
+						</li>
+					</ul>
+				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/dialog.html">
 						dialog（消息框）
@@ -245,14 +262,29 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/picker.html">
+						picker（选择器） 
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/popovers.html">
 						popover（弹出菜单）
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/pullrefresh.html">
-						pull to refresh（下拉刷新和上拉加载更多）
-					</a>
+				<li class="mui-table-view-cell mui-collapse">
+					<a href="#" class="mui-navigate-right">pull to refresh（下拉刷新和上拉加载更多）</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type="common" href="examples/pullrefresh_main.html">
+								默认实现
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type="common" href="examples/pullrefresh_with_tab.html">
+								选项卡切换+下拉刷新
+							</a>
+						</li>
+					</ul>
 				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/radio.html">
@@ -322,13 +354,55 @@
 				
 				<li class="mui-table-view-divider">模板</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/lazyload-image.html">
-						lazyload（懒加载） 
+					<a class="mui-navigate-right" open-type="common" href="examples/ad.html">
+						advertisement（广告模板）
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/listpicker.html">
-						list picker（选择列表） 
+					<a class="mui-navigate-right" href="examples/echarts.html">
+						chart（EChart 图表）
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" open-type="common" href="examples/clouddb_wilddog.html">
+						cloud DB（云端数据库）
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/im-chat.html">
+						chat（聊天窗口） 
+					</a>
+				</li>
+				<!-- <li id='feedback' class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/feedback.html">
+						feedback（问题反馈） 
+					</a>
+				</li> -->
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" open-type="common" href="examples/imageviewer.html">
+						image viewer（图片预览）
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">
+						indexed list（索引列表）
+					</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type = "common" href="examples/indexed-list.html">
+								展示模式
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" open-type = "common" href="examples/indexed-list-select.html">
+								选择模式
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/lazyload-image.html">
+						lazyload（懒加载） 
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
@@ -337,8 +411,13 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/login.html">
+						login（登录） 
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" open-type="common" href="examples/setting.html">
-						setting（设置）
+						setting（设置）- div窗体切换示例
 					</a>
 				</li>
 			</ul>
@@ -356,17 +435,22 @@
 					}
 				}
 				//Android平台暂时使用slide-in-right动画
-				//				aniShow = "slide-in-right"
+				if(parseFloat(mui.os.version)<4.4){
+					aniShow = "slide-in-right";
+				}
 			}
-			 //初始化，并预加载webview模式的选项卡
-			mui.init({
-				preloadPages: [{
-					url: 'examples/tab-webview-main.html',
-					id: 'examples/tab-webview-main.html'
-				}]
-			});
+			//初始化，并预加载webview模式的选项卡			
+			function preload () {
+				mui.preload({url:'examples/tab-webview-main.html'});
+				mui.preload({
+					url:"examples/pullrefresh_main.html",
+					styles:{
+						popGesture:'hide'
+					}
+				});
+			}
 			var templates = {};
-			var getTemplate = function(name, header, content, loading) {
+			var getTemplate = function(name, header, content) {
 				var template = templates[name];
 				if (!template) {
 					//预加载共用父模板；
@@ -409,20 +493,45 @@
 						name: name,
 						header: headerWebview,
 						content: subWebview,
-						loaded: loading
 					};
 				}
 				return template;
 			};
 			var initTemplates = function() {
-				getTemplate('pullrefresh', 'examples/template_pullrefresh.html', 'examples/pullrefresh.html', true);
 				getTemplate('default', 'examples/template.html');
 			};
 			mui.plusReady(function() {
-				//初始化模板
-				initTemplates(); //预加载所有模板	
-				//关闭splash页面；
-				plus.navigator.closeSplashscreen();
+				//读取本地存储，检查是否为首次启动
+				var showGuide = plus.storage.getItem("lauchFlag");
+				if(showGuide){
+					//有值，说明已经显示过了，无需显示；
+					//关闭splash页面；
+					plus.navigator.closeSplashscreen();
+					plus.navigator.setFullscreen(false);
+					//初始化模板
+					initTemplates(); 
+					//预加载
+					preload();
+				}else{
+					//显示启动导航
+					mui.openWindow({
+						id:'guide',
+						url:'examples/guide.html',
+						show:{
+							aniShow:'none'
+						},
+						waiting:{
+							autoShow:false
+						}
+					});
+					//延迟的原因：优先打开启动导航页面，避免资源争夺
+					setTimeout(function () {
+						//初始化模板
+						initTemplates(); 
+						//预加载
+						preload();
+					},200);
+				}
 			});
 			 //主列表点击事件
 			mui('#list').on('tap', 'a', function() {
@@ -451,7 +560,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html') && !~href.indexOf('pullrefresh.html') && mui.os.ios) {
+					if (!~id.indexOf('popovers.html')&&!~id.indexOf('tab-with-viewpagerindicator.html')&&mui.os.ios) {
 						mui.openWindow({
 							id: id,
 							url: this.href,
@@ -466,9 +575,10 @@
 							}
 						});
 					} else {
+						//TODO  by chb 当初这么设计，是为了一个App中有多个模板，目前仅有一个模板的情况下，实际上无需这么复杂
 						//使用父子模板方案打开的页面
 						//获得共用模板组
-						var template = ~href.indexOf('pullrefresh.html') ? getTemplate('pullrefresh') : getTemplate('default');
+						var template = getTemplate('default');
 						//判断是否显示右上角menu图标；
 						var showMenu = ~href.indexOf('popovers.html') ? true : false;
 						//获得共用父模板
@@ -479,29 +589,35 @@
 						//通知模板修改标题，并显示隐藏右上角图标；
 						mui.fire(headerWebview, 'updateHeader', {
 							title: title,
-							showMenu: showMenu
+							showMenu: showMenu,
+							target:href,
+							aniShow: aniShow
 						});
-						var reload = true;
-						if (!template.loaded) {
-							if (contentWebview.getURL() != this.href) {
-								contentWebview.loadURL(this.href);
+						
+						if(mui.os.ios||(mui.os.android&&parseFloat(mui.os.version)<4.4)){
+							var reload = true;
+							if (!template.loaded) {
+								if (contentWebview.getURL() != this.href) {
+									contentWebview.loadURL(this.href);
+								} else {
+									reload = false;
+								}
 							} else {
 								reload = false;
 							}
-						} else {
-							reload = false;
+							(!reload) && contentWebview.show();
+							
+							headerWebview.show(aniShow, 150);
 						}
-						(!reload) && contentWebview.show();
-						headerWebview.show('slide-in-right', 150);
 					}
 				}
 			});
 			var index = null; //主页面
 			function openMenu() {
-					!index && (index = mui.currentWebview.parent());
-					mui.fire(index, "menu:open");
-				}
-				//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
+				!index && (index = mui.currentWebview.parent());
+				mui.fire(index, "menu:open");
+			}
+			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
 			window.addEventListener('dragstart', function(e) {
 				mui.gestures.touch.lockDirection = true; //锁定方向
 				mui.gestures.touch.startDirection = e.detail.direction;

@@ -12,6 +12,11 @@
 	var CLASS_HIDDEN = $.className('hidden');
 	var CLASS_BLOCK = $.className('block');
 
+	var CLASS_PULL_CAPTION = $.className('pull-caption');
+	var CLASS_PULL_CAPTION_DOWN = $.className('pull-caption-down');
+	var CLASS_PULL_CAPTION_REFRESH = $.className('pull-caption-refresh');
+	var CLASS_PULL_CAPTION_NOMORE = $.className('pull-caption-nomore');
+
 	var PlusPullRefresh = $.Class.extend({
 		init: function(element, options) {
 			this.element = element;
@@ -127,9 +132,15 @@
 				});
 			}
 		},
-		pulldownLoading: function() {
-			//TODO
-			throw new Error('暂不支持');
+		pulldownLoading: function() { //该方法是子页面调用的
+			var callback = $.options.pullRefresh.down.callback;
+			callback && callback.call(this);
+		},
+		_pulldownLoading: function() { //该方法是子页面调用的
+			var self = this;
+			$.plusReady(function() {
+				plus.webview.getWebviewById(self.options.webviewId).evalJS("mui&&mui.options.pullRefresh.down&&mui.options.pullRefresh.down.callback()");
+			});
 		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
@@ -161,6 +172,7 @@
 				self.pullLoading.classList.add(CLASS_VISIBILITY);
 				self.pullLoading.classList.remove(CLASS_HIDDEN);
 				self.pullCaption.innerHTML = ''; //修正5+里边第一次加载时，文字显示的bug(还会显示出来个“多”,猜测应该是渲染问题导致的)
+				self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH;
 				self.pullCaption.innerHTML = self.options.up.contentrefresh;
 				callback = callback || self.options.up.callback;
 				callback && callback.call(self);
@@ -174,12 +186,14 @@
 				self.isLoading = false;
 				if (finished) {
 					self.finished = true;
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
 					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
 					//					document.removeEventListener('plusscrollbottom', self);
 					window.removeEventListener('dragup', self);
 				} else { //初始化时隐藏，后续不再隐藏
+					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 					self.pullCaption.innerHTML = self.options.up.contentdown;
 					//					setTimeout(function() {
 					//						self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
@@ -187,17 +201,24 @@
 				}
 			}
 		},
+		disablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.className = $.className('pull-bottom-pocket') + ' ' + CLASS_HIDDEN;
+			window.removeEventListener('dragup', this);
+		},
+		enablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.classList.remove(CLASS_HIDDEN);
+			this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+			this.pullCaption.innerHTML = this.options.up.contentdown;
+			window.addEventListener('dragup', this);
+		},
 		scrollTo: function(x, y, time) {
 			$.scrollTo(x, y, time);
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				if (this.pulldown !== false) {
-					this._initPullupRefresh();
-				}
-				this.bottomPocket.classList.remove(CLASS_HIDDEN);
-				this.pullCaption.innerHTML = this.options.up.contentdown;
-				window.addEventListener('dragup', this);
+				this.enablePullupToRefresh();
 				this.finished = false;
 			}
 		}
@@ -230,7 +251,9 @@
 		} else {
 			pullRefreshApi = $.data[id];
 		}
-		if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+		if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
+			pullRefreshApi._pulldownLoading(); //parent webview
+		} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
 			pullRefreshApi.pullupLoading();
 		}
 		return pullRefreshApi;

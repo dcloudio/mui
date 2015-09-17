@@ -12,7 +12,8 @@
 			hold: false,
 			flick: true,
 			swipe: true,
-			drag: true
+			drag: true,
+			pinch: false
 		}
 	};
 	/**
@@ -43,7 +44,7 @@
 		isInitialized = true;
 		$.options = $.extend(true, $.global, options || {});
 		$.ready(function() {
-			$.each($.inits, function(index, init) {
+			$.doAction('inits', function(index, init) {
 				var isInit = !!(!inits[init.name] || init.repeat);
 				if (isInit) {
 					init.handle.call($);
@@ -58,8 +59,8 @@
 	 * 增加初始化执行流程
 	 * @param {function} init
 	 */
-	$.registerInit = function(init) {
-		return $.registerHandler('inits', init);
+	$.addInit = function(init) {
+		return $.addAction('inits', init);
 	};
 	$(function() {
 		var classList = document.body.classList;

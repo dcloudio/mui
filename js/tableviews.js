@@ -145,7 +145,7 @@
 							timer = $.later(function() {
 								toggleActive(true);
 							}, 100);
-						} else if (!(cell.querySelector('input') || cell.querySelector(SELECTOR_BUTTON) || cell.querySelector('.' + CLASS_TOGGLE))) {
+						} else {
 							toggleActive(true);
 						}
 					}
@@ -425,19 +425,25 @@
 		toggleActive(false);
 		sliderHandle && toggleEvents(cell, true);
 	});
-	var radioOrCheckboxClick = function() {
+	var radioOrCheckboxClick = function(event) {
+		var type = event.target && event.target.type || '';
+		if (type === 'radio' || type === 'checkbox') {
+			return;
+		}
 		var classList = cell.classList;
 		if (classList.contains($.className('radio'))) {
 			var input = cell.querySelector('input[type=radio]');
 			if (input) {
 				//				input.click();
 				input.checked = !input.checked;
+				$.trigger(input, 'change');
 			}
 		} else if (classList.contains($.className('checkbox'))) {
 			var input = cell.querySelector('input[type=checkbox]');
 			if (input) {
 				//				input.click();
 				input.checked = !input.checked;
+				$.trigger(input, 'change');
 			}
 		}
 	};
@@ -449,16 +455,12 @@
 	});
 	window.addEventListener('doubletap', function(event) {
 		if (cell) {
-			radioOrCheckboxClick();
+			radioOrCheckboxClick(event);
 		}
 	});
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	window.addEventListener('tap', function(event) {
 		if (!cell) {
-			return;
-		}
-		var type = event.target && event.target.type;
-		if (type === 'radio' || type === 'checkbox') {
-			radioOrCheckboxClick();
 			return;
 		}
 		var isExpand = false;
@@ -479,7 +481,10 @@
 			return;
 		}
 		if (classList.contains($.className('collapse')) && !cell.parentNode.classList.contains($.className('unfold'))) {
-			event.detail.gesture.preventDefault();
+			if (!preventDefaultException.test(event.target.tagName)) {
+				event.detail.gesture.preventDefault();
+			}
+
 			if (!classList.contains(CLASS_ACTIVE)) { //展开时,需要收缩其他同类
 				var collapse = cell.parentNode.querySelector($.classSelector('.collapse.active'));
 				if (collapse) {
@@ -506,7 +511,7 @@
 				// }
 			}
 		} else {
-			radioOrCheckboxClick();
+			radioOrCheckboxClick(event);
 		}
 	});
 })(mui, window, document);

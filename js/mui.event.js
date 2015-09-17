@@ -36,12 +36,12 @@
 				return sourceMethod && sourceMethod.apply(event, arguments)
 			}
 			event[predicate] = returnFalse;
-		});
+		}, true);
 		return event;
 	};
 	//简单的wrap对象_mid
 	var mid = function(obj) {
-		return obj._mid || (obj._mid = _mid++);
+		return obj && (obj._mid || (obj._mid = _mid++));
 	};
 	//事件委托对象绑定的事件回调列表
 	var delegateFns = {};
@@ -62,12 +62,13 @@
 				}
 				var matches = {};
 				$.each(callbackObjs, function(selector, callbacks) { //same selector
-					if (~(selectorAlls[selector] || (selectorAlls[selector] = $.qsa(selector, element))).indexOf(target)) {
+					selectorAlls[selector] || (selectorAlls[selector] = $.qsa(selector, element));
+					if (selectorAlls[selector] && ~(selectorAlls[selector]).indexOf(target)) {
 						if (!matches[selector]) {
 							matches[selector] = callbacks;
 						}
 					}
-				});
+				}, true);
 				if (!$.isEmptyObject(matches)) {
 					handlerQueue.push({
 						element: target,
@@ -90,14 +91,31 @@
 							e.preventDefault();
 							e.stopPropagation();
 						}
-					});
-				})
+					}, true);
+				}, true)
 				if (e.isPropagationStopped()) {
 					return false;
 				}
-			});
+			}, true);
 		};
 	};
+	var findDelegateFn = function(element, event) {
+		var delegateCallbacks = delegateFns[mid(element)];
+		var result = false;
+		if (delegateCallbacks) {
+			result = [];
+			if (event) {
+				var filterFn = function(fn) {
+					return fn.type === event;
+				}
+				return delegateCallbacks.filter(filterFn);
+			} else {
+				result = delegateCallbacks;
+			}
+		}
+		return result;
+	};
+	var preventDefaultException = /^(INPUT|TEXTAREA|BUTTON|SELECT)$/;
 	/**
 	 * mui delegate events
 	 * @param {type} event
@@ -119,14 +137,29 @@
 			var delegateCallbacks = delegateCallbackObjs[selector] || (delegateCallbackObjs[selector] = []);
 			delegateCallbacks.push(callback);
 			if (isAddEventListener) {
-				delegateFns[mid(element)] = delegateFn(element, event, selector, callback);
-				element.addEventListener(event, delegateFns[mid(element)]);
+				var delegateFnArray = delegateFns[mid(element)];
+				if (!delegateFnArray) {
+					delegateFnArray = [];
+				}
+				var delegateCallback = delegateFn(element, event, selector, callback);
+				delegateFnArray.push(delegateCallback);
+				delegateCallback.i = delegateFnArray.length - 1;
+				delegateCallback.type = event;
+				delegateFns[mid(element)] = delegateFnArray;
+				element.addEventListener(event, delegateCallback);
 				if (event === 'tap') { //TODO 需要找个更好的解决方案
 					element.addEventListener('click', function(e) {
 						if (e.target) {
 							var tagName = e.target.tagName;
-							if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
-								e.preventDefault();
+							if (!preventDefaultException.test(tagName)) {
+								if (tagName === 'A') {
+									var href = e.target.href;
+									if (!(href && ~href.indexOf('tel:'))) {
+										e.preventDefault();
+									}
+								} else {
+									e.preventDefault();
+								}
 							}
 						}
 					});
@@ -137,24 +170,37 @@
 	$.fn.off = function(event, selector, callback) {
 		return this.each(function() {
 			var _mid = mid(this);
-			if (!callback) {
-				if (delegates[_mid] && delegates[_mid][event]) {
-					delete delegates[_mid][event][selector];
-				}
-			} else {
+			if (!event) { //mui(selector).off();
+				delegates[_mid] && delete delegates[_mid];
+			} else if (!selector) { //mui(selector).off(event);
+				delegates[_mid] && delete delegates[_mid][event];
+			} else if (!callback) { //mui(selector).off(event,selector);
+				delegates[_mid] && delegates[_mid][event] && delete delegates[_mid][event][selector];
+			} else { //mui(selector).off(event,selector,callback);
 				var delegateCallbacks = delegates[_mid] && delegates[_mid][event] && delegates[_mid][event][selector];
 				$.each(delegateCallbacks, function(index, delegateCallback) {
 					if (mid(delegateCallback) === mid(callback)) {
 						delegateCallbacks.splice(index, 1);
 						return false;
 					}
-				});
+				}, true);
 			}
-			//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
-			if (delegates[_mid] && $.isEmptyObject(delegates[_mid][event])) {
-				this.removeEventListener(event, delegateFns[_mid]);
-				delete delegateFns[_mid];
+			if (delegates[_mid]) {
+				//如果off掉了所有当前element的指定的event事件，则remove掉当前element的delegate回调
+				if ((!delegates[_mid][event] || $.isEmptyObject(delegates[_mid][event]))) {
+					findDelegateFn(this, event).forEach(function(fn) {
+						this.removeEventListener(fn.type, fn);
+						delete delegateFns[_mid][fn.i];
+					}.bind(this));
+				}
+			} else {
+				//如果delegates[_mid]已不存在，删除所有
+				findDelegateFn(this).forEach(function(fn) {
+					this.removeEventListener(fn.type, fn);
+					delete delegateFns[_mid][fn.i];
+				}.bind(this));
 			}
-		})
+		});
+
 	};
 })(mui);

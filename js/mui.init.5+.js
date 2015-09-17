@@ -47,7 +47,7 @@
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		return $.extend(defaultShow, options);
+		return $.extend(true,{},defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
@@ -67,7 +67,9 @@
 	 */
 	$.plusReady = function(callback) {
 		if (window.plus) {
-			callback();
+			setTimeout(function() { //解决callback与plusready事件的执行时机问题(典型案例:showWaiting,closeWaiting)
+				callback();
+			}, 0);
 		} else {
 			document.addEventListener("plusready", function() {
 				callback();
@@ -84,7 +86,13 @@
 	 */
 	$.fire = function(webview, eventType, data) {
 		if (webview) {
-			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c") + "')");
+			if (data !== '') {
+				data = data || {};
+				if ($.isPlainObject(data)) {
+					data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
+				}
+			}
+			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
 		}
 	};
 	/**
@@ -95,7 +103,11 @@
 	 */
 	$.receive = function(eventType, data) {
 		if (eventType) {
-			data = JSON.parse(data);
+			try {
+				if (data) {
+					data = JSON.parse(data);
+				}
+			} catch (e) {}
 			$.trigger(document, eventType, data);
 		}
 	};
@@ -181,7 +193,7 @@
 		} else { //新窗口
 			if (options.createNew !== true) {
 				webview = plus.webview.getWebviewById(id);
-				if (webview) {//如果已存在
+				if (webview) { //如果已存在
 					nShow = $.showOptions(options.show);
 					webview.show(nShow.aniShow, nShow.duration, function() {
 						triggerPreload(webview);
@@ -239,17 +251,25 @@
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
 				//preload
-				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
-					preload: true
-				}, options.extras));
-				if (options.subpages) {
-					$.each(options.subpages, function(index, subpage) {
-						//TODO 子窗口也可能已经创建，比如公用模板的情况；
-						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
-							preload: true
-						}, subpage.extras));
-						webview.append(subWebview);
-					});
+				//判断是否携带createNew参数，默认为false
+				if (options.createNew !== true) {
+					webview = plus.webview.getWebviewById(id);
+				}
+
+				//之前没有，那就新创建	
+				if (!webview) {
+					webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
+						preload: true
+					}, options.extras));
+					if (options.subpages) {
+						$.each(options.subpages, function(index, subpage) {
+							//TODO 子窗口也可能已经创建，比如公用模板的情况；
+							var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
+								preload: true
+							}, subpage.extras));
+							webview.append(subWebview);
+						});
+					}
 				}
 			}
 
@@ -379,7 +399,7 @@
 	$.plusReady(function() {
 		$.currentWebview = plus.webview.currentWebview();
 	});
-	$.registerInit({
+	$.addInit({
 		name: '5+',
 		index: 100,
 		handle: function() {

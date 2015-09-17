@@ -55,7 +55,7 @@
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
-		setStyle(this,'none');
+		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener('touchmove', $.preventDefault);
 		fixedPopoverScroll(false);
@@ -166,15 +166,18 @@
 		if (!popover || !anchor) {
 			return;
 		}
+
+		if (isActionSheet) { //actionsheet
+			setStyle(popover, 'block')
+			return;
+		}
+
 		var wWidth = window.innerWidth;
 		var wHeight = window.innerHeight;
 
 		var pWidth = popover.offsetWidth;
 		var pHeight = popover.offsetHeight;
-		if (isActionSheet) { //actionsheet
-			setStyle(popover, 'block', (wHeight - pHeight + window.pageYOffset), (wWidth - pWidth) / 2)
-			return;
-		}
+
 		var aWidth = anchor.offsetWidth;
 		var aHeight = anchor.offsetHeight;
 		var offset = $.offset(anchor);
@@ -248,8 +251,9 @@
 			if (mask._show) {
 				mask._show = false;
 				element.setAttribute('style', 'opacity:0');
-				setTimeout(function() {
-					document.body.removeChild(element);
+				$.later(function() {
+					var body = document.body;
+					element.parentNode === body && body.removeChild(element);
 				}, 350);
 			}
 			return mask;

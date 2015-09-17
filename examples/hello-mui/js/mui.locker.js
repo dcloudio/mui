@@ -19,6 +19,26 @@
 
 	var times = 4;
 
+	function getElementLeft(element) {　　　　
+		var actualLeft = element.offsetLeft;　　　　
+		var current = element.offsetParent;　　　　
+		while (current !== null) {　　　　　　
+			actualLeft += current.offsetLeft;　　　　　　
+			current = current.offsetParent;　　　　
+		}　　　　
+		return actualLeft;　　
+	}　　
+
+	function getElementTop(element) {　　　　
+		var actualTop = element.offsetTop;　　　　
+		var current = element.offsetParent;　　　　
+		while (current !== null) {　　　　　　
+			actualTop += current.offsetTop;　　　　　　
+			current = current.offsetParent;　　　　
+		}　　　　
+		return actualTop;　　
+	}
+
 	//定义 Locker 类
 	var Locker = $.Locker = $.Class.extend({
 		R: 26,
@@ -36,6 +56,11 @@
 				throw "构造 Locker 时缺少容器元素";
 			}
 			self.holder = holder;
+			//避免重复初始化开始
+			if (self.holder.__locker_inited) return;
+			self.holder.__locker_inited = true;
+			//避免重复初始化结束
+			//
 			self.options = options || {};
 			self.options.callback = self.options.callback || self.options.done || $.noop;
 			self.holder.innerHTML = '<canvas></canvas>';
@@ -52,8 +77,8 @@
 			//
 			if (self.options.width) self.holder.style.width = self.options.width + 'px';
 			if (self.options.height) self.holder.style.height = self.options.height + 'px';
-			self.CW = self.holder.offsetWidth || self.CW;
-			self.CH = self.holder.offsetHeight || self.CH;
+			self.CW = self.options.width || self.holder.offsetWidth || self.CW;
+			self.CH = self.options.height || self.holder.offsetHeight || self.CH;
 			//处理 “宽、高” 等数值, 全部扩大 times 倍
 			self.R *= times;
 			self.CW *= times;
@@ -69,7 +94,11 @@
 			var Y = (self.CH - 2 * self.OffsetY - self.R * 2 * 3) / 2;
 			self.pointLocationArr = self.caculateNinePointLotion(X, Y);
 			self.initEvent(canvas, cxt, self.holder);
+			//console.log(X);
 			self.draw(cxt, self.pointLocationArr, [], null);
+			setTimeout(function() {
+				self.draw(cxt, self.pointLocationArr, [], null);
+			}, 0);
 		},
 
 		/**
@@ -161,8 +190,8 @@
 			//start
 			self._startHandler = function(e) {
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
-				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
+				e.point.elementX = (e.point.pageX - getElementLeft(holder)) * times;
+				e.point.elementY = (e.point.pageY - getElementTop(holder)) * times;
 				self.isPointSelect(e.point, linePoint);
 				isDown = true;
 			};
@@ -172,8 +201,8 @@
 				if (!isDown) return;
 				e.preventDefault();
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
-				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
+				e.point.elementX = (e.point.pageX - getElementLeft(holder)) * times;
+				e.point.elementY = (e.point.pageY - getElementTop(holder)) * times;
 				var touches = e.point;
 				self.isPointSelect(touches, linePoint);
 				cxt.clearRect(0, 0, self.CW, self.CH);
@@ -186,8 +215,8 @@
 			//end
 			self._endHandler = function(e) {
 				e.point = event.changedTouches ? event.changedTouches[0] : event;
-				e.point.elementX = (e.point.pageX - holder.offsetLeft) * times;
-				e.point.elementY = (e.point.pageY - holder.offsetTop) * times;
+				e.point.elementX = (e.point.pageX - getElementLeft(holder)) * times;
+				e.point.elementY = (e.point.pageY - getElementTop(holder)) * times;
 				cxt.clearRect(0, 0, self.CW, self.CH);
 				self.draw(cxt, self.pointLocationArr, linePoint, null);
 				//事件数据
@@ -251,24 +280,25 @@
 				new Locker(element, options);
 			} else {
 				var optionsText = element.getAttribute('data-locker-options');
-				var options = optionsText ? JSON.parse(optionsText) : {};
-				options.lineColor = element.getAttribute('data-locker-line-color') || options.lineColor;
-				options.ringColor = element.getAttribute('data-locker-ring-color') || options.ringColor;
-				options.fillColor = element.getAttribute('data-locker-fill-color') || options.fillColor;
-				options.pointColor = element.getAttribute('data-locker-point-color') || options.pointColor;
-				options.width = element.getAttribute('data-locker-width') || options.width;
-				options.height = element.getAttribute('data-locker-height') || options.height;
-				new Locker(element, options);
+				var _options = optionsText ? JSON.parse(optionsText) : {};
+				_options.lineColor = element.getAttribute('data-locker-line-color') || _options.lineColor;
+				_options.ringColor = element.getAttribute('data-locker-ring-color') || _options.ringColor;
+				_options.fillColor = element.getAttribute('data-locker-fill-color') || _options.fillColor;
+				_options.pointColor = element.getAttribute('data-locker-point-color') || _options.pointColor;
+				_options.width = element.getAttribute('data-locker-width') || _options.width;
+				_options.height = element.getAttribute('data-locker-height') || _options.height;
+				new Locker(element, _options);
 			}
 		});
 		return this;
 	};
 
 	//自动处理 class='mui-locker' 的 dom
+	try {
+		$('.' + lockerClassName).locker();
+	} catch (ex) {}
 	$.ready(function() {
-		setTimeout(function() {
-			$('.' + lockerClassName).locker();
-		}, 350);
+		$('.' + lockerClassName).locker();
 	});
 
 }(mui, document));

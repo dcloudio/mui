@@ -38,7 +38,7 @@
 			this.sliderActionSelector = SELECTOR_TOOLTIP;
 		} else { //clear,speech,search
 			if (~this.options.actions.indexOf('clear')) {
-				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + (element.value ? '' : (' ' + CLASS_HIDDEN));
+				this.clearActionClass = CLASS_ICON + ' ' + CLASS_ICON_CLEAR + ' ' + CLASS_HIDDEN;
 				this.clearActionSelector = SELECTOR_ICON_CLOSE;
 			}
 			if (~this.options.actions.indexOf('speech')) { //only for 5+
@@ -94,7 +94,7 @@
 			var action = document.createElement('span');
 			action.className = actionClass;
 			if (actionClass === this.searchActionClass) {
-				action.innerHTML = '<span class="' + CLASS_ICON + ' ' + CLASS_ICON_SEARCH + '"></span>' + this.element.getAttribute('placeholder');
+				action.innerHTML = '<span class="' + CLASS_ICON + ' ' + CLASS_ICON_SEARCH + '"></span><span>' + this.element.getAttribute('placeholder') + '</span>';
 				this.element.setAttribute('placeholder', '');
 				if (this.element.value.trim()) {
 					row.classList.add($.className('active'));
@@ -119,7 +119,7 @@
 			var showTip = function() {
 				tooltip.classList.remove(CLASS_HIDDEN);
 				tooltipWidth = tooltipWidth || tooltip.offsetWidth;
-				var scaleWidth = Math.abs(element.value) / distince * width;
+				var scaleWidth = (width / distince) * Math.abs(element.value - element.min);
 				tooltip.style.left = (14 + offsetLeft + scaleWidth - tooltipWidth / 2) + 'px';
 				tooltip.innerText = element.value;
 				if (timer) {
@@ -140,12 +140,15 @@
 				if (!action) {
 					return;
 				}
-				$.each(['keyup', 'change', 'input', 'focus', 'blur', 'cut', 'paste'], function(index, type) {
+				$.each(['keyup', 'change', 'input', 'focus', 'cut', 'paste'], function(index, type) {
 					(function(type) {
 						element.addEventListener(type, function() {
 							action.classList[element.value.trim() ? 'remove' : 'add'](CLASS_HIDDEN);
 						});
 					})(type);
+				});
+				element.addEventListener('blur', function() {
+					action.classList.add(CLASS_HIDDEN);
 				});
 			}
 			if (this.searchActionClass) {
@@ -158,6 +161,14 @@
 					}
 				});
 			}
+		}
+	};
+	Input.prototype.setPlaceholder = function(text) {
+		if (this.searchActionClass) {
+			var placeholder = this.element.parentNode.querySelector(SELECTOR_PLACEHOLDER);
+			placeholder && (placeholder.getElementsByTagName('span')[1].innerText = text);
+		} else {
+			this.element.setAttribute('placeholder', text);
 		}
 	};
 	Input.prototype.clearActionClick = function(event) {
@@ -196,7 +207,9 @@
 		event.preventDefault();
 	};
 	$.fn.input = function(options) {
+		var inputApis = [];
 		this.each(function() {
+			var inputApi = null;
 			var actions = [];
 			var row = findRow(this.parentNode);
 			if (this.type === 'range' && row.classList.contains($.className('input-range'))) {
@@ -216,15 +229,18 @@
 			var id = this.getAttribute('data-input-' + actions[0]);
 			if (!id) {
 				id = ++$.uuid;
-				$.data[id] = new Input(this, {
+				inputApi = $.data[id] = new Input(this, {
 					actions: actions.join(',')
 				});
 				for (var i = 0, len = actions.length; i < len; i++) {
 					this.setAttribute('data-input-' + actions[i], id);
 				}
+			} else {
+				inputApi = $.data[id];
 			}
-
+			inputApis.push(inputApi);
 		});
+		return inputApis.length === 1 ? inputApis[0] : inputApis;
 	};
 	$.ready(function() {
 		$($.classSelector('.input-row input')).input();

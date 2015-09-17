@@ -32,7 +32,7 @@
 				<div class="mui-locker" data-locker-options='{"ringColor":"rgba(221,221,221,1)","fillColor":"#ffffff","pointColor":"rgba(0,136,204,1)","lineColor":"rgba(0,136,204,1)"}' data-locker-width='320' data-locker-height='320'>
 				</div>
 			</div>
-			<a id='forget'>我忘记了解锁图案</a>
+			<a id='forget'>忘记手势密码？</a>
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/mui.locker.js"></script>
@@ -42,31 +42,62 @@
 			(function($, doc) {
 				$.init();
 				$.plusReady(function() {
+					var mainPage = $.preload({
+						"id": 'main',
+						"url": 'main.html'
+					});
+					var toMain = function() {
+						$.fire(mainPage, 'show', null);
+						setTimeout(function() {
+							$.openWindow({
+								id: 'main',
+								show: {
+									aniShow: 'pop-in'
+								},
+								waiting: {
+									autoShow: false
+								}
+							});
+						}, 0);
+					};
 					var settings = app.getSettings();
-					var forgetButton = doc.querySelector("#forget");
+					var forgetButton = doc.getElementById("forget");
 					var locker = doc.querySelector('.mui-locker');
-					forgetButton.addEventListener('tap', function(event) {
+					var clearStateAndToLogin = function() {
 						settings.gestures = '';
+						settings.autoLogin = false;
 						app.setSettings(settings);
 						var state = app.getState();
 						state.token = '';
 						app.setState(state);
 						$.openWindow({
 							url: 'login.html',
-							id: 'login'
+							id: 'login',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
 						});
+					};
+					forgetButton.addEventListener('tap', function(event) {
+						clearStateAndToLogin();
 					});
+					var tryNumber = 5;
 					locker.addEventListener('done', function(event) {
 						var rs = event.detail;
 						if (settings.gestures == rs.points.join('')) {
-							$.openWindow({
-								url: 'main.html',
-								id: 'main'
-							});
+							toMain()
 							rs.sender.clear();
 						} else {
-							plus.nativeUI.toast('解锁手势错误');
+							tryNumber--;
 							rs.sender.clear();
+							if (tryNumber > 0) {
+								plus.nativeUI.toast('解锁手势错误，还能尝试 ' + tryNumber + ' 次。');
+							} else {
+								clearStateAndToLogin();
+							}
 						}
 					}, false);
 					var backButtonPress = 0;

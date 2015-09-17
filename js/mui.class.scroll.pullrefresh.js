@@ -23,6 +23,7 @@
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
+			e.preventDefault();
 			this._super(e);
 		},
 		_drag: function(e) {
@@ -41,15 +42,19 @@
 		},
 		//API
 		resetPosition: function(time) {
-			if (this.pulldown && this.y >= this.options.down.height) {
-				this.pulldownLoading(0, time || 0);
-				return true;
+			if (this.pulldown) {
+				if (this.y >= this.options.down.height) {
+					this.pulldownLoading(undefined, time || 0);
+					return true;
+				} else {
+					!this.loading && this.topPocket.classList.remove(CLASS_VISIBILITY);
+				}
 			}
 			return this._super(time);
 		},
-		pulldownLoading: function(x, time) {
-			x = x || 0;
-			this.scrollTo(x, this.options.down.height, time, this.options.bounceEasing);
+		pulldownLoading: function(y, time) {
+			typeof y === 'undefined' && (y = this.options.down.height); //默认高度
+			this.scrollTo(0, y, time, this.options.bounceEasing);
 			if (this.loading) {
 				return;
 			}
@@ -92,7 +97,7 @@
 		},
 		endPullupToRefresh: function(finished) {
 			var self = this;
-			if (self.bottomPocket && self.loading && !this.pulldown) {
+			if (self.bottomPocket) { // && self.loading && !this.pulldown
 				self.loading = false;
 				if (finished) {
 					this.finished = true;
@@ -102,20 +107,26 @@
 					self.wrapper.removeEventListener('scrollbottom', self);
 				} else {
 					self._setCaption(self.options.up.contentdown);
-					setTimeout(function() {
-						self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					}, 350);
+					//					setTimeout(function() {
+					self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+					//					}, 300);
 				}
 			}
 		},
+		disablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.className = $.className('pull-bottom-pocket') + ' ' + CLASS_HIDDEN;
+			this.wrapper.removeEventListener('scrollbottom', this);
+		},
+		enablePullupToRefresh: function() {
+			this._initPullupRefresh();
+			this.bottomPocket.classList.remove(CLASS_HIDDEN);
+			this._setCaption(this.options.up.contentdown);
+			this.wrapper.addEventListener('scrollbottom', this);
+		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
-				if (this.pulldown !== false) {
-					this._initPullupRefresh();
-				}
-				this.bottomPocket.classList.remove(CLASS_HIDDEN);
-				this._setCaption(this.options.up.contentdown);
-				this.wrapper.addEventListener('scrollbottom', this);
+				this.enablePullupToRefresh();
 				this.finished = false;
 			}
 			this._super();
@@ -134,7 +145,9 @@
 			} else {
 				pullRefreshApi = $.data[id];
 			}
-			if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+			if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
+				pullRefreshApi.pulldownLoading(options.down.autoY);
+			} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
 				pullRefreshApi.pullupLoading();
 			}
 			//暂不提供这种调用方式吧			

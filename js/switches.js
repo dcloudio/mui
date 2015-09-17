@@ -113,10 +113,10 @@
 		var classList = this.classList;
 		if (classList.contains(CLASS_ACTIVE)) {
 			classList.remove(CLASS_ACTIVE);
-			this.handle.style.webkitTransform = 'translate3d(0,0,0)';
+			this.handle.style.webkitTransform = 'translate(0,0)';
 		} else {
 			classList.add(CLASS_ACTIVE);
-			this.handle.style.webkitTransform = 'translate3d(' + this.handleX + 'px,0,0)';
+			this.handle.style.webkitTransform = 'translate(' + this.handleX + 'px,0)';
 		}
 		$.trigger(this.element, 'toggle', {
 			isActive: this.classList.contains(CLASS_ACTIVE)
@@ -132,10 +132,10 @@
 		}
 		if (this.lastChanged !== isChanged) {
 			if (isChanged) {
-				this.handle.style.webkitTransform = 'translate3d(' + (this.initialState ? 0 : this.handleX) + 'px,0,0)';
+				this.handle.style.webkitTransform = 'translate(' + (this.initialState ? 0 : this.handleX) + 'px,0)';
 				this.classList[this.initialState ? 'remove' : 'add'](CLASS_ACTIVE);
 			} else {
-				this.handle.style.webkitTransform = 'translate3d(' + (this.initialState ? this.handleX : 0) + 'px,0,0)';
+				this.handle.style.webkitTransform = 'translate(' + (this.initialState ? this.handleX : 0) + 'px,0)';
 				this.classList[this.initialState ? 'add' : 'remove'](CLASS_ACTIVE);
 			}
 			this.lastChanged = isChanged;

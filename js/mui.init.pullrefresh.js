@@ -4,7 +4,7 @@
  * @returns {undefined}
  */
 (function($) {
-	$.registerInit({
+	$.addInit({
 		name: 'pullrefresh',
 		index: 1000,
 		handle: function() {

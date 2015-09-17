@@ -71,6 +71,16 @@
 				$.init({
 					swipeBack:true //启用右滑关闭功能
 				});
+				
+				var network = true;
+				if(mui.os.plus){
+					mui.plusReady(function () {
+						if(plus.networkinfo.getCurrentType()==plus.networkinfo.CONNECTION_NONE){
+							network = false;
+						}
+					});
+				}
+				
 				var methodEl = document.getElementById("method");
 				var dataTypeEl = document.getElementById("dataType");
 				var respnoseEl = document.getElementById("response");
@@ -121,7 +131,11 @@
 				};
 				//发送请求按钮的点击事件
 				document.getElementById("confirm").addEventListener('tap', function() {
-					ajax();
+					if(network){
+						ajax();
+					}else{
+						mui.toast("当前网络不给力，请稍后再试");
+					}
 				});
 				//点击描述中链接时，打开对应网页介绍；
 				$('body').on('tap', 'a', function(e) {

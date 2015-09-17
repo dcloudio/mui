@@ -6,12 +6,12 @@
  */
 (function($, window) {
 	if ($.os.plus && $.os.android) {
-		$.registerBack({
+		$.addBack({
 			name: 'mui',
 			index: 5,
 			handle: function() {
 				//popover
-				if ($.targets._popover) {
+				if ($.targets._popover && $.targets._popover.classList.contains($.className('active'))) {
 					$($.targets._popover).popover('hide');
 					return true;
 				}
@@ -21,13 +21,18 @@
 					$(offCanvas).offCanvas('close');
 					return true;
 				}
+				var previewImage = $.isFunction($.getPreviewImage) && $.getPreviewImage();
+				if (previewImage && previewImage.isShown()) {
+					previewImage.close();
+					return true;
+				}
 			}
 		});
 	}
 	/**
 	 * 5+ back
 	 */
-	$.registerBack({
+	$.addBack({
 		name: '5+',
 		index: 10,
 		handle: function() {
@@ -44,18 +49,18 @@
 					if (e.canBack) { //webview history back
 						window.history.back();
 					} else { //webview close or hide
-						var opener = wobj.opener();
-						if (opener) {
+						//fixed by fxy 此处不应该用opener判断，因为用户有可能自己close掉当前窗口的opener。这样的话。opener就为空了，导致不能执行close
+						if (wobj.id === plus.runtime.appid) { //首页
+							//首页不存在opener的情况下，后退实际上应该是退出应用；
+							//这个交给项目具体实现，框架暂不处理；
+							//plus.runtime.quit();	
+						} else { //其他页面，
 							if (wobj.preload) {
 								wobj.hide("auto");
 							} else {
 								//关闭页面时，需要将其打开的所有子页面全部关闭；
 								$.closeAll(wobj);
 							}
-						} else {
-							//首页不存在opener的情况下，后退实际上应该是退出应用；
-							//这个交给项目具体实现，框架暂不处理；
-							//plus.runtime.quit();
 						}
 					}
 				});
@@ -80,27 +85,33 @@
 			}
 		}
 	};
+	var __back = function() {
+		$.back();
+	};
+	var __menu = function() {
+		$.menu();
+	};
 	//默认监听
 	$.plusReady(function() {
 		if ($.options.keyEventBind.backbutton) {
-			plus.key.addEventListener('backbutton', $.back, false);
+			plus.key.addEventListener('backbutton', __back, false);
 		}
 		if ($.options.keyEventBind.menubutton) {
-			plus.key.addEventListener('menubutton', $.menu, false);
+			plus.key.addEventListener('menubutton', __menu, false);
 		}
 	});
 	//处理按键监听事件
-	$.registerInit({
+	$.addInit({
 		name: 'keyEventBind',
 		index: 1000,
 		handle: function() {
 			$.plusReady(function() {
 				//如果不为true，则移除默认监听
 				if (!$.options.keyEventBind.backbutton) {
-					plus.key.removeEventListener('backbutton', $.back);
+					plus.key.removeEventListener('backbutton', __back);
 				}
 				if (!$.options.keyEventBind.menubutton) {
-					plus.key.removeEventListener('menubutton', $.menu);
+					plus.key.removeEventListener('menubutton', __menu);
 				}
 			});
 		}

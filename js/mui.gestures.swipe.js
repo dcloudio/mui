@@ -6,18 +6,21 @@
  */
 (function($, name) {
 	var handle = function(event, touch) {
+		var session = $.gestures.session;
 		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
 			var options = this.options;
-			if (touch.direction && options.swipeMaxTime > touch.touchTime && touch.distance > options.swipeMinDistince) {
+			//TODO 后续根据velocity计算
+			if (touch.direction && options.swipeMaxTime > touch.deltaTime && touch.distance > options.swipeMinDistince) {
 				touch.swipe = true;
-				$.trigger(event.target, name + touch.direction, touch);
+				$.trigger(session.target, name, touch);
+				$.trigger(session.target, name + touch.direction, touch);
 			}
 		}
 	};
 	/**
 	 * mui gesture swipe
 	 */
-	$.registerGesture({
+	$.addGesture({
 		name: name,
 		index: 10,
 		handle: handle,
