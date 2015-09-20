@@ -90,7 +90,7 @@
 				var id = this.getAttribute("href");
 				var type = this.getAttribute("open-type");
 				var href = this.href;
-				if(type=="common"||(mui.os.ios&&!~id.indexOf('tab-with-viewpagerindicator.html')) ){
+				if(type=="common"||mui.os.ios){
 					var webview_style = {
 						popGesture: "close"
 					};
