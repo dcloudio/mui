@@ -4,50 +4,94 @@
 			this._super(element, options);
 		},
 		_init: function() {
-			this.options.selector = 'img[data-lazyload]';
+			this.options.selector = '[data-lazyload]';
 			this._super();
 		},
-		addElement: function(img) {
-			var self = this;
-			var src = img.getAttribute('data-lazyload');
-			if (src) {
-				self.onPlaceHolder = self._createLoader(function(callback) {
-					var img = new Image();
-					var placeholder = self.options.placeholder;
-					img.src = placeholder;
-					img.onload = img.onerror = function() {
-						callback(placeholder)
-					};
-				});
-				if (img.offsetWidth) {
-					self.addCallback(img, self.handle);
+		_set: function(element, uri) {
+			if (element.tagName === 'IMG') {
+				element.src = uri;
+			} else {
+				element.style.backgroundImage = "url(" + uri + ")";
+			}
+		},
+		_hasPlaceholder: function(element) {
+			if (element.offsetWidth) {
+				if (element.tagName === 'IMG') {
+					return !!element.src;
 				} else {
-					self._counter++;
-					img.onload = function() {
-						self._counter--;
-						self.addCallback(img, self.handle);
-						this.onload = null;
-					};
-					if (!img.src) {
-						self.onPlaceHolder(function(placeholder) {
-							if (!img.src) {
-								img.src = placeholder;
-							}
-						});
-					}
+					return !!element.style.backgroundImage;
+				}
+			}
+			return false;
+		},
+		_addPlaceHolder: function(element) {
+			var self = this;
+			if (element.tagName === 'IMG') {
+				self._counter++;
+				element.onload = function() {
+					self._counter--;
+					self.addCallback(element, self.handle);
+					this.onload = null;
+				};
+				self.onPlaceHolder(function(placeholder) {
+					self._set(element, placeholder);
+				});
+			} else {
+				element.style.backgroundImage = "url(" + self.options.placeholder + ")";
+			}
+		},
+		addElement: function(element) {
+			var self = this;
+			var uri = element.getAttribute('data-lazyload');
+			if (uri) {
+				if (self._hasPlaceholder(element)) {
+					self.addCallback(element, self.handle);
+				} else {
+					self.onPlaceHolder = self._createLoader(function(callback) {
+						var img = new Image();
+						var placeholder = self.options.placeholder;
+						img.src = placeholder;
+						img.onload = img.onerror = function() {
+							callback(placeholder);
+						};
+					});
+					self._addPlaceHolder(element);
 				}
 				return true;
 			}
 			return false;
 		},
-		handle: function(img, key) {
-			var dataSrc = img.getAttribute('data-lazyload');
-			if (dataSrc && img.src != dataSrc) {
-				img.src = dataSrc;
-				img.removeAttribute('data-lazyload');
-				img.parentNode.parentNode.setAttribute('data-lazyload', 'true');
+		set: function(element, uri) {
+			var self = this;
+			var img = new Image();
+			img.onload = function() {
+				self._set(element, uri);
+				$.trigger(self.element, 'success', {
+					element: element,
+					uri: uri
+				});
+			};
+			img.onerror = function() {
+				$.trigger(self.element, 'error', {
+					element: element,
+					uri: uri
+				});
+			};
+			img.src = uri;
+			element.removeAttribute('data-lazyload'); //只尝试一次，后续可能支持多次尝试
+		},
+		handle: function(element, key) {
+			var uri = element.getAttribute('data-lazyload');
+			if (uri) {
+				this.set(element, uri);
+				//element.parentNode.parentNode.setAttribute('data-lazyload', 'true'); //debug
 			}
+		},
+		destroy: function() {
+			this._super();
+			this.element.removeAttribute('data-imageLazyload');
 		}
+
 	});
 	$.fn.imageLazyload = function(options) {
 		var lazyloadApis = [];

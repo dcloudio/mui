@@ -29,6 +29,7 @@
 			var self = this;
 			//			document.addEventListener('plusscrollbottom', this);
 			window.addEventListener('dragup', self);
+			document.addEventListener("plusscrollbottom", self);
 			self.scrollInterval = window.setInterval(function() {
 				if (self.isScroll && !self.loading) {
 					if (window.pageYOffset + window.innerHeight + 10 >= document.documentElement.scrollHeight) {
@@ -96,7 +97,7 @@
 			//				}
 			//			}
 			self.isScroll = false;
-			if (e.type === 'dragup') {
+			if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
 				self.isScroll = true;
 				setTimeout(function() {
 					self.isScroll = false;

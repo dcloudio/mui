@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.3.0 (https://github.com/dcloudio/mui)
+ * Mui v2.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -748,7 +748,8 @@ var mui = (function(document, undefined) {
 				}
 			}
 			var target = e.target;
-			if (target.tagName && target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')) {
+			//TODO 需考虑所有键盘弹起的情况
+			if (target.tagName && (target.tagName === 'TEXTAREA' || (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')))) {
 				if (target.disabled || target.readOnly) {
 					return;
 				}
@@ -3440,7 +3441,6 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_start: function(e) {
-			e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 			this.moved = this.needReset = false;
 			this._transitionTime();
 			if (this.isInTransition) {
@@ -4085,6 +4085,10 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_start: function(e) {
+			//仅下拉刷新在start阻止默认事件
+			if (e.touches && e.touches.length && e.touches[0].clientX > 30) {
+				e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
+			}
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
@@ -4638,6 +4642,7 @@ var mui = (function(document, undefined) {
 			var self = this;
 			//			document.addEventListener('plusscrollbottom', this);
 			window.addEventListener('dragup', self);
+			document.addEventListener("plusscrollbottom", self);
 			self.scrollInterval = window.setInterval(function() {
 				if (self.isScroll && !self.loading) {
 					if (window.pageYOffset + window.innerHeight + 10 >= document.documentElement.scrollHeight) {
@@ -4705,7 +4710,7 @@ var mui = (function(document, undefined) {
 			//				}
 			//			}
 			self.isScroll = false;
-			if (e.type === 'dragup') {
+			if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
 				self.isScroll = true;
 				setTimeout(function() {
 					self.isScroll = false;
@@ -5583,10 +5588,11 @@ var mui = (function(document, undefined) {
 
 		return element;
 	}());
+	var removeBackdropTimer;
 	var removeBackdrop = function(popover) {
 		backdrop.setAttribute('style', 'opacity:0');
 		$.targets.popover = $.targets._popover = null; //reset
-		setTimeout(function() {
+		removeBackdropTimer = $.later(function() {
 			if (!popover.classList.contains(CLASS_ACTIVE) && backdrop.parentNode && backdrop.parentNode === document.body) {
 				document.body.removeChild(backdrop);
 			}
@@ -5611,6 +5617,7 @@ var mui = (function(document, undefined) {
 	});
 
 	var togglePopover = function(popover, anchor) {
+		removeBackdropTimer && removeBackdropTimer.cancel(); //取消remove的timer
 		//remove一遍，以免来回快速切换，导致webkitTransitionEnd不触发，无法remove
 		popover.removeEventListener('webkitTransitionEnd', onPopoverShown);
 		popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
@@ -7011,7 +7018,15 @@ var mui = (function(document, undefined) {
 			});
 			self.input.addEventListener(changeEventName, function(event) {
 				self.checkValue();
+				$.trigger(self, changeEventName, self.getValue());
 			});
+		},
+		/**
+		 * 获取当前值
+		 **/
+		getValue: function() {
+			var self = this;
+			return parseInt(self.input.value);
 		},
 		/**
 		 * 验证当前值是法合法

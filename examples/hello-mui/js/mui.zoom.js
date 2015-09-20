@@ -26,6 +26,9 @@
 		zoom.zoomerStyle = zoom.zoomer && zoom.zoomer.style;
 
 		zoom.init = function() {
+			//自动启用
+			$.options.gestureConfig.pinch = true;
+			$.options.gestureConfig.doubletap = true;
 			zoom.initEvents();
 		};
 

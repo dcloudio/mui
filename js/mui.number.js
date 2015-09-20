@@ -51,7 +51,15 @@
 			});
 			self.input.addEventListener(changeEventName, function(event) {
 				self.checkValue();
+				$.trigger(self, changeEventName, self.getValue());
 			});
+		},
+		/**
+		 * 获取当前值
+		 **/
+		getValue: function() {
+			var self = this;
+			return parseInt(self.input.value);
 		},
 		/**
 		 * 验证当前值是法合法
