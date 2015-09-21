@@ -1916,10 +1916,7 @@ var mui = (function(document, undefined) {
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend({
-			autoShow: true,
-			title: ''
-		}, options);
+		return $.extend(true,{},{autoShow: true,title: ''}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -2045,20 +2042,17 @@ var mui = (function(document, undefined) {
 		}
 		options = options || {};
 		var params = options.params || {};
-		var webview, nShow, nWaiting;
-		if ($.webviews[id]) { //已缓存
-			var webviewCache = $.webviews[id];
-			webview = webviewCache.webview;
-			//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
-			if (!webview || !webview.getURL()) {
-				//再次新建一个webview；
-				options = $.extend(options, {
-					id: id,
-					url: url,
-					preload: true
-				}, true);
-				webview = $.createWindow(options);
+		var webview = null,webviewCache = null, nShow, nWaiting;
+
+		if($.webviews[id]){
+			webviewCache = $.webviews[id];
+			//webview真实存在，才能获取
+			if(plus.webview.getWebviewById(id)){
+				webview = webviewCache.webview;
 			}
+		}
+
+		if (webviewCache&&webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
 			nShow = webviewCache.show;
