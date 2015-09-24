@@ -215,7 +215,7 @@
 			window.addEventListener('dragup', this);
 		},
 		scrollTo: function(x, y, time) {
-			$.scrollTo(x, y, time);
+			$.scrollTo(y, time);
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
