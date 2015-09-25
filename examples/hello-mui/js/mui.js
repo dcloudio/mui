@@ -7010,10 +7010,10 @@ var mui = (function(document, undefined) {
 				self.input.value = val.toString();
 				$.trigger(self.input, changeEventName, null);
 			});
-			self.input.addEventListener(changeEventName, function(event) {
-				self.checkValue();
-				$.trigger(self, changeEventName, self.getValue());
-			});
+//			self.input.addEventListener(changeEventName, function(event) {
+//				self.checkValue();
+//				$.trigger(self, changeEventName, self.getValue());
+//			});
 		},
 		/**
 		 * 获取当前值
