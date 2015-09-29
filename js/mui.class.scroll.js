@@ -28,28 +28,28 @@
 			this.stopped = false;
 
 			this.options = $.extend(true, {
-				scrollY: true,//是否竖向滚动
-				scrollX: false,//是否横向滚动
-				startX: 0,//初始化时滚动至x
-				startY: 0,//初始化时滚动至y
-				indicators: true,//是否显示滚动条
+				scrollY: true, //是否竖向滚动
+				scrollX: false, //是否横向滚动
+				startX: 0, //初始化时滚动至x
+				startY: 0, //初始化时滚动至y
+				indicators: true, //是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
 				fixedBadAndorid: false,
 				preventDefaultException: {
-					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
+					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|VIDEO)$/
 				},
 				momentum: true,
 
-				snap: false,//图片轮播，拖拽式选项卡
+				snap: false, //图片轮播，拖拽式选项卡
 
-				bounce: true,//是否启用回弹
-				bounceTime: 300,//回弹动画时间
-				bounceEasing: ease.circular.style,//回弹动画曲线
+				bounce: true, //是否启用回弹
+				bounceTime: 300, //回弹动画时间
+				bounceEasing: ease.circular.style, //回弹动画曲线
 
 				directionLockThreshold: 5,
 
-				parallaxElement: false,//视差元素
+				parallaxElement: false, //视差元素
 				parallaxRatio: 0.5
 			}, options);
 
@@ -277,12 +277,12 @@
 		_start: function(e) {
 			this.moved = this.needReset = false;
 			this._transitionTime();
-			if (this.isInTransition && this.moved) {
+			if (this.isInTransition) {
 				this.needReset = true;
 				this.isInTransition = false;
 				var pos = $.parseTranslateMatrix($.getStyles(this.scroller, 'webkitTransform'));
 				this.setTranslate(Math.round(pos.x), Math.round(pos.y));
-				this.resetPosition(); //reset
+				//				this.resetPosition(); //reset
 				$.trigger(this.scroller, 'scrollend', this);
 				//				e.stopPropagation();
 				e.preventDefault();

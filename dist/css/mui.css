@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.2.0 (https://github.com/dcloudio/mui)
+ * Mui v2.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -572,6 +572,29 @@ p
     margin-bottom: 10px;
 
     color: #8f8f94;
+}
+
+.mui-row:before, .mui-row:after
+{
+    display: table;
+
+    content: ' ';
+}
+.mui-row:after
+{
+    clear: both;
+}
+
+.mui-col-xs-1, .mui-col-sm-1, .mui-col-xs-2, .mui-col-sm-2, .mui-col-xs-3, .mui-col-sm-3, .mui-col-xs-4, .mui-col-sm-4, .mui-col-xs-5, .mui-col-sm-5, .mui-col-xs-6, .mui-col-sm-6, .mui-col-xs-7, .mui-col-sm-7, .mui-col-xs-8, .mui-col-sm-8, .mui-col-xs-9, .mui-col-sm-9, .mui-col-xs-10, .mui-col-sm-10, .mui-col-xs-11, .mui-col-sm-11, .mui-col-xs-12, .mui-col-sm-12
+{
+    position: relative;
+
+    min-height: 1px;
+}
+
+.mui-row > [class*='mui-col-']
+{
+    float: left;
 }
 
 .mui-col-xs-12
@@ -1867,14 +1890,14 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     border-bottom: 0;
     border-radius: 6px;
 }
-.mui-card .mui-table-view .mui-table-view-divider:first-child
+.mui-card .mui-table-view .mui-table-view-divider:first-child, .mui-card .mui-table-view .mui-table-view-cell:first-child
 {
     top: 0;
 
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
-.mui-card .mui-table-view .mui-table-view-divider:last-child
+.mui-card .mui-table-view .mui-table-view-divider:last-child, .mui-card .mui-table-view .mui-table-view-cell:last-child
 {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -1930,6 +1953,10 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
             transform: scaleY(.5);
 
     background-color: #c8c7cc;
+}
+.mui-table-view:before
+{
+    top: -1px;
 }
 
 .mui-table-view-icon .mui-table-view-cell .mui-navigate-right .mui-icon
@@ -2044,8 +2071,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     overflow: hidden;
 
     padding: 11px 15px;
-
-    background-color: inherit;
 
     -webkit-touch-callout: none;
 }
@@ -2548,20 +2573,36 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
 .mui-grid-view.mui-grid-9
 {
-    padding: 1px 0 1px 0;
-    padding-right: 0;
+    margin: 0;
+    padding: 0;
 
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
     background-color: #f2f2f2;
+}
+.mui-grid-view.mui-grid-9:before, .mui-grid-view.mui-grid-9:after
+{
+    display: table;
+
+    content: ' ';
+}
+.mui-grid-view.mui-grid-9:after
+{
+    clear: both;
+}
+.mui-grid-view.mui-grid-9:after
+{
+    position: static;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell
 {
-    margin: -1px 0 0 -1px;
+    margin: 0;
     padding: 11px 15px;
 
     vertical-align: top;
 
-    border-top: 1px solid #eee;
-    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 .mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active
 {
@@ -3232,6 +3273,20 @@ select:focus
 
     -webkit-touch-callout: none;
 }
+.mui-segmented-control.mui-segmented-control-vertical
+{
+    border-collapse: collapse;
+
+    border-width: 0;
+    border-radius: 0;
+}
+.mui-segmented-control.mui-segmented-control-vertical .mui-control-item
+{
+    display: block;
+
+    border-bottom: 1px solid #c8c7cc;
+    border-left-width: 0;
+}
 .mui-segmented-control.mui-scroll-wrapper
 {
     height: 38px;
@@ -3286,6 +3341,14 @@ select:focus
 
     border: 0;
     border-radius: 0;
+}
+.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item
+{
+    border-bottom: 1px solid #c8c7cc;
+}
+.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item.mui-active
+{
+    border-bottom: 1px solid #c8c7cc;
 }
 .mui-segmented-control.mui-segmented-control-inverted .mui-control-item
 {
@@ -3853,6 +3916,7 @@ select:focus
     height: 100%;
 
     vertical-align: top;
+    white-space: normal;
 }
 .mui-slider .mui-slider-group .mui-slider-item > a:not(.mui-control-item)
 {

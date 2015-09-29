@@ -57,10 +57,10 @@
 				<h5 class="mui-content-padded">取值操作</h5>
 				<div class="mui-numbox">
 					<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-					<input id="testBox" class="mui-numbox-input" type="number" />
+					<input id="box" class="mui-numbox-input" type="number" />
 					<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 				</div>
-				<button id="getValue" class="mui-btn" style="padding: 7px 12px;">取当前值</button>
+				<button id="btn" class="mui-btn" style="padding: 7px 12px;">取当前值</button>
 				<h5 class="mui-content-padded">在行内</h5> 购买数量:
 				<div class="mui-numbox">
 					<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
@@ -99,17 +99,11 @@
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script>
-			(function($, doc) {
-				$.init();
-				$.plusReady(function() {
-					var btnGetValue = doc.querySelector('#getValue');
-					var boxTest = doc.querySelector('#testBox');
-					btnGetValue.addEventListener('click', function(event) {
-						plus.nativeUI.alert('当前值: ' + boxTest.value, null, "提示");
-					});
-				});
-			}(mui, document));
+		<script>			
+			mui.init();
+			document.getElementById("btn").addEventListener('tap', function(event) {
+				mui.alert('当前值: ' + document.getElementById("box").value, null, "提示");
+			});
 		</script>
 	</body>
 

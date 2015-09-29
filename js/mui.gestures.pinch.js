@@ -41,6 +41,7 @@
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
 				if ($.options.gestureConfig.pinch && session.pinch && touch.touches.length === 2) {
+					session.pinch = false;
 					$.trigger(session.target, name + 'end', touch);
 				}
 				break;

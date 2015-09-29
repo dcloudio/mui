@@ -29,6 +29,7 @@
 			var self = this;
 			//			document.addEventListener('plusscrollbottom', this);
 			window.addEventListener('dragup', self);
+			document.addEventListener("plusscrollbottom", self);
 			self.scrollInterval = window.setInterval(function() {
 				if (self.isScroll && !self.loading) {
 					if (window.pageYOffset + window.innerHeight + 10 >= document.documentElement.scrollHeight) {
@@ -96,7 +97,7 @@
 			//				}
 			//			}
 			self.isScroll = false;
-			if (e.type === 'dragup') {
+			if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
 				self.isScroll = true;
 				setTimeout(function() {
 					self.isScroll = false;
@@ -190,7 +191,8 @@
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
 					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
-					//					document.removeEventListener('plusscrollbottom', self);
+					//取消5+的plusscrollbottom事件
+					document.removeEventListener('plusscrollbottom', self);
 					window.removeEventListener('dragup', self);
 				} else { //初始化时隐藏，后续不再隐藏
 					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
@@ -211,10 +213,11 @@
 			this.bottomPocket.classList.remove(CLASS_HIDDEN);
 			this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 			this.pullCaption.innerHTML = this.options.up.contentdown;
+			document.addEventListener("plusscrollbottom", this);
 			window.addEventListener('dragup', this);
 		},
 		scrollTo: function(x, y, time) {
-			$.scrollTo(x, y, time);
+			$.scrollTo(y, time);
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {

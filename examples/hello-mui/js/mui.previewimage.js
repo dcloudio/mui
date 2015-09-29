@@ -24,9 +24,6 @@
 			document.body.appendChild(div.firstElementChild);
 			el = document.getElementById(this.options.id);
 		}
-		//自动启用
-		$.options.gestureConfig.pinch = true;
-		$.options.gestureConfig.doubletap = true;
 
 		this.element = el;
 		this.scroller = this.element.querySelector($.classSelector('.slider-group'));

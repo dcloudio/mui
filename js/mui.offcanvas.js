@@ -30,12 +30,23 @@
 				this.options = $.extend(true, {
 					dragThresholdX: 10,
 					scale: 0.8,
-					opacity: 0.1
+					opacity: 0.1,
+					preventDefaultException: {
+						tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|VIDEO)$/
+					},
 				}, options);
 				document.body.classList.add($.className('fullscreen')); //fullscreen
 				this.refresh();
 				this.initEvent();
 			}
+		},
+		_preventDefaultException: function(el, exceptions) {
+			for (var i in exceptions) {
+				if (exceptions[i].test(el[i])) {
+					return true;
+				}
+			}
+			return false;
 		},
 		refresh: function(offCanvas) {
 			//			offCanvas && !offCanvas.classList.contains(CLASS_ACTIVE) && this.classList.remove(CLASS_ACTIVE);
@@ -85,10 +96,7 @@
 		handleEvent: function(e) {
 			switch (e.type) {
 				case 'touchstart':
-					var tagName = e.target && e.target.tagName;
-					if (tagName !== 'INPUT' && tagName !== 'TEXTAREA' && tagName !== 'SELECT') {
-						e.preventDefault();
-					}
+					e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 					break;
 				case 'webkitTransitionEnd': //有个bug需要处理，需要考虑假设没有触发webkitTransitionEnd的情况
 					if (e.target === this.scroller) {
@@ -105,6 +113,7 @@
 					}
 					if (!this.isDragging && Math.abs(this.lastX - this.startX) > this.options.dragThresholdX && (detail.direction === 'left' || (detail.direction === 'right'))) {
 						if (this.slideIn) {
+							this.scroller = this.wrapper.querySelector(SELECTOR_INNER_WRAP);
 							if (this.classList.contains(CLASS_ACTIVE)) {
 								if (this.offCanvasRight && this.offCanvasRight.classList.contains(CLASS_ACTIVE)) {
 									this.offCanvas = this.offCanvasRight;
@@ -143,7 +152,7 @@
 								}
 							}
 						}
-						if (this.offCanvas) {
+						if (this.offCanvas && this.scroller) {
 							this.startX = this.lastX;
 							this.isDragging = true;
 
