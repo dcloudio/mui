@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.3.0 (https://github.com/dcloudio/mui)
+ * Mui v2.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 
@@ -1954,6 +1954,10 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     background-color: #c8c7cc;
 }
+.mui-table-view:before
+{
+    top: -1px;
+}
 
 .mui-table-view-icon .mui-table-view-cell .mui-navigate-right .mui-icon
 {
@@ -2067,8 +2071,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     overflow: hidden;
 
     padding: 11px 15px;
-
-    background-color: inherit;
 
     -webkit-touch-callout: none;
 }
@@ -3914,6 +3916,7 @@ select:focus
     height: 100%;
 
     vertical-align: top;
+    white-space: normal;
 }
 .mui-slider .mui-slider-group .mui-slider-item > a:not(.mui-control-item)
 {

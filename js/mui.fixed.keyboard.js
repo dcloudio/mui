@@ -21,7 +21,8 @@
 				}
 			}
 			var target = e.target;
-			if (target.tagName && target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')) {
+			//TODO 需考虑所有键盘弹起的情况
+			if (target.tagName && (target.tagName === 'TEXTAREA' || (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')))) {
 				if (target.disabled || target.readOnly) {
 					return;
 				}

@@ -13,6 +13,9 @@
 //  border-width: 1px 0px 1px 0px;
 //  border-style: solid;
     @include hairline(double, #c8c7cc, 0); // Double grey border.
+    &:before{
+        top:-1px;//cell 高亮时，保证边框仍旧可见
+    }
 
 }
 //.#{$namespace}table-view-striped>li:nth-child(odd){
@@ -83,7 +86,7 @@
     position: relative;
     padding: 11px 15px;
     overflow: hidden;
-    background-color: inherit;
+    //background-color: inherit;//应该透明，否则会盖住ul的边框
     @include hairline(single, #c8c7cc, 15px); // Single grey border with 15px offset.
     -webkit-touch-callout: none;//禁止长按出现打开菜单；
     &.#{$namespace}radio input[type=radio],&.#{$namespace}checkbox input[type=checkbox]{

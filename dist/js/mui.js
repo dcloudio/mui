@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.3.0 (https://github.com/dcloudio/mui)
+ * Mui v2.4.0 (https://github.com/dcloudio/mui)
  * =====================================================
  */
 /**
@@ -748,7 +748,8 @@ var mui = (function(document, undefined) {
 				}
 			}
 			var target = e.target;
-			if (target.tagName && target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')) {
+			//TODO 需考虑所有键盘弹起的情况
+			if (target.tagName && (target.tagName === 'TEXTAREA' || (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'search' || target.type === 'number')))) {
 				if (target.disabled || target.readOnly) {
 					return;
 				}
@@ -1915,10 +1916,7 @@ var mui = (function(document, undefined) {
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend({
-			autoShow: true,
-			title: ''
-		}, options);
+		return $.extend(true,{},{autoShow: true,title: ''}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -2044,20 +2042,17 @@ var mui = (function(document, undefined) {
 		}
 		options = options || {};
 		var params = options.params || {};
-		var webview, nShow, nWaiting;
-		if ($.webviews[id]) { //已缓存
-			var webviewCache = $.webviews[id];
-			webview = webviewCache.webview;
-			//需要处理用户手动关闭窗口的情况，此时webview应该是空的；
-			if (!webview || !webview.getURL()) {
-				//再次新建一个webview；
-				options = $.extend(options, {
-					id: id,
-					url: url,
-					preload: true
-				}, true);
-				webview = $.createWindow(options);
+		var webview = null,webviewCache = null, nShow, nWaiting;
+
+		if($.webviews[id]){
+			webviewCache = $.webviews[id];
+			//webview真实存在，才能获取
+			if(plus.webview.getWebviewById(id)){
+				webview = webviewCache.webview;
 			}
+		}
+
+		if (webviewCache&&webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
 			nShow = webviewCache.show;
@@ -3440,7 +3435,6 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_start: function(e) {
-			e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 			this.moved = this.needReset = false;
 			this._transitionTime();
 			if (this.isInTransition) {
@@ -4085,6 +4079,10 @@ var mui = (function(document, undefined) {
 			}
 		},
 		_start: function(e) {
+			//仅下拉刷新在start阻止默认事件
+			if (e.touches && e.touches.length && e.touches[0].clientX > 30) {
+				e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
+			}
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}
@@ -4638,6 +4636,7 @@ var mui = (function(document, undefined) {
 			var self = this;
 			//			document.addEventListener('plusscrollbottom', this);
 			window.addEventListener('dragup', self);
+			document.addEventListener("plusscrollbottom", self);
 			self.scrollInterval = window.setInterval(function() {
 				if (self.isScroll && !self.loading) {
 					if (window.pageYOffset + window.innerHeight + 10 >= document.documentElement.scrollHeight) {
@@ -4705,7 +4704,7 @@ var mui = (function(document, undefined) {
 			//				}
 			//			}
 			self.isScroll = false;
-			if (e.type === 'dragup') {
+			if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
 				self.isScroll = true;
 				setTimeout(function() {
 					self.isScroll = false;
@@ -4799,7 +4798,8 @@ var mui = (function(document, undefined) {
 					self.pullCaption.innerHTML = self.options.up.contentnomore;
 					//					self.bottomPocket.classList.remove(CLASS_BLOCK);
 					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
-					//					document.removeEventListener('plusscrollbottom', self);
+					//取消5+的plusscrollbottom事件
+					document.removeEventListener('plusscrollbottom', self);
 					window.removeEventListener('dragup', self);
 				} else { //初始化时隐藏，后续不再隐藏
 					self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
@@ -4820,10 +4820,11 @@ var mui = (function(document, undefined) {
 			this.bottomPocket.classList.remove(CLASS_HIDDEN);
 			this.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
 			this.pullCaption.innerHTML = this.options.up.contentdown;
+			document.addEventListener("plusscrollbottom", this);
 			window.addEventListener('dragup', this);
 		},
 		scrollTo: function(x, y, time) {
-			$.scrollTo(x, y, time);
+			$.scrollTo(y, time);
 		},
 		refresh: function(isReset) {
 			if (isReset && this.finished) {
@@ -5583,10 +5584,11 @@ var mui = (function(document, undefined) {
 
 		return element;
 	}());
+	var removeBackdropTimer;
 	var removeBackdrop = function(popover) {
 		backdrop.setAttribute('style', 'opacity:0');
 		$.targets.popover = $.targets._popover = null; //reset
-		setTimeout(function() {
+		removeBackdropTimer = $.later(function() {
 			if (!popover.classList.contains(CLASS_ACTIVE) && backdrop.parentNode && backdrop.parentNode === document.body) {
 				document.body.removeChild(backdrop);
 			}
@@ -5611,6 +5613,7 @@ var mui = (function(document, undefined) {
 	});
 
 	var togglePopover = function(popover, anchor) {
+		removeBackdropTimer && removeBackdropTimer.cancel(); //取消remove的timer
 		//remove一遍，以免来回快速切换，导致webkitTransitionEnd不触发，无法remove
 		popover.removeEventListener('webkitTransitionEnd', onPopoverShown);
 		popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
@@ -7009,9 +7012,17 @@ var mui = (function(document, undefined) {
 				self.input.value = val.toString();
 				$.trigger(self.input, changeEventName, null);
 			});
-			self.input.addEventListener(changeEventName, function(event) {
-				self.checkValue();
-			});
+//			self.input.addEventListener(changeEventName, function(event) {
+//				self.checkValue();
+//				$.trigger(self, changeEventName, self.getValue());
+//			});
+		},
+		/**
+		 * 获取当前值
+		 **/
+		getValue: function() {
+			var self = this;
+			return parseInt(self.input.value);
 		},
 		/**
 		 * 验证当前值是法合法

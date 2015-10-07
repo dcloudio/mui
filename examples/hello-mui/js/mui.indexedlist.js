@@ -174,4 +174,14 @@
 		}
 	});
 
+	//mui(selector).indexedList 方式
+	$.fn.indexedList = function(options) {
+		//遍历选择的元素
+		this.each(function(i, element) {
+			if (element.indexedList) return;
+			element.indexedList = new IndexedList(element, options);
+		});
+		return this[0] ? this[0].indexedList : null;
+	};
+
 })(mui, window, document);

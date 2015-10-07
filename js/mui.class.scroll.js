@@ -275,7 +275,6 @@
 			}
 		},
 		_start: function(e) {
-			e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 			this.moved = this.needReset = false;
 			this._transitionTime();
 			if (this.isInTransition) {

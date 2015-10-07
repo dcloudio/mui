@@ -36,6 +36,9 @@
 					contentrefresh: '正在加载...',
 					contentnomore: '没有更多数据了',
 					callback: false
+				},
+				preventDefaultException: {
+					tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/
 				}
 			}, options);
 			this.stopped = this.isNeedRefresh = this.isDragging = false;
@@ -45,8 +48,17 @@
 
 			this.initEvent();
 		},
+		_preventDefaultException: function(el, exceptions) {
+			for (var i in exceptions) {
+				if (exceptions[i].test(el[i])) {
+					return true;
+				}
+			}
+			return false;
+		},
 		initEvent: function() {
 			if ($.isFunction(this.options.down.callback)) {
+				this.element.addEventListener('touchstart', this);
 				this.element.addEventListener('drag', this);
 				this.element.addEventListener('dragend', this);
 			}
@@ -60,6 +72,9 @@
 		},
 		handleEvent: function(e) {
 			switch (e.type) {
+				case 'touchstart':
+					this.isInScroll && this._canPullDown() && e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
+					break;
 				case 'drag':
 					this._drag(e);
 					break;
@@ -127,7 +142,7 @@
 			if (self.loading) {
 				return;
 			}
-			if (e && e.detail && e.detail.drag) {
+			if (e && e.detail && $.gestures.session.drag) {
 				self.isDraggingUp = true;
 			} else {
 				if (!self.isDraggingUp) { //scroll event
@@ -175,6 +190,11 @@
 			var detail = e.detail;
 			if (!this.isDragging) {
 				if (detail.direction === 'down' && this._canPullDown()) {
+					if (document.querySelector('.' + CLASS_PULL_TOP_TIPS)) {
+						e.stopPropagation();
+						e.detail.gesture.preventDefault();
+						return;
+					}
 					this.isDragging = true;
 					this.removing = false;
 					this.startDeltaY = detail.deltaY;

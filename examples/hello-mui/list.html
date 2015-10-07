@@ -163,7 +163,7 @@
 				</li>
 
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/icons.html">
+					<a class="mui-navigate-right" open-type="common" href="examples/icons.html">
 						icon（图标）
 					</a>
 				</li>
@@ -550,6 +550,10 @@
 					if (~id.indexOf('offcanvas-')) {
 						webview_style.zindex = 9998;
 						webview_style.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
+					}
+					//图标界面需要启动硬件加速
+					if(~id.indexOf('icons.html')){
+						webview_style.hardwareAccelerated = true;
 					}
 					mui.openWindow({
 						id: id,

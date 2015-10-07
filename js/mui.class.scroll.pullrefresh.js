@@ -20,6 +20,10 @@
 			}
 		},
 		_start: function(e) {
+			//仅下拉刷新在start阻止默认事件
+			if (e.touches && e.touches.length && e.touches[0].clientX > 30) {
+				e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
+			}
 			if (!this.loading) {
 				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
 			}

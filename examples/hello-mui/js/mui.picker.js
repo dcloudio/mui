@@ -22,7 +22,9 @@
 
 	var platform = navigator.platform.toLowerCase();
 	var userAgent = navigator.userAgent.toLowerCase();
-	var isIos = userAgent.indexOf('iphone') > -1 && platform == 'iphone';
+	var isIos = (userAgent.indexOf('iphone') > -1 || userAgent.indexOf('ipad') > -1) &&
+		(platform.indexOf('iphone') > -1 || platform.indexOf('ipad') > -1);
+	//alert(isIos);
 
 	var Picker = $.Picker = function(holder, options) {
 		var self = this;
@@ -371,5 +373,5 @@
 		});
 	}
 
-})(this.mui || this, window, document, undefined);
+})(window.mui || window, window, document, undefined);
 //end
