@@ -427,7 +427,7 @@
 	});
 	var radioOrCheckboxClick = function(event) {
 		var type = event.target && event.target.type || '';
-		if (type === 'radio' || type === 'checkbox') {
+		if (!window.quickCheck || type === 'radio' || type === 'checkbox') {
 			return;
 		}
 		var classList = cell.classList;
