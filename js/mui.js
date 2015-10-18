@@ -186,25 +186,6 @@ var mui = (function(document, undefined) {
 		return this;
 	};
 	/**
-	 * map
-	 */
-	$.map = function(elements, callback) {
-		var value, values = [],
-			i, key;
-		if (typeof elements.length === 'number') { //TODO 此处逻辑不严谨，可能会有Object:{a:'b',length:1}的情况未处理
-			for (i = 0, len = elements.length; i < len; i++) {
-				value = callback(elements[i], i);
-				if (value != null) values.push(value);
-			}
-		} else {
-			for (key in elements) {
-				value = callback(elements[key], key);
-				if (value != null) values.push(value);
-			}
-		}
-		return values.length > 0 ? [].concat.apply([], values) : values;
-	};
-	/**
 	 * each
 	 * @param {type} elements
 	 * @param {type} callback

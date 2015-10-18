@@ -1,7 +1,7 @@
 {
   "name": "mui",
   "description": "Build mobile apps with simple HTML, CSS, and JS components.",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "keywords": [
     "css",
     "fonts",
@@ -10,7 +10,7 @@
     "mobile",
     "prototype"
   ],
-  "homepage": "https://github.com/dcloudio/mui",
+  "homepage": "http://dev.dcloud.net.cn/mui",
   "author": "DCloud",
   "style": "dist/css/mui.css",
   "sass": "sass/mui.scss",

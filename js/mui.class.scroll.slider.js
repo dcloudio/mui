@@ -28,6 +28,7 @@
 				indicators: false,
 				bounceTime: 200,
 				startX: false,
+				slideTime: 0, //滑动动画时间
 				snap: SELECTOR_SLIDER_ITEM
 			}, options));
 			if (this.options.startX) {
@@ -88,7 +89,14 @@
 			}
 			var detail = e.detail;
 			detail.slideNumber = detail.slideNumber || 0;
-			var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var temps = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var items = [];
+			for (var i = 0, len = temps.length; i < len; i++) {
+				var item = temps[i];
+				if (item.parentNode === self.scroller) {
+					items.push(item);
+				}
+			}
 			var _slideNumber = detail.slideNumber;
 			if (self.loop) {
 				_slideNumber += 1;
@@ -131,7 +139,7 @@
 		},
 		_handleTabShow: function(e) {
 			var self = this;
-			self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
+			self.gotoItem((e.detail.tabNumber || 0), self.options.slideTime);
 		},
 		_handleIndicatorTap: function(event) {
 			var self = this;
