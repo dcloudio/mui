@@ -7029,6 +7029,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			});
 			self.input.addEventListener(changeEventName, function(event) {
 				self.checkValue();
+				var val = parseInt(self.input.value);
+				//触发顶层容器
+				$.trigger(self.holder, changeEventName, {
+					value: val
+				});
 			});
 		},
 		/**
