@@ -1,7 +1,7 @@
 {
 	"@platforms": ["android", "iPhone", "iPad"],
-	"id": "H5291D269",/*必选，应用的标识*/
-	"name": "test",/*必选，应用名称*/
+	"id": "hellomui",/*必选，应用的标识*/
+	"name": "hellomui",/*必选，应用名称*/
 	"version": {
 		"name": "1.0",/*必选，版本名称*/
 		"code": ""
@@ -10,6 +10,7 @@
 	"icons": {
 		"72": "icon.png"
 	},
+	"fullscreen":true,
 	"launch_path": "index.html",/*必选，应用的入口页面，默认为根目录下的index.html；也可以是网络地址，网络地址必须以http://或https://开头*/
 	"developer": {
 		"email": "",/*可选，开发者名称*/
@@ -17,29 +18,14 @@
 		"url": ""/*可选，开发者自定义地址*/
 	},
 	"permissions": {
-		"Accelerometer": {
-			"description": "访问加速度感应器"
-		},
 		"Audio": {
 			"description": "访问麦克风"
-		},
-		"Cache": {
-			"description": "管理应用缓存"
 		},
 		"Camera": {
 			"description": "访问摄像头"
 		},
-		"Console": {
-			"description": "跟踪调试输出日志"
-		},
-		"Contacts": {
-			"description": "访问系统联系人信息"
-		},
 		"Device": {
 			"description": "访问设备信息"
-		},
-		"Downloader": {
-			"description": "文件下载管理"
 		},
 		"Events": {
 			"description": "应用扩展事件"
@@ -50,29 +36,8 @@
 		"Gallery": {
 			"description": "访问系统相册"
 		},
-		"Geolocation": {
-			"description": "访问位置信息"
-		},
-		"Invocation": {
-			"description": "调用Native JS桥功能"
-		},
-		"Messaging": {
-			"description": "访问通讯能力"
-		},
-		"Orientation": {
-			"description": "访问方向感应器"
-		},
-		"Proximity": {
-			"description": "访问距离感应器"
-		},
 		"Storage": {
 			"description": "管理应用本地数据"
-		},
-		"UI": {
-			"description": "管理系统原生控件"
-		},
-		"Uploader": {
-			"description": "管理文件上传任务"
 		},
 		"Runtime": {
 			"description": "访问运行期环境"
@@ -80,38 +45,29 @@
 		"XMLHttpRequest": {
 			"description": "跨域网络访问"
 		},
-		"Zip": {
-			"description": "文件压缩与解压缩"
-		},
-		"Barcode": {
-			"description": "管理二维码扫描插件"
-		},
-		"Maps": {
-			"description": "管理地图插件"
-		},
-		"Payment": {
-			"description": "管理支付插件"
-		},
-		"Push": {
-			"description": "管理推送消息插件"
-		},
-		"Share": {
-			"description": "管理社交分享插件"
-		},
 		"Speech": {
 			"description": "管理语音识别插件"
 		},
-		"Statistic": {
-			"description": "管理统计插件"
+		"Zip": {
+			"description": "文件压缩与解压缩"
+		},
+		"Webview":{
+			"description": "窗口管理"
+		},
+		"NativeUI":{
+			"description": "原生UI控件"
+		},
+		"Navigator":{
+			"description": "浏览器信息"
 		}
 	},
 	"plus": {
 		"popGesture": "close",/*设置应用默认侧滑返回关闭Webview窗口，none为无侧滑返回功能，hide为侧滑隐藏Webview窗口。参考ask.dcloud.net.cn/article/102*/
 		"splashscreen": {
 			"autoclose": false,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
-			"waiting": true/*autoclose设置为false时生效，在此事件后，启动图片自动关闭，单位为毫秒*/
+			"waiting": true/*是否在程序启动界面显示等待雪花，true表示显示，false表示不显示。*/
 		},
-		"runmode": "liberate",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
+		"runmode": "normal",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
 			"debug": "",/*可选，是否为debug模式，可取值：true表示debug模式运行，false表示release模式运行，默认值为false*/
@@ -128,7 +84,8 @@
 				"keystore": "",/*Android必选，打包证书文件*/
 				"password": "",/*Android必选，打包证书密码*/
 				"aliasname": "",/*Android必选，打包证书别名*/
-				"permissions": [] /*使用 Native.js 调用原生安卓 API 需要申请的系统权限，用户可以添加多个权限的字符串*/
+				"permissions": ["<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>", "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>", "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>", "<uses-permission android:name=\"android.permission.VIBRATE\"/>", "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>", "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>", "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>", "<uses-feature android:name=\"android.hardware.camera\"/>", "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.CAMERA\"/>"]
+				/*使用 Native.js 调用原生安卓 API 需要申请的系统权限，用户可以添加多个权限的字符串*/
 			},
 			"orientation": ["portrait-primary", "landscape-primary", "portrait-secondary", "landscape-secondary"],/*必选*/
 			"icons": {

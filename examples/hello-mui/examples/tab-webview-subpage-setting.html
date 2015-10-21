@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,body {
 				background-color: #efeff4;
@@ -21,9 +19,6 @@
 				font-size: 15px;
 			}
 		</style>
-		<script type="text/javascript">
-			mui.init();
-		</script>
 	</head>
 
 	<body>
@@ -54,7 +49,7 @@
 			</ul>
 			<ul class="mui-table-view" style="margin-top: 25px;">
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
+					<a id="about" class="mui-navigate-right">
 						关于mui
 					</a>
 				</li>
@@ -69,5 +64,16 @@
 		</div>
 		</style>
 	</body>
-
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		document.getElementById("about").addEventListener('tap',function () {
+			//获得主页面的webview
+			var main = plus.webview.currentWebview().parent();
+			//触发主页面的gohome事件
+			mui.fire(main,'gohome');
+		});
+	</script>
 </html>

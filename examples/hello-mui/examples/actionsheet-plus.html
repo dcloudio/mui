@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<style>
+			p {
+				text-indent: 22px;
+			}
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
+			#info{
+		  		padding: 20px 10px ;
+		  	}
+		  	.des{
+		  		margin: .5em 0;
+		  	}
+		  	.des>li{
+		  		font-size: 14px;
+				color: #8f8f94;
+		  	}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">原生模式actionsheet</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="delete-btn" class="mui-tab-item">
+				<span class="mui-icon mui-icon-trash"></span>
+			</a>
+			<a class="mui-tab-item" href="#">
+			</a>
+			<a class="mui-tab-item" href="#">
+			</a>
+			<a class="mui-tab-item" href="#">
+			</a>
+		</nav>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>这是5+ runtime封装的原生actionsheet，该模式具备如下优点：</p>
+				<ul class="des">
+					<li>支持覆盖顶部状态栏</li>
+					<li>支持跨webview的遮罩</li>
+					<li>在有map等原生组件时，依然会显示在最顶层，不会被遮挡</li>
+				</ul>	
+				<p>另一方面，原生模式的actionsheet目前不支持自定义样式</p>	
+				
+				<p>
+					<a id="picture-btn" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined" style="padding: 5px 20px;">打开actionsheet</a>
+				</p>
+			</div>
+		</div>
+		<p id="info"></p>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		mui('body').on('shown', '.mui-popover', function(e) {
+			//console.log('shown', e.detail.id);//detail为当前popover元素
+		});
+		mui('body').on('hidden', '.mui-popover', function(e) {
+			//console.log('hidden', e.detail.id);//detail为当前popover元素
+		});
+		var info = document.getElementById("info");
+		document.getElementById("picture-btn").addEventListener('tap',function () {
+			var btnArray = [{title:"拍照或录像"},{title:"选取现有的"}];
+			plus.nativeUI.actionSheet( {
+				title:"选择照片",
+				cancel:"取消",
+				buttons:btnArray
+			}, function(e){
+				var index = e.index;
+				var text = "你刚点击了\"";
+				switch (index){
+					case 0:
+						text += "取消";
+						break;
+					case 1:
+						text += "拍照或录像";
+						break;
+					case 2:
+						text += "选取现有的";
+						break;
+				}
+				info.innerHTML = text+"\"按钮";
+			} );
+		});
+		document.getElementById("delete-btn").addEventListener('tap',function () {
+			var btnArray = [{title:"删除信息",style:"destructive"}];
+			plus.nativeUI.actionSheet( {
+				cancel:"取消",
+				buttons:btnArray
+			}, function(e){
+				var index = e.index;
+				var text = "你刚点击了\"";
+				switch (index){
+					case 0:
+						text += "取消";
+						break;
+					case 1:
+						text += "删除信息";
+						break;
+				}
+				info.innerHTML = text+"\"按钮";
+			} );
+		});
+	</script>
+
+</html>

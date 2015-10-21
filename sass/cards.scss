@@ -1,0 +1,63 @@
+//
+// Cards
+// --------------------------------------------------
+
+.#{$namespace}card {
+    margin: 0 15px;
+    overflow: hidden;
+    background-color: $card-bg;
+    border: $border-default;
+    background-clip:padding-box;
+    border-radius: $border-radius;
+}
+
+.#{$namespace}content > .#{$namespace}card:first-child{
+    margin-top: 15px;
+}
+//Cards with input-group
+.#{$namespace}card .#{$namespace}input-group{
+    &:before,&:after{
+         height:0;   
+    }
+    .#{$namespace}input-row:last-child{
+        &:before,&:after{
+            height:0;   
+        }
+    }
+    
+}
+// Cards with table-views
+// --------------------------------------------------
+.#{$namespace}card .#{$namespace}table-view {
+    margin-bottom: 0;
+    border-top: 0;
+    border-bottom: 0;
+    border-radius: $border-radius;
+    // Rounding first divider on carded lists and remove border on the top
+    //fix Android 4.1.x/4.2.x 圆角列表四角不圆的bug
+    .#{$namespace}table-view-divider:first-child,.#{$namespace}table-view-cell:first-child {
+        top: 0;
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+    }
+
+    // Rounding last divider on carded table views
+    .#{$namespace}table-view-divider:last-child,.#{$namespace}table-view-cell:last-child {
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+    }
+    &:before,&:after{
+     height:0;
+    }
+}
+
+
+// Remove the bottom border from last table cell
+.#{$namespace}card > .#{$namespace}table-view {
+    >.#{$namespace}table-view-cell:last-child{
+        &:before,&:after{
+        height:0;   
+        }
+    }
+}
+

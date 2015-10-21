@@ -8,46 +8,37 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding: 0;
-			}
-		</style>
-		<script>
-			mui.init();
-		</script>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">文字选项卡</h1>
-</header>
-<nav class="mui-bar mui-bar-tab">
-    <a class="mui-tab-item mui-active" href="#">
-        电话沟通
-    </a>
-    <a class="mui-tab-item" href="#">
-        在线交流
-    </a>
-    <a class="mui-tab-item" href="#">
-        短信咨询
-    </a>
-    <a class="mui-tab-item" href="#">
-        查看地图
-    </a>
-</nav>
-
-</body>
-
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">文字选项卡</h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+		    <a class="mui-tab-item mui-active" href="#">
+		        电话沟通
+		    </a>
+		    <a class="mui-tab-item" href="#">
+		        在线交流
+		    </a>
+		    <a class="mui-tab-item" href="#">
+		        短信咨询
+		    </a>
+		    <a class="mui-tab-item" href="#">
+		        查看地图
+		    </a>
+		</nav>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+	</script>
 </html>

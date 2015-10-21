@@ -8,24 +8,10 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
-		<style>
-			html,
-			body {
-				background-color: #efeff4;
-			}
-			header.mui-bar {
-				display: none;
-			}
-			.mui-bar-nav~.mui-content {
-				padding: 0;
-			}
-		</style>
-		<script>
-			mui.init();
-		</script>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 	</head>
 
 	<body>
@@ -38,7 +24,7 @@
 			<ul id="OA_task_1" class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<div class="mui-slider-right mui-disabled">
-						<a class="mui-btn mui-btn-red">delete</a>
+						<a class="mui-btn mui-btn-red">删除</a>
 					</div>
 					<div class="mui-slider-handle">
 						左滑显示删除按钮
@@ -105,11 +91,10 @@
 						<a class="mui-btn mui-btn-yellow mui-icon mui-icon-phone"></a>
 						<a class="mui-btn mui-btn-red mui-icon mui-icon-email"></a>
 					</div>
-					<div class="mui-slider-handle mui-table">
+					<div class="mui-slider-handle">
 						<div class="mui-table-cell">
 							左滑显示多功能菜单
 						</div>
-
 					</div>
 				</li>
 				<li class="mui-table-view-cell">
@@ -139,7 +124,9 @@
 				</li>
 			</ul>
 		</div>
+		<script src="../js/mui.min.js"></script>
 		<script>
+			mui.init();
 			(function($) {
 				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
 				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
@@ -152,10 +139,14 @@
 				//第一个demo，拖拽后显示操作图标，点击操作图标删除元素；
 				$('#OA_task_1').on('tap', '.mui-btn', function(event) {
 					var elem = this;
+					var li = elem.parentNode.parentNode;
 					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
 						if (e.index == 0) {
-							var li = elem.parentNode.parentNode;
 							li.parentNode.removeChild(li);
+						} else {
+							setTimeout(function() {
+								$.swipeoutClose(li);
+							}, 0);
 						}
 					});
 				});
@@ -166,6 +157,10 @@
 					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
 						if (e.index == 0) {
 							elem.parentNode.removeChild(elem);
+						} else {
+							setTimeout(function() {
+								$.swipeoutClose(elem);
+							}, 0);
 						}
 					});
 				});
@@ -175,12 +170,15 @@
 					mui.confirm('确认删除该条记录？', 'Hello MUI', btnArray, function(e) {
 						if (e.index == 0) {
 							elem.parentNode.removeChild(elem);
+						} else {
+							setTimeout(function() {
+								$.swipeoutClose(elem);
+							}, 0);
 						}
 					});
 				});
 			})(mui);
 		</script>
-
 	</body>
 
 </html>

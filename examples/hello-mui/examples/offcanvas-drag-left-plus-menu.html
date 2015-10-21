@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			body,.mui-content {
 				background-color: #333;
@@ -36,9 +34,6 @@
 			  	margin-bottom: 35px;
 			  }
 		</style>
-		<script>
-			mui.init();
-		</script>
 	</head>
 
 	<body>
@@ -53,7 +48,7 @@
 						4.Android手机按back键；5.Android手机按menu键
 					</span>。
 					<p style="margin: 10px 15px;">
-						<button id="close-btn" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">关闭侧滑菜单</button>
+						<button id="close-btn" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">关闭侧滑菜单</button>
 					</p>
 					
 				</div>
@@ -79,27 +74,29 @@
 					</li>
 				</ul>
 		</div>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		//关闭back、menu按键监听，这样侧滑主界面会自动获得back和memu的按键事件，仅在主界面处理按键逻辑即可；
+		mui.init({
+			keyEventBind: {
+				backbutton: false,
+				menubutton: false
+			}
+		});
+		var main = null;
+		mui.plusReady(function () {
+			main = plus.webview.currentWebview().opener();
+		})
 		
-<script type="text/javascript" charset="utf-8">
-	mui.init({
-		swipeBack:false,
-	});
-	var main = null;
-	mui.plusReady(function () {
-		main = plus.webview.currentWebview().opener();
-	})
-	
-	function closeMenu () {
-		mui.fire(main,"menu:swiperight");
-	}
-	
-	//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
-	window.addEventListener("swiperight",closeMenu);
-	
-	document.getElementById("close-btn").addEventListener('tap',closeMenu);
-	mui.menu = closeMenu;
-  	mui.back = closeMenu;
-</script>
+		function closeMenu () {
+			mui.fire(main,"menu:swiperight");
+		}
+		
+		//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
+		window.addEventListener("swiperight",closeMenu);
+		
+		document.getElementById("close-btn").addEventListener('tap',closeMenu);
+	</script>
 </body>
 
 </html>

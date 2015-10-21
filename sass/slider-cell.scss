@@ -1,0 +1,20 @@
+.#{$namespace}slider-cell{
+    position:relative;
+    >.#{$namespace}slider-handle{
+        z-index:z("default");
+    }
+    >.#{$namespace}slider-left,>.#{$namespace}slider-right{
+        z-index:0;
+        position:absolute;
+        top:0;
+        bottom:0;
+    }
+    >.#{$namespace}slider-left{
+        left:0;
+    }
+    >.#{$namespace}slider-right{
+        right:z("default")-1;
+    }
+}
+
+    

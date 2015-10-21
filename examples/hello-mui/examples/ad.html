@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">advertisement（广告模板）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>本页为广告模板示例，集成了百度联盟的网站广告，目前支持广告固定在底部显示。</p>
+				
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		mui.plusReady(function () {
+			if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE){
+				mui.toast("当前网络不给力，无法加载广告");
+			}else{
+				//屏幕真实宽度
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				//根据投放广告的比例，计算广告高度
+				var adHeight = parseInt(width)*3/20;
+				//广告投放域名地址
+				var ltu = encodeURIComponent('http://www.dcloud.io/ad/');
+				//投放广告的服务端页面标题
+				var title = encodeURIComponent('DCloud HBuilder-做最好的HTML5开发工具||MUI-最接近原生体验的高性能前端框架');
+				
+				var url = 'http://pos.baidu.com/acom?adn=1&at=97&aurl=&cad=1&ccd=24&cec=UTF-8&cfv=18&ch=0&col=en-US&conOP=0&cpa=1&dai=1&dis=0&ltr=&lunum=6&n=99099160_cpr&pis=10000x10000&ps=0x0&qn=31f2f2a7de233256&rad=&rsi5=4&rss0=&rss1=&rss2=&rss3=&rss4=&rss5=&rss6=&rss7=&scale=20.3&skin=mobile_skin_white_blue&td_id=2206321&tn=template_inlay_all_mobile&tpr=1436841400149&ts=1&xuanting=0&tt=1436841400136.14.87.89&dtm=BAIDU_DUP2_SETJSONADSLOT&dc=2&wt=1&distp=1001';
+				url += '&conW='+width+'&conH='+adHeight+'&ltu='+ltu;
+				url += '&di=u2206321';//广告id
+				url += '&pcs='+width+'x'+height;
+				url += '&psr='+width+'x'+height;
+				url += '&pss='+width+'x0';
+				url += '&rsi0='+width+'&rsi1='+adHeight;
+				url += '&ti='+title;
+				
+				
+				var adBottom = mui.os.ios?('-'+adHeight+'px'):'0';
+				
+				var ad = plus.webview.create(url,'ad',{height:adHeight+'px',bottom:adBottom});
+				//目前Android平台不支持子webview的setStyle动画，因此分平台处理；
+				if(mui.os.ios){
+					//为了支持iOS平台左侧边缘滑动关闭页面，需要append进去；
+					plus.webview.currentWebview().append(ad);
+					ad.addEventListener('loaded',function () {
+						ad.setStyle({
+							bottom:'0',
+							transition: {
+								duration: 150
+							}
+						});
+					});
+				}else{
+					ad.addEventListener('loaded',function () {
+						ad.show('slide-in-bottom');
+					});
+				}
+				
+				ad.appendJsFile('_www/js/ad.js');
+				
+				//设置主页面的底部留白，否则会被遮住；
+				document.querySelector('.mui-content').style.paddingBottom = adHeight + 'px';
+			}
+			
+			
+			
+		});		
+
+	</script>
+
+</html>

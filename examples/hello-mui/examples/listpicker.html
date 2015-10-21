@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<link href="../css/mui.listpicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body,
+			.mui-content {
+				height: 0px;
+				margin: 0px;
+				background-color: #efeff4;
+			}
+			h5.mui-content-padded {
+				margin-left: 3px;
+				margin-top: 20px !important;
+			}
+			h5.mui-content-padded:first-child {
+				margin-top: 12px !important;
+			}
+			.mui-btn {
+				font-size: 16px;
+				padding: 8px;
+				margin: 3px;
+			}
+			.btn-area{
+				text-align: center;
+			}
+			.btn-area button {
+				width: 47%;
+				font-size: 14px;
+			}
+			.ui-alert {
+				text-align: center;
+				padding: 20px 10px;
+				font-size: 16px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">listpicker (选择列表)</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<div id='userPicker' class="mui-listpicker">
+					<div class="mui-listpicker-inner">
+						<ul>
+							<li data-value="ywj">董事长 叶文洁</li>
+							<li data-value="aaa">总经理 艾AA</li>
+							<li data-value="lj">罗辑</li>
+							<li data-value="ymt">云天明</li>
+							<li data-value="shq">史强</li>
+							<li data-value="zhbh">章北海</li>
+							<li data-value="zhy">庄颜</li>
+							<li data-value="gyf">关一帆</li>
+							<li data-value="zhz">智子</li>
+							<li data-value="gezh">歌者</li>
+						</ul>
+					</div>
+				</div>
+				<p class="btn-area">
+					<button data-method='getSelectedIndex' data-args='' class="mui-btn api-btn" type='button'>获取选中的索引</button>
+					<button data-method='getSelectedValue' data-args='' class="mui-btn api-btn" type='button'>获取选中的值</button>
+					<button data-method='getSelectedText' data-args='' class="mui-btn api-btn" type='button'>获取选中的文本</button>
+					<button data-method='getSelectedItem' data-args='' class="mui-btn api-btn" type='button'>获取选中的项</button>
+					<button data-method='setSelectedIndex' data-args='6' class="mui-btn api-btn" type='button'>设置选中的索引(6)</button>
+					<button data-method='setSelectedValue' data-args='zhz' class="mui-btn api-btn" type='button'>设置选中的值(智子)</button>
+				</p>
+				<div id='result' class="ui-alert"></div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.listpicker.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			(function($, doc) {
+				$.init();
+				$.ready(function() {
+					//
+					var userPicker = doc.getElementById('userPicker');
+					var result = doc.getElementById('result');
+					//userPicker.setSelectedValue('ymt');
+					userPicker.addEventListener('change', function(event) {
+						var index = event.detail.index;
+						//console.log(index);
+					}, false);
+					var apiBtns = [].slice.call($('.api-btn'));
+					for (var i in apiBtns) {
+						var btn = apiBtns[i];
+						btn.addEventListener('tap', function(event) {
+							var method = this.getAttribute('data-method');
+							var args = this.getAttribute('data-args');
+							var rs = userPicker[method](args);
+							if (rs !== null && rs !== undefined) {
+								result.innerText = (typeof(rs) == 'string' ? rs : JSON.stringify(rs));
+							}
+						}, false);
+					}
+				});
+			})(mui, document);
+			
+		</script>
+	</body>
+
+</html>

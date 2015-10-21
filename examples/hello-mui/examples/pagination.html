@@ -8,26 +8,17 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding-top: 0;
-			}
-		</style>
-		<script type="text/javascript">
-			mui.init();
-		</script>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">pagination（分页）</h1>
+		</header>
 		<div class="mui-content">
 			<h5 class="mui-content-padded">分页(默认尺寸)</h5>
 			<div class="mui-content-padded">
@@ -193,7 +184,11 @@
 				</ul>
 			</div>
 		</div>
+		<script src="../js/mui.min.js"></script>
 		<script>
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
 			(function($) {
 				$('.mui-pagination').on('tap', 'a', function() {
 					var li = this.parentNode;

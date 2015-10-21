@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<script src="https://cdn.wilddog.com/js/client/current/wilddog.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.title{
+				background-color: rgba(0,0,0,.25);
+				font-weight: 400;
+			}
+			
+			#list td{
+				padding:5px 5px;
+			}
+			
+			#list tr:active{
+				background-color: rgba(0,0,0,.25);
+			}
+
+			
+			#popover{
+				min-width: 282px;
+				height: 300px ;
+				top:50% !important;
+				margin-top: -150px;
+				left: 50% !important;
+				margin-left: -141px;
+			}
+			
+			@media (min-width: 400px){
+				#popover{
+					width: 80%;
+					margin-left: -40%;
+				}
+			}
+			
+			.mui-popover .mui-popover-arrow{
+				display: none !important;
+			}
+			
+			.operate{
+				text-align: center;
+				margin-top: 20px
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a class="mui-icon mui-icon-plusempty mui-pull-right" id="open"></a>
+			<h1 class="mui-title">cloud DB（云端数据库）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p style="text-indent: 22px;">这是mui无后端开发示例，集成野狗云服务，通过js操作云端数据库，实现常见的增删改查功能。
+				</p>
+				
+			</div>
+			<div style="background-color: #fff;padding-bottom: 15px;">
+				<div class="mui-content-padded" >
+					<h4 style="text-align: center;margin-bottom: 15px;padding-top: 15px;">云端数据库</h4>
+					<table id="list" border="1" width="100%" style="padding: 5px 10px;text-align: center;" >
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+		
+		
+		<div id="popover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-content-padded">
+				<h4 id="title" style="text-align: center;margin-top: 20px;">新增数据</h4>
+				<form class="mui-input-group" style="margin-top: 30px;">
+					<div class="mui-input-row">
+						<label>字段1：</label>
+						<input type="text" class="mui-input-clear" id="col1" placeholder="请输入">
+					</div>
+					<div class="mui-input-row">
+						<label>字段2：</label>
+						<input type="text" class="mui-input-clear" id="col2" placeholder="请输入">
+					</div>
+					<div class="mui-input-row">
+						<label>字段3：</label>
+						<input type="text" class="mui-input-clear" id="col3" placeholder="请输入">
+					</div>
+				</form>
+				<div id="add_div" class="operate mui-hidden">
+					<button type="button" class="mui-btn mui-btn-blue" id="add">确定</button>
+				</div>
+				<div id="edit_div" class="operate mui-hidden">
+					<button type="button" class="mui-btn mui-btn-blue" id="update" style="margin-right: 30px;">修改</button>
+					<button type="button" class="mui-btn mui-btn-red" id="del">删除</button>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+		
+			function trim(str){ //删除左右两端的空格
+		　　     return str.replace(/(^\s*)|(\s*$)/g, "");
+		　　 }
+		
+		
+			var network = false;
+			var ref = null;
+			mui.plusReady(function () {
+				if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE){
+					mui.toast("当前网络不给力，无法连接云端数据库~");
+				}else{
+					network = true;
+					ref = new Wilddog("https://muidemo.wilddogio.com/demo");
+					getList();
+				}
+			});
+
+			var list = document.getElementById("list");
+			var col1 = document.getElementById("col1");
+			var col2 = document.getElementById("col2");
+			var col3 = document.getElementById("col3");
+			
+			var add_div = document.getElementById("add_div");
+			var edit_div = document.getElementById("edit_div");
+
+			var title = document.getElementById("title");
+
+			document.getElementById("open").addEventListener('tap',function () {
+				if(!network){
+					mui.toast("当前网络不给力，请稍后再试");
+				}else{
+					//清空数据
+					col1.value = "";
+					col2.value = "";
+					col3.value = "";
+					title.innerHTML = "新增数据";
+					add_div.classList.remove("mui-hidden");
+					if(!edit_div.classList.contains("mui-hidden")){
+						edit_div.classList.add("mui-hidden");
+					}
+					mui("#popover").popover("toggle");
+				}
+			});
+			
+			
+			document.getElementById("add").addEventListener('tap', function() {
+				if(!ref){
+					mui.toast("当前网络不给力，请稍后再试");
+				}else{
+					var check = true;
+					mui(".mui-input-group input").each(function () {
+						if(!this.value||trim(this.value)==""){
+							var label = this.previousElementSibling;
+							mui.alert(label.innerText+"不允许为空");
+							check = false;
+							return false;
+						}
+					});
+					if(check){
+						var newRef = ref.push({
+							"col1": col1.value,
+							"col2": col2.value,
+							"col3": col3.value,
+						});
+						add_div.classList.add("mui-hidden");
+						//关闭modal
+						mui("#popover").popover("toggle");
+						mui.toast("添加成功~");
+						//刷新界面
+						getList();
+					}
+				}
+				
+			});
+			document.getElementById("update").addEventListener("tap", function() {
+				var check = true;
+				mui(".mui-input-group input").each(function () {
+					if(!this.value||trim(this.value)==""){
+						var label = this.previousElementSibling;
+						mui.alert(label.innerText+"不允许为空");
+						check = false;
+						return false;
+					}
+				});
+				if(check){
+					var newRef = ref.child(document.getElementById("col1").getAttribute("demoid"));
+					newRef.update({
+						"col1": col1.value,
+						"col2": col2.value,
+						"col3": col3.value,
+					});
+					//关闭modal
+					mui("#popover").popover("toggle");
+					edit_div.classList.add("mui-hidden");
+					mui.toast("修改成功~");
+					//刷新界面
+					getList();
+				}
+			})
+			document.getElementById("del").addEventListener("tap", function() {
+				var newRef = ref.child(document.getElementById("col1").getAttribute("demoid"));
+				newRef.remove();
+				//关闭modal
+				mui("#popover").popover("toggle");
+				if(!edit_div.classList.contains("mui-hidden")){
+					edit_div.classList.add("mui-hidden");
+				}
+				mui.toast("删除成功~");
+				//刷新界面
+				getList();
+			})
+			//列表事件绑定，点击编辑数据
+			 mui("#list").on("tap", "tr", function() {
+			 	var id = this.getAttribute("id");
+			 	if(id){
+			 		document.getElementById("col1").value = this.querySelector(".col1").innerHTML;
+					document.getElementById("col2").value = this.querySelector(".col2").innerHTML;
+					document.getElementById("col3").value = this.querySelector(".col3").innerHTML;
+					document.getElementById("col1").setAttribute("demoid", id);
+					title.innerHTML = "编辑数据";
+					if(!add_div.classList.contains("mui-hidden")){
+						add_div.classList.add("mui-hidden");
+					}
+					edit_div.classList.remove("mui-hidden");
+					mui("#popover").popover("toggle");
+			 	}
+				
+			})
+				/**
+				 * 获取最新记录
+				 */
+
+			function getList() {
+				ref.once("value", function(snapshot) {
+					list.innerHTML = "<tr class='title'><td>字段1</td><td>字段2</td><td>字段3</td></tr>";
+					var result = snapshot.val();
+					mui.each(result, function(key, elem) {
+						var li = document.createElement("tr");
+						li.setAttribute("id", key);
+						var col1 = document.createElement("td");
+						col1.className = "col1"
+						col1.innerHTML = elem.col1;
+						li.appendChild(col1);
+						var col2 = document.createElement("td");
+						col2.className = "col2"
+						col2.innerHTML = elem.col2;
+						li.appendChild(col2);
+						var col3 = document.createElement("td");
+						col3.className = "col3"
+						col3.innerHTML = elem.col3;
+						li.appendChild(col3);
+						list.appendChild(li);
+					})
+				});
+			}
+		</script>
+	</body>
+
+</html>

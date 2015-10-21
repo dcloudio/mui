@@ -1,0 +1,35 @@
+.#{$namespace}fullscreen{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    &.#{$namespace}slider .#{$namespace}slider-group{
+        height:100%;
+        
+    }
+    .#{$namespace}segmented-control ~ .#{$namespace}slider-group{
+        width:100%;
+        height:auto;
+        top:40px;
+        bottom:0;
+        position: absolute;
+    }
+    &.#{$namespace}slider .#{$namespace}slider-item>a{
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+    }
+    .#{$namespace}off-canvas-wrap .#{$namespace}slider-item>a{
+        top: auto;
+        transform: none;
+        -webkit-transform: none;
+    }
+}
+.#{$namespace}bar-tab ~ .#{$namespace}content .#{$namespace}slider.#{$namespace}fullscreen{
+    .#{$namespace}segmented-control ~ .#{$namespace}slider-group{
+        bottom:50px;
+    }
+}

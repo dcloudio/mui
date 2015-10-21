@@ -8,8 +8,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,body {
 				background-color: #efeff4;
@@ -20,9 +18,6 @@
 				font-size: 15px;
 			}
 		</style>
-		<script type="text/javascript">
-			mui.init();
-		</script>
 	</head>
 	<body>
 		<div class="mui-content">
@@ -34,4 +29,10 @@
 			</div>
 		</div>
 	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+	</script>
 </html>

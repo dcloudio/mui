@@ -1,0 +1,167 @@
+//
+// Segmented controllers
+// --------------------------------------------------
+
+.#{$namespace}segmented-control {
+    position: relative;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    overflow: hidden;
+    font-size: 15px;
+    font-weight: $font-weight-light;
+    background-color: transparent;
+    border: 1px solid $primary-color;
+    border-radius: 3px;
+    -webkit-touch-callout: none;//(iOS平台)分段选择禁止长按弹出菜单；
+    &.#{$namespace}segmented-control-vertical{
+        border-radius:0;
+        border-width: 0;
+        border-collapse: collapse;
+     .#{$namespace}control-item{
+         display: block;
+         border-left-width: 0;
+         border-bottom: 1px solid #c8c7cc;
+     }   
+    }
+    &.#{$namespace}scroll-wrapper{
+        height: 38px;
+        .#{$namespace}scroll{
+            height: 40px;
+            width: auto;
+            white-space: nowrap;
+        }
+        .#{$namespace}control-item{
+            display: inline-block;
+            width: auto;
+            padding: 0 20px;
+            border: 0;
+        }
+    }
+    // Section within controller
+    .#{$namespace}control-item {
+        display: table-cell;
+        width: 1%;
+//      padding-top: 6px;
+//      padding-bottom: 7px;
+        overflow: hidden;
+        line-height: 38px;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-left: 1px solid $primary-color;
+        color: $primary-color;
+        border-color: $primary-color;
+        @include transition(background-color .1s linear);
+        // Remove border-left and shadow from first section
+        &:first-child {
+            border-left-width: 0;
+        }
+//      &:active {
+//          background-color: lighten($primary-color, 35%);
+//      }
+        // Selected state of segmented controller
+        &.#{$namespace}active {
+            color: #fff;
+            background-color: $primary-color;
+        }
+    }
+    &.#{$namespace}segmented-control-inverted{
+        width:100%;
+        border:0;
+        border-radius:0;
+        &.#{$namespace}segmented-control-vertical{
+             .#{$namespace}control-item{
+                 border-bottom: 1px solid #c8c7cc;
+                 &.#{$namespace}active {
+                   border-bottom: 1px solid #c8c7cc;
+                 }
+             }
+        }
+        .#{$namespace}control-item {
+            border:0;
+            color: inherit;
+            &.#{$namespace}active {
+                color: $primary-color;
+                background: none;
+                border-bottom:2px solid $primary-color;
+            }
+        }
+        ~ .#{$namespace}slider-progress-bar{
+            background-color:$primary-color;
+        }
+    }
+}
+
+// Other segmented controller types
+// --------------------------------------------------
+
+// Positive
+.#{$namespace}segmented-control-positive {
+    border: 1px solid $positive-color;
+
+    .#{$namespace}control-item {
+        color: $positive-color;
+        border-color: inherit;
+
+//      &:active {
+//          background-color: lighten($positive-color, 35%);
+//      }
+        &.#{$namespace}active {
+            color: #fff;
+            background-color: $positive-color;
+        }
+    }
+    &.#{$namespace}segmented-control-inverted{
+        .#{$namespace}control-item {
+            &.#{$namespace}active {
+                color: $positive-color;
+                background: none;
+                border-bottom:2px solid $positive-color;
+            }
+        }
+        ~ .#{$namespace}slider-progress-bar{
+            background-color:$positive-color;
+        }
+    }
+}
+
+// Negative
+.#{$namespace}segmented-control-negative {
+    border: 1px solid $negative-color;
+
+    .#{$namespace}control-item {
+        color: $negative-color;
+        border-color: inherit;
+
+//      &:active {
+//          background-color: lighten($negative-color, 35%);
+//      }
+        &.#{$namespace}active {
+            color: #fff;
+            background-color: $negative-color;
+        }
+    }
+    &.#{$namespace}segmented-control-inverted{
+        .#{$namespace}control-item {
+            &.#{$namespace}active {
+                color: $negative-color;
+                background: none;
+                border-bottom:2px solid $negative-color;
+            }
+        }
+        ~ .#{$namespace}slider-progress-bar{
+            background-color:$negative-color;
+        }
+    }
+}
+
+// This is used to by the js to show and hide content tide to the segmented control.
+.#{$namespace}control-content {
+    position: relative;
+    display: none;
+
+    &.#{$namespace}active {
+        display: block;
+    }
+}

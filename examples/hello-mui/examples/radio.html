@@ -8,62 +8,86 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
-		<style>
-			html,body {
-				background-color: #efeff4;
-			}
-			header.mui-bar{
-				display: none;
-			}
-			.mui-bar-nav~.mui-content{
-				padding: 0;
-			}
-		</style>
-		<script>
-			mui.init();
-		</script>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 
 	<body>
 
-<header class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">单选框（Radio）</h1>
-</header>
-<div class="mui-content">
-	<h5 class="mui-content-padded">图标左对齐</h5>
-	<div class="mui-card">
-		<form class="mui-input-group">
-			<div class="mui-input-row mui-radio mui-left">
-				<label>Radio</label>
-				<input name="radio1" type="radio">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">单选框（radio）</h1>
+		</header>
+		<div class="mui-content">
+			<h5 class="mui-content-padded">图标左对齐</h5>
+			<div class="mui-card">
+				<form class="mui-input-group">
+					<div class="mui-input-row mui-radio mui-left">
+						<label>radio</label>
+						<input name="radio1" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>radio</label>
+						<input name="radio1" type="radio" checked>
+					</div>
+					<div class="mui-input-row mui-radio mui-left mui-disabled">
+						<label>disabled radio</label>
+						<input name="radio1" type="radio" disabled="disabled">
+					</div>
+				</form>
 			</div>
-			<div class="mui-input-row mui-radio mui-left">
-				<label>Radio</label>
-				<input name="radio1" type="radio" checked>
+		
+			<h5 class="mui-content-padded">图标右对齐</h5>
+			<div class="mui-card">
+				<form class="mui-input-group">
+					<div class="mui-input-row mui-radio">
+						<label>radio</label>
+						<input name="radio1" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio">
+						<label>radio</label>
+						<input name="radio1" type="radio" checked>
+					</div>
+					<div class="mui-input-row mui-radio mui-disabled">
+						<label>disabled radio</label>
+						<input name="radio1" type="radio" disabled="disabled">
+					</div>
+				</form>
 			</div>
-		</form>
-	</div>
-
-	<h5 class="mui-content-padded">图标右对齐</h5>
-	<div class="mui-card">
-		<form class="mui-input-group">
-			<div class="mui-input-row mui-radio">
-				<label>Radio</label>
-				<input name="radio1" type="radio">
+			<h5 class="mui-content-padded">列表模式的单选框</h5>
+			<ul class="mui-table-view mui-table-view-radio">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 1
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-selected">
+					<a class="mui-navigate-right">
+						Item 2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						Item 3
+					</a>
+				</li>
+			</ul>
+			<div class="mui-content-padded">
+				<p id="info"></p>
 			</div>
-			<div class="mui-input-row mui-radio">
-				<label>Radio</label>
-				<input name="radio1" type="radio" checked>
-			</div>
-		</form>
-	</div>
-
-</div>
-
-</body>
-
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		var info = document.getElementById("info");
+		document.querySelector('.mui-table-view.mui-table-view-radio').addEventListener('selected',function(e){
+			info.innerHTML = "当前选中的为："+e.detail.el.innerText;
+		});
+		
+	</script>
 </html>

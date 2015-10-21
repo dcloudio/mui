@@ -1,0 +1,205 @@
+//
+// Buttons
+// --------------------------------------------------
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button,
+.#{$namespace}btn {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0; // For input.#{$namespace}btn
+    font-size: $button-font-size;
+    font-weight: $font-weight-light;
+    line-height: 1.42;//增大，和bootstrap保持一致；
+    color: #333;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border-top-left-radius: 3px;//fixed android 4.2
+    border-top-right-radius: 3px;//fixed android 4.2
+    border-bottom-right-radius: 3px;//fixed android 4.2
+    border-bottom-left-radius: 3px;//fixed android 4.2
+    border-radius: 3px;
+    @include transition(all);
+    @include transition-duration(.2s);
+    @include transition-timing-function(linear);
+
+    // Active & filled button styles
+    &:enabled:active,
+        &.#{$namespace}active:enabled {
+        color: #fff;
+        background-color: $default-color;
+    }
+
+    // Disabled styles & filled button active styles
+    &:disabled,
+        &.#{$namespace}disabled {
+        opacity: .6;
+    }
+}
+
+
+// Other button types
+// --------------------------------------------------
+
+// Primary button (Default color is blue)
+input[type="submit"],
+.#{$namespace}btn-primary,.#{$namespace}btn-blue {
+    @include btn($primary-color);
+}
+
+// Positive button (Default color is green)
+.#{$namespace}btn-positive,.#{$namespace}btn-success,.#{$namespace}btn-green {
+    @include btn($positive-color);
+}
+
+.#{$namespace}btn-warning,.#{$namespace}btn-yellow {
+    @include btn($warning-color);
+}
+
+// Negative button (Default color is red)
+.#{$namespace}btn-negative,.#{$namespace}btn-danger,.#{$namespace}btn-red {
+    @include btn($negative-color);
+}
+//紫色
+.#{$namespace}btn-royal,.#{$namespace}btn-purple {
+    @include btn($royal-color);
+}
+// grey button
+.#{$namespace}btn-grey {
+    @include btn($grey-color);
+}
+// Outlined buttons
+.#{$namespace}btn-outlined {
+    background-color: transparent;
+
+    &.#{$namespace}btn-primary,&.#{$namespace}btn-blue {
+        color: $primary-color;
+    }
+    &.#{$namespace}btn-positive,&.#{$namespace}btn-success,&.#{$namespace}btn-green {
+        color: $positive-color;
+    }
+    &.#{$namespace}btn-warning,&.#{$namespace}btn-yellow {
+        color: $warning-color;
+    }
+    &.#{$namespace}btn-negative,&.#{$namespace}btn-danger,&.#{$namespace}btn-red {
+        color: $negative-color;
+    }
+    &.#{$namespace}btn-royal,&.#{$namespace}btn-purple {
+        color: $royal-color;
+    }
+    // Active states
+    &.#{$namespace}btn-primary,&.#{$namespace}btn-blue,
+        &.#{$namespace}btn-positive,&.#{$namespace}btn-success,&.#{$namespace}btn-green,
+        &.#{$namespace}btn-warning,&.#{$namespace}btn-yellow, 
+        &.#{$namespace}btn-negative,&.#{$namespace}btn-danger,&.#{$namespace}btn-red,
+        &.#{$namespace}btn-royal,&.#{$namespace}btn-purple, 
+        {
+            &:enabled:active{
+                color: #fff;
+            }
+    }
+}
+
+// Link button (Buttons that look like links)
+.#{$namespace}btn-link {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: $primary-color;
+    background-color: transparent;
+    border: 0;
+
+    &:enabled:active,
+        &.#{$namespace}active:enabled {
+        color: darken($primary-color, 10%);
+        background-color: transparent;
+    }
+}
+
+// Block level buttons (full width buttons)
+.#{$namespace}btn-block {
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+
+// Button overrides
+// --------------------------------------------------
+
+//input[type="submit"],
+//input[type="reset"],
+//input[type="button"] {
+//  width: 100%;
+//}
+
+
+// Buttons with badges
+// --------------------------------------------------
+
+// Generic styles for all badges within default buttons
+.#{$namespace}btn .#{$namespace}badge {
+    margin: -2px -4px -2px 4px;
+    font-size: $button-font-size;
+    background-color: rgba(0,0,0,.15);
+}
+
+// Buttons with inverted badges
+.#{$namespace}btn .#{$namespace}badge-inverted,
+.#{$namespace}btn:enabled:active .#{$namespace}badge-inverted {
+    background-color: transparent;
+}
+.#{$namespace}btn-primary:enabled:active .#{$namespace}badge-inverted,
+.#{$namespace}btn-positive:enabled:active .#{$namespace}badge-inverted,
+.#{$namespace}btn-negative:enabled:active .#{$namespace}badge-inverted {
+    color: #fff;
+}
+
+// Position badges within block level buttons
+// Note: These are absolutely positioned so that text of button isn't "pushed" by badge and always
+// stays at the center of button
+.#{$namespace}btn-block .#{$namespace}badge {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}
+
+
+// Buttons with Muiicons
+// --------------------------------------------------
+
+.#{$namespace}btn .#{$namespace}icon{
+    font-size: inherit;
+}
+
+.#{$namespace}btn.#{$namespace}icon {
+    font-size: $button-font-size;
+    line-height: 1.42;
+}
+
+.#{$namespace}btn.#{$namespace}fab{
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding:16px;
+    outline: none;
+    &.#{$namespace}btn-mini{
+        width: 40px;
+        height: 40px;
+        padding:8px;
+    }
+    .#{$namespace}icon{
+        font-size: 24px;
+        line-height: 24px;
+        width: 24px;
+        height: 24px;
+    }
+}

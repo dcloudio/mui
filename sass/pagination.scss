@@ -1,0 +1,155 @@
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
+
+.#{$namespace}pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 0 auto;
+  border-radius: $border-radius;
+
+  > li {
+    display: inline; // Remove list-style and block-level defaults
+    > a,
+    > span {
+      position: relative;
+      float: left; // Collapse white-space
+      padding: 6px 12px;
+      line-height: 1.428571429;
+      text-decoration: none;
+      color: $primary-color;
+      background-color: #fff;
+      border: $border-default;
+      margin-left: -1px;
+    }
+    &:first-child {
+      > a,
+      > span {
+        margin-left: 0;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+        background-clip: padding-box;
+      }
+    }
+    &:last-child {
+      > a,
+      > span {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+        background-clip: padding-box;
+      }
+    }
+  }
+
+  > li:active > a,
+  > li:active > span,
+  > li.#{$namespace}active > a,
+  > li.#{$namespace}active > span {
+    &,
+    &:active {
+      z-index: z("default")+1;
+      color: #fff;
+      background-color: $primary-color;
+      border-color: $primary-color;
+      cursor: default;
+    }
+  }
+
+  > li.#{$namespace}disabled {
+    > span,
+    > span:active,
+    > a,
+    > a:active {
+      color:#777;
+      opacity: .6;
+      background-color:#fff;
+      border: $border-default;
+    }
+  }
+}
+
+// Sizing
+// --------------------------------------------------
+
+// Large
+.#{$namespace}pagination-lg>li {
+    > a,
+    > span {
+      padding: 10px 16px;
+      font-size: 18px;
+    }
+}
+
+// Small
+.#{$namespace}pagination-sm >li{
+    > a,
+    > span {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+}
+
+
+
+.#{$namespace}pager {
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+  li {
+    display: inline;
+    > a,
+    > span {
+      display: inline-block;
+      padding: 5px 14px;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: $border-default;
+      border-radius: $border-radius;
+    }
+    &:active>a,
+    &:active>span,
+    &.#{$namespace}active > a ,
+    &.#{$namespace}active > span {
+      text-decoration: none;
+      color: #fff;
+      background-color: $primary-color;
+      border-color: $primary-color;
+      cursor: default;
+    }
+  }
+
+  .#{$namespace}next {
+    > a,
+    > span {
+      float: right;
+    }
+  }
+
+  .#{$namespace}previous {
+    > a,
+    > span {
+      float: left;
+    }
+  }
+
+  .#{$namespace}disabled {
+    > a,
+    > a:active,
+    > span,
+    > span:active{
+        color:#777;
+        opacity: .6;
+        background-color:#fff;
+        border: $border-default;
+    }
+  }
+
+}

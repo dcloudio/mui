@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<style>
 			html,
 			body {
@@ -74,13 +72,38 @@
 		</header>
 		<div class="mui-loader">加载中...</div>
 	</body>
+	<script src="../js/mui.min.js"></script>
 	<script type="text/javascript">
+		//启用双击监听
+		mui.init({
+			gestureConfig:{
+				doubletap:true
+			}
+		});
+		var contentWebview = null,self = null;
+		mui.plusReady(function () {
+			self = plus.webview.currentWebview();
+		});
+		mui.back = function() {
+			self.hide('auto');
+			setTimeout(function() {
+				titleElem.className = 'mui-title mui-fadeout';
+				titleElem.innerText = '';
+				if(contentWebview==null){
+					contentWebview = self.children()[0];
+				}
+				contentWebview.hide("none");
+			}, 350);
+		}
+		
 		var titleElem = document.getElementById("title")
-		var menu = document.getElementById("menu")
+		var menuElem = document.getElementById("menu")
 
-		 window.addEventListener("updateHeader", function(e) {
+		window.addEventListener("updateHeader", function(e) {
 			var title = e.detail.title;
 			var showMenu = e.detail.showMenu;
+			var href = e.detail.target;
+			var aniShow = e.detail.aniShow;
 			titleElem.innerHTML = title;
 			titleElem.className = "mui-title mui-fadein";
 			var display = showMenu ? "" : "none";
@@ -90,11 +113,47 @@
 				mui.options.keyEventBind.menubutton = false;
 			}
 			menu.style.display = display;
+			
+			if(mui.os.android&&aniShow&&parseFloat(mui.os.version)>=4.4){
+				if(contentWebview==null){
+					contentWebview = self.children()[0];
+				}
+				
+				if (contentWebview.getURL() != href) {
+					contentWebview.loadURL(href);
+				} else {
+					contentWebview.show();
+				}
+				setTimeout(function () {
+					self.show(aniShow);
+				},10);
+			}
 		});
-
-		document.getElementById("menu").addEventListener('tap', function() {
-			plus.webview.currentWebview().children()[0].evalJS('mui("#topPopover").popover("toggle")');
+		
+		
+		menuElem.addEventListener('tap', function(e) {
+			e.stopPropagation();
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS('mui("#topPopover").popover("toggle")');
 		});
+		document.querySelector('header').addEventListener('doubletap',function () {
+			if(contentWebview==null){
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS('mui.scrollTo(0, 100)');
+		});
+		
+		mui.menu = function () {
+			console.log(menuElem.style.display);
+			if(menuElem.style.display !== "none"){
+				if(contentWebview==null){
+					contentWebview = plus.webview.currentWebview().children()[0];
+				}
+				contentWebview.evalJS('mui("#topPopover").popover("toggle")');
+			}
+		}
 	</script>
 
 </html>

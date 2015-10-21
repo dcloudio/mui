@@ -1,0 +1,85 @@
+.#{$namespace}row {
+    @include clearfix();
+}
+.#{$namespace}col-xs-1, .#{$namespace}col-sm-1, .#{$namespace}col-xs-2, .#{$namespace}col-sm-2, .#{$namespace}col-xs-3, .#{$namespace}col-sm-3, .#{$namespace}col-xs-4, .#{$namespace}col-sm-4,  .#{$namespace}col-xs-5, .#{$namespace}col-sm-5, .#{$namespace}col-xs-6, .#{$namespace}col-sm-6, .#{$namespace}col-xs-7, .#{$namespace}col-sm-7, .#{$namespace}col-xs-8, .#{$namespace}col-sm-8, .#{$namespace}col-xs-9, .#{$namespace}col-sm-9, .#{$namespace}col-xs-10, .#{$namespace}col-sm-10,  .#{$namespace}col-xs-11, .#{$namespace}col-sm-11, .#{$namespace}col-xs-12, .#{$namespace}col-sm-12 {
+  position: relative;
+  min-height: 1px;
+}
+.#{$namespace}row>[class*="#{$namespace}col-"]{
+  float: left;  
+}
+.#{$namespace}col-xs-12 {
+    width: 100%;
+}
+.#{$namespace}col-xs-11 {
+    width: 91.66666667%;
+}
+.#{$namespace}col-xs-10 {
+    width: 83.33333333%;
+}
+.#{$namespace}col-xs-9 {
+    width: 75%;
+}
+.#{$namespace}col-xs-8 {
+    width: 66.66666667%;
+}
+.#{$namespace}col-xs-7 {
+    width: 58.33333333%;
+}
+.#{$namespace}col-xs-6 {
+    width: 50%;
+}
+.#{$namespace}col-xs-5 {
+    width: 41.66666667%;
+}
+.#{$namespace}col-xs-4 {
+    width: 33.33333333%;
+}
+.#{$namespace}col-xs-3 {
+    width: 25%;
+}
+.#{$namespace}col-xs-2 {
+    width: 16.66666667%;
+}
+.#{$namespace}col-xs-1 {
+    width: 8.33333333%;
+}
+@media (min-width: 400px) {
+    .#{$namespace}col-sm-12 {
+        width: 100%;
+    }
+    .#{$namespace}col-sm-11 {
+        width: 91.66666667%;
+    }
+    .#{$namespace}col-sm-10 {
+        width: 83.33333333%;
+    }
+    .#{$namespace}col-sm-9 {
+        width: 75%;
+    }
+    .#{$namespace}col-sm-8 {
+        width: 66.66666667%;
+    }
+    .#{$namespace}col-sm-7 {
+        width: 58.33333333%;
+    }
+    .#{$namespace}col-sm-6 {
+        width: 50%;
+    }
+    .#{$namespace}col-sm-5 {
+        width: 41.66666667%;
+    }
+    .#{$namespace}col-sm-4 {
+        width: 33.33333333%;
+    }
+    .#{$namespace}col-sm-3 {
+        width: 25%;
+    }
+    .#{$namespace}col-sm-2 {
+        width: 16.66666667%;
+    }
+    .#{$namespace}col-sm-1 {
+        width: 8.33333333%;
+    }
+
+}

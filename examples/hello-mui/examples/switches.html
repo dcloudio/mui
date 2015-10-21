@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -8,24 +7,10 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
-		<style>
-			html,
-			body {
-				background-color: #efeff4;
-			}
-			header.mui-bar {
-				display: none;
-			}
-			.mui-bar-nav~.mui-content {
-				padding: 0;
-			}
-		</style>
-		<script>
-			mui.init();
-		</script>
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
 	</head>
 
 	<body>
@@ -86,10 +71,11 @@
 				</li>
 			</ul>
 		</div>
+		<script src="../js/mui.min.js"></script>
 		<script>
-				// mui.plusReady(function(){
-				//     plus.webview.currentWebview().setStyle({bounce:'none'});
-				// });
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
 			mui('.mui-content .mui-switch').each(function() { //循环所有toggle
 				//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
 				this.parentNode.querySelector('span').innerText = '状态：' + (this.classList.contains('mui-active') ? 'true' : 'false');
@@ -102,7 +88,5 @@
 				});
 			});
 		</script>
-
 	</body>
-
 </html>

@@ -1,0 +1,95 @@
+/**
+ * 选择列表插件
+ * varstion 1.0.0
+ * by Houfeng
+ * Houfeng@DCloud.io
+ */
+
+.mui-listpicker {
+	position: relative;
+	border: solid 1px #ccc;
+	padding: 0px;
+	margin: 3px;
+	height: 185px;
+	background-color: #fff;
+	overflow: hidden;
+	border-radius: 3px;
+}
+.mui-listpicker .mui-listpicker-inner {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+	border-radius: 3px;
+	-webkit-mask-box-image: -webkit-linear-gradient(bottom, transparent, transparent 5%, #fff 20%, #fff 80%, transparent 95%, transparent);
+	-webkit-mask-box-image: linear-gradient(to top, transparent, transparent 5%, #fff 20%, #fff 80%, transparent 95%, transparent);
+}
+.mui-ios .mui-listpicker .mui-listpicker-inner {
+	width: calc(100% + 8px);
+	padding-right: 8px;
+}
+.mui-android .mui-listpicker .mui-listpicker-inner {
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.mui-listpicker .mui-listpicker-inner::-webkit-scrollbar {
+	width: 0px;
+	height: 0px;
+	visibility: hidden;
+}
+.mui-listpicker ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+}
+.mui-listpicker ul li {
+	box-sizing: border-box;
+	position: relative;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	color: #555;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.mui-listpicker.three-dimensional {
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-listpicker.three-dimensional .mui-listpicker-inner {
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-listpicker.three-dimensional ul {
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-listpicker.three-dimensional ul li {
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-listpicker ul li:last-child {
+	border-bottom: none;
+}
+.mui-listpicker ul li::first-child {
+	border-top: none;
+}
+.mui-listpicker .mui-listpicker-rule {
+	position: absolute;
+	border: solid 1px #ccc;
+	border-left: none;
+	border-right: none;
+	background-color: #dfd;
+	opacity: 0.5;
+	width: 100%;
+	left: 0px;
+	top: 50%;
+	z-index: 0;
+}
+.mui-listpicker .mui-listpicker-item-selected {
+	color: green;
+}
