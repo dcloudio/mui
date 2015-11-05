@@ -258,6 +258,7 @@
 					this._end(e);
 					break;
 				case 'webkitTransitionEnd':
+					this.transitionTimer && this.transitionTimer.cancel();
 					this._transitionEnd(e);
 					break;
 				case 'scrollend':
@@ -506,6 +507,12 @@
 					this.indicators[i].transitionTime(time);
 				}
 			}
+			if (time) { //自定义timer，保证webkitTransitionEnd始终触发
+				this.transitionTimer && this.transitionTimer.cancel();
+				this.transitionTimer = $.later(function() {
+					$.trigger(this.scroller, 'webkitTransitionEnd');
+				}, time + 100, this);
+			}
 		},
 		_transitionTimingFunction: function(easing) {
 			this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
@@ -702,7 +709,9 @@
 		},
 		scrollTo: function(x, y, time, easing) {
 			var easing = easing || ease.circular;
-			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//暂不严格判断x,y，否则会导致部分版本上不正常触发轮播
+			this.isInTransition = time > 0;
 			if (this.isInTransition) {
 				this._clearRequestAnimationFrame();
 				this._transitionTimingFunction(easing.style);

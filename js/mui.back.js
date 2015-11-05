@@ -42,6 +42,7 @@
 		var action = $.targets.action;
 		if (action && action.classList.contains($.className('action-back'))) {
 			$.back();
+			$.targets.action = false;
 		}
 	});
 	window.addEventListener('swiperight', function(e) {
