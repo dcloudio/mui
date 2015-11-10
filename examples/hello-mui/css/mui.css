@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.4.0 (https://github.com/dcloudio/mui)
+ * Mui v2.6.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -4341,8 +4341,8 @@ select:focus
     font-size: 14px;
 
     width: 270px;
-    margin: 5px auto 5px auto;
-    padding: 5px 5px 5px 5px;
+    margin: 5px auto;
+    padding: 5px;
 
     text-align: center;
 

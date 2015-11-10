@@ -1,0 +1,589 @@
+{
+  "version": "1.0.0",
+  "protocol": [
+    "http",
+    "https"
+  ],
+  "rooturl": "",
+  "index": {
+    "href": "index.html",
+    "resources": [
+      "manifest.json",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/update.js",
+      "examples/guide.html",
+      "list.html",
+      "index-menu.html"
+    ],
+    "refer": [
+      "examples/info.html"
+    ],
+    "priority": 0
+  },
+  "pages": {
+    "examples/popovers.html": {
+      "href": "examples/popovers.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 0
+    },
+    "examples/icons.html": {
+      "href": "examples/icons.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 1
+    },
+    "examples/numbox.html": {
+      "href": "examples/numbox.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 2
+    },
+    "examples/im-chat.html": {
+      "href": "examples/im-chat.html",
+      "resources": [
+        "css/app.css",
+        "css/mui.imageviewer.css",
+        "js/mui.imageViewer.js",
+        "js/arttmpl.js",
+        "images/logo.png"
+      ],
+      "priority": 3
+    },
+    "examples/slider-table-default.html": {
+      "href": "examples/slider-table-default.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 4
+    },
+    "examples/actionsheet-plus.html": {
+      "href": "examples/actionsheet-plus.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 5
+    },
+    "examples/tab-with-segmented-control-vertical.html": {
+      "href": "examples/tab-with-segmented-control-vertical.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 6
+    },
+    "examples/setting.html": {
+      "href": "examples/setting.html",
+      "resources": [
+        "libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+        "libs/easymob-webim-sdk/jquery-1.11.1.js",
+        "images/logo.png",
+        "libs/easymob-webim-sdk/json2.js",
+        "js/feedback-page.js",
+        "css/feedback-page.css",
+        "images/iconfont-tianjia.png",
+        "libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+        "js/mui.view.js",
+        "js/feedback.js"
+      ],
+      "refer": [
+        "examples/guide.html"
+      ],
+      "priority": 7
+    },
+    "examples/accordion.html": {
+      "href": "examples/accordion.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 8
+    },
+    "examples/buttons-with-block.html": {
+      "href": "examples/buttons-with-block.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 9
+    },
+    "examples/list-triplex-row.html": {
+      "href": "examples/list-triplex-row.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 10
+    },
+    "examples/tabbar.html": {
+      "href": "examples/tabbar.html",
+      "resources": [
+        "css/app.css",
+        "images/60x60.gif"
+      ],
+      "priority": 11
+    },
+    "examples/login.html": {
+      "href": "examples/login.html",
+      "resources": [
+        "css/app.css",
+        "images/login-1.png"
+      ],
+      "priority": 12
+    },
+    "examples/pullrefresh_with_tab.html": {
+      "href": "examples/pullrefresh_with_tab.html",
+      "resources": [
+        "js/mui.pullToRefresh.js",
+        "js/mui.pullToRefresh.material.js"
+      ],
+      "priority": 13
+    },
+    "examples/media-list.html": {
+      "href": "examples/media-list.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 14
+    },
+    "examples/grid-default.html": {
+      "href": "examples/grid-default.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 15
+    },
+    "examples/grid-pagination.html": {
+      "href": "examples/grid-pagination.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 16
+    },
+    "examples/pagination.html": {
+      "href": "examples/pagination.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 17
+    },
+    "examples/radio.html": {
+      "href": "examples/radio.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 18
+    },
+    "examples/tab-with-viewpagerindicator.html": {
+      "href": "examples/tab-with-viewpagerindicator.html",
+      "priority": 2
+    },
+    "examples/picker.html": {
+      "href": "examples/picker.html",
+      "resources": [
+        "js/city.data.js",
+        "js/mui.picker.js",
+        "css/mui.poppicker.css",
+        "css/mui.picker.css",
+        "js/mui.poppicker.js",
+        "css/app.css",
+        "js/city.data-3.js",
+        "css/mui.picker.min.css",
+        "js/mui.picker.min.js"
+      ],
+      "priority": 20
+    },
+    "examples/tab-webview-subpage-about.html": {
+      "href": "examples/tab-webview-subpage-about.html",
+      "resources": [],
+      "priority": 21
+    },
+    "examples/tab-webview-subpage-setting.html": {
+      "href": "examples/tab-webview-subpage-setting.html",
+      "resources": [],
+      "priority": 22
+    },
+    "examples/tab-webview-subpage-chat.html": {
+      "href": "examples/tab-webview-subpage-chat.html",
+      "resources": [],
+      "priority": 23
+    },
+    "examples/tab-webview-subpage-contact.html": {
+      "href": "examples/tab-webview-subpage-contact.html",
+      "resources": [
+        "images/60x60.gif"
+      ],
+      "priority": 24
+    },
+    "examples/tab-webview-main.html": {
+      "href": "examples/tab-webview-main.html",
+      "resources": [],
+      "refer": [
+        "examples/tab-webview-subpage-about.html",
+        "examples/tab-webview-subpage-setting.html",
+        "examples/tab-webview-subpage-chat.html",
+        "examples/tab-webview-subpage-contact.html"
+      ],
+      "priority": 21
+    },
+    "examples/list-with-input.html": {
+      "href": "examples/list-with-input.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 22
+    },
+    "examples/clouddb_wilddog.html": {
+      "href": "examples/clouddb_wilddog.html",
+      "resources": [],
+      "priority": 23
+    },
+    "examples/ajax.html": {
+      "href": "examples/ajax.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 24
+    },
+    "examples/checkbox.html": {
+      "href": "examples/checkbox.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 25
+    },
+    "examples/nav.html": {
+      "href": "examples/nav.html",
+      "resources": [],
+      "priority": 26
+    },
+    "examples/tableviews-with-swipe.html": {
+      "href": "examples/tableviews-with-swipe.html",
+      "priority": 4
+    },
+    "examples/buttons-with-icons.html": {
+      "href": "examples/buttons-with-icons.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 28
+    },
+    "examples/imageviewer.html": {
+      "href": "examples/imageviewer.html",
+      "resources": [
+        "images/muwu.jpg",
+        "images/shuijiao.jpg",
+        "js/mui.previewimage.js",
+        "js/mui.zoom.js",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 29
+    },
+    "examples/offcanvas-drag-left-plus-menu.html": {
+      "href": "examples/offcanvas-drag-left-plus-menu.html",
+      "resources": [],
+      "priority": 30
+    },
+    "examples/offcanvas-drag-left-plus-main.html": {
+      "href": "examples/offcanvas-drag-left-plus-main.html",
+      "resources": [],
+      "refer": [
+        "examples/offcanvas-drag-left-plus-menu.html"
+      ],
+      "priority": 30
+    },
+    "examples/buttons-with-badges.html": {
+      "href": "examples/buttons-with-badges.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 31
+    },
+    "examples/offcanvas-drag-right.html": {
+      "href": "examples/offcanvas-drag-right.html",
+      "resources": [],
+      "priority": 32
+    },
+    "examples/typography.html": {
+      "href": "examples/typography.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 33
+    },
+    "examples/template.html": {
+      "href": "examples/template.html",
+      "resources": [],
+      "priority": 34
+    },
+    "examples/echarts.html": {
+      "href": "examples/echarts.html",
+      "resources": [
+        "css/app.css",
+        "libs/echarts-all.js"
+      ],
+      "priority": 35
+    },
+    "examples/tableviews-with-collapses.html": {
+      "href": "examples/tableviews-with-collapses.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 36
+    },
+    "examples/indexed-list-select.html": {
+      "href": "examples/indexed-list-select.html",
+      "resources": [
+        "css/mui.indexedlist.css",
+        "js/mui.indexedlist.js"
+      ],
+      "priority": 37
+    },
+    "examples/tab-with-segmented-control.html": {
+      "href": "examples/tab-with-segmented-control.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 38
+    },
+    "examples/input.html": {
+      "href": "examples/input.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 39
+    },
+    "examples/lazyload-image.html": {
+      "href": "examples/lazyload-image.html",
+      "resources": [
+        "css/app.css",
+        "js/mui.lazyload.js",
+        "js/mui.lazyload.img.js",
+        "images/60x60.gif"
+      ],
+      "priority": 40
+    },
+    "examples/dtpicker.html": {
+      "href": "examples/dtpicker.html",
+      "resources": [
+        "css/app.css",
+        "css/mui.picker.min.css",
+        "js/mui.picker.min.js",
+        "css/mui.picker.css",
+        "css/mui.dtpicker.css",
+        "js/mui.picker.js",
+        "js/mui.dtpicker.js"
+      ],
+      "priority": 41
+    },
+    "examples/slider-table-pagination.html": {
+      "href": "examples/slider-table-pagination.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 42
+    },
+    "examples/buttons.html": {
+      "href": "examples/buttons.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 43
+    },
+    "examples/indexed-list.html": {
+      "href": "examples/indexed-list.html",
+      "resources": [
+        "css/mui.indexedlist.css",
+        "js/mui.indexedlist.js"
+      ],
+      "priority": 44
+    },
+    "examples/date.html": {
+      "href": "examples/date.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 45
+    },
+    "examples/offcanvas-drag-down.html": {
+      "href": "examples/offcanvas-drag-down.html",
+      "resources": [],
+      "priority": 47
+    },
+    "examples/tableviews.html": {
+      "href": "examples/tableviews.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 48
+    },
+    "examples/slider-default.html": {
+      "href": "examples/slider-default.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 49
+    },
+    "examples/badges.html": {
+      "href": "examples/badges.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 50
+    },
+    "examples/slider-with-title.html": {
+      "href": "examples/slider-with-title.html",
+      "resources": [
+        "images/shuijiao.jpg",
+        "css/app.css",
+        "images/muwu.jpg",
+        "images/cbd.jpg",
+        "images/yuantiao.jpg"
+      ],
+      "priority": 51
+    },
+    "examples/tableviews-with-badges.html": {
+      "href": "examples/tableviews-with-badges.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 52
+    },
+    "examples/range.html": {
+      "href": "examples/range.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 53
+    },
+    "examples/offcanvas-drag-right-plus-menu.html": {
+      "href": "examples/offcanvas-drag-right-plus-menu.html",
+      "resources": [],
+      "priority": 54
+    },
+    "examples/offcanvas-drag-right-plus-main.html": {
+      "href": "examples/offcanvas-drag-right-plus-main.html",
+      "resources": [],
+      "refer": [
+        "examples/offcanvas-drag-right-plus-menu.html"
+      ],
+      "priority": 54
+    },
+    "examples/tabbar-with-submenus.html": {
+      "href": "examples/tabbar-with-submenus.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 55
+    },
+    "examples/actionsheet.html": {
+      "href": "examples/actionsheet.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 56
+    },
+    "examples/offcanvas-drag-left.html": {
+      "href": "examples/offcanvas-drag-left.html",
+      "priority": 3
+    },
+    "examples/dialog.html": {
+      "href": "examples/dialog.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 58
+    },
+    "examples/ad.html": {
+      "href": "examples/ad.html",
+      "resources": [
+      	"js/ad.js"
+      ],
+      "priority": 59
+    },
+    "examples/locker-dom.html": {
+      "href": "examples/locker-dom.html",
+      "resources": [
+        "css/app.css",
+        "js/mui.locker.js"
+      ],
+      "priority": 60
+    },
+    "examples/pullrefresh_sub.html": {
+      "href": "examples/pullrefresh_sub.html",
+      "resources": [],
+      "priority": 61
+    },
+    "examples/pullrefresh_main.html": {
+      "href": "examples/pullrefresh_main.html",
+      "priority": 5
+    },
+    "examples/switches.html": {
+      "href": "examples/switches.html",
+      "priority": 6
+    },
+    "examples/tabbar-labels-only.html": {
+      "href": "examples/tabbar-labels-only.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 63
+    },
+    "examples/feedback.html": {
+      "href": "examples/feedback.html",
+      "resources": [
+        "css/feedback-page.css",
+        "images/iconfont-tianjia.png",
+        "libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+        "libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+        "css/app.css",
+        "libs/easymob-webim-sdk/json2.js",
+        "js/feedback-page.js",
+        "libs/easymob-webim-sdk/jquery-1.11.1.js",
+        "js/feedback.js"
+      ],
+      "priority": 64
+    },
+    "examples/info.html": {
+      "href": "examples/info.html",
+      "resources": [
+        "css/app.css"
+      ],
+      "priority": 1
+    }
+  },
+  "idle": {
+    "resources": [
+      "css/mui.listpicker.css",
+      "images/42x42.gif",
+      "images/pull_fresh.png",
+      "js/mui.picker.all.js",
+      "images/pull_arrow.png",
+      "js/mui.listpicker.js",
+      "examples/modals.html",
+      "css/mui.picker.all.css",
+      "js/mui.js"
+    ]
+  }
+}

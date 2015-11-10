@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.4.0 (https://github.com/dcloudio/mui)
+ * Mui v2.6.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -189,25 +189,6 @@ var mui = (function(document, undefined) {
 			}, false);
 		}
 		return this;
-	};
-	/**
-	 * map
-	 */
-	$.map = function(elements, callback) {
-		var value, values = [],
-			i, key;
-		if (typeof elements.length === 'number') { //TODO 此处逻辑不严谨，可能会有Object:{a:'b',length:1}的情况未处理
-			for (i = 0, len = elements.length; i < len; i++) {
-				value = callback(elements[i], i);
-				if (value != null) values.push(value);
-			}
-		} else {
-			for (key in elements) {
-				value = callback(elements[key], key);
-				if (value != null) values.push(value);
-			}
-		}
-		return values.length > 0 ? [].concat.apply([], values) : values;
 	};
 	/**
 	 * each
@@ -587,6 +568,32 @@ var mui = (function(document, undefined) {
 		window.CustomEvent = CustomEvent;
 	}
 })();
+/*
+	A shim for non ES5 supporting browsers.
+	Adds function bind to Function prototype, so that you can do partial application.
+	Works even with the nasty thing, where the first word is the opposite of extranet, the second one is the profession of Columbus, and the version number is 9, flipped 180 degrees.
+*/
+
+Function.prototype.bind = Function.prototype.bind || function(to) {
+	// Make an array of our arguments, starting from second argument
+	var partial = Array.prototype.splice.call(arguments, 1),
+		// We'll need the original function.
+		fn = this;
+	var bound = function() {
+			// Join the already applied arguments to the now called ones (after converting to an array again).
+			var args = partial.concat(Array.prototype.splice.call(arguments, 0));
+			// If not being called as a constructor
+			if (!(this instanceof bound)) {
+				// return the result of the function called bound to target and partially applied.
+				return fn.apply(to, args);
+			}
+			// If being called as a constructor, apply the function bound to self.
+			fn.apply(this, args);
+		}
+		// Attach the prototype of the function to our newly created function.
+	bound.prototype = fn.prototype;
+	return bound;
+};
 /**
  * mui fixed classList
  * @param {type} document
@@ -921,7 +928,7 @@ var mui = (function(document, undefined) {
 	};
 	var findDelegateFn = function(element, event) {
 		var delegateCallbacks = delegateFns[mid(element)];
-		var result = false;
+		var result = [];
 		if (delegateCallbacks) {
 			result = [];
 			if (event) {
@@ -2389,6 +2396,7 @@ var mui = (function(document, undefined) {
 		var action = $.targets.action;
 		if (action && action.classList.contains('mui-action-back')) {
 			$.back();
+			$.targets.action = false;
 		}
 	});
 	window.addEventListener('swiperight', function(e) {
@@ -2739,7 +2747,8 @@ var mui = (function(document, undefined) {
 				xhr.onreadystatechange = $.noop;
 				clearTimeout(abortTimeout);
 				var result, error = false;
-				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
+				var isLocal = protocol === 'file:';
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && isLocal && xhr.responseText)) {
 					dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
 					result = xhr.responseText;
 					try {
@@ -2761,7 +2770,13 @@ var mui = (function(document, undefined) {
 						ajaxSuccess(result, xhr, settings);
 					}
 				} else {
-					ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+					var status = xhr.status ? 'error' : 'abort';
+					var statusText = xhr.statusText || null;
+					if (isLocal) {
+						status = 'error';
+						statusText = '404';
+					}
+					ajaxError(statusText, status, xhr, settings);
 				}
 			}
 		};
@@ -3418,6 +3433,7 @@ var mui = (function(document, undefined) {
 					this._end(e);
 					break;
 				case 'webkitTransitionEnd':
+					this.transitionTimer && this.transitionTimer.cancel();
 					this._transitionEnd(e);
 					break;
 				case 'scrollend':
@@ -3666,6 +3682,12 @@ var mui = (function(document, undefined) {
 					this.indicators[i].transitionTime(time);
 				}
 			}
+			if (time) { //自定义timer，保证webkitTransitionEnd始终触发
+				this.transitionTimer && this.transitionTimer.cancel();
+				this.transitionTimer = $.later(function() {
+					$.trigger(this.scroller, 'webkitTransitionEnd');
+				}, time + 100, this);
+			}
 		},
 		_transitionTimingFunction: function(easing) {
 			this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
@@ -3862,7 +3884,9 @@ var mui = (function(document, undefined) {
 		},
 		scrollTo: function(x, y, time, easing) {
 			var easing = easing || ease.circular;
-			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//暂不严格判断x,y，否则会导致部分版本上不正常触发轮播
+			this.isInTransition = time > 0;
 			if (this.isInTransition) {
 				this._clearRequestAnimationFrame();
 				this._transitionTimingFunction(easing.style);
@@ -4253,6 +4277,7 @@ var mui = (function(document, undefined) {
 				indicators: false,
 				bounceTime: 200,
 				startX: false,
+				slideTime: 0, //滑动动画时间
 				snap: SELECTOR_SLIDER_ITEM
 			}, options));
 			if (this.options.startX) {
@@ -4313,7 +4338,14 @@ var mui = (function(document, undefined) {
 			}
 			var detail = e.detail;
 			detail.slideNumber = detail.slideNumber || 0;
-			var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var temps = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var items = [];
+			for (var i = 0, len = temps.length; i < len; i++) {
+				var item = temps[i];
+				if (item.parentNode === self.scroller) {
+					items.push(item);
+				}
+			}
 			var _slideNumber = detail.slideNumber;
 			if (self.loop) {
 				_slideNumber += 1;
@@ -4356,7 +4388,7 @@ var mui = (function(document, undefined) {
 		},
 		_handleTabShow: function(e) {
 			var self = this;
-			self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
+			self.gotoItem((e.detail.tabNumber || 0), self.options.slideTime);
 		},
 		_handleIndicatorTap: function(event) {
 			var self = this;
@@ -7012,10 +7044,14 @@ var mui = (function(document, undefined) {
 				self.input.value = val.toString();
 				$.trigger(self.input, changeEventName, null);
 			});
-//			self.input.addEventListener(changeEventName, function(event) {
-//				self.checkValue();
-//				$.trigger(self, changeEventName, self.getValue());
-//			});
+			self.input.addEventListener(changeEventName, function(event) {
+				self.checkValue();
+				var val = parseInt(self.input.value);
+				//触发顶层容器
+				$.trigger(self.holder, changeEventName, {
+					value: val
+				});
+			});
 		},
 		/**
 		 * 获取当前值

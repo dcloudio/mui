@@ -49,10 +49,14 @@
 				self.input.value = val.toString();
 				$.trigger(self.input, changeEventName, null);
 			});
-//			self.input.addEventListener(changeEventName, function(event) {
-//				self.checkValue();
-//				$.trigger(self, changeEventName, self.getValue());
-//			});
+			self.input.addEventListener(changeEventName, function(event) {
+				self.checkValue();
+				var val = parseInt(self.input.value);
+				//触发顶层容器
+				$.trigger(self.holder, changeEventName, {
+					value: val
+				});
+			});
 		},
 		/**
 		 * 获取当前值

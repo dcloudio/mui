@@ -101,7 +101,7 @@
 	};
 	var findDelegateFn = function(element, event) {
 		var delegateCallbacks = delegateFns[mid(element)];
-		var result = false;
+		var result = [];
 		if (delegateCallbacks) {
 			result = [];
 			if (event) {
