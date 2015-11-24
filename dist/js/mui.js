@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.5.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v2.6.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -2396,6 +2396,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		var action = $.targets.action;
 		if (action && action.classList.contains('mui-action-back')) {
 			$.back();
+			$.targets.action = false;
 		}
 	});
 	window.addEventListener('swiperight', function(e) {
@@ -2746,7 +2747,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				xhr.onreadystatechange = $.noop;
 				clearTimeout(abortTimeout);
 				var result, error = false;
-				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
+				var isLocal = protocol === 'file:';
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && isLocal && xhr.responseText)) {
 					dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
 					result = xhr.responseText;
 					try {
@@ -2768,7 +2770,13 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						ajaxSuccess(result, xhr, settings);
 					}
 				} else {
-					ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+					var status = xhr.status ? 'error' : 'abort';
+					var statusText = xhr.statusText || null;
+					if (isLocal) {
+						status = 'error';
+						statusText = '404';
+					}
+					ajaxError(statusText, status, xhr, settings);
 				}
 			}
 		};
@@ -3425,6 +3433,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this._end(e);
 					break;
 				case 'webkitTransitionEnd':
+					this.transitionTimer && this.transitionTimer.cancel();
 					this._transitionEnd(e);
 					break;
 				case 'scrollend':
@@ -3673,6 +3682,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this.indicators[i].transitionTime(time);
 				}
 			}
+			if (time) { //自定义timer，保证webkitTransitionEnd始终触发
+				this.transitionTimer && this.transitionTimer.cancel();
+				this.transitionTimer = $.later(function() {
+					$.trigger(this.scroller, 'webkitTransitionEnd');
+				}, time + 100, this);
+			}
 		},
 		_transitionTimingFunction: function(easing) {
 			this.scrollerStyle['webkitTransitionTimingFunction'] = easing;
@@ -3869,7 +3884,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		},
 		scrollTo: function(x, y, time, easing) {
 			var easing = easing || ease.circular;
-			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//			this.isInTransition = time > 0 && (this.lastX != x || this.lastY != y);
+			//暂不严格判断x,y，否则会导致部分版本上不正常触发轮播
+			this.isInTransition = time > 0;
 			if (this.isInTransition) {
 				this._clearRequestAnimationFrame();
 				this._transitionTimingFunction(easing.style);
