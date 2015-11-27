@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.6.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v2.7.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -730,8 +730,6 @@ p
     overflow: hidden;
 
     width: 100%;
-
-    -webkit-backface-visibility: hidden;
 }
 
 .mui-scroll
@@ -743,8 +741,6 @@ p
 
     -webkit-transform: translateZ(0);
             transform: translateZ(0);
-
-    -webkit-backface-visibility: hidden;
 }
 
 .mui-scrollbar
@@ -875,8 +871,8 @@ p
 }
 .mui-off-canvas-wrap .mui-inner-wrap.mui-transitioning
 {
-    -webkit-transition: -webkit-transform 200ms ease;
-            transition:         transform 200ms ease;
+    -webkit-transition: -webkit-transform 350ms;
+            transition:         transform 350ms cubic-bezier(.165, .84, .44, 1);
 }
 .mui-off-canvas-wrap .mui-inner-wrap .mui-off-canvas-left
 {
@@ -905,12 +901,11 @@ p
 
     display: block;
 
-    transition: background 200ms ease;
+    transition: background 350ms cubic-bezier(.165, .84, .44, 1);
 
     background: rgba(0, 0, 0, .4);
     box-shadow: -4px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
 
-    -webkit-backface-visibility: hidden;
     -webkit-tap-highlight-color: transparent;
 }
 .mui-off-canvas-wrap.mui-slide-in .mui-off-canvas-right
@@ -941,13 +936,12 @@ p
 
     background: #333;
 
-    -webkit-backface-visibility: hidden;
     -webkit-overflow-scrolling: touch;
 }
 .mui-off-canvas-left.mui-transitioning, .mui-off-canvas-right.mui-transitioning
 {
-    -webkit-transition: -webkit-transform 200ms ease;
-            transition:         transform 200ms ease;
+    -webkit-transition: -webkit-transform 350ms cubic-bezier(.165, .84, .44, 1);
+            transition:         transform 350ms cubic-bezier(.165, .84, .44, 1);
 }
 
 .mui-off-canvas-left
@@ -975,8 +969,8 @@ p
 }
 .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-left.mui-transitioning, .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-right.mui-transitioning
 {
-    -webkit-transition: -webkit-transform 200ms ease, opacity 200ms ease;
-            transition:         transform 200ms ease, opacity 200ms ease;
+    -webkit-transition: -webkit-transform 350ms cubic-bezier(.165, .84, .44, 1), opacity 350ms cubic-bezier(.165, .84, .44, 1);
+            transition:         transform 350ms cubic-bezier(.165, .84, .44, 1), opacity 350ms cubic-bezier(.165, .84, .44, 1);
 }
 .mui-off-canvas-wrap:not(.mui-slide-in).mui-scalable > .mui-off-canvas-left
 {
@@ -2155,9 +2149,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 {
     -webkit-transition: -webkit-transform 0ms ease;
             transition:         transform 0ms ease;
-
-    -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
 }
 .mui-table-view-cell > .mui-slider-left, .mui-table-view-cell > .mui-slider-right
 {
@@ -2169,9 +2160,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     display:         flex;
 
     height: 100%;
-
-    -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
 }
 .mui-table-view-cell > .mui-slider-left > .mui-btn, .mui-table-view-cell > .mui-slider-right > .mui-btn
 {
@@ -2928,7 +2916,7 @@ select:focus
 {
     padding: 8px 0;
 }
-.mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-input-row .mui-input-speech ~ .mui-icon-speech
+.mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-input-row .mui-input-speech ~ .mui-icon-speech, .mui-input-row .mui-input-password ~ .mui-icon-eye
 {
     font-size: 20px;
 
@@ -2943,6 +2931,10 @@ select:focus
     text-align: center;
 
     color: #999;
+}
+.mui-input-row .mui-input-clear ~ .mui-icon-clear.mui-active, .mui-input-row .mui-input-speech ~ .mui-icon-speech.mui-active, .mui-input-row .mui-input-password ~ .mui-icon-eye.mui-active
+{
+    color: #007aff;
 }
 .mui-input-row .mui-input-speech ~ .mui-icon-speech
 {
@@ -4028,8 +4020,6 @@ select:focus
 
     -webkit-transform: translateZ(0);
             transform: translateZ(0);
-
-    -webkit-backface-visibility: hidden;
 }
 
 .mui-switch
@@ -4294,8 +4284,6 @@ select:focus
     -webkit-transition-duration: 400ms;
             transition-duration: 400ms;
     vertical-align: middle;
-
-    -webkit-backface-visibility: hidden;
 }
 
 .mui-pull-loading.mui-reverse
@@ -4369,7 +4357,7 @@ select:focus
     border-radius: 3px;
     background-color: #efeff4;
 }
-.mui-numbox [class*=mui-numbox-btn]
+.mui-numbox [class*=numbox-btn], .mui-numbox [class*=btn-numbox]
 {
     font-size: 18px;
     font-weight: normal;
@@ -4389,29 +4377,29 @@ select:focus
     border-radius: 0;
     background-color: #f9f9f9;
 }
-.mui-numbox [class*=mui-numbox-btn]:active
+.mui-numbox [class*=numbox-btn]:active, .mui-numbox [class*=btn-numbox]:active
 {
     background-color: #ccc;
 }
-.mui-numbox [class*=mui-numbox-btn][disabled]
+.mui-numbox [class*=numbox-btn][disabled], .mui-numbox [class*=btn-numbox][disabled]
 {
     color: #c0c0c0;
 }
-.mui-numbox .mui-numbox-btn-plus
+.mui-numbox .mui-numbox-btn-plus, .mui-numbox .mui-btn-numbox-plus
 {
     right: 0;
 
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
-.mui-numbox .mui-numbox-btn-minus
+.mui-numbox .mui-numbox-btn-minus, .mui-numbox .mui-btn-numbox-minus
 {
     left: 0;
 
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
 }
-.mui-numbox .mui-numbox-input
+.mui-numbox .mui-numbox-input, .mui-numbox .mui-input-numbox
 {
     display: inline-block;
     overflow: hidden;
@@ -4458,6 +4446,10 @@ select:focus
     text-decoration: none;
 
     -webkit-font-smoothing: antialiased;
+}
+.mui-icon.mui-active
+{
+    color: #007aff;
 }
 .mui-icon.mui-right:before
 {
@@ -4851,6 +4843,11 @@ select:focus
     content: '\e567';
 }
 
+.mui-icon-eye:before
+{
+    content: '\e568';
+}
+
 .mui-icon-arrowup:before
 {
     content: '\e580';
@@ -4946,6 +4943,13 @@ select:focus
     -webkit-user-modify: inherit;
 }
 
+.mui-android.mui-android-4-2 input,
+.mui-android.mui-android-4-2 textarea, .mui-android.mui-android-4-3 input,
+.mui-android.mui-android-4-3 textarea
+{
+    -webkit-user-select: text;
+}
+
 .mui-ios .mui-table-view-cell
 {
     -webkit-transform-style: preserve-3d;
@@ -4980,4 +4984,40 @@ select:focus
 .mui-plus .mui-plus-hidden, .mui-wechat .mui-wechat-hidden
 {
     display: none !important;
+}
+
+.mui-plus.mui-statusbar.mui-statusbar-offset .mui-bar-nav
+{
+    height: 64px;
+    padding-top: 20px;
+}
+.mui-plus.mui-statusbar.mui-statusbar-offset .mui-bar-nav ~ .mui-content
+{
+    padding-top: 64px;
+}
+.mui-plus.mui-statusbar.mui-statusbar-offset .mui-bar-nav ~ .mui-content .mui-pull-top-pocket
+{
+    top: 64px;
+}
+.mui-plus.mui-statusbar.mui-statusbar-offset .mui-bar-header-secondary
+{
+    top: 64px;
+}
+.mui-plus.mui-statusbar.mui-statusbar-offset .mui-bar-header-secondary ~ .mui-content
+{
+    padding-top: 94px;
+}
+
+.mui-iframe-wrapper
+{
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+.mui-iframe-wrapper iframe
+{
+    width: 100%;
+    height: 100%;
+
+    border: 0;
 }

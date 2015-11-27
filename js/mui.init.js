@@ -62,6 +62,40 @@
 	$.addInit = function(init) {
 		return $.addAction('inits', init);
 	};
+	/**
+	 * 处理html5版本subpages 
+	 */
+	$.addInit({
+		name: 'iframe',
+		index: 100,
+		handle: function() {
+			var options = $.options;
+			var subpages = options.subpages || [];
+			if (!$.os.plus && subpages.length) {
+				//暂时只处理单个subpage。后续可以考虑支持多个subpage
+				createIframe(subpages[0]);
+			}
+		}
+	});
+	var createIframe = function(options) {
+		var wrapper = document.createElement('div');
+		wrapper.className = $.className('iframe-wrapper');
+		var styles = options.styles || {};
+		if (typeof styles.top !== 'string') {
+			styles.top = '0px';
+		}
+		if (typeof styles.bottom !== 'string') {
+			styles.bottom = '0px';
+		}
+		wrapper.style.top = styles.top;
+		wrapper.style.bottom = styles.bottom;
+		var iframe = document.createElement('iframe');
+		iframe.src = options.url;
+		iframe.id = options.id || options.url;
+		iframe.name = iframe.id;
+		wrapper.appendChild(iframe);
+		document.body.appendChild(wrapper);
+	};
 	$(function() {
 		var classList = document.body.classList;
 		var os = [];

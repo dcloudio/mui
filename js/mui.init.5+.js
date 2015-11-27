@@ -36,7 +36,10 @@
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend(true,{},{autoShow: true,title: ''}, options);
+		return $.extend(true, {}, {
+			autoShow: true,
+			title: ''
+		}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -44,7 +47,7 @@
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		return $.extend(true,{},defaultShow, options);
+		return $.extend(true, {}, defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
@@ -144,10 +147,6 @@
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
-
-		if (!window.plus) {
-			return;
-		}
 		if (typeof url === 'object') {
 			options = url;
 			url = options.url;
@@ -160,19 +159,29 @@
 				id = id || url;
 			}
 		}
+		if (!$.os.plus) {
+			window.top.location.href = url;
+			return;
+		}
+		if (!window.plus) {
+			return;
+		}
+
 		options = options || {};
 		var params = options.params || {};
-		var webview = null,webviewCache = null, nShow, nWaiting;
+		var webview = null,
+			webviewCache = null,
+			nShow, nWaiting;
 
-		if($.webviews[id]){
+		if ($.webviews[id]) {
 			webviewCache = $.webviews[id];
 			//webview真实存在，才能获取
-			if(plus.webview.getWebviewById(id)){
+			if (plus.webview.getWebviewById(id)) {
 				webview = webviewCache.webview;
 			}
 		}
 
-		if (webviewCache&&webview) { //已缓存
+		if (webviewCache && webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
 			nShow = webviewCache.show;
@@ -433,20 +442,21 @@
 					}
 				});
 			} else {
-				if (subpages.length > 0) {
-					var err = document.createElement('div');
-					err.className = 'mui-error';
-					//文字描述
-					var span = document.createElement('span');
-					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考';
-					err.appendChild(span);
-					var a = document.createElement('a');
-					a.innerHTML = '"mui框架适用场景"';
-					a.href = 'http://ask.dcloud.net.cn/article/113';
-					err.appendChild(a);
-					document.body.appendChild(err);
-					console.log('在该浏览器下，不支持创建子页面');
-				}
+				//已支持iframe嵌入
+				//				if (subpages.length > 0) {
+				//					var err = document.createElement('div');
+				//					err.className = 'mui-error';
+				//					//文字描述
+				//					var span = document.createElement('span');
+				//					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考';
+				//					err.appendChild(span);
+				//					var a = document.createElement('a');
+				//					a.innerHTML = '"mui框架适用场景"';
+				//					a.href = 'http://ask.dcloud.net.cn/article/113';
+				//					err.appendChild(a);
+				//					document.body.appendChild(err);
+				//					console.log('在该浏览器下，不支持创建子页面');
+				//				}
 
 			}
 
@@ -463,5 +473,14 @@
 			});
 
 		});
+	});
+	$.supportStatusbarOffset = function() {
+		return $.os.plus && $.os.ios && parseFloat($.os.version) >= 7;
+	};
+	$.ready(function() {
+		//标识当前环境支持statusbar
+		if ($.supportStatusbarOffset()) {
+			document.body.classList.add($.className('statusbar'));
+		}
 	});
 })(mui);

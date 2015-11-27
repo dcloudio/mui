@@ -15,12 +15,21 @@
 		<style>
 			/*跨webview需要手动指定位置*/
 			
-			header.mui-bar {
+			.mui-plus header.mui-bar {
 				display: none!important;
 			}
-			.mui-bar-nav~.mui-content {
+			.mui-plus .mui-bar-nav~.mui-content {
 				padding: 0!important;
 			}
+			
+			.mui-plus .plus{
+				display: inline;
+			}
+			
+			.plus{
+				display: none;
+			}
+			
 			#topPopover {
 				position: fixed;
 				top: 16px;
@@ -51,7 +60,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right"></a>
+			<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a>
 			<h1 class="mui-title">popover（弹出菜单）</h1>
 		</header>
 		<footer class="mui-bar mui-bar-footer">
@@ -61,9 +70,9 @@
 			<div class="mui-content-padded">
 				<p>popover（弹出菜单是）mobile App中常见的UI组件，在用户点击位置附近弹出悬浮菜单，向用户展示更多信息或提供快捷操作。</p>
 				<p>popover最常用的两个位置：顶部导航栏右侧和底部工具栏右侧； 点击本页右上角的
-					<span class="mui-icon mui-icon-bars"></span> 图标体验，这是一个
+					<span class="mui-icon mui-icon-bars"></span> 图标体验，<span class="plus">这是一个
 					<strong>跨webview</strong>的popover示例，
-					<span class="mui-icon mui-icon-bars"></span>在父webview中，点击后通过自定义事件 通知子webview， 子webview再执行popover的显示隐藏逻辑； 接着点击本页面右下角的“菜单”按钮体验。
+					<span class="mui-icon mui-icon-bars"></span>在父webview中，点击后通过自定义事件 通知子webview， 子webview再执行popover的显示隐藏逻辑； </span>接着点击本页面右下角的“菜单”按钮体验。
 				</p>
 				<p>除了页面顶部导航栏、底部工具栏固定位置之外，其它区域要使用弹出菜单，都要准确计算物理位置，从而实现弹出菜单的绝对定位； mui封装的手势事件中，可以获得点击位置，通过这些位置可实现任意区域的弹出菜单显示，点击如下按钮体验：
 				</p>

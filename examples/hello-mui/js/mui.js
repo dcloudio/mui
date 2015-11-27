@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.6.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v2.7.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -524,10 +524,29 @@ var mui = (function(document, undefined) {
 				break;
 			}
 		}
-
+	});
+	window.addEventListener('click', function(event) { //解决touch与click的target不一致的问题(比如链接边缘点击时，touch的target为html，而click的target为A)
+		var target = event.target;
+		var isFound = false;
+		for (; target && target !== document; target = target.parentNode) {
+			if (target.tagName === 'A') {
+				$.each($.targetHandles, function(index, targetHandle) {
+					var name = targetHandle.name;
+					if (targetHandle.hasOwnProperty('handle')) {
+						if (targetHandle.handle(event, target)) {
+							isFound = true;
+							event.preventDefault();
+							return false;
+						}
+					}
+				});
+				if (isFound) {
+					break;
+				}
+			}
+		}
 	});
 })(mui, window, document);
-
 /**
  * fixed trim
  * @param {type} undefined
@@ -1434,7 +1453,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		//TODO 应该判断当前target是不是在targets.popover内部，而不是非要相等
-		if (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal) {
+		if (($.os.android || $.os.ios) && (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal)) {
 			e.preventDefault();
 		}
 	}, true);
@@ -1472,6 +1491,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				break;
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
+				touch.flick = false;
 				if (session.flickStart && options.flickMaxTime > (now - flickStartTime) && touch.distance > options.flickMinDistince) {
 					touch.flick = true;
 					touch.flickTime = now - flickStartTime;
@@ -1508,6 +1528,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		var session = $.gestures.session;
 		if (event.type === $.EVENT_END || event.type === $.EVENT_CANCEL) {
 			var options = this.options;
+			touch.swipe = false;
 			//TODO 后续根据velocity计算
 			if (touch.direction && options.swipeMaxTime > touch.deltaTime && touch.distance > options.swipeMinDistince) {
 				touch.swipe = true;
@@ -1848,6 +1869,40 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.addInit = function(init) {
 		return $.addAction('inits', init);
 	};
+	/**
+	 * 处理html5版本subpages 
+	 */
+	$.addInit({
+		name: 'iframe',
+		index: 100,
+		handle: function() {
+			var options = $.options;
+			var subpages = options.subpages || [];
+			if (!$.os.plus && subpages.length) {
+				//暂时只处理单个subpage。后续可以考虑支持多个subpage
+				createIframe(subpages[0]);
+			}
+		}
+	});
+	var createIframe = function(options) {
+		var wrapper = document.createElement('div');
+		wrapper.className = 'mui-iframe-wrapper';
+		var styles = options.styles || {};
+		if (typeof styles.top !== 'string') {
+			styles.top = '0px';
+		}
+		if (typeof styles.bottom !== 'string') {
+			styles.bottom = '0px';
+		}
+		wrapper.style.top = styles.top;
+		wrapper.style.bottom = styles.bottom;
+		var iframe = document.createElement('iframe');
+		iframe.src = options.url;
+		iframe.id = options.id || options.url;
+		iframe.name = iframe.id;
+		wrapper.appendChild(iframe);
+		document.body.appendChild(wrapper);
+	};
 	$(function() {
 		var classList = document.body.classList;
 		var os = [];
@@ -1923,7 +1978,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {Object}
 	 */
 	$.waitingOptions = function(options) {
-		return $.extend(true,{},{autoShow: true,title: ''}, options);
+		return $.extend(true, {}, {
+			autoShow: true,
+			title: ''
+		}, options);
 	};
 	/**
 	 * 窗口显示配置
@@ -1931,7 +1989,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {Object}
 	 */
 	$.showOptions = function(options) {
-		return $.extend(true,{},defaultShow, options);
+		return $.extend(true, {}, defaultShow, options);
 	};
 	/**
 	 * 窗口默认配置
@@ -2031,10 +2089,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
-
-		if (!window.plus) {
-			return;
-		}
 		if (typeof url === 'object') {
 			options = url;
 			url = options.url;
@@ -2047,19 +2101,29 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				id = id || url;
 			}
 		}
+		if (!$.os.plus) {
+			window.top.location.href = url;
+			return;
+		}
+		if (!window.plus) {
+			return;
+		}
+
 		options = options || {};
 		var params = options.params || {};
-		var webview = null,webviewCache = null, nShow, nWaiting;
+		var webview = null,
+			webviewCache = null,
+			nShow, nWaiting;
 
-		if($.webviews[id]){
+		if ($.webviews[id]) {
 			webviewCache = $.webviews[id];
 			//webview真实存在，才能获取
-			if(plus.webview.getWebviewById(id)){
+			if (plus.webview.getWebviewById(id)) {
 				webview = webviewCache.webview;
 			}
 		}
 
-		if (webviewCache&&webview) { //已缓存
+		if (webviewCache && webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
 			nShow = webviewCache.show;
@@ -2320,20 +2384,21 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					}
 				});
 			} else {
-				if (subpages.length > 0) {
-					var err = document.createElement('div');
-					err.className = 'mui-error';
-					//文字描述
-					var span = document.createElement('span');
-					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考';
-					err.appendChild(span);
-					var a = document.createElement('a');
-					a.innerHTML = '"mui框架适用场景"';
-					a.href = 'http://ask.dcloud.net.cn/article/113';
-					err.appendChild(a);
-					document.body.appendChild(err);
-					console.log('在该浏览器下，不支持创建子页面');
-				}
+				//已支持iframe嵌入
+				//				if (subpages.length > 0) {
+				//					var err = document.createElement('div');
+				//					err.className = 'mui-error';
+				//					//文字描述
+				//					var span = document.createElement('span');
+				//					span.innerHTML = '在该浏览器下，不支持创建子页面，具体参考';
+				//					err.appendChild(span);
+				//					var a = document.createElement('a');
+				//					a.innerHTML = '"mui框架适用场景"';
+				//					a.href = 'http://ask.dcloud.net.cn/article/113';
+				//					err.appendChild(a);
+				//					document.body.appendChild(err);
+				//					console.log('在该浏览器下，不支持创建子页面');
+				//				}
 
 			}
 
@@ -2350,6 +2415,15 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			});
 
 		});
+	});
+	$.supportStatusbarOffset = function() {
+		return $.os.plus && $.os.ios && parseFloat($.os.version) >= 7;
+	};
+	$.ready(function() {
+		//标识当前环境支持statusbar
+		if ($.supportStatusbarOffset()) {
+			document.body.classList.add('mui-statusbar');
+		}
 	});
 })(mui);
 /**
@@ -2715,7 +2789,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
 			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
-		var mime = settings.accepts[dataType];
+		var mime = settings.accepts[dataType.toLowerCase()];
 		var headers = {};
 		var setHeader = function(name, value) {
 			headers[name.toLowerCase()] = [name, value];
@@ -3025,9 +3099,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				scrollY: true,
 				scrollX: false,
 				indicators: true,
-				deceleration:0.003,
+				deceleration: 0.003,
 				down: {
 					height: 50,
+					contentinit: '下拉可以刷新',
 					contentdown: '下拉可以刷新',
 					contentover: '释放立即刷新',
 					contentrefresh: '正在刷新...'
@@ -3035,6 +3110,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				up: {
 					height: 50,
 					auto: false,
+					contentinit: '上拉显示更多',
 					contentdown: '上拉显示更多',
 					contentrefresh: '正在加载...',
 					contentnomore: '没有更多数据了',
@@ -3088,7 +3164,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		_createPocket: function(clazz, options, iconClass) {
 			var pocket = document.createElement('div');
 			pocket.className = clazz;
-			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentrefresh).replace('{icon}', iconClass);
+			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
 			return pocket;
 		},
 		_resetPullDownLoading: function() {
@@ -3193,6 +3269,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			fn: function(k) {
 				return Math.sqrt(1 - (--k * k));
 			}
+		},
+		outCirc: {
+			style: 'cubic-bezier(0.075, 0.82, 0.165, 1)'
+		},
+		outCubic: {
+			style: 'cubic-bezier(0.165, 0.84, 0.44, 1)'
 		}
 	}
 	var Scroll = $.Class.extend({
@@ -3207,6 +3289,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				scrollX: false, //是否横向滚动
 				startX: 0, //初始化时滚动至x
 				startY: 0, //初始化时滚动至y
+
 				indicators: true, //是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
@@ -3216,11 +3299,16 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				},
 				momentum: true,
 
+				snapX: 0.5, //横向切换距离(以当前容器宽度为基准)
 				snap: false, //图片轮播，拖拽式选项卡
 
 				bounce: true, //是否启用回弹
-				bounceTime: 300, //回弹动画时间
-				bounceEasing: ease.circular.style, //回弹动画曲线
+				bounceTime: 500, //回弹动画时间
+				bounceEasing: ease.outCirc, //回弹动画曲线
+
+				scrollTime: 500,
+				scrollEasing: ease.outCubic, //轮播动画曲线
+
 
 				directionLockThreshold: 5,
 
@@ -3297,7 +3385,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			var m = 0;
 			var n = -1;
 			var x = 0;
-			var cx = 0;
+			var leftX = 0;
+			var rightX = 0;
+			var snapX = 0;
 			for (var i = 0; i < length; i++) {
 				var snap = snaps[i];
 				var offsetLeft = snap.offsetLeft;
@@ -3310,10 +3400,13 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this.pages[m] = [];
 				}
 				x = this._getSnapX(offsetLeft);
-				cx = x - Math.round((offsetWidth) / 2);
+				snapX = Math.round((offsetWidth) * this.options.snapX);
+				leftX = x - snapX;
+				rightX = x - offsetWidth + snapX;
 				this.pages[m][n] = {
 					x: x,
-					cx: cx,
+					leftX: leftX,
+					rightX: rightX,
 					pageX: m,
 					element: snap
 				}
@@ -3338,7 +3431,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this.snaps[i].classList.remove(CLASS_ACTIVE);
 				}
 			}
-			this.scrollTo(this.currentPage.x, 0, this.options.bounceTime);
+			this.scrollTo(this.currentPage.x, 0, this.options.scrollTime);
 		},
 		_nearestSnap: function(x) {
 			if (!this.pages.length) {
@@ -3349,15 +3442,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 			var i = 0;
 			var length = this.pages.length;
-
 			if (x > 0) {
 				x = 0;
 			} else if (x < this.maxScrollX) {
 				x = this.maxScrollX;
 			}
-
 			for (; i < length; i++) {
-				if (x >= this.pages[i][0].cx) {
+				var nearestX = this.direction === 'left' ? this.pages[i][0].leftX : this.pages[i][0].rightX;
+				if (x >= nearestX) {
 					return this.pages[i][0];
 				}
 			}
@@ -3573,7 +3665,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			if (!this.requestAnimationFrame) {
 				this._updateTranslate();
 			}
-
+			this.direction = detail.deltaX > 0 ? 'right' : 'left';
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
@@ -3873,7 +3965,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			if (x == this.x && y == this.y) {
 				return false;
 			}
-			this.scrollTo(x, y, time, this.options.bounceEasing);
+			this.scrollTo(x, y, time, this.options.scrollEasing);
 
 			return true;
 		},
@@ -3898,7 +3990,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 		},
 		scrollToBottom: function(time, easing) {
-			time = time || this.options.bounceTime;
+			time = time || this.options.scrollTime;
 			this.scrollTo(0, this.maxScrollY, time, easing);
 		},
 		gotoPage: function(index) {
@@ -4275,7 +4367,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				scrollY: false,
 				scrollX: true,
 				indicators: false,
-				bounceTime: 200,
+				scrollTime: 1000,
 				startX: false,
 				slideTime: 0, //滑动动画时间
 				snap: SELECTOR_SLIDER_ITEM
@@ -4550,7 +4642,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		},
 		_gotoItem: function(slideNumber, time) {
 			this.currentPage = this._getPage(slideNumber, true); //此处传true。可保证程序切换时，动画与人手操作一致(第一张，最后一张的切换动画)
-			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
@@ -4571,17 +4663,17 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				this.x = this.maxScrollX;
 			}
 			this.currentPage = this._nearestSnap(this.x);
-			this.scrollTo(this.currentPage.x, 0, time);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.bounceTime : time);
+			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.scrollTime : time);
 		},
 		nextItem: function() {
-			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber + 1, this.options.scrollTime);
 		},
 		prevItem: function() {
-			this._gotoItem(this.slideNumber - 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber - 1, this.options.scrollTime);
 		},
 		getSlideNumber: function() {
 			return this.slideNumber || 0;
@@ -4773,15 +4865,22 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		},
 		pulldownLoading: function() { //该方法是子页面调用的
+			$.plusReady(function() {
+				plus.webview.currentWebview().setBounce({
+					offset: {
+						top: this.options.down.height + "px"
+					}
+				});
+			}.bind(this));
 			var callback = $.options.pullRefresh.down.callback;
 			callback && callback.call(this);
 		},
-		_pulldownLoading: function() { //该方法是子页面调用的
-			var self = this;
-			$.plusReady(function() {
-				plus.webview.getWebviewById(self.options.webviewId).evalJS("mui&&mui.options.pullRefresh.down&&mui.options.pullRefresh.down.callback()");
-			});
-		},
+		//		_pulldownLoading: function() { //该方法是子页面调用的
+		//			var self = this;
+		//			$.plusReady(function() {
+		//				plus.webview.getWebviewById(self.options.webviewId).evalJS("mui&&mui.options.pullRefresh.down&&mui.options.pullRefresh.down.callback()");
+		//			});
+		//		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
 			webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
@@ -4894,7 +4993,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			pullRefreshApi = $.data[id];
 		}
 		if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-			pullRefreshApi._pulldownLoading(); //parent webview
+			pullRefreshApi.pulldownLoading(); //parent webview
 		} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
 			pullRefreshApi.pullupLoading();
 		}
@@ -5094,21 +5193,23 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 								this._dispatchEvent(); //此处不触发webkitTransitionEnd,所以手动dispatch
 								return;
 							}
-							if (ratio > 0 && ratio < 0.5 && direction === 'right') {
-								this.openPercentage(0);
-							} else if (ratio > 0.5 && direction === 'left') {
+							if (direction === 'right' && ratio >= 0 && (ratio >= 0.5 || detail.swipe)) { //右滑打开
 								this.openPercentage(100);
-							} else if (ratio < 0 && ratio > -0.5 && direction === 'left') {
+							} else if (direction === 'right' && ratio < 0 && (ratio > -0.5 || detail.swipe)) { //右滑关闭
 								this.openPercentage(0);
-							} else if (direction === 'right' && ratio < 0 && ratio > -0.5) {
+							} else if (direction === 'right' && ratio > 0 && ratio < 0.5) { //右滑还原关闭
 								this.openPercentage(0);
-							} else if (ratio < 0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio < 0.5) { //右滑还原打开
 								this.openPercentage(-100);
-							} else if (direction === 'right' && ratio >= 0 && (ratio >= 0.5 || detail.flick)) {
+							} else if (direction === 'left' && ratio <= 0 && (ratio <= -0.5 || detail.swipe)) { //左滑打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio > 0 && (ratio <= 0.5 || detail.swipe)) { //左滑关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio < 0 && ratio >= -0.5) { //左滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio > 0.5) { //左滑还原打开
 								this.openPercentage(100);
-							} else if (direction === 'left' && ratio <= 0 && (ratio <= -0.5 || detail.flick)) {
-								this.openPercentage(-100);
-							} else {
+							} else { //默认关闭
 								this.openPercentage(0);
 							}
 							if (ratio === 1 || ratio === -1) { //此处不触发webkitTransitionEnd,所以手动dispatch
@@ -5120,24 +5221,22 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 							} else {
 								ratio = (this.offCanvasLeftWidth && (x / this.offCanvasLeftWidth)) || 0;
 							}
-							if (ratio >= 0.5 && direction === 'left') {
-								this.openPercentage(0);
-							} else if (ratio > 0 && ratio <= 0.5 && direction === 'left') {
-								this.openPercentage(-100);
-							} else if (ratio >= 0.5 && direction === 'right') {
-								this.openPercentage(0);
-							} else if (ratio >= -0.5 && ratio < 0 && direction === 'left') {
+							if (direction === 'right' && ratio <= 0 && (ratio >= -0.5 || detail.swipe)) { //右滑打开
 								this.openPercentage(100);
-							} else if (ratio > 0 && ratio <= 0.5 && direction === 'right') {
-								this.openPercentage(-100);
-							} else if (ratio <= -0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio > 0 && (ratio >= 0.5 || detail.swipe)) { //右滑关闭
 								this.openPercentage(0);
-							} else if (ratio >= -0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio <= -0.5) { //右滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'right' && ratio > 0 && ratio <= 0.5) { //右滑还原打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio >= 0 && (ratio <= 0.5 || detail.swipe)) { //左滑打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio < 0 && (ratio <= -0.5 || detail.swipe)) { //左滑关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio >= 0.5) { //左滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio >= -0.5 && ratio < 0) { //左滑还原打开
 								this.openPercentage(100);
-							} else if (ratio <= -0.5 && direction === 'left') {
-								this.openPercentage(0);
-							} else if (ratio >= -0.5 && direction === 'left') {
-								this.openPercentage(-100);
 							} else {
 								this.openPercentage(0);
 							}
@@ -5207,7 +5306,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				}
 				this.classList[percentage !== 0 ? 'add' : 'remove'](CLASS_ACTIVE);
 			}
-
 		},
 		updateTranslate: function(x) {
 			if (x !== this.lastTranslateX) {
@@ -5644,7 +5742,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 	});
 
-	var togglePopover = function(popover, anchor) {
+	var togglePopover = function(popover, anchor, state) {
+		if ((state === 'show' && popover.classList.contains(CLASS_ACTIVE)) || (state === 'hide' && !popover.classList.contains(CLASS_ACTIVE))) {
+			return;
+		}
 		removeBackdropTimer && removeBackdropTimer.cancel(); //取消remove的timer
 		//remove一遍，以免来回快速切换，导致webkitTransitionEnd不触发，无法remove
 		popover.removeEventListener('webkitTransitionEnd', onPopoverShown);
@@ -5814,7 +5915,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		this.each(function() {
 			$.targets._popover = this;
 			if (args[0] === 'show' || args[0] === 'hide' || args[0] === 'toggle') {
-				togglePopover(this, args[1]);
+				togglePopover(this, args[1], args[0]);
 			}
 		});
 	};
@@ -5997,6 +6098,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		}
 	};
 	Toggle.prototype.start = function(e) {
+		this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '.2s';
 		this.classList.add(CLASS_DRAGGING);
 		if (this.toggleWidth === 0 || this.handleWidth === 0) { //当switch处于隐藏状态时，width为0，需要重新初始化
 			this.init();
@@ -6034,8 +6136,13 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			this.toggle();
 		}
 	};
-	Toggle.prototype.toggle = function() {
+	Toggle.prototype.toggle = function(animate) {
 		var classList = this.classList;
+		if (animate === false) {
+			this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '0s';
+		} else {
+			this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '.2s';
+		}
 		if (classList.contains(CLASS_ACTIVE)) {
 			classList.remove(CLASS_ACTIVE);
 			this.handle.style.webkitTransform = 'translate(0,0)';
@@ -6186,7 +6293,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	};
 	var setTranslate = function(element, x) {
 		if (element) {
-			element.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+			element.style.webkitTransform = 'translate(' + x + 'px,0)';
 		}
 	};
 
@@ -6757,6 +6864,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var CLASS_ICON_CLEAR = 'mui-icon-clear';
 	var CLASS_ICON_SPEECH = 'mui-icon-speech';
 	var CLASS_ICON_SEARCH = 'mui-icon-search';
+	var CLASS_ICON_PASSWORD = 'mui-icon-eye';
 	var CLASS_INPUT_ROW = 'mui-input-row';
 	var CLASS_PLACEHOLDER = 'mui-placeholder';
 	var CLASS_TOOLTIP = 'mui-tooltip';
@@ -6764,6 +6872,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var CLASS_FOCUSIN = 'mui-focusin';
 	var SELECTOR_ICON_CLOSE = '.' + CLASS_ICON_CLEAR;
 	var SELECTOR_ICON_SPEECH = '.' + CLASS_ICON_SPEECH;
+	var SELECTOR_ICON_PASSWORD = '.' + CLASS_ICON_PASSWORD;
 	var SELECTOR_PLACEHOLDER = '.' + CLASS_PLACEHOLDER;
 	var SELECTOR_TOOLTIP = '.' + CLASS_TOOLTIP;
 
@@ -6795,6 +6904,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			if (~this.options.actions.indexOf('search')) {
 				this.searchActionClass = CLASS_PLACEHOLDER;
 				this.searchActionSelector = SELECTOR_PLACEHOLDER;
+			}
+			if (~this.options.actions.indexOf('password')) {
+				this.passwordActionClass = CLASS_ICON + ' ' + CLASS_ICON_PASSWORD;
+				this.passwordActionSelector = SELECTOR_ICON_PASSWORD;
 			}
 		}
 		this.init();
@@ -6830,7 +6943,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					self.clearAction.addEventListener('tap', function(event) {
 						self.clearActionClick(event);
 					});
-
+				}
+				if (self.passwordActionClass) {
+					self.passwordAction = self.createAction(row, self.passwordActionClass, self.passwordActionSelector);
+					self.passwordAction.addEventListener('tap', function(event) {
+						self.passwordActionClick(event);
+					});
 				}
 			}
 		}
@@ -6918,6 +7036,15 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			this.element.setAttribute('placeholder', text);
 		}
 	};
+	Input.prototype.passwordActionClick = function(event) {
+		if (this.element.type === 'text') {
+			this.element.type = 'password';
+		} else {
+			this.element.type = 'text';
+		}
+		this.passwordAction.classList.toggle('mui-active');
+		event.preventDefault();
+	};
 	Input.prototype.clearActionClick = function(event) {
 		var self = this;
 		self.element.value = '';
@@ -6969,6 +7096,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				if (classList.contains('mui-input-speech')) {
 					actions.push('speech');
 				}
+				if (classList.contains('mui-input-password')) {
+					actions.push('password');
+				}
 				if (this.type === 'search' && row.classList.contains('mui-search')) {
 					actions.push('search');
 				}
@@ -7006,9 +7136,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var tapEventName = touchSupport ? 'tap' : 'click';
 	var changeEventName = 'change';
 	var holderClassName = 'mui-numbox';
-	var plusClassName = 'mui-numbox-btn-plus';
-	var minusClassName = 'mui-numbox-btn-minus';
-	var inputClassName = 'mui-numbox-input';
+	var plusClassName = 'mui-btn-numbox-plus' + "," + "mui-numbox-btn-plus";
+	var minusClassName = 'mui-btn-numbox-minus' + "," + "mui-numbox-btn-minus";
+	var inputClassName = 'mui-input-numbox' + "," + "mui-numbox-input";
 
 	var Numbox = $.Numbox = $.Class.extend({
 		/**
@@ -7099,7 +7229,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		var instanceArray = [];
 		//遍历选择的元素
 		this.each(function(i, element) {
-			if (element.numbox) return;
+			if (element.numbox) {
+				return;
+			}
 			if (options) {
 				element.numbox = new Numbox(element, options);
 			} else {

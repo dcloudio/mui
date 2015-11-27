@@ -16,3 +16,24 @@
 .#{$namespace}plus .#{$namespace}plus-hidden,.#{$namespace}wechat .#{$namespace}wechat-hidden{
     display: none!important;
 }
+
+
+//ios 状态栏
+.#{$namespace}plus.#{$namespace}statusbar.#{$namespace}statusbar-offset{
+    .#{$namespace}bar-nav {
+        padding-top: 20px;
+        height:64px;
+        &~.#{$namespace}content {
+            padding-top: 64px;
+            .#{$namespace}pull-top-pocket {
+                top: 64px;
+            }
+        }
+    }
+    .#{$namespace}bar-header-secondary {
+        top: 64px;
+        &~.#{$namespace}content {
+            padding-top: 94px;
+        }
+    }
+}

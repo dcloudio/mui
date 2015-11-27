@@ -18,6 +18,12 @@
 			fn: function(k) {
 				return Math.sqrt(1 - (--k * k));
 			}
+		},
+		outCirc: {
+			style: 'cubic-bezier(0.075, 0.82, 0.165, 1)'
+		},
+		outCubic: {
+			style: 'cubic-bezier(0.165, 0.84, 0.44, 1)'
 		}
 	}
 	var Scroll = $.Class.extend({
@@ -32,6 +38,7 @@
 				scrollX: false, //是否横向滚动
 				startX: 0, //初始化时滚动至x
 				startY: 0, //初始化时滚动至y
+
 				indicators: true, //是否显示滚动条
 				stopPropagation: false,
 				hardwareAccelerated: true,
@@ -41,11 +48,16 @@
 				},
 				momentum: true,
 
+				snapX: 0.5, //横向切换距离(以当前容器宽度为基准)
 				snap: false, //图片轮播，拖拽式选项卡
 
 				bounce: true, //是否启用回弹
-				bounceTime: 300, //回弹动画时间
-				bounceEasing: ease.circular.style, //回弹动画曲线
+				bounceTime: 500, //回弹动画时间
+				bounceEasing: ease.outCirc, //回弹动画曲线
+
+				scrollTime: 500,
+				scrollEasing: ease.outCubic, //轮播动画曲线
+
 
 				directionLockThreshold: 5,
 
@@ -122,7 +134,9 @@
 			var m = 0;
 			var n = -1;
 			var x = 0;
-			var cx = 0;
+			var leftX = 0;
+			var rightX = 0;
+			var snapX = 0;
 			for (var i = 0; i < length; i++) {
 				var snap = snaps[i];
 				var offsetLeft = snap.offsetLeft;
@@ -135,10 +149,13 @@
 					this.pages[m] = [];
 				}
 				x = this._getSnapX(offsetLeft);
-				cx = x - Math.round((offsetWidth) / 2);
+				snapX = Math.round((offsetWidth) * this.options.snapX);
+				leftX = x - snapX;
+				rightX = x - offsetWidth + snapX;
 				this.pages[m][n] = {
 					x: x,
-					cx: cx,
+					leftX: leftX,
+					rightX: rightX,
 					pageX: m,
 					element: snap
 				}
@@ -163,7 +180,7 @@
 					this.snaps[i].classList.remove(CLASS_ACTIVE);
 				}
 			}
-			this.scrollTo(this.currentPage.x, 0, this.options.bounceTime);
+			this.scrollTo(this.currentPage.x, 0, this.options.scrollTime);
 		},
 		_nearestSnap: function(x) {
 			if (!this.pages.length) {
@@ -174,15 +191,14 @@
 			}
 			var i = 0;
 			var length = this.pages.length;
-
 			if (x > 0) {
 				x = 0;
 			} else if (x < this.maxScrollX) {
 				x = this.maxScrollX;
 			}
-
 			for (; i < length; i++) {
-				if (x >= this.pages[i][0].cx) {
+				var nearestX = this.direction === 'left' ? this.pages[i][0].leftX : this.pages[i][0].rightX;
+				if (x >= nearestX) {
 					return this.pages[i][0];
 				}
 			}
@@ -398,7 +414,7 @@
 			if (!this.requestAnimationFrame) {
 				this._updateTranslate();
 			}
-
+			this.direction = detail.deltaX > 0 ? 'right' : 'left';
 			this.moved = true;
 			this.x = newX;
 			this.y = newY;
@@ -698,7 +714,7 @@
 			if (x == this.x && y == this.y) {
 				return false;
 			}
-			this.scrollTo(x, y, time, this.options.bounceEasing);
+			this.scrollTo(x, y, time, this.options.scrollEasing);
 
 			return true;
 		},
@@ -723,7 +739,7 @@
 
 		},
 		scrollToBottom: function(time, easing) {
-			time = time || this.options.bounceTime;
+			time = time || this.options.scrollTime;
 			this.scrollTo(0, this.maxScrollY, time, easing);
 		},
 		gotoPage: function(index) {

@@ -11,7 +11,8 @@
 	width: 120px;
 	vertical-align: middle;
 
-	[class*=mui-numbox-btn] {
+	//基于.mui-btn扩展，故命名修改为mui-btn-numbox
+	[class*=numbox-btn],[class*=btn-numbox] {
 		width: 40px;
 		height: 100%;
 		position: absolute;
@@ -34,18 +35,18 @@
 		}
 	}
 
-	.#{$namespace}numbox-btn-plus {
+	.#{$namespace}numbox-btn-plus,.#{$namespace}btn-numbox-plus {
 		right: 0px;
 		border-top-right-radius:3px;
 		border-bottom-right-radius:3px;
 	}
-	.#{$namespace}numbox-btn-minus {
+	.#{$namespace}numbox-btn-minus,.#{$namespace}btn-numbox-minus {
 		left: 0px;
 		border-top-left-radius:3px;
 		border-bottom-left-radius:3px;
 	}
 
-	.#{$namespace}numbox-input {
+	.#{$namespace}numbox-input,.#{$namespace}input-numbox {
 		width: 100% !important;
 		height: 100%;
 		text-align: center;

@@ -28,9 +28,10 @@
 				scrollY: true,
 				scrollX: false,
 				indicators: true,
-				deceleration:0.003,
+				deceleration: 0.003,
 				down: {
 					height: 50,
+					contentinit: '下拉可以刷新',
 					contentdown: '下拉可以刷新',
 					contentover: '释放立即刷新',
 					contentrefresh: '正在刷新...'
@@ -38,6 +39,7 @@
 				up: {
 					height: 50,
 					auto: false,
+					contentinit: '上拉显示更多',
 					contentdown: '上拉显示更多',
 					contentrefresh: '正在加载...',
 					contentnomore: '没有更多数据了',
@@ -91,7 +93,7 @@
 		_createPocket: function(clazz, options, iconClass) {
 			var pocket = document.createElement('div');
 			pocket.className = clazz;
-			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentrefresh).replace('{icon}', iconClass);
+			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
 			return pocket;
 		},
 		_resetPullDownLoading: function() {

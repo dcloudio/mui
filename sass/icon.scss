@@ -18,7 +18,9 @@
     line-height: 1;
     text-decoration: none;
     -webkit-font-smoothing: antialiased;
-
+    &.#{$namespace}active{
+        color:$primary-color;
+    }
     &.#{$namespace}right{
         &:before{
             float:right;
@@ -149,6 +151,7 @@
 .#{$namespace}icon-loop:before { content: "\e565"; }
 // .#{$namespace}icon-loopstrong:before { content: "\e566"; }
 .#{$namespace}icon-paperclip:before { content: "\e567"; }
+.#{$namespace}icon-eye:before { content: "\e568"; }
 
 // 箭头
 .#{$namespace}icon-arrowup:before { content: "\e580"; }

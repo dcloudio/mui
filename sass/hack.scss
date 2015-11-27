@@ -7,6 +7,12 @@ textarea{
     }
 }	
 }
+.#{$namespace}android.#{$namespace}android-4-2,.#{$namespace}android.#{$namespace}android-4-3 {
+input,
+textarea{
+    -webkit-user-select: text;
+}   
+}
 //解决ios list 过多(height>20000px) crash的bug
 .#{$namespace}ios .#{$namespace}table-view-cell {
     -webkit-transform-style: preserve-3d;

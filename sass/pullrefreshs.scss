@@ -70,7 +70,7 @@
 //vertical-align: middle;
 //}
 .#{$namespace}pull-loading{
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     -webkit-transition-duration: 400ms;
     transition-duration: 400ms;
     -webkit-transition:-webkit-transform 0.4s;

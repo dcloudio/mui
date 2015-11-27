@@ -72,6 +72,7 @@
 		}
 	};
 	Toggle.prototype.start = function(e) {
+		this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '.2s';
 		this.classList.add(CLASS_DRAGGING);
 		if (this.toggleWidth === 0 || this.handleWidth === 0) { //当switch处于隐藏状态时，width为0，需要重新初始化
 			this.init();
@@ -109,8 +110,13 @@
 			this.toggle();
 		}
 	};
-	Toggle.prototype.toggle = function() {
+	Toggle.prototype.toggle = function(animate) {
 		var classList = this.classList;
+		if (animate === false) {
+			this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '0s';
+		} else {
+			this.handle.style.webkitTransitionDuration = this.element.style.webkitTransitionDuration = '.2s';
+		}
 		if (classList.contains(CLASS_ACTIVE)) {
 			classList.remove(CLASS_ACTIVE);
 			this.handle.style.webkitTransform = 'translate(0,0)';

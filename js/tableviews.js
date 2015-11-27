@@ -96,7 +96,7 @@
 	};
 	var setTranslate = function(element, x) {
 		if (element) {
-			element.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+			element.style.webkitTransform = 'translate(' + x + 'px,0)';
 		}
 	};
 

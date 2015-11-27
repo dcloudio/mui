@@ -130,7 +130,7 @@
 		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
 			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
-		var mime = settings.accepts[dataType];
+		var mime = settings.accepts[dataType.toLowerCase()];
 		var headers = {};
 		var setHeader = function(name, value) {
 			headers[name.toLowerCase()] = [name, value];

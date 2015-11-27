@@ -191,21 +191,23 @@
 								this._dispatchEvent(); //此处不触发webkitTransitionEnd,所以手动dispatch
 								return;
 							}
-							if (ratio > 0 && ratio < 0.5 && direction === 'right') {
-								this.openPercentage(0);
-							} else if (ratio > 0.5 && direction === 'left') {
+							if (direction === 'right' && ratio >= 0 && (ratio >= 0.5 || detail.swipe)) { //右滑打开
 								this.openPercentage(100);
-							} else if (ratio < 0 && ratio > -0.5 && direction === 'left') {
+							} else if (direction === 'right' && ratio < 0 && (ratio > -0.5 || detail.swipe)) { //右滑关闭
 								this.openPercentage(0);
-							} else if (direction === 'right' && ratio < 0 && ratio > -0.5) {
+							} else if (direction === 'right' && ratio > 0 && ratio < 0.5) { //右滑还原关闭
 								this.openPercentage(0);
-							} else if (ratio < 0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio < 0.5) { //右滑还原打开
 								this.openPercentage(-100);
-							} else if (direction === 'right' && ratio >= 0 && (ratio >= 0.5 || detail.flick)) {
+							} else if (direction === 'left' && ratio <= 0 && (ratio <= -0.5 || detail.swipe)) { //左滑打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio > 0 && (ratio <= 0.5 || detail.swipe)) { //左滑关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio < 0 && ratio >= -0.5) { //左滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio > 0.5) { //左滑还原打开
 								this.openPercentage(100);
-							} else if (direction === 'left' && ratio <= 0 && (ratio <= -0.5 || detail.flick)) {
-								this.openPercentage(-100);
-							} else {
+							} else { //默认关闭
 								this.openPercentage(0);
 							}
 							if (ratio === 1 || ratio === -1) { //此处不触发webkitTransitionEnd,所以手动dispatch
@@ -217,24 +219,22 @@
 							} else {
 								ratio = (this.offCanvasLeftWidth && (x / this.offCanvasLeftWidth)) || 0;
 							}
-							if (ratio >= 0.5 && direction === 'left') {
-								this.openPercentage(0);
-							} else if (ratio > 0 && ratio <= 0.5 && direction === 'left') {
-								this.openPercentage(-100);
-							} else if (ratio >= 0.5 && direction === 'right') {
-								this.openPercentage(0);
-							} else if (ratio >= -0.5 && ratio < 0 && direction === 'left') {
+							if (direction === 'right' && ratio <= 0 && (ratio >= -0.5 || detail.swipe)) { //右滑打开
 								this.openPercentage(100);
-							} else if (ratio > 0 && ratio <= 0.5 && direction === 'right') {
-								this.openPercentage(-100);
-							} else if (ratio <= -0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio > 0 && (ratio >= 0.5 || detail.swipe)) { //右滑关闭
 								this.openPercentage(0);
-							} else if (ratio >= -0.5 && direction === 'right') {
+							} else if (direction === 'right' && ratio <= -0.5) { //右滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'right' && ratio > 0 && ratio <= 0.5) { //右滑还原打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio >= 0 && (ratio <= 0.5 || detail.swipe)) { //左滑打开
+								this.openPercentage(-100);
+							} else if (direction === 'left' && ratio < 0 && (ratio <= -0.5 || detail.swipe)) { //左滑关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio >= 0.5) { //左滑还原关闭
+								this.openPercentage(0);
+							} else if (direction === 'left' && ratio >= -0.5 && ratio < 0) { //左滑还原打开
 								this.openPercentage(100);
-							} else if (ratio <= -0.5 && direction === 'left') {
-								this.openPercentage(0);
-							} else if (ratio >= -0.5 && direction === 'left') {
-								this.openPercentage(-100);
 							} else {
 								this.openPercentage(0);
 							}
@@ -304,7 +304,6 @@
 				}
 				this.classList[percentage !== 0 ? 'add' : 'remove'](CLASS_ACTIVE);
 			}
-
 		},
 		updateTranslate: function(x) {
 			if (x !== this.lastTranslateX) {

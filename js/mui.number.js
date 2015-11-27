@@ -11,9 +11,9 @@
 	var tapEventName = touchSupport ? 'tap' : 'click';
 	var changeEventName = 'change';
 	var holderClassName = $.className('numbox');
-	var plusClassName = $.className('numbox-btn-plus');
-	var minusClassName = $.className('numbox-btn-minus');
-	var inputClassName = $.className('numbox-input');
+	var plusClassName = $.className('btn-numbox-plus') + "," + $.className("numbox-btn-plus");
+	var minusClassName = $.className('btn-numbox-minus') + "," + $.className("numbox-btn-minus");
+	var inputClassName = $.className('input-numbox') + "," + $.className("numbox-input");
 
 	var Numbox = $.Numbox = $.Class.extend({
 		/**
@@ -104,7 +104,9 @@
 		var instanceArray = [];
 		//遍历选择的元素
 		this.each(function(i, element) {
-			if (element.numbox) return;
+			if (element.numbox) {
+				return;
+			}
 			if (options) {
 				element.numbox = new Numbox(element, options);
 			} else {

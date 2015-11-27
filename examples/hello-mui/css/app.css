@@ -3,9 +3,9 @@
  * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
  * 
  * */
-.mui-android header.mui-bar{
+.mui-plus.mui-android header.mui-bar{
 	display: none;
 }
-.mui-android .mui-bar-nav~.mui-content{
+.mui-plus.mui-android .mui-bar-nav~.mui-content{
 	padding: 0;
 }
