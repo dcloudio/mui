@@ -5013,6 +5013,8 @@ select:focus
     position: absolute;
     right: 0;
     left: 0;
+
+    -webkit-overflow-scrolling: touch;
 }
 .mui-iframe-wrapper iframe
 {

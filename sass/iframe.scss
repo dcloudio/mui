@@ -1,4 +1,5 @@
 .#{$namespace}iframe-wrapper{
+    -webkit-overflow-scrolling:touch;
     position: absolute;
     left: 0;
     right: 0;

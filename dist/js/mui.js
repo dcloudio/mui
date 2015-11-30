@@ -1902,6 +1902,27 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		iframe.name = iframe.id;
 		wrapper.appendChild(iframe);
 		document.body.appendChild(wrapper);
+		//目前仅处理微信
+		$.os.wechat && handleScroll(wrapper, iframe);
+	};
+
+	function handleScroll(wrapper, iframe) {
+		var key = 'MUI_SCROLL_POSITION_' + document.location.href + '_' + iframe.src;
+		var scrollTop = (parseFloat(localStorage.getItem(key)) || 0);
+		if (scrollTop) {
+			(function(y) {
+				iframe.onload = function() {
+					window.scrollTo(0, y);
+				};
+			})(scrollTop);
+		}
+		setInterval(function() {
+			var _scrollTop = window.scrollY;
+			if (scrollTop !== _scrollTop) {
+				localStorage.setItem(key, _scrollTop + '');
+				scrollTop = _scrollTop;
+			}
+		}, 100);
 	};
 	$(function() {
 		var classList = document.body.classList;
