@@ -26,7 +26,7 @@
 				scrollY: false,
 				scrollX: true,
 				indicators: false,
-				bounceTime: 200,
+				scrollTime: 1000,
 				startX: false,
 				slideTime: 0, //滑动动画时间
 				snap: SELECTOR_SLIDER_ITEM
@@ -301,7 +301,7 @@
 		},
 		_gotoItem: function(slideNumber, time) {
 			this.currentPage = this._getPage(slideNumber, true); //此处传true。可保证程序切换时，动画与人手操作一致(第一张，最后一张的切换动画)
-			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
@@ -322,17 +322,17 @@
 				this.x = this.maxScrollX;
 			}
 			this.currentPage = this._nearestSnap(this.x);
-			this.scrollTo(this.currentPage.x, 0, time);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.bounceTime : time);
+			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.scrollTime : time);
 		},
 		nextItem: function() {
-			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber + 1, this.options.scrollTime);
 		},
 		prevItem: function() {
-			this._gotoItem(this.slideNumber - 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber - 1, this.options.scrollTime);
 		},
 		getSlideNumber: function() {
 			return this.slideNumber || 0;

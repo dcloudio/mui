@@ -401,7 +401,7 @@
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		//TODO 应该判断当前target是不是在targets.popover内部，而不是非要相等
-		if (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal) {
+		if (($.os.android || $.os.ios) && (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal)) {
 			e.preventDefault();
 		}
 	}, true);

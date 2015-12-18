@@ -21,8 +21,8 @@
         height:100%;
         z-index: z("default");
         &.#{$namespace}transitioning{
-            -webkit-transition: -webkit-transform 200ms ease;
-            transition: transform 200ms ease;    
+            -webkit-transition: -webkit-transform 350ms ;
+            transition: transform 350ms cubic-bezier(0.165, 0.84, 0.44, 1);    
         }
         .#{$namespace}off-canvas-left {
             @include transform(translate3d(-100%, 0, 0));
@@ -35,8 +35,8 @@
          overflow:hidden;
          height:100%;
          .#{$namespace}off-canvas-backdrop{
-             -webkit-backface-visibility: hidden;
-            transition: background 200ms ease;
+//           -webkit-backface-visibility: hidden;
+            transition: background 350ms cubic-bezier(0.165, 0.84, 0.44, 1);
             box-shadow: -4px 0 4px rgba(0, 0, 0, 0.5), 4px 0 4px rgba(0, 0, 0, 0.5);
             display: block;
             position: absolute;
@@ -63,7 +63,7 @@
 
 
 .#{$namespace}off-canvas-left, .#{$namespace}off-canvas-right {
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     width: 70%;
     min-height:100%;
     top: 0;
@@ -75,8 +75,8 @@
     z-index: -1;
     visibility: hidden;
     &.#{$namespace}transitioning{
-        -webkit-transition: -webkit-transform 200ms ease;
-        transition: transform 200ms ease;    
+        -webkit-transition: -webkit-transform 350ms cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: transform 350ms cubic-bezier(0.165, 0.84, 0.44, 1);    
     }
 }
 .#{$namespace}off-canvas-left {
@@ -94,8 +94,8 @@
         @include transform(scale(0.8));
         opacity: 0.1;
         &.#{$namespace}transitioning{
-            -webkit-transition: -webkit-transform 200ms ease, opacity 200ms ease;
-            transition: transform 200ms ease, opacity 200ms ease;
+            -webkit-transition: -webkit-transform 350ms cubic-bezier(0.165, 0.84, 0.44, 1), opacity 350ms cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: transform 350ms cubic-bezier(0.165, 0.84, 0.44, 1), opacity 350ms cubic-bezier(0.165, 0.84, 0.44, 1);
         }
     }
     >.#{$namespace}off-canvas-left{

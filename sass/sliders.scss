@@ -127,7 +127,7 @@
     }
 }
 .#{$namespace}slider-progress-bar{
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     @include transform(translateZ(0));
     height:2px;
     z-index:z("default");

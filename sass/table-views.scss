@@ -178,12 +178,12 @@
     >.#{$namespace}slider-handle,>.#{$namespace}slider-left .#{$namespace}btn,>.#{$namespace}slider-right .#{$namespace}btn{
         -webkit-transition: -webkit-transform 0ms ease;
         transition: transform 0ms ease;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
+//      -webkit-backface-visibility: hidden;
+//      backface-visibility: hidden;
         }
      >.#{$namespace}slider-left,>.#{$namespace}slider-right{
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
+//      -webkit-backface-visibility: hidden;
+//      backface-visibility: hidden;
         position: absolute;
         top: 0;
         height: 100%;
