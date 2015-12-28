@@ -214,9 +214,9 @@
 
 			this.scroller[action]('webkitTransitionEnd', this);
 
-			this.wrapper[action]('touchstart', this);
-			this.wrapper[action]('touchcancel', this);
-			this.wrapper[action]('touchend', this);
+			this.wrapper[action]($.EVENT_START, this);
+			this.wrapper[action]($.EVENT_CANCEL, this);
+			this.wrapper[action]($.EVENT_END, this);
 			this.wrapper[action]('drag', this);
 			this.wrapper[action]('dragend', this);
 			this.wrapper[action]('flick', this);
@@ -229,11 +229,8 @@
 				mui(segmentedControl)[detach ? 'off' : 'on']('click', 'a', $.preventDefault);
 			}
 
-			this.wrapper[action]('scrollend', this._handleIndicatorScrollend.bind(this));
-
-			this.wrapper[action]('scrollstart', this._handleIndicatorScrollstart.bind(this));
-
-			this.wrapper[action]('refresh', this._handleIndicatorRefresh.bind(this));
+			this.wrapper[action]('scrollstart', this);
+			this.wrapper[action]('refresh', this);
 		},
 		_handleIndicatorScrollend: function() {
 			this.indicators.map(function(indicator) {
@@ -257,7 +254,7 @@
 			}
 
 			switch (e.type) {
-				case 'touchstart':
+				case $.EVENT_START:
 					this._start(e);
 					break;
 				case 'drag':
@@ -269,15 +266,19 @@
 					this.options.stopPropagation && e.stopPropagation();
 					this._flick(e);
 					break;
-				case 'touchcancel':
-				case 'touchend':
+				case $.EVENT_CANCEL:
+				case $.EVENT_END:
 					this._end(e);
 					break;
 				case 'webkitTransitionEnd':
 					this.transitionTimer && this.transitionTimer.cancel();
 					this._transitionEnd(e);
 					break;
+				case 'scrollstart':
+					this._handleIndicatorScrollstart(e);
+					break;
 				case 'scrollend':
+					this._handleIndicatorScrollend(e);
 					this._scrollend(e);
 					e.stopPropagation();
 					break;
@@ -287,6 +288,9 @@
 					break;
 				case 'swiperight':
 					e.stopPropagation();
+					break;
+				case 'refresh':
+					this._handleIndicatorRefresh(e);
 					break;
 
 			}
@@ -480,7 +484,7 @@
 		},
 		_end: function(e) {
 			this.needReset = false;
-			if ((!this.moved && this.needReset) || e.type === 'touchcancel') {
+			if ((!this.moved && this.needReset) || e.type === $.EVENT_CANCEL) {
 				this.resetPosition();
 			}
 		},
@@ -745,7 +749,7 @@
 		gotoPage: function(index) {
 			this._gotoPage(index);
 		},
-		destory: function() {
+		destroy: function() {
 			this._initEvent(true); //detach
 			delete $.data[this.wrapper.getAttribute('data-scroll')];
 			this.wrapper.setAttribute('data-scroll', '');

@@ -153,17 +153,23 @@
 			var self = this;
 			self._super(detach);
 			var action = detach ? 'removeEventListener' : 'addEventListener';
-			self.wrapper[action]('swiperight', $.stopPropagation);
-			self.wrapper[action]('scrollend', self._triggerSlide.bind(this));
-
-			self.wrapper[action]('slide', self._handleSlide.bind(this));
-
-			self.wrapper[action]($.eventName('shown', 'tab'), self._handleTabShow.bind(this));
-			//indicator
-			var indicator = self.wrapper.querySelector(SELECTOR_SLIDER_INDICATOR);
-			if (indicator) {
-				indicator[action]('tap', self._handleIndicatorTap.bind(this));
+			self.wrapper[action]('slide', this);
+			self.wrapper[action]($.eventName('shown', 'tab'), this);
+		},
+		handleEvent: function(e) {
+			this._super(e);
+			switch (e.type) {
+				case 'slide':
+					this._handleSlide(e);
+					break;
+				case $.eventName('shown', 'tab'):
+					this._handleTabShow(e);
+					break;
 			}
+		},
+		_scrollend: function(e) {
+			this._super(e);
+			this._triggerSlide(e);
 		},
 		_drag: function(e) {
 			this._super(e);
@@ -341,12 +347,12 @@
 			if (options) {
 				$.extend(this.options, options);
 				this._super();
-				this.nextItem();
+				this._initTimer();
 			} else {
 				this._super();
 			}
 		},
-		destory: function() {
+		destroy: function() {
 			this._initEvent(true); //detach
 			delete $.data[this.wrapper.getAttribute('data-slider')];
 			this.wrapper.setAttribute('data-slider', '');

@@ -51,13 +51,13 @@
 	};
 	var onPopoverShown = function(e) {
 		this.removeEventListener('webkitTransitionEnd', onPopoverShown);
-		this.addEventListener('touchmove', $.preventDefault);
+		this.addEventListener($.EVENT_MOVE, $.preventDefault);
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
 		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
-		this.removeEventListener('touchmove', $.preventDefault);
+		this.removeEventListener($.EVENT_MOVE, $.preventDefault);
 		fixedPopoverScroll(false);
 		$.trigger(this, 'hidden', this);
 	};
@@ -65,7 +65,7 @@
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_BACKDROP);
-		element.addEventListener('touchmove', $.preventDefault);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('tap', function(e) {
 			var popover = $.targets._popover;
 			if (popover) {
@@ -240,7 +240,7 @@
 	$.createMask = function(callback) {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_BACKDROP);
-		element.addEventListener('touchmove', $.preventDefault);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('tap', function() {
 			mask.close();
 		});

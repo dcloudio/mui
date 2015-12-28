@@ -11,9 +11,9 @@
 	var tapEventName = touchSupport ? 'tap' : 'click';
 	var changeEventName = 'change';
 	var holderClassName = $.className('numbox');
-	var plusClassName = $.className('btn-numbox-plus') + "," + $.className("numbox-btn-plus");
-	var minusClassName = $.className('btn-numbox-minus') + "," + $.className("numbox-btn-minus");
-	var inputClassName = $.className('input-numbox') + "," + $.className("numbox-input");
+	var plusClassSelector = $.classSelector('.btn-numbox-plus,.numbox-btn-plus');
+	var minusClassSelector = $.classSelector('.btn-numbox-minus,.numbox-btn-minus');
+	var inputClassSelector = $.classSelector('.input-numbox,.numbox-input');
 
 	var Numbox = $.Numbox = $.Class.extend({
 		/**
@@ -28,9 +28,9 @@
 			options = options || {};
 			options.step = parseInt(options.step || 1);
 			self.options = options;
-			self.input = $.qsa('.' + inputClassName, self.holder)[0];
-			self.plus = $.qsa('.' + plusClassName, self.holder)[0];
-			self.minus = $.qsa('.' + minusClassName, self.holder)[0];
+			self.input = $.qsa(inputClassSelector, self.holder)[0];
+			self.plus = $.qsa(plusClassSelector, self.holder)[0];
+			self.minus = $.qsa(minusClassSelector, self.holder)[0];
 			self.checkValue();
 			self.initEvent();
 		},

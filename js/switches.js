@@ -44,11 +44,11 @@
 		this.handleX = this.toggleWidth - this.handleWidth - 3;
 	};
 	Toggle.prototype.initEvent = function() {
-		this.element.addEventListener('touchstart', this);
+		this.element.addEventListener($.EVENT_START, this);
 		this.element.addEventListener('drag', this);
 		this.element.addEventListener('swiperight', this);
-		this.element.addEventListener('touchend', this);
-		this.element.addEventListener('touchcancel', this);
+		this.element.addEventListener($.EVENT_END, this);
+		this.element.addEventListener($.EVENT_CANCEL, this);
 
 	};
 	Toggle.prototype.handleEvent = function(e) {
@@ -56,7 +56,7 @@
 			return;
 		}
 		switch (e.type) {
-			case 'touchstart':
+			case $.EVENT_START:
 				this.start(e);
 				break;
 			case 'drag':
@@ -65,8 +65,8 @@
 			case 'swiperight':
 				this.swiperight();
 				break;
-			case 'touchend':
-			case 'touchcancel':
+			case $.EVENT_END:
+			case $.EVENT_CANCEL:
 				this.end(e);
 				break;
 		}

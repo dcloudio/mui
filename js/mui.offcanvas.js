@@ -95,7 +95,7 @@
 		},
 		handleEvent: function(e) {
 			switch (e.type) {
-				case 'touchstart':
+				case $.EVENT_START:
 					e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 					break;
 				case 'webkitTransitionEnd': //有个bug需要处理，需要考虑假设没有触发webkitTransitionEnd的情况
@@ -275,7 +275,7 @@
 				});
 			}
 			if (this.classList.contains($.className('draggable'))) {
-				this.wrapper.addEventListener('touchstart', this); //临时处理
+				this.wrapper.addEventListener($.EVENT_START, this); //临时处理
 				this.wrapper.addEventListener('drag', this);
 				this.wrapper.addEventListener('dragend', this);
 			}
