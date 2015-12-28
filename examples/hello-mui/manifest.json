@@ -905,6 +905,15 @@
 				"refer": [],
 				"priority": 0
 			},
+			"examples/beecloud.html": {
+				"resources": [
+					"js/mui.min.js",
+					"js/beecloud.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
 			"examples/tableviews.html": {
 				"resources": [
 					"js/mui.min.js",
