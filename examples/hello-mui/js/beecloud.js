@@ -19,15 +19,13 @@ beecloud.genBillNo = function() {
 	return billno;
 };
 
-function plusReady() {
+mui.plusReady(function () {
 	plus.payment.getChannels(function(s) {
 		channels = s;
 	}, function(e) {
 		alert("获取支付渠道信权限失败:" + e.message);
 	});
-}
-
-document.addEventListener("plusready", plusReady, false);
+});
 
 function checkServices(pc) {
 	if (!pc.serviceReady) {
