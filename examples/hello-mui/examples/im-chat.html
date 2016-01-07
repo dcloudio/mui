@@ -670,12 +670,25 @@
 						ui.footer.style.height = (ui.h.offsetHeight + footerPadding) + 'px';
 						ui.content.style.paddingBottom = ui.footer.style.height;
 					});
+					var focus = false;
 					ui.boxMsgText.addEventListener('tap', function(event) {
 						ui.boxMsgText.focus();
 						setTimeout(function() {
 							ui.boxMsgText.focus();
 						}, 0);
+						focus = true;
+						setTimeout(function () {
+							focus = false;
+						},1000);
+						event.detail.gesture.preventDefault();
 					}, false);
+					//点击消息列表，关闭键盘
+					ui.areaMsgList.addEventListener('click',function (event) {
+						if(!focus){
+							ui.boxMsgText.blur();
+						}
+					})
+					
 				});
 			}(mui, document));
 		</script>
