@@ -5,11 +5,6 @@
  * @returns {undefined}
  */
 (function($, window) {
-	$.EVENT_START = 'touchstart';
-	$.EVENT_MOVE = 'touchmove';
-	$.EVENT_END = 'touchend';
-	$.EVENT_CANCEL = 'touchcancel';
-	$.EVENT_CLICK = 'click';
 	$.gestures = {
 		session: {}
 	};
@@ -316,8 +311,14 @@
 		touch.direction = direction;
 	};
 	var targetIds = {};
+	var convertTouches = function(touches) {
+		for (var i = 0; i < touches.length; i++) {
+			!touches['identifier'] && (touches['identifier'] = 0);
+		}
+		return touches;
+	};
 	var getTouches = function(event, touch) {
-		var allTouches = $.slice.call(event.touches || event);
+		var allTouches = convertTouches($.slice.call(event.touches || [event]));
 
 		var type = event.type;
 
@@ -334,7 +335,7 @@
 			var i = 0;
 			var targetTouches = [];
 			var changedTargetTouches = [];
-			var changedTouches = $.slice.call(event.changedTouches || event);
+			var changedTouches = convertTouches($.slice.call(event.changedTouches || [event]));
 
 			touch.target = event.target;
 			var sessionTarget = $.gestures.session.target || event.target;
@@ -368,7 +369,6 @@
 		targetTouches = uniqueArray(targetTouches.concat(changedTargetTouches), 'identifier', true);
 		var touchesLength = targetTouches.length;
 		var changedTouchesLength = changedTargetTouches.length;
-
 		if (type === $.EVENT_START && touchesLength - changedTouchesLength === 0) { //first
 			touch.isFirst = true;
 			$.gestures.touch = $.gestures.session = {
@@ -393,6 +393,9 @@
 		calTouchData(touch);
 		detect(event, touch);
 		$.gestures.session.prevTouch = touch;
+		if (event.type === $.EVENT_END && !$.isTouchable) {
+			$.gestures.touch = $.gestures.session = {};
+		}
 	};
 	window.addEventListener($.EVENT_START, handleTouchEvent);
 	window.addEventListener($.EVENT_MOVE, handleTouchEvent);
@@ -401,7 +404,7 @@
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		//TODO 应该判断当前target是不是在targets.popover内部，而不是非要相等
-		if (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal) {
+		if (($.os.android || $.os.ios) && (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal)) {
 			e.preventDefault();
 		}
 	}, true);

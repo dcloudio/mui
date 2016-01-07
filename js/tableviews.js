@@ -96,11 +96,11 @@
 	};
 	var setTranslate = function(element, x) {
 		if (element) {
-			element.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
+			element.style.webkitTransform = 'translate(' + x + 'px,0)';
 		}
 	};
 
-	window.addEventListener('touchstart', function(event) {
+	window.addEventListener($.EVENT_START, function(event) {
 		if (cell) {
 			toggleActive(false);
 		}
@@ -154,7 +154,7 @@
 			}
 		}
 	});
-	window.addEventListener('touchmove', function(event) {
+	window.addEventListener($.EVENT_MOVE, function(event) {
 		toggleActive(false);
 	});
 
@@ -411,14 +411,14 @@
 		}
 	};
 
-	window.addEventListener('touchend', function(event) { //使用touchend来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
+	window.addEventListener($.EVENT_END, function(event) { //使用touchend来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
 		if (!cell) {
 			return;
 		}
 		toggleActive(false);
 		sliderHandle && toggleEvents(cell, true);
 	});
-	window.addEventListener('touchcancel', function(event) { //使用touchcancel来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
+	window.addEventListener($.EVENT_CANCEL, function(event) { //使用touchcancel来取消高亮，避免一次点击既不触发tap，doubletap，longtap的事件
 		if (!cell) {
 			return;
 		}

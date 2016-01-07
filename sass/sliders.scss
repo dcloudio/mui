@@ -8,6 +8,7 @@
     overflow: hidden;
     width: 100%;
     position:relative;
+    z-index:z("default");
     .#{$namespace}segmented-control.#{$namespace}segmented-control-inverted{
         .#{$namespace}control-item {
             &.#{$namespace}active {
@@ -127,7 +128,7 @@
     }
 }
 .#{$namespace}slider-progress-bar{
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     @include transform(translateZ(0));
     height:2px;
     z-index:z("default");

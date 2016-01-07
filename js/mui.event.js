@@ -3,6 +3,19 @@
  * @param {Object} $
  */
 (function($) {
+	if ('ontouchstart' in window) {
+		$.isTouchable = true;
+		$.EVENT_START = 'touchstart';
+		$.EVENT_MOVE = 'touchmove';
+		$.EVENT_END = 'touchend';
+	} else {
+		$.isTouchable = false;
+		$.EVENT_START = 'mousedown';
+		$.EVENT_MOVE = 'mousemove';
+		$.EVENT_END = 'mouseup';
+	}
+	$.EVENT_CANCEL = 'touchcancel';
+	$.EVENT_CLICK = 'click';
 
 	var _mid = 1;
 	var delegates = {};
@@ -101,7 +114,7 @@
 	};
 	var findDelegateFn = function(element, event) {
 		var delegateCallbacks = delegateFns[mid(element)];
-		var result = false;
+		var result = [];
 		if (delegateCallbacks) {
 			result = [];
 			if (event) {

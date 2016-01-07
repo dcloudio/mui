@@ -11,7 +11,6 @@
 		<style type="text/css">
 			#list {
 				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
-				
 				margin-top: -1px;
 			}
 		</style>
@@ -35,7 +34,7 @@
 								H5模式actionsheet
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" href="examples/actionsheet-plus.html">
 								原生模式actionsheet
 							</a>
@@ -43,7 +42,7 @@
 					</ul>
 				</li>
 				
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell mui-plus-visible">
 					<a class="mui-navigate-right" href="examples/ajax.html">
 						ajax（网络请求）
 					</a>
@@ -96,7 +95,7 @@
 								H5模式
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" href="examples/date.html">
 								native模式
 							</a>
@@ -229,12 +228,12 @@
 						off canvas（侧滑导航）
 					</a>
 					<ul class="mui-table-view mui-table-view-chevron">
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-right-plus-main.html">
 								webview模式右滑菜单
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" open-type="common" href="examples/offcanvas-drag-left-plus-main.html">
 								webview模式左滑菜单
 							</a>
@@ -311,7 +310,7 @@
 								底部选项卡-div模式
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" open-type="common" href="examples/tab-webview-main.html">
 								底部选项卡-webview模式
 							</a>
@@ -351,7 +350,7 @@
 				</li>
 				
 				<li class="mui-table-view-divider">模板</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell mui-plus-visible">
 					<a class="mui-navigate-right" open-type="common" href="examples/ad.html">
 						advertisement（广告模板）
 					</a>
@@ -361,21 +360,21 @@
 						chart（EChart 图表）
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" open-type="common" href="examples/clouddb_wilddog.html">
-						cloud DB（云端数据库）
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell mui-plus-visible">
 					<a class="mui-navigate-right" href="examples/im-chat.html">
 						chat（聊天窗口） 
 					</a>
 				</li>
-				<!-- <li id='feedback' class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/feedback.html">
-						feedback（问题反馈） 
+				<li class="mui-table-view-cell mui-plus-visible">
+					<a class="mui-navigate-right" open-type="common" href="examples/clouddb_wilddog.html">
+						cloud DB（云端数据库）
 					</a>
-				</li> -->
+				</li>
+				<li class="mui-table-view-cell mui-plus-visible">
+					<a class="mui-navigate-right" open-type="common" href="examples/beecloud.html">
+						cloud Pay（云端支付）
+					</a>
+				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" open-type="common" href="examples/imageviewer.html">
 						image viewer（图片预览）
@@ -567,7 +566,7 @@
 						}
 					});
 				} else if (id && ~id.indexOf('.html')) {
-					if (!~id.indexOf('popovers.html')&&mui.os.ios) {
+					if (!mui.os.plus || (!~id.indexOf('popovers.html')&&mui.os.ios)) {
 						mui.openWindow({
 							id: id,
 							url: this.href,

@@ -134,15 +134,22 @@
 			}
 		},
 		pulldownLoading: function() { //该方法是子页面调用的
+			$.plusReady(function() {
+				plus.webview.currentWebview().setBounce({
+					offset: {
+						top: this.options.down.height + "px"
+					}
+				});
+			}.bind(this));
 			var callback = $.options.pullRefresh.down.callback;
 			callback && callback.call(this);
 		},
-		_pulldownLoading: function() { //该方法是子页面调用的
-			var self = this;
-			$.plusReady(function() {
-				plus.webview.getWebviewById(self.options.webviewId).evalJS("mui&&mui.options.pullRefresh.down&&mui.options.pullRefresh.down.callback()");
-			});
-		},
+		//		_pulldownLoading: function() { //该方法是子页面调用的
+		//			var self = this;
+		//			$.plusReady(function() {
+		//				plus.webview.getWebviewById(self.options.webviewId).evalJS("mui&&mui.options.pullRefresh.down&&mui.options.pullRefresh.down.callback()");
+		//			});
+		//		},
 		endPulldownToRefresh: function() { //该方法是子页面调用的
 			var webview = plus.webview.currentWebview();
 			webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
@@ -255,7 +262,7 @@
 			pullRefreshApi = $.data[id];
 		}
 		if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-			pullRefreshApi._pulldownLoading(); //parent webview
+			pullRefreshApi.pulldownLoading(); //parent webview
 		} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
 			pullRefreshApi.pullupLoading();
 		}

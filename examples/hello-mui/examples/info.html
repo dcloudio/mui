@@ -11,25 +11,38 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
 		<style>
 			p {
 				text-indent: 22px;
 				padding: 5px 8px;
 			}
-			html,body,.mui-content {
+			
+			html,
+			body,
+			.mui-content {
 				background-color: #fff;
 			}
+			
 			h4 {
 				margin-left: 5px;
 			}
+			
+			.mui-plus header.mui-bar {
+				display: none;
+			}
+			
+			.mui-plus .mui-bar-nav~.mui-content {
+				padding: 0;
+			}
 		</style>
 	</head>
+
 	<body>
-		<!--<header class="mui-bar mui-bar-nav">
+		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">关于</h1>
-		</header>-->
+		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<h4 style="margin-top:10px;">mui</h4>
@@ -48,7 +61,7 @@
 				</p>
 				<p>更多详细介绍，请到<a href="http://dcloudio.github.io/mui">mui官网</a>查看；</p>
 				<h4>版本介绍</h4>
-				<p>当前版本为2.4.0，可到<a href="https://github.com/dcloudio/mui">Github</a>上获取最新版本。</p>
+				<p>当前版本为2.8.0，可到<a href="https://github.com/dcloudio/mui">Github</a>上获取最新版本。</p>
 				<h4>License</h4>
 				<p>
 					mui遵循MIT License，源码已提交至Github，<a href="https://github.com/dcloudio/mui">点击查看</a>;
@@ -58,7 +71,7 @@
 		<script src="../js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			mui.init({
-				swipeBack:true //启用右滑关闭功能
+				swipeBack: true //启用右滑关闭功能
 			});
 			//处理点击事件，需要打开原生浏览器
 			mui('body').on('tap', 'a', function(e) {
@@ -73,4 +86,5 @@
 			});
 		</script>
 	</body>
+
 </html>

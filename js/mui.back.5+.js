@@ -10,6 +10,7 @@
 			name: 'mui',
 			index: 5,
 			handle: function() {
+				//后续重新设计此处，将back放到各个空间内部实现
 				//popover
 				if ($.targets._popover && $.targets._popover.classList.contains($.className('active'))) {
 					$($.targets._popover).popover('hide');
@@ -26,6 +27,8 @@
 					previewImage.close();
 					return true;
 				}
+				//popup
+				return $.closePopup();
 			}
 		});
 	}
@@ -73,7 +76,7 @@
 	$.menu = function() {
 		var menu = document.querySelector($.classSelector('.action-menu'));
 		if (menu) {
-			$.trigger(menu, 'touchstart'); //临时处理menu无touchstart的话，找不到当前targets的问题
+			$.trigger(menu, $.EVENT_START); //临时处理menu无touchstart的话，找不到当前targets的问题
 			$.trigger(menu, 'tap');
 		} else { //执行父窗口的menu
 			if (window.plus) {

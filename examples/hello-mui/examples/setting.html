@@ -159,7 +159,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/feedback-page.css" />
 	</head>
 
-	<body>
+	<body class="mui-fullscreen">
 		<!--页面主结构开始-->
 		<div id="app" class="mui-views">
 			<div class="mui-view">
@@ -213,7 +213,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
 							<li class="mui-table-view-cell">
-								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V2.4.0</i></a>
+								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V2.8.0</i></a>
 							</li>
 						</ul>
 						<ul class="mui-table-view">
@@ -236,32 +236,34 @@
 			</div>
 			<div class="mui-page-content">
 				<div class="mui-scroll-wrapper">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a id="head" class="mui-navigate-right">头像
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">
+								<a id="head" class="mui-navigate-right">头像
 								<span class="mui-pull-right head">
 									<img class="head-img mui-action-preview" id="head-img1" src=""/>
 								</span>
 							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a>姓名<span class="mui-pull-right">Hbuilder</span></a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a>HBuilder账号<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
-						</li>
-					</ul>
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a>QQ号<span class="mui-pull-right">88888888</span></a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a>手机号<span class="mui-pull-right">18601234567</span></a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a>邮箱地址<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
-						</li>
-					</ul>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>姓名<span class="mui-pull-right">Hbuilder</span></a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>HBuilder账号<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
+							</li>
+						</ul>
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">
+								<a>QQ号<span class="mui-pull-right">88888888</span></a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>手机号<span class="mui-pull-right">18601234567</span></a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>邮箱地址<span class="mui-pull-right">hbuilder@dcloud.io</span></a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -459,13 +461,13 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
+							<li class="mui-table-view-cell mui-plus-visible">
 								<a id="rate" class="mui-navigate-right">评分鼓励</a>
 							</li>
-							<li class="mui-table-view-cell">
+							<li class="mui-table-view-cell mui-plus-visible">
 								<a id="welcome" class="mui-navigate-right">欢迎页</a>
 							</li>
-							<li class="mui-table-view-cell">
+							<li class="mui-table-view-cell mui-plus-visible">
 								<a id="share" class="mui-navigate-right">分享推荐</a>
 							</li>
 							<li class="mui-table-view-cell">
@@ -474,7 +476,7 @@
 							<li class="mui-table-view-cell">
 								<a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
 							</li>
-							<li class="mui-table-view-cell">
+							<li class="mui-table-view-cell mui-plus-visible">
 								<a id="update" class="mui-navigate-right">检查更新</a>
 							</li>
 						</ul>
@@ -518,14 +520,15 @@
 	<script src="../js/feedback-page.js"></script>
 	<script>
 		mui.init();
-		 //初始化单页view
+		//初始化单页view
 		var viewApi = mui('#app').view({
 			defaultPage: '#setting'
 		});
-		 //初始化单页的区域滚动
+		//初始化单页的区域滚动
 		mui('.mui-scroll-wrapper').scroll();
-		 //分享操作
+		//分享操作
 		var shares = {};
+		
 		mui.plusReady(function() {
 			plus.share.getServices(function(s) {
 				if (s && s.length > 0) {
@@ -537,12 +540,16 @@
 			}, function() {
 				console.log("获取分享服务列表失败");
 			});
+		});
+		
+		setTimeout(function () {
 			defaultImg();
 			setTimeout(function() {
 				initImgPreview();
-			}, 500);
-		});
-		 //分享链接点击事件
+			}, 300);
+		},500);
+		
+		//分享链接点击事件
 		document.getElementById("share").addEventListener('tap', function() {
 			var ids = [{
 					id: "weixin",
@@ -594,25 +601,25 @@
 		});
 
 		function shareMessage(share, ex) {
-				var msg = {
-					extra: {
-						scene: ex
-					}
-				};
-				msg.href = "http://www.dcloud.io/hellomui/";
-				msg.title = "最接近原生APP体验的高性能前端框架";
-				msg.content = "我正在体验HelloMUI，果然很流畅，基本看不出和原生App的差距";
-				if (~share.id.indexOf('weibo')) {
-					msg.content += "；体验地址：http://www.dcloud.io/hellomui/";
+			var msg = {
+				extra: {
+					scene: ex
 				}
-				msg.thumbs = ["_www/images/logo.png"];
-				share.send(msg, function() {
-					console.log("分享到\"" + share.description + "\"成功！ ");
-				}, function(e) {
-					console.log("分享到\"" + share.description + "\"失败: " + e.code + " - " + e.message);
-				});
+			};
+			msg.href = "http://www.dcloud.io/hellomui/";
+			msg.title = "最接近原生APP体验的高性能前端框架";
+			msg.content = "我正在体验HelloMUI，果然很流畅，基本看不出和原生App的差距";
+			if (~share.id.indexOf('weibo')) {
+				msg.content += "；体验地址：http://www.dcloud.io/hellomui/";
 			}
-			//去评分
+			msg.thumbs = ["_www/images/logo.png"];
+			share.send(msg, function() {
+				console.log("分享到\"" + share.description + "\"成功！ ");
+			}, function(e) {
+				console.log("分享到\"" + share.description + "\"失败: " + e.code + " - " + e.message);
+			});
+		}
+		//去评分
 		document.getElementById("rate").addEventListener('tap', function() {
 			if (mui.os.ios) {
 				location.href = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
@@ -624,16 +631,21 @@
 				}, "com.tencent.android.qqdownloader");
 			}
 		});
-		 //客服电话
+		//客服电话
 		document.getElementById("tel").addEventListener('tap', function() {
-			plus.device.dial("114");
+			if(mui.os.plus){
+				plus.device.dial("114");
+			}else{
+				location.href = 'tel:114';
+			}
+			
 		});
-		 //		//意见反馈
-		 //		document.getElementById("quest").addEventListener('tap', function() {
-		 //			
-		 //		});
-		 //		
-		 //检查更新
+		//		//意见反馈
+		//		document.getElementById("quest").addEventListener('tap', function() {
+		//			
+		//		});
+		//		
+		//检查更新
 		document.getElementById("update").addEventListener('tap', function() {
 			var server = "http://www.dcloud.io/check/update"; //获取升级描述文件服务器地址
 			mui.getJSON(server, {
@@ -678,31 +690,34 @@
 				//				console.log(e.detail.page.id + ' back');
 			});
 		})(mui);
-		 //更换头像
+		//更换头像
 		mui(".mui-table-view-cell").on("tap", "#head", function(e) {
-			var a = [{
-				title: "拍照"
-			}, {
-				title: "从手机相册选择"
-			}];
-			plus.nativeUI.actionSheet({
-				title: "修改头像",
-				cancel: "取消",
-				buttons: a
-			}, function(b) {
-				switch (b.index) {
-					case 0:
-						break;
-					case 1:
-						getImage();
-						break;
-					case 2:
-						galleryImg();
-						break;
-					default:
-						break
-				}
-			})
+			if(mui.os.plus){
+				var a = [{
+					title: "拍照"
+				}, {
+					title: "从手机相册选择"
+				}];
+				plus.nativeUI.actionSheet({
+					title: "修改头像",
+					cancel: "取消",
+					buttons: a
+				}, function(b) {
+					switch (b.index) {
+						case 0:
+							break;
+						case 1:
+							getImage();
+							break;
+						case 2:
+							galleryImg();
+							break;
+						default:
+							break
+					}
+				})	
+			}
+			
 		});
 
 		function getImage() {
@@ -774,14 +789,20 @@
 		};
 
 		function defaultImg() {
-			plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
-				var s = entry.fullPath + "?version=" + new Date().getTime();;
-				document.getElementById("head-img").src = s;
-				document.getElementById("head-img1").src = s;
-			}, function(e) {
+			if(mui.os.plus){
+				plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
+					var s = entry.fullPath + "?version=" + new Date().getTime();;
+					document.getElementById("head-img").src = s;
+					document.getElementById("head-img1").src = s;
+				}, function(e) {
+					document.getElementById("head-img").src = '../images/logo.png';
+					document.getElementById("head-img1").src = '../images/logo.png';
+				})
+			}else{
 				document.getElementById("head-img").src = '../images/logo.png';
 				document.getElementById("head-img1").src = '../images/logo.png';
-			})
+			}
+			
 		}
 		document.getElementById("head-img1").addEventListener('tap', function(e) {
 			e.stopPropagation();

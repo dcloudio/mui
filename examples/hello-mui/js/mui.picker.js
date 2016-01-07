@@ -22,8 +22,12 @@
 
 	var platform = navigator.platform.toLowerCase();
 	var userAgent = navigator.userAgent.toLowerCase();
-	var isIos = (userAgent.indexOf('iphone') > -1 || userAgent.indexOf('ipad') > -1) &&
-		(platform.indexOf('iphone') > -1 || platform.indexOf('ipad') > -1);
+	var isIos = (userAgent.indexOf('iphone') > -1 ||
+			userAgent.indexOf('ipad') > -1 ||
+			userAgent.indexOf('ipod') > -1) &&
+		(platform.indexOf('iphone') > -1 ||
+			platform.indexOf('ipad') > -1 ||
+			platform.indexOf('ipod') > -1);
 	//alert(isIos);
 
 	var Picker = $.Picker = function(holder, options) {

@@ -19,6 +19,7 @@
 				break;
 			case $.EVENT_END:
 			case $.EVENT_CANCEL:
+				touch.flick = false;
 				if (session.flickStart && options.flickMaxTime > (now - flickStartTime) && touch.distance > options.flickMinDistince) {
 					touch.flick = true;
 					touch.flickTime = now - flickStartTime;

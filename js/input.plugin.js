@@ -10,6 +10,7 @@
 	var CLASS_ICON_CLEAR = $.className('icon-clear');
 	var CLASS_ICON_SPEECH = $.className('icon-speech');
 	var CLASS_ICON_SEARCH = $.className('icon-search');
+	var CLASS_ICON_PASSWORD = $.className('icon-eye');
 	var CLASS_INPUT_ROW = $.className('input-row');
 	var CLASS_PLACEHOLDER = $.className('placeholder');
 	var CLASS_TOOLTIP = $.className('tooltip');
@@ -17,6 +18,7 @@
 	var CLASS_FOCUSIN = $.className('focusin');
 	var SELECTOR_ICON_CLOSE = '.' + CLASS_ICON_CLEAR;
 	var SELECTOR_ICON_SPEECH = '.' + CLASS_ICON_SPEECH;
+	var SELECTOR_ICON_PASSWORD = '.' + CLASS_ICON_PASSWORD;
 	var SELECTOR_PLACEHOLDER = '.' + CLASS_PLACEHOLDER;
 	var SELECTOR_TOOLTIP = '.' + CLASS_TOOLTIP;
 
@@ -48,6 +50,10 @@
 			if (~this.options.actions.indexOf('search')) {
 				this.searchActionClass = CLASS_PLACEHOLDER;
 				this.searchActionSelector = SELECTOR_PLACEHOLDER;
+			}
+			if (~this.options.actions.indexOf('password')) {
+				this.passwordActionClass = CLASS_ICON + ' ' + CLASS_ICON_PASSWORD;
+				this.passwordActionSelector = SELECTOR_ICON_PASSWORD;
 			}
 		}
 		this.init();
@@ -83,7 +89,12 @@
 					self.clearAction.addEventListener('tap', function(event) {
 						self.clearActionClick(event);
 					});
-
+				}
+				if (self.passwordActionClass) {
+					self.passwordAction = self.createAction(row, self.passwordActionClass, self.passwordActionSelector);
+					self.passwordAction.addEventListener('tap', function(event) {
+						self.passwordActionClick(event);
+					});
 				}
 			}
 		}
@@ -131,7 +142,7 @@
 			};
 			element.addEventListener('input', showTip);
 			element.addEventListener('tap', showTip);
-			element.addEventListener('touchmove', function(e) {
+			element.addEventListener($.EVENT_MOVE, function(e) {
 				e.stopPropagation();
 			});
 		} else {
@@ -170,6 +181,15 @@
 		} else {
 			this.element.setAttribute('placeholder', text);
 		}
+	};
+	Input.prototype.passwordActionClick = function(event) {
+		if (this.element.type === 'text') {
+			this.element.type = 'password';
+		} else {
+			this.element.type = 'text';
+		}
+		this.passwordAction.classList.toggle($.className('active'));
+		event.preventDefault();
 	};
 	Input.prototype.clearActionClick = function(event) {
 		var self = this;
@@ -221,6 +241,9 @@
 				}
 				if (classList.contains($.className('input-speech'))) {
 					actions.push('speech');
+				}
+				if (classList.contains($.className('input-password'))) {
+					actions.push('password');
 				}
 				if (this.type === 'search' && row.classList.contains($.className('search'))) {
 					actions.push('search');

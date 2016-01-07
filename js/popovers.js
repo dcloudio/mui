@@ -51,13 +51,13 @@
 	};
 	var onPopoverShown = function(e) {
 		this.removeEventListener('webkitTransitionEnd', onPopoverShown);
-		this.addEventListener('touchmove', $.preventDefault);
+		this.addEventListener($.EVENT_MOVE, $.preventDefault);
 		$.trigger(this, 'shown', this);
 	}
 	var onPopoverHidden = function(e) {
 		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
-		this.removeEventListener('touchmove', $.preventDefault);
+		this.removeEventListener($.EVENT_MOVE, $.preventDefault);
 		fixedPopoverScroll(false);
 		$.trigger(this, 'hidden', this);
 	};
@@ -65,7 +65,7 @@
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_BACKDROP);
-		element.addEventListener('touchmove', $.preventDefault);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('tap', function(e) {
 			var popover = $.targets._popover;
 			if (popover) {
@@ -106,7 +106,10 @@
 
 	});
 
-	var togglePopover = function(popover, anchor) {
+	var togglePopover = function(popover, anchor, state) {
+		if ((state === 'show' && popover.classList.contains(CLASS_ACTIVE)) || (state === 'hide' && !popover.classList.contains(CLASS_ACTIVE))) {
+			return;
+		}
 		removeBackdropTimer && removeBackdropTimer.cancel(); //取消remove的timer
 		//remove一遍，以免来回快速切换，导致webkitTransitionEnd不触发，无法remove
 		popover.removeEventListener('webkitTransitionEnd', onPopoverShown);
@@ -237,7 +240,7 @@
 	$.createMask = function(callback) {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_BACKDROP);
-		element.addEventListener('touchmove', $.preventDefault);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('tap', function() {
 			mask.close();
 		});
@@ -276,7 +279,7 @@
 		this.each(function() {
 			$.targets._popover = this;
 			if (args[0] === 'show' || args[0] === 'hide' || args[0] === 'toggle') {
-				togglePopover(this, args[1]);
+				togglePopover(this, args[1], args[0]);
 			}
 		});
 	};

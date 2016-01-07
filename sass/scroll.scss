@@ -1,8 +1,8 @@
 
 .#{$namespace}scroll-wrapper {
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     position: absolute;
-    z-index: z("default");
+    z-index: 2;
     top: 0px;
     bottom: 0px;
     left: 0;
@@ -10,7 +10,7 @@
     overflow: hidden;
 }
 .#{$namespace}scroll {
-    -webkit-backface-visibility: hidden;
+//  -webkit-backface-visibility: hidden;
     position: absolute;
     z-index: z("default");
     width: 100%;

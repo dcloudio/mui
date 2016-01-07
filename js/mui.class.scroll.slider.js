@@ -26,8 +26,9 @@
 				scrollY: false,
 				scrollX: true,
 				indicators: false,
-				bounceTime: 200,
+				scrollTime: 1000,
 				startX: false,
+				slideTime: 0, //滑动动画时间
 				snap: SELECTOR_SLIDER_ITEM
 			}, options));
 			if (this.options.startX) {
@@ -88,7 +89,14 @@
 			}
 			var detail = e.detail;
 			detail.slideNumber = detail.slideNumber || 0;
-			var items = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var temps = self.scroller.querySelectorAll(SELECTOR_SLIDER_ITEM);
+			var items = [];
+			for (var i = 0, len = temps.length; i < len; i++) {
+				var item = temps[i];
+				if (item.parentNode === self.scroller) {
+					items.push(item);
+				}
+			}
 			var _slideNumber = detail.slideNumber;
 			if (self.loop) {
 				_slideNumber += 1;
@@ -131,7 +139,7 @@
 		},
 		_handleTabShow: function(e) {
 			var self = this;
-			self.gotoItem((e.detail.tabNumber || 0), self.options.bounceTime);
+			self.gotoItem((e.detail.tabNumber || 0), self.options.slideTime);
 		},
 		_handleIndicatorTap: function(event) {
 			var self = this;
@@ -145,17 +153,23 @@
 			var self = this;
 			self._super(detach);
 			var action = detach ? 'removeEventListener' : 'addEventListener';
-			self.wrapper[action]('swiperight', $.stopPropagation);
-			self.wrapper[action]('scrollend', self._triggerSlide.bind(this));
-
-			self.wrapper[action]('slide', self._handleSlide.bind(this));
-
-			self.wrapper[action]($.eventName('shown', 'tab'), self._handleTabShow.bind(this));
-			//indicator
-			var indicator = self.wrapper.querySelector(SELECTOR_SLIDER_INDICATOR);
-			if (indicator) {
-				indicator[action]('tap', self._handleIndicatorTap.bind(this));
+			self.wrapper[action]('slide', this);
+			self.wrapper[action]($.eventName('shown', 'tab'), this);
+		},
+		handleEvent: function(e) {
+			this._super(e);
+			switch (e.type) {
+				case 'slide':
+					this._handleSlide(e);
+					break;
+				case $.eventName('shown', 'tab'):
+					this._handleTabShow(e);
+					break;
 			}
+		},
+		_scrollend: function(e) {
+			this._super(e);
+			this._triggerSlide(e);
 		},
 		_drag: function(e) {
 			this._super(e);
@@ -293,7 +307,7 @@
 		},
 		_gotoItem: function(slideNumber, time) {
 			this.currentPage = this._getPage(slideNumber, true); //此处传true。可保证程序切换时，动画与人手操作一致(第一张，最后一张的切换动画)
-			this.scrollTo(this.currentPage.x, 0, time, this.options.bounceEasing);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			if (time === 0) {
 				$.trigger(this.wrapper, 'scrollend', this);
 			}
@@ -314,17 +328,17 @@
 				this.x = this.maxScrollX;
 			}
 			this.currentPage = this._nearestSnap(this.x);
-			this.scrollTo(this.currentPage.x, 0, time);
+			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			return true;
 		},
 		gotoItem: function(slideNumber, time) {
-			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.bounceTime : time);
+			this._gotoItem(slideNumber, typeof time === 'undefined' ? this.options.scrollTime : time);
 		},
 		nextItem: function() {
-			this._gotoItem(this.slideNumber + 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber + 1, this.options.scrollTime);
 		},
 		prevItem: function() {
-			this._gotoItem(this.slideNumber - 1, this.options.bounceTime);
+			this._gotoItem(this.slideNumber - 1, this.options.scrollTime);
 		},
 		getSlideNumber: function() {
 			return this.slideNumber || 0;
@@ -333,12 +347,12 @@
 			if (options) {
 				$.extend(this.options, options);
 				this._super();
-				this.nextItem();
+				this._initTimer();
 			} else {
 				this._super();
 			}
 		},
-		destory: function() {
+		destroy: function() {
 			this._initEvent(true); //detach
 			delete $.data[this.wrapper.getAttribute('data-slider')];
 			this.wrapper.setAttribute('data-slider', '');

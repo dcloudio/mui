@@ -130,7 +130,7 @@
 		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
 			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
-		var mime = settings.accepts[dataType];
+		var mime = settings.accepts[dataType && dataType.toLowerCase()];
 		var headers = {};
 		var setHeader = function(name, value) {
 			headers[name.toLowerCase()] = [name, value];
@@ -162,7 +162,8 @@
 				xhr.onreadystatechange = $.noop;
 				clearTimeout(abortTimeout);
 				var result, error = false;
-				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && protocol === 'file:')) {
+				var isLocal = protocol === 'file:';
+				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && isLocal && xhr.responseText)) {
 					dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
 					result = xhr.responseText;
 					try {
@@ -184,7 +185,13 @@
 						ajaxSuccess(result, xhr, settings);
 					}
 				} else {
-					ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings);
+					var status = xhr.status ? 'error' : 'abort';
+					var statusText = xhr.statusText || null;
+					if (isLocal) {
+						status = 'error';
+						statusText = '404';
+					}
+					ajaxError(statusText, status, xhr, settings);
 				}
 			}
 		};

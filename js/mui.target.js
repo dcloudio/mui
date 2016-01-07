@@ -27,7 +27,7 @@
 
 		return $.targetHandles;
 	};
-	window.addEventListener('touchstart', function(event) {
+	window.addEventListener($.EVENT_START, function(event) {
 		var target = event.target;
 		var founds = {};
 		for (; target && target !== document; target = target.parentNode) {
@@ -53,6 +53,26 @@
 				break;
 			}
 		}
-
+	});
+	window.addEventListener('click', function(event) { //解决touch与click的target不一致的问题(比如链接边缘点击时，touch的target为html，而click的target为A)
+		var target = event.target;
+		var isFound = false;
+		for (; target && target !== document; target = target.parentNode) {
+			if (target.tagName === 'A') {
+				$.each($.targetHandles, function(index, targetHandle) {
+					var name = targetHandle.name;
+					if (targetHandle.hasOwnProperty('handle')) {
+						if (targetHandle.handle(event, target)) {
+							isFound = true;
+							event.preventDefault();
+							return false;
+						}
+					}
+				});
+				if (isFound) {
+					break;
+				}
+			}
+		}
 	});
 })(mui, window, document);

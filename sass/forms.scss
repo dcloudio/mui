@@ -141,7 +141,7 @@ select {
 .#{$namespace}input-row label {
     float: left;
     width: 35%;
-    padding: 10px 15px;
+    padding: 11px 15px;
     font-family: $font-family-default;
     line-height: 1.1; // Put the text on the baseline.
 }
@@ -190,7 +190,7 @@ select {
     .#{$namespace}inline{
         padding: 8px 0;
     }
-    .#{$namespace}input-clear ~ .#{$namespace}icon-clear,.#{$namespace}input-speech ~ .#{$namespace}icon-speech{
+    .#{$namespace}input-clear ~ .#{$namespace}icon-clear,.#{$namespace}input-speech ~ .#{$namespace}icon-speech,.#{$namespace}input-password ~ .#{$namespace}icon-eye{
         position:absolute;
         right: 0px;
         top: 10px;
@@ -200,6 +200,9 @@ select {
         text-align: center;
         color:#999;
         z-index: z("default");
+        &.#{$namespace}active{
+            color:$primary-color;
+        }
     }
     .#{$namespace}input-speech ~ .#{$namespace}icon-speech{
         top:8px;

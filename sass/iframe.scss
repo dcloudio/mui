@@ -1,0 +1,12 @@
+.#{$namespace}iframe-wrapper{
+    -webkit-overflow-scrolling:touch;
+    position: absolute;
+    left: 0;
+    right: 0;
+    iframe{
+      border: 0;
+      width: 100%;
+      height: 100%;  
+    }
+}
+

@@ -11,9 +11,9 @@
 	var tapEventName = touchSupport ? 'tap' : 'click';
 	var changeEventName = 'change';
 	var holderClassName = $.className('numbox');
-	var plusClassName = $.className('numbox-btn-plus');
-	var minusClassName = $.className('numbox-btn-minus');
-	var inputClassName = $.className('numbox-input');
+	var plusClassSelector = $.classSelector('.btn-numbox-plus,.numbox-btn-plus');
+	var minusClassSelector = $.classSelector('.btn-numbox-minus,.numbox-btn-minus');
+	var inputClassSelector = $.classSelector('.input-numbox,.numbox-input');
 
 	var Numbox = $.Numbox = $.Class.extend({
 		/**
@@ -28,9 +28,9 @@
 			options = options || {};
 			options.step = parseInt(options.step || 1);
 			self.options = options;
-			self.input = $.qsa('.' + inputClassName, self.holder)[0];
-			self.plus = $.qsa('.' + plusClassName, self.holder)[0];
-			self.minus = $.qsa('.' + minusClassName, self.holder)[0];
+			self.input = $.qsa(inputClassSelector, self.holder)[0];
+			self.plus = $.qsa(plusClassSelector, self.holder)[0];
+			self.minus = $.qsa(minusClassSelector, self.holder)[0];
 			self.checkValue();
 			self.initEvent();
 		},
@@ -49,10 +49,14 @@
 				self.input.value = val.toString();
 				$.trigger(self.input, changeEventName, null);
 			});
-//			self.input.addEventListener(changeEventName, function(event) {
-//				self.checkValue();
-//				$.trigger(self, changeEventName, self.getValue());
-//			});
+			self.input.addEventListener(changeEventName, function(event) {
+				self.checkValue();
+				var val = parseInt(self.input.value);
+				//触发顶层容器
+				$.trigger(self.holder, changeEventName, {
+					value: val
+				});
+			});
 		},
 		/**
 		 * 获取当前值
@@ -100,7 +104,9 @@
 		var instanceArray = [];
 		//遍历选择的元素
 		this.each(function(i, element) {
-			if (element.numbox) return;
+			if (element.numbox) {
+				return;
+			}
 			if (options) {
 				element.numbox = new Numbox(element, options);
 			} else {

@@ -47,14 +47,15 @@ module.exports = function(grunt) {
 					'js/mui.js',
 					'js/mui.detect.js',
 					'js/mui.detect.5+.js',
+					'js/mui.event.js',
 					'js/mui.target.js',
 					'js/mui.fixed.js',
+					'js/mui.fixed.bind.js',
 					'js/mui.fixed.classlist.js',
 					'js/mui.fixed.animation.js',
 					'js/mui.fixed.fastclick.js',
 					'js/mui.fixed.keyboard.js',
 					'js/mui.namespace.js',
-					'js/mui.event.js',
 					'js/mui.gestures.js',
 					'js/mui.gestures.flick.js',
 					'js/mui.gestures.swipe.js',
@@ -89,6 +90,7 @@ module.exports = function(grunt) {
 					'js/mui.dialog.confirm.js',
 					'js/mui.dialog.prompt.js',
 					'js/mui.dialog.toast.js',
+					'js/mui.popup.js',
 					'js/input.plugin.js',
 					'js/mui.number.js'
 
@@ -150,7 +152,7 @@ module.exports = function(grunt) {
 		uglify: {
 			options: {
 				banner: '<%= banner %>',
-				compress: true,
+				compress: {},
 				mangle: true,
 				preserveComments: false
 			},

@@ -2,6 +2,9 @@
  * fastclick(only for radio,checkbox)
  */
 (function($, window, name) {
+	if (!$.os.android && !$.os.ios) { //目前仅识别android和ios
+		return;
+	}
 	if (window.FastClick) {
 		return;
 	}

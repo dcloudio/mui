@@ -64,9 +64,10 @@
 			}
 			if (this.pullUpTips) {
 				this.element.addEventListener('dragup', this);
-				window.addEventListener('scroll', this);
 				if (this.isInScroll) {
 					this.element.addEventListener('scrollbottom', this);
+				} else {
+					window.addEventListener('scroll', this);
 				}
 			}
 		},

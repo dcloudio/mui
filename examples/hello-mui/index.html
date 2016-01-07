@@ -13,7 +13,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-icon mui-icon-bars mui-pull-left"></a>
+			<a class="mui-icon mui-icon-bars mui-pull-left mui-plus-visible"></a>
 			<a id="info" class="mui-icon mui-icon-info-filled mui-pull-right" style="color: #999;"></a>
 			<h1 class="mui-title">Hello mui</h1>
 		</header>
@@ -119,7 +119,7 @@
 					}, 300);
 				}
 			};
-			 //点击左上角侧滑图标，打开侧滑菜单；
+			//点击左上角侧滑图标，打开侧滑菜单；
 			document.querySelector('.mui-icon-bars').addEventListener('tap', function(e) {
 				if (showMenu) {
 					closeMenu();
@@ -127,18 +127,18 @@
 					openMenu();
 				}
 			});
-			 //敲击顶部导航，内容区回到顶部
+			//敲击顶部导航，内容区回到顶部
 			document.querySelector('header').addEventListener('doubletap', function() {
 				main.children()[0].evalJS('mui.scrollTo(0, 100)');
 			});
-			 //主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
+			//主界面向右滑动，若菜单未显示，则显示菜单；否则不做任何操作
 			window.addEventListener("swiperight", openMenu);
-			 //主界面向左滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
+			//主界面向左滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
 			window.addEventListener("swipeleft", closeMenu);
-			 //侧滑菜单触发关闭菜单命令
+			//侧滑菜单触发关闭菜单命令
 			window.addEventListener("menu:close", closeMenu);
 			window.addEventListener("menu:open", openMenu);
-			 //重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
+			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
 			mui.menu = function() {
 					if (showMenu) {
 						closeMenu();
@@ -150,6 +150,17 @@
 			var subWebview = null,
 				template = null;
 			document.getElementById('info').addEventListener('tap', function() {
+				if (!mui.os.plus) {
+					mui.openWindow({
+						url: "examples/info.html",
+						id: "info",
+						show: {
+							aniShow: 'zoom-fade-out',
+							duration: 300
+						}
+					});
+					return;
+				}
 				if (subWebview == null) {
 					//获取共用父窗体
 					template = plus.webview.getWebviewById("default-main");
@@ -164,9 +175,17 @@
 					});
 					template.show('slide-in-right', 150);
 				}
+				//				mui.openWindow({
+				//					url:"examples/info.html",
+				//					id:"info",
+				//					show:{
+				//						aniShow:'zoom-fade-out',
+				//						duration:300
+				//					}
+				//				});
 			});
-			 //首页返回键处理
-			 //处理逻辑：1秒内，连续两次按返回键，则退出应用；
+			//首页返回键处理
+			//处理逻辑：1秒内，连续两次按返回键，则退出应用；
 			var first = null;
 			mui.back = function() {
 				if (showMenu) {
