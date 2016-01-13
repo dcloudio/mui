@@ -1,0 +1,153 @@
+.#{$namespace}popup-backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: z("backdrop");
+    background: rgba(0,0,0,.4);
+    opacity: 0;
+    @include transition-duration(400ms);
+     &.#{$namespace}active {
+        opacity: 1;
+    }
+}
+.#{$namespace}popup{
+    width: 270px;
+    position: absolute;
+    z-index: z("max");
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    border-radius: 13px;
+    overflow: hidden;
+    opacity: 0;
+    @include transform(translate3d(-50%,-50%,0) scale(1.185));
+    -webkit-transition-property: -webkit-transform,opacity;
+    transition-property: transform,opacity;
+    color: #000;
+    display: none;
+    &.#{$namespace}popup-in{
+        opacity: 1;
+        @include transition-duration(400ms);
+        @include transform(translate3d(-50%,-50%,0) scale(1));
+        display: block;
+    }
+    &.#{$namespace}popup-out{
+        opacity: 0;
+        //z-index:max-1
+        @include transition-duration(400ms);
+        @include transform(translate3d(-50%,-50%,0) scale(1));
+    }
+}
+.#{$namespace}popup-inner {
+    padding: 15px;
+    border-radius: 13px 13px 0 0;
+    position: relative;
+    background: rgba(255,255,255,.95);
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: auto;
+        top: auto;
+        height: 1px;
+        width: 100%;
+        background-color: rgba(0,0,0,.2);
+        display: block;
+        z-index: 15;
+        -webkit-transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        -webkit-transform: scaleY(.5);
+        transform: scaleY(.5);
+    }
+}
+.#{$namespace}popup-title {
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+}
+.#{$namespace}popup-title+.#{$namespace}popup-text {
+    margin-top: 5px;
+    font-size: 14px;
+}
+.#{$namespace}popup-buttons {
+    height: 44px;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center
+}
+
+.#{$namespace}popup-button {
+    width: 100%;
+    padding: 0 5px;
+    height: 44px;
+    font-size: 17px;
+    line-height: 44px;
+    text-align: center;
+    color: #007aff;
+    display: block;
+    position: relative;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+    box-sizing: border-box;
+    -webkit-box-flex: 1;
+    background: rgba(255,255,255,.95);
+    &:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        left: auto;
+        bottom: auto;
+        width: 1px;
+        height: 100%;
+        background-color: rgba(0,0,0,.2);
+        display: block;
+        z-index: 15;
+        -webkit-transform-origin: 100% 50%;
+        transform-origin: 100% 50%;
+        -webkit-transform: scaleX(.5);
+        transform: scaleX(.5)
+    }
+    &:first-child {
+        border-radius: 0 0 0 13px;
+        &:last-child {
+            border-radius: 0 0 13px 13px
+        }
+    }
+    &:last-child {
+        border-radius: 0 0 13px 0;
+        &:after {
+            display: none
+        }
+    }
+    &.#{$namespace}popup-button-bold {
+        font-weight: 600
+    }
+}
+.#{$namespace}popup-input input{
+    height: 26px;
+    background: #fff;
+    margin: 0;
+    margin-top: 15px;
+    padding: 0 5px;
+    border: 1px solid rgba(0,0,0,.3);
+    border-radius: 0;
+    width: 100%;
+    font-size: 14px;
+}
+.#{$namespace}plus.#{$namespace}android .#{$namespace}popup-backdrop{
+    @include transition-duration(1ms);
+}
+.#{$namespace}plus.#{$namespace}android .#{$namespace}popup{
+    @include transition-duration(1ms);
+    @include transform(translate3d(-50%,-50%,0) scale(1));
+}

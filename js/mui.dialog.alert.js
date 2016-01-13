@@ -4,7 +4,7 @@
 	 */
 	$.alert = function(message, title, btnValue, callback) {
 		if ($.os.plus) {
-			if (typeof message === undefined) {
+			if (typeof message === 'undefined') {
 				return;
 			} else {
 				if (typeof title === 'function') {

@@ -11,7 +11,7 @@
 			case $.EVENT_START:
 				break;
 			case $.EVENT_MOVE:
-				if (!touch.direction) {
+				if (!touch.direction || !session.target) {
 					return;
 				}
 				//修正direction,可在session期间自行锁定拖拽方向，方便开发scroll类不同方向拖拽插件嵌套

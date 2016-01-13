@@ -4,7 +4,7 @@
 	 */
 	$.prompt = function(text, defaultText, title, btnArray, callback) {
 		if ($.os.plus) {
-			if (typeof message === undefined) {
+			if (typeof message === 'undefined') {
 				return;
 			} else {
 

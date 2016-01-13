@@ -160,7 +160,12 @@
 			}
 		}
 		if (!$.os.plus) {
-			window.top.location.href = url;
+			//TODO 先临时这么处理：手机上顶层跳，PC上parent跳
+			if ($.os.ios || $.os.android) {
+				window.top.location.href = url;
+			} else {
+				window.parent.location.href = url;
+			}
 			return;
 		}
 		if (!window.plus) {
@@ -198,7 +203,7 @@
 				webview = plus.webview.getWebviewById(id);
 				if (webview) { //如果已存在
 					nShow = $.showOptions(options.show);
-					webview.show(nShow.aniShow, nShow.duration, function() {
+					nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
 						triggerPreload(webview);
 						trigger(webview, 'pagebeforeshow', false);
 					});

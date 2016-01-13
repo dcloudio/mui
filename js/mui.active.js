@@ -3,7 +3,7 @@
  */
 (function(window) {
 	var active;
-	window.addEventListener('touchstart', function(event) {
+	window.addEventListener($.EVENT_START, function(event) {
 		var target = event.target;
 		var isCellDisabled = false;
 		for (; target && target !== document; target = target.parentNode) {

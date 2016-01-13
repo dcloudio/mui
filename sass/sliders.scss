@@ -8,6 +8,7 @@
     overflow: hidden;
     width: 100%;
     position:relative;
+    z-index:z("default");
     .#{$namespace}segmented-control.#{$namespace}segmented-control-inverted{
         .#{$namespace}control-item {
             &.#{$namespace}active {

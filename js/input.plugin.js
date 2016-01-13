@@ -142,7 +142,7 @@
 			};
 			element.addEventListener('input', showTip);
 			element.addEventListener('tap', showTip);
-			element.addEventListener('touchmove', function(e) {
+			element.addEventListener($.EVENT_MOVE, function(e) {
 				e.stopPropagation();
 			});
 		} else {

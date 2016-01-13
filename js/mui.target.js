@@ -27,7 +27,7 @@
 
 		return $.targetHandles;
 	};
-	window.addEventListener('touchstart', function(event) {
+	window.addEventListener($.EVENT_START, function(event) {
 		var target = event.target;
 		var founds = {};
 		for (; target && target !== document; target = target.parentNode) {
