@@ -14,7 +14,7 @@ mui框架有效的解决了这些问题，这是一个可以方便开发出高�
 [在线下载](http://www.dcloud.io/hellomui)或扫描如下二维码下载Hello MUI，可在手机上体验MUI的控件UI及能力展示；
 
 <a href="http://www.dcloud.io/hellomui" target="_blank">
-<img src="http://dcloud.io/img/qrcode-m.png" width="85" />
+<img src="http://www.dcloud.io/images/code-m.png" width="100" />
 </a>
 
 
