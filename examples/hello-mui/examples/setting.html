@@ -476,7 +476,7 @@
 							<li class="mui-table-view-cell">
 								<a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
 							</li>
-							<li class="mui-table-view-cell mui-plus-visible">
+							<li id="check_update" class="mui-table-view-cell mui-plus-visible">
 								<a id="update" class="mui-navigate-right">检查更新</a>
 							</li>
 						</ul>
@@ -861,6 +861,11 @@
 				var _slider = mui(slider).slider();
 			}
 		}
+		
+		if(mui.os.stream){
+			document.getElementById("check_update").display = "none";
+		}
+		
 	</script>
 
 </html>
