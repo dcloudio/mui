@@ -7397,7 +7397,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				if (classList.contains('mui-input-clear')) {
 					actions.push('clear');
 				}
-				if (classList.contains('mui-input-speech')) {
+				if (!($.os.android && $.os.stream) && classList.contains('mui-input-speech')) {
 					actions.push('speech');
 				}
 				if (classList.contains('mui-input-password')) {

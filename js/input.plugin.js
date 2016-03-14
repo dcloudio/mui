@@ -236,7 +236,7 @@
 				if (classList.contains($.className('input-clear'))) {
 					actions.push('clear');
 				}
-				if (classList.contains($.className('input-speech'))) {
+				if (!($.os.android && $.os.stream) && classList.contains($.className('input-speech'))) {
 					actions.push('speech');
 				}
 				if (classList.contains($.className('input-password'))) {
