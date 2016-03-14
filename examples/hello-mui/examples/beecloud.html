@@ -33,6 +33,9 @@
 			textarea{
 				margin-top: 10px;
 			}
+			.mui-btn-block{
+				padding: 8px 5px;
+			}
 		</style>
 	</head>
 
@@ -57,21 +60,24 @@
 				<div id='ALI_APP' class="mui-btn mui-btn-blue mui-btn-block pay">
 					支付宝钱包
 				</div>
-				    <ul class="mui-table-view">
-				        <li class="mui-table-view-cell">
-				                 支付方式: <span id="channel"></span>
-				        </li>
-				        <li class="mui-table-view-cell">
-				                订单号: <span id="bill_no"></span>
-				        </li>
-				        <li class="mui-table-view-cell">
-				                 支付金额: <span id="total_fee"></span>
-				        </li>
-				        <li class="mui-table-view-cell">
-				                 支付状态:<span id="status"></span>
-				        </li>
-				        <textarea name="" id="status_msg" cols="20" rows="5"></textarea>
-				    </ul>
+				<div id='UN_WEB' class="mui-btn mui-btn-blue mui-btn-block pay">
+					银联在线
+				</div>
+			    <ul class="mui-table-view">
+			        <li class="mui-table-view-cell">
+			                 支付方式: <span id="channel"></span>
+			        </li>
+			        <li class="mui-table-view-cell">
+			                订单号: <span id="bill_no"></span>
+			        </li>
+			        <li class="mui-table-view-cell">
+			                 支付金额: <span id="total_fee"></span>
+			        </li>
+			        <li class="mui-table-view-cell">
+			                 支付状态:<span id="status"></span>
+			        </li>
+			        <textarea name="" id="status_msg" cols="20" rows="5"></textarea>
+			    </ul>
 			</div>
 		</div>
  
@@ -86,6 +92,7 @@
 			document.getElementById("bill_no").innerHTML = beecloud.genBillNo();
 		}) 
 		function beecloudPay(bcChannel) {
+			var _appid = bcChannel=="UN_WEB"?"c37d661d-7e61-49ea-96a5-68c34e83db3b":"44f01a13-965f-4b27-ba9f-da678b47f3f5"
 			/*
 			 * 构建支付参数
 			 * 
@@ -97,13 +104,14 @@
 			 * bill_timeout: 订单失效时间,必须为非零正整数，单位为秒，必须大于360。选填 
 			 */
 			var payData = {
-				app_id: "44f01a13-965f-4b27-ba9f-da678b47f3f5",
+				app_id: _appid,
 				channel: bcChannel,  
 				title: "DCloud项目捐赠",  
 				total_fee: document.getElementById('total').value * 100, 
 				bill_no: beecloud.genBillNo(),    
 				optional: {'uerId':'beecloud','phone':'4006280728'},  
-				bill_timeout: 360 
+				bill_timeout: 360,
+				return_url: "http://www.dcloud.io/demo/pay"//wap支付成功后的回跳地址
 			};
 			/*
 			 *  发起支付

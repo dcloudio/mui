@@ -19,7 +19,7 @@ beecloud.genBillNo = function() {
 	return billno;
 };
 
-mui.plusReady(function () {
+mui.plusReady(function() {
 	plus.payment.getChannels(function(s) {
 		channels = s;
 	}, function(e) {
@@ -111,6 +111,15 @@ function doPay(payData, cbsuccess, cberror) {
 						paySrc = JSON.stringify(statement);
 					}
 					plus.payment.request(payChannel, paySrc, cbsuccess, cberror);
+				} else if (payData.channel == 'UN_WEB') {
+					var web = plus.webview.create('', "beecloudPay");
+					web.setJsFile('_www/js/95516.js');
+					web.addEventListener('loaded', function() {
+						if (!web.isVisible()) {
+							web.show();
+						}
+					});
+					web.loadData(data.html);
 				}
 			} else {
 				var bcError = {};
