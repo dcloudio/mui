@@ -1,4 +1,5 @@
 (function($, window, document, undefined) {
+	var CLASS_SCROLL = $.className('scroll');
 	var CLASS_SCROLLBAR = $.className('scrollbar');
 	var CLASS_INDICATOR = $.className('scrollbar-indicator');
 	var CLASS_SCROLLBAR_VERTICAL = CLASS_SCROLLBAR + '-vertical';
@@ -722,7 +723,18 @@
 
 			return true;
 		},
+		_reInit: function() {
+			var groups = this.wrapper.querySelectorAll('.' + CLASS_SCROLL);
+			for (var i = 0, len = groups.length; i < len; i++) {
+				if (groups[i].parentNode === this.wrapper) {
+					this.scroller = groups[i];
+					break;
+				}
+			}
+			this.scrollerStyle = this.scroller && this.scroller.style;
+		},
 		refresh: function() {
+			this._reInit();
 			this.reLayout();
 			$.trigger(this.scroller, 'refresh', this);
 			this.resetPosition();

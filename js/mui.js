@@ -15,7 +15,11 @@ var mui = (function(document, undefined) {
 		if (!selector)
 			return wrap();
 		if (typeof selector === 'object')
-			return wrap([selector], null);
+			if ($.isArrayLike(selector)) {
+				return wrap($.slice.call(selector), null);
+			} else {
+				return wrap([selector], null);
+			}
 		if (typeof selector === 'function')
 			return $.ready(selector);
 		if (typeof selector === 'string') {
@@ -124,6 +128,19 @@ var mui = (function(document, undefined) {
 		function(object) {
 			return object instanceof Array;
 		};
+	/**
+	 * mui isArrayLike 
+	 * @param {Object} obj
+	 */
+	$.isArrayLike = function(obj) {
+		var length = !!obj && "length" in obj && obj.length;
+		var type = $.type(obj);
+		if (type === "function" || $.isWindow(obj)) {
+			return false;
+		}
+		return type === "array" || length === 0 ||
+			typeof length === "number" && length > 0 && (length - 1) in obj;
+	};
 	/**
 	 * mui isWindow(需考虑obj为undefined的情况)
 	 */

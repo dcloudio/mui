@@ -120,16 +120,13 @@
 
 		if (this.sliderActionClass) {
 			var tooltip = this.sliderAction;
-			//TODO resize
-			var offsetLeft = element.offsetLeft;
-			var width = element.offsetWidth - 28;
-			var tooltipWidth = tooltip.offsetWidth;
-			var distince = Math.abs(element.max - element.min);
-
 			var timer = null;
-			var showTip = function() {
+			var showTip = function() { //每次重新计算是因为控件可能被隐藏，初始化时计算是不正确的
 				tooltip.classList.remove(CLASS_HIDDEN);
-				tooltipWidth = tooltipWidth || tooltip.offsetWidth;
+				var offsetLeft = element.offsetLeft;
+				var width = element.offsetWidth - 28;
+				var tooltipWidth = tooltip.offsetWidth;
+				var distince = Math.abs(element.max - element.min);
 				var scaleWidth = (width / distince) * Math.abs(element.value - element.min);
 				tooltip.style.left = (14 + offsetLeft + scaleWidth - tooltipWidth / 2) + 'px';
 				tooltip.innerText = element.value;
@@ -239,7 +236,7 @@
 				if (classList.contains($.className('input-clear'))) {
 					actions.push('clear');
 				}
-				if (classList.contains($.className('input-speech'))) {
+				if (!($.os.android && $.os.stream) && classList.contains($.className('input-speech'))) {
 					actions.push('speech');
 				}
 				if (classList.contains($.className('input-password'))) {

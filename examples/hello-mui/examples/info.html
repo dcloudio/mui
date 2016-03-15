@@ -35,6 +35,21 @@
 			.mui-plus .mui-bar-nav~.mui-content {
 				padding: 0;
 			}
+			
+			.qrcode {
+				/*position: absolute;*/
+				top: 50px;
+				/*left: 50%;*/
+				width: 100%;
+				/*-webkit-transform: translate(-50%, 0);
+				transform: translate(-50%, 0);*/
+				text-align: center;
+			}
+			
+			.qrcode img {
+				margin: 0 auto;
+			}
+			
 		</style>
 	</head>
 
@@ -45,32 +60,23 @@
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<h4 style="margin-top:10px;">mui</h4>
-				<p>
-					性能和体验的差距，一直是mobile app开发者放弃HTML5的首要原因。 浏览器天生的切页白屏、不忍直视的转页动画、浮动元素的抖动、无法流畅下拉刷新等问题，这些都让HTML5开发者倍感挫败 ； 另一方面，浏览器默认控件样式又少又丑，制作一个漂亮的控件非常麻烦，也有一些制作简单的ui框架但性能低下。
-				</p>
-				<p>
-					mui框架有效的解决了这些问题，这是一个可以方便开发出高性能App的框架，也是目前最接近原生App效果的框架。
-				</p>
-				<h4>新手指南</h4>
-				<p>
-					若想详细了解Hello MUI的源码及工作原理，可从<a href="http://www.dcloud.io">Dcloud官网</a>下载Hbuilder，选择新建“移动APP”，并选择“Hello MUI”工程模板，创建工程；然后通过数据线将手机连接上电脑，点击运行，就可以在手机上体验MUI的各项能力。
-				</p>
-				<p>
-					若要使用MUI进行移动APP开发，可通过Hbuilder，新建“移动APP”，并选择“MUI”工程模板，该模板已内置MUI相关的资源文件。
-				</p>
-				<p>更多详细介绍，请到<a href="http://dcloudio.github.io/mui">mui官网</a>查看；</p>
-				<h4>版本介绍</h4>
-				<p>当前版本为2.8.0，可到<a href="https://github.com/dcloudio/mui">Github</a>上获取最新版本。</p>
-				<h4>License</h4>
-				<p>
-					mui遵循MIT License，源码已提交至Github，<a href="https://github.com/dcloudio/mui">点击查看</a>;
-				</p>
+				<div class="qrcode">
+					<img id="qrcode" src="../images/qrcode.png" width="100%" />
+					<a id="shortcut" style="width: 60%;margin: 15px auto;padding: 5px;" class="mui-hidden mui-btn mui-btn-block mui-btn-red">创建桌面图标</a>
+				</div>
+				<!--<h4 style="margin-top:10px;">mui</h4>-->
+				<p>mui是一款小巧高能的前端UI框架，其UI控件富有原生UI样式；
+					通过封装多webview、启动原生动画，使得mui成为目前最接近原生体验的前端框架，
+					更多详细介绍，请到<a href="http://dev.dcloud.net.cn/mui">mui官网</a>查看</p>
+				<p style="text-align: center;color: #ccc;text-indent: 0;">当前版本：<span id="version">2.9.0</span></p>	
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			mui.init({
+				gestureConfig: {
+					longtap: true
+				},
 				swipeBack: true //启用右滑关闭功能
 			});
 			//处理点击事件，需要打开原生浏览器
@@ -84,6 +90,37 @@
 					}
 				}
 			});
+
+			var qrcodeEl = document.getElementById("qrcode");
+			qrcodeEl.addEventListener('longtap', function() {
+				plus.nativeUI.actionSheet({
+					cancel: '取消',
+					buttons: [{
+						title: '保存到相册'
+					}]
+				}, function(e) {
+					var index = e.index;
+					if (e.index === 1) {
+						plus.gallery.save(qrcodeEl.src, function() {
+							mui.toast('保存成功');
+						}, function() {
+							mui.toast('保存失败，请重试！');
+						});
+					}
+				});
+			});
+			if (mui.os.android&&mui.os.stream) { //创建快捷方式
+				var shortcutElem = document.getElementById("shortcut");
+				shortcutElem.classList.remove('mui-hidden');
+				shortcutElem.addEventListener('tap', function() {
+					plus.navigator.createShortcut({
+						name: "hello-mui",
+						icon: "images/logo.png"
+					});
+				});
+			}
+
+
 		</script>
 	</body>
 
