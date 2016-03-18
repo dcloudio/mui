@@ -124,9 +124,11 @@
 		} else {
 			if (typeof title === 'function') {
 				callback = title;
+				type = btnValue;
 				title = null;
 				btnValue = null;
 			} else if (typeof btnValue === 'function') {
+				type = callback;
 				callback = btnValue;
 				btnValue = null;
 			}
@@ -142,9 +144,11 @@
 		} else {
 			if (typeof title === 'function') {
 				callback = title;
+				type = btnArray;
 				title = null;
 				btnArray = null;
 			} else if (typeof btnArray === 'function') {
+				type = callback;
 				callback = btnArray;
 				btnArray = null;
 			}
@@ -160,14 +164,17 @@
 		} else {
 			if (typeof placeholder === 'function') {
 				callback = placeholder;
+				type = title;
 				placeholder = null;
 				title = null;
 				btnArray = null;
 			} else if (typeof title === 'function') {
 				callback = title;
+				type = btnArray;
 				title = null;
 				btnArray = null;
 			} else if (typeof btnArray === 'function') {
+				type = callback;
 				callback = btnArray;
 				btnArray = null;
 			}

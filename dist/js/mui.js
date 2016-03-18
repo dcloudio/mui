@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.8.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v2.9.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -20,7 +20,11 @@ var mui = (function(document, undefined) {
 		if (!selector)
 			return wrap();
 		if (typeof selector === 'object')
-			return wrap([selector], null);
+			if ($.isArrayLike(selector)) {
+				return wrap($.slice.call(selector), null);
+			} else {
+				return wrap([selector], null);
+			}
 		if (typeof selector === 'function')
 			return $.ready(selector);
 		if (typeof selector === 'string') {
@@ -129,6 +133,19 @@ var mui = (function(document, undefined) {
 		function(object) {
 			return object instanceof Array;
 		};
+	/**
+	 * mui isArrayLike 
+	 * @param {Object} obj
+	 */
+	$.isArrayLike = function(obj) {
+		var length = !!obj && "length" in obj && obj.length;
+		var type = $.type(obj);
+		if (type === "function" || $.isWindow(obj)) {
+			return false;
+		}
+		return type === "array" || length === 0 ||
+			typeof length === "number" && length > 0 && (length - 1) in obj;
+	};
 	/**
 	 * mui isWindow(需考虑obj为undefined的情况)
 	 */
@@ -3298,6 +3315,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.PullRefresh = PullRefresh;
 })(mui, document);
 (function($, window, document, undefined) {
+	var CLASS_SCROLL = 'mui-scroll';
 	var CLASS_SCROLLBAR = 'mui-scrollbar';
 	var CLASS_INDICATOR = 'mui-scrollbar-indicator';
 	var CLASS_SCROLLBAR_VERTICAL = CLASS_SCROLLBAR + '-vertical';
@@ -4021,7 +4039,18 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 			return true;
 		},
+		_reInit: function() {
+			var groups = this.wrapper.querySelectorAll('.' + CLASS_SCROLL);
+			for (var i = 0, len = groups.length; i < len; i++) {
+				if (groups[i].parentNode === this.wrapper) {
+					this.scroller = groups[i];
+					break;
+				}
+			}
+			this.scrollerStyle = this.scroller && this.scroller.style;
+		},
 		refresh: function() {
+			this._reInit();
 			this.reLayout();
 			$.trigger(this.scroller, 'refresh', this);
 			this.resetPosition();
@@ -4429,13 +4458,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		},
 		_init: function() {
-			var groups = this.wrapper.querySelectorAll('.' + CLASS_SLIDER_GROUP);
-			for (var i = 0, len = groups.length; i < len; i++) {
-				if (groups[i].parentNode === this.wrapper) {
-					this.scroller = groups[i];
-					break;
-				}
-			}
+			this._reInit();
 			if (this.scroller) {
 				this.scrollerStyle = this.scroller.style;
 				this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
@@ -4736,6 +4759,20 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		getSlideNumber: function() {
 			return this.slideNumber || 0;
 		},
+		_reInit: function() {
+			var groups = this.wrapper.querySelectorAll('.' + CLASS_SLIDER_GROUP);
+			for (var i = 0, len = groups.length; i < len; i++) {
+				if (groups[i].parentNode === this.wrapper) {
+					this.scroller = groups[i];
+					break;
+				}
+			}
+			this.scrollerStyle = this.scroller && this.scroller.style;
+			if (this.progressBar) {
+				this.progressBarWidth = this.progressBar.offsetWidth;
+				this.progressBarStyle = this.progressBar.style;
+			}
+		},
 		refresh: function(options) {
 			if (options) {
 				$.extend(this.options, options);
@@ -4930,8 +4967,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					}
 				});
 			}.bind(this));
-			var callback = $.options.pullRefresh.down.callback;
-			callback && callback.call(this);
 		},
 		//		_pulldownLoading: function() { //该方法是子页面调用的
 		//			var self = this;
@@ -7044,9 +7079,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		} else {
 			if (typeof title === 'function') {
 				callback = title;
+				type = btnValue;
 				title = null;
 				btnValue = null;
 			} else if (typeof btnValue === 'function') {
+				type = callback;
 				callback = btnValue;
 				btnValue = null;
 			}
@@ -7062,9 +7099,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		} else {
 			if (typeof title === 'function') {
 				callback = title;
+				type = btnArray;
 				title = null;
 				btnArray = null;
 			} else if (typeof btnArray === 'function') {
+				type = callback;
 				callback = btnArray;
 				btnArray = null;
 			}
@@ -7080,14 +7119,17 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		} else {
 			if (typeof placeholder === 'function') {
 				callback = placeholder;
+				type = title;
 				placeholder = null;
 				title = null;
 				btnArray = null;
 			} else if (typeof title === 'function') {
 				callback = title;
+				type = btnArray;
 				title = null;
 				btnArray = null;
 			} else if (typeof btnArray === 'function') {
+				type = callback;
 				callback = btnArray;
 				btnArray = null;
 			}
@@ -7239,16 +7281,13 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 		if (this.sliderActionClass) {
 			var tooltip = this.sliderAction;
-			//TODO resize
-			var offsetLeft = element.offsetLeft;
-			var width = element.offsetWidth - 28;
-			var tooltipWidth = tooltip.offsetWidth;
-			var distince = Math.abs(element.max - element.min);
-
 			var timer = null;
-			var showTip = function() {
+			var showTip = function() { //每次重新计算是因为控件可能被隐藏，初始化时计算是不正确的
 				tooltip.classList.remove(CLASS_HIDDEN);
-				tooltipWidth = tooltipWidth || tooltip.offsetWidth;
+				var offsetLeft = element.offsetLeft;
+				var width = element.offsetWidth - 28;
+				var tooltipWidth = tooltip.offsetWidth;
+				var distince = Math.abs(element.max - element.min);
 				var scaleWidth = (width / distince) * Math.abs(element.value - element.min);
 				tooltip.style.left = (14 + offsetLeft + scaleWidth - tooltipWidth / 2) + 'px';
 				tooltip.innerText = element.value;
@@ -7358,7 +7397,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				if (classList.contains('mui-input-clear')) {
 					actions.push('clear');
 				}
-				if (classList.contains('mui-input-speech')) {
+				if (!($.os.android && $.os.stream) && classList.contains('mui-input-speech')) {
 					actions.push('speech');
 				}
 				if (classList.contains('mui-input-password')) {

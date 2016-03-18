@@ -11,39 +11,49 @@
 			.area {
 				margin: 20px auto 0px auto;
 			}
+			
 			.mui-input-group {
 				margin-top: 10px;
 			}
+			
 			.mui-input-group:first-child {
 				margin-top: 20px;
 			}
+			
 			.mui-input-group label {
 				width: 22%;
 			}
+			
 			.mui-input-row label~input,
 			.mui-input-row label~select,
 			.mui-input-row label~textarea {
 				width: 78%;
 			}
+			
 			.mui-checkbox input[type=checkbox],
 			.mui-radio input[type=radio] {
 				top: 6px;
 			}
+			
 			.mui-content-padded {
 				margin-top: 25px;
 			}
+			
 			.mui-btn {
 				padding: 10px;
 			}
+			
 			.link-area {
 				display: block;
 				margin-top: 25px;
 				text-align: center;
 			}
+			
 			.spliter {
 				color: #bbb;
 				padding: 0px 8px;
 			}
+			
 			.oauth-area {
 				position: absolute;
 				bottom: 20px;
@@ -53,6 +63,7 @@
 				padding: 0px;
 				margin: 0px;
 			}
+			
 			.oauth-area .oauth-btn {
 				display: inline-block;
 				width: 50px;
@@ -62,12 +73,16 @@
 				background-repeat: no-repeat;
 				margin: 0px 20px;
 				/*-webkit-filter: grayscale(100%); */
-				
 				border: solid 1px #ddd;
 				border-radius: 25px;
 			}
+			
 			.oauth-area .oauth-btn:active {
 				border: solid 1px #aaa;
+			}
+			
+			.oauth-area .oauth-btn.disabled {
+				background-color: #ddd;
 			}
 		</style>
 
@@ -152,31 +167,37 @@
 					} else if (settings.autoLogin && state.token) {
 						toMain();
 					} else {
+						app.setState(null);
 						//第三方登录
+						var authBtns = ['qihoo', 'weixin', 'sinaweibo', 'qq']; //配置业务支持的第三方登录
 						var auths = {};
 						var oauthArea = doc.querySelector('.oauth-area');
 						plus.oauth.getServices(function(services) {
 							for (var i in services) {
 								var service = services[i];
 								auths[service.id] = service;
-								var btn = document.createElement('div');
-								btn.setAttribute('class', 'oauth-btn');
-								btn.authId = service.id;
-								btn.style.backgroundImage = 'url("images/' + service.id + '.png")'
-									//alert(service.id);
-									//btn.innerText = service.description + "登录";
-								oauthArea.appendChild(btn);
+								if (~authBtns.indexOf(service.id)) {
+									var isInstalled = app.isInstalled(service.id);
+									var btn = document.createElement('div');
+									//如果微信未安装，则为不启用状态
+									btn.setAttribute('class', 'oauth-btn' + (!isInstalled && service.id === 'weixin' ? (' disabled') : ''));
+									btn.authId = service.id;
+									btn.style.backgroundImage = 'url("images/' + service.id + '.png")'
+									oauthArea.appendChild(btn);
+								}
 							}
 							$(oauthArea).on('tap', '.oauth-btn', function() {
+								if (this.classList.contains('disabled')) {
+									plus.nativeUI.toast('您尚未安装微信客户端');
+									return;
+								}
 								var auth = auths[this.authId];
 								var waiting = plus.nativeUI.showWaiting();
 								auth.login(function() {
 									waiting.close();
 									plus.nativeUI.toast("登录认证成功");
-									//alert(JSON.stringify(auth.authResult));
 									auth.getUserInfo(function() {
 										plus.nativeUI.toast("获取用户信息成功");
-										//alert(JSON.stringify(auth.userInfo));
 										var name = auth.userInfo.nickname || auth.userInfo.name;
 										app.createState(name, function() {
 											toMain();
@@ -234,6 +255,7 @@
 						$.openWindow({
 							url: 'reg.html',
 							id: 'reg',
+							preload: true,
 							show: {
 								aniShow: 'pop-in'
 							},
@@ -249,6 +271,7 @@
 						$.openWindow({
 							url: 'forget_password.html',
 							id: 'forget_password',
+							preload: true,
 							show: {
 								aniShow: 'pop-in'
 							},

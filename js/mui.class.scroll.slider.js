@@ -36,13 +36,7 @@
 			}
 		},
 		_init: function() {
-			var groups = this.wrapper.querySelectorAll('.' + CLASS_SLIDER_GROUP);
-			for (var i = 0, len = groups.length; i < len; i++) {
-				if (groups[i].parentNode === this.wrapper) {
-					this.scroller = groups[i];
-					break;
-				}
-			}
+			this._reInit();
 			if (this.scroller) {
 				this.scrollerStyle = this.scroller.style;
 				this.progressBar = this.wrapper.querySelector(SELECTOR_SLIDER_PROGRESS_BAR);
@@ -342,6 +336,20 @@
 		},
 		getSlideNumber: function() {
 			return this.slideNumber || 0;
+		},
+		_reInit: function() {
+			var groups = this.wrapper.querySelectorAll('.' + CLASS_SLIDER_GROUP);
+			for (var i = 0, len = groups.length; i < len; i++) {
+				if (groups[i].parentNode === this.wrapper) {
+					this.scroller = groups[i];
+					break;
+				}
+			}
+			this.scrollerStyle = this.scroller && this.scroller.style;
+			if (this.progressBar) {
+				this.progressBarWidth = this.progressBar.offsetWidth;
+				this.progressBarStyle = this.progressBar.style;
+			}
 		},
 		refresh: function(options) {
 			if (options) {

@@ -141,8 +141,6 @@
 					}
 				});
 			}.bind(this));
-			var callback = $.options.pullRefresh.down.callback;
-			callback && callback.call(this);
 		},
 		//		_pulldownLoading: function() { //该方法是子页面调用的
 		//			var self = this;

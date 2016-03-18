@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -213,7 +212,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
 							<li class="mui-table-view-cell">
-								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V2.8.0</i></a>
+								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V2.9.0</i></a>
 							</li>
 						</ul>
 						<ul class="mui-table-view">
@@ -476,7 +475,7 @@
 							<li class="mui-table-view-cell">
 								<a id="feedback-btn" href="#feedback" class="mui-navigate-right">问题反馈</a>
 							</li>
-							<li class="mui-table-view-cell mui-plus-visible">
+							<li id="check_update" class="mui-table-view-cell mui-plus-visible">
 								<a id="update" class="mui-navigate-right">检查更新</a>
 							</li>
 						</ul>
@@ -861,6 +860,11 @@
 				var _slider = mui(slider).slider();
 			}
 		}
+		
+		if(mui.os.stream){
+			document.getElementById("check_update").display = "none";
+		}
+		
 	</script>
 
 </html>
