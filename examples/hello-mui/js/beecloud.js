@@ -21,32 +21,25 @@ beecloud.genBillNo = function() {
 
 mui.plusReady(function() {
 	plus.payment.getChannels(function(s) {
+		var oauthArea = document.querySelector('.oauth-area');
+		for (var i = 0; i < s.length; i++) {
+			if(s[i].serviceReady){
+				//流应用情况下，暂不显示微信支付；
+				if(s[i].id == 'wxpay' && mui.os.stream){
+					continue;
+				}
+				var btn = document.createElement('div');
+				btn.setAttribute('id', s[i].id);
+				btn.className = 'mui-btn mui-btn-blue mui-btn-block pay';
+				btn.innerText = s[i].description+'支付'
+				oauthArea.appendChild(btn);
+			}
+		}
 		channels = s;
 	}, function(e) {
-		alert("获取支付渠道信权限失败:" + e.message);
+		console.log("获取支付渠道信权限失败:" + e.message);
 	});
 });
-
-function checkServices(pc) {
-	if (!pc.serviceReady) {
-		var txt = null;
-		switch (pc.id) {
-			case "alipay":
-				txt = "检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？";
-				break;
-			default:
-				txt = "系统未安装“" + pc.description + "”服务，无法完成支付，是否立即安装？";
-				break;
-		}
-		plus.nativeUI.confirm(txt, function(e) {
-			if (e.index == 0) {
-				pc.installService();
-			}
-		}, pc.description);
-		return false;
-	}
-	return true;
-}
 
 function getRandomHost() {
 	var hosts = ['https://apibj.beecloud.cn',
@@ -68,10 +61,10 @@ function getPayChannel(bc_channel) {
 			break;
 		default:
 			break;
-	}
+	} 
 
 	for (var i in channels) {
-		if (channels[i].id == dc_channel_id && checkServices(channels[i])) {
+		if (channels[i].id == dc_channel_id) {
 			return channels[i];
 		}
 	}
@@ -79,9 +72,8 @@ function getPayChannel(bc_channel) {
 }
 
 function doPay(payData, cbsuccess, cberror) {
-	if (w) return;
-	console.log('doPay: ' + JSON.stringify(payData));
-
+	if (w) return; 
+ 
 	w = plus.nativeUI.showWaiting();
 	mui.ajax(getRandomHost(), {
 		data: JSON.stringify(payData),
@@ -89,7 +81,6 @@ function doPay(payData, cbsuccess, cberror) {
 		dataType: 'json',
 		contentType: "application/json",
 		success: function(data) {
-			console.log(JSON.stringify(data));
 			w.close();
 			w = null;
 			var paySrc = '';
