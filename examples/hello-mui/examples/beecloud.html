@@ -103,7 +103,7 @@
 		})
 
 		function beecloudPay(bcChannel) {
-			var _appid = bcChannel == "UN_WEB" ? "c37d661d-7e61-49ea-96a5-68c34e83db3b":"44f01a13-965f-4b27-ba9f-da678b47f3f5";
+			var _appid = bcChannel == "UN_WEB" ? "c37d661d-7e61-49ea-96a5-68c34e83db3b":"44f01a13-965f-4b27-ba9f-da678b47f3f5"
 			/*
 			 * 构建支付参数
 			 * 
@@ -120,9 +120,12 @@
 				title: "DCloud项目捐赠",
 				total_fee: document.getElementById('total').value * 100,
 				bill_no: beecloud.genBillNo(),
-				optional: {'uerId': 'beecloud','phone': '4006280728'},
+				optional: {
+					'uerId': 'beecloud',
+					'phone': '4006280728'
+				},
 				bill_timeout: 360,
-				return_url: "http://www.dcloud.io/demo/pay"//wap支付成功后的回跳地址
+				return_url: "http://www.dcloud.io/demo/pay" //wap支付成功后的回跳地址
 			};
 			/*
 			 *  发起支付
@@ -133,12 +136,12 @@
 			beecloud.payReq(payData, function(result) {
 				document.getElementById("status").innerHTML = 'success';
 				document.getElementById("status").style.color = 'green'
-				document.getElementById("status_msg").innerHTML = "-------- 支付成功 --------" +"\n感谢您的支持,我们会继续努力完善产品";
+				document.getElementById("status_msg").innerHTML = "-------- 支付成功 --------" + "\n感谢您的支持,我们会继续努力完善产品";
 				console.log(result);
 			}, function(e) {
 				document.getElementById("status").innerHTML = 'failed';
 				document.getElementById("status").style.color = 'red'
-				document.getElementById("status_msg").innerHTML = "-------- 支付失败 --------\n" +"错误码："+ e.code + '\n' + e.message;
+				document.getElementById("status_msg").innerHTML = "-------- 支付失败 --------\n" + "错误码：" + e.code + '\n' + e.message;
 			});
 		}
 	</script>

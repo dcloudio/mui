@@ -900,7 +900,8 @@
 				"resources": [
 					"js/mui.min.js",
 					"css/app.css",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"images/qrcode.png"
 				],
 				"refer": [],
 				"priority": 0
