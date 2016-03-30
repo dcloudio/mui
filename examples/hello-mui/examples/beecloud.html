@@ -103,6 +103,7 @@
 		})
 
 		function beecloudPay(bcChannel) {
+			//因DCloud尚未申请银联账号，故支付宝、微信使用的是DCloud的appid，银联暂时使用BeeCloud的appid，开发者这里无需判断，直接写一个appid即可；
 			var _appid = bcChannel == "UN_WEB" ? "c37d661d-7e61-49ea-96a5-68c34e83db3b":"44f01a13-965f-4b27-ba9f-da678b47f3f5"
 			/*
 			 * 构建支付参数
