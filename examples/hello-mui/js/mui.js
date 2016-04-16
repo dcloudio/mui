@@ -7243,7 +7243,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				container.appendChild(progressbar);
 			}
 		}
-		if (progress) $.setProgressbar(container, progress);
+		if (progress) setProgressbar(container, progress);
 		return progressbar;
 	};
 	/**
@@ -7284,7 +7284,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			return;
 		}
 		if (progress) progress = Math.min(Math.max(progress, 0), 100);
-		var clientLeft = progressbar.clientLeft;
+		progressbar.offsetHeight;
 		var span = progressbar.querySelector('span');
 		if (span) {
 			var style = span.style;
@@ -7305,8 +7305,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			var progressbarApi = self.mui_plugin_progressbar;
 			if (!progressbarApi) {
 				self.mui_plugin_progressbar = progressbarApi = {
+					options: options,
+					setOptions: function(options) {
+						this.options = options;
+					},
 					show: function() {
-						return showProgressbar(self, options.progress, options.color);
+						return showProgressbar(self, this.options.progress, this.options.color);
 					},
 					setProgress: function(progress) {
 						return setProgressbar(self, progress);
@@ -7315,6 +7319,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						return hideProgressbar(self);
 					}
 				};
+			} else if (options) {
+				progressbarApi.setOptions(options);
 			}
 			progressbarApis.push(progressbarApi);
 		});
