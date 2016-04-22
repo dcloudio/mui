@@ -27,8 +27,8 @@
 				padding: 5px 0;
 			}
 			
-			#demo5 div{
-				padding: 8px 10px;
+			#demo5 .mui-progressbar{
+				margin: 15px 10px;
 			}
 			
 			.mui-progressbar-success span {
@@ -55,7 +55,7 @@
 			<div class="mui-demo-container">
 				<div id="demo1" class="mui-text-center">
 					<h5>动态设置进度条进度</h5>
-					<p class="mui-progressbar" data-progress="20"><span></span></p>
+					<p class="mui-progressbar mui-progressbar-in" data-progress="20"><span></span></p>
 					<ul id="progressbarBtn1" class="mui-pagination">
 						<li><a href="javascript:;" data-progress="10">10%</a></li>
 						<li><a href="javascript:;" data-progress="30">30%</a></li>
@@ -69,7 +69,7 @@
 					<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-btn-block">开始加载</button>
 				</div>
 				<div id="demo3">
-					<h5>页面顶部动态创建进度条</h5>
+					<h5>动态创建页面顶部进度条</h5>
 					<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-btn-block">开始加载</button>
 				</div>
 			</div>
@@ -88,10 +88,10 @@
 			</div>
 			<div style="padding-left: 10px;margin: 15px 0;"><h5>自定义进度条颜色</h5></div>
 			<div id="demo5" class="mui-demo-container" style="padding-bottom: 30px;">
-				<div data-progress="20"><p class="mui-progressbar mui-progressbar-success"><span></span></p></div>
-				<div data-progress="30"><p class="mui-progressbar mui-progressbar-warning" ><span></span></p></div>
-				<div data-progress="50"><p class="mui-progressbar mui-progressbar-danger" ><span></span></p></div>
-				<div data-progress="80"><p class="mui-progressbar mui-progressbar-royal"><span></span></p></div>
+				<p class="mui-progressbar mui-progressbar-success" data-progress="20"><span></span></p>
+				<p class="mui-progressbar mui-progressbar-warning" data-progress="30" ><span></span></p>
+				<p class="mui-progressbar mui-progressbar-danger" data-progress="50"><span></span></p>
+				<p class="mui-progressbar mui-progressbar-royal" data-progress="80"><span></span></p>
 			</div>
 
 		</div>
@@ -123,16 +123,16 @@
 					}
 				}, Math.random() * 200 + 200);
 			}
-			//内联进度条
-			var progressbar2 = mui('#demo2');
-			progressbar2.on('tap', 'button', function() {
-				var container = progressbar2[0].querySelector('p');
-				if (mui(container).progressbar({
+			//动态创建内联进度条
+			mui("#demo2").on('tap', '.mui-btn', function() {
+				var container = mui("#demo2 p");
+				if (container.progressbar({
 						progress: 0
 					}).show()) {
 					simulateLoading(container, 0);
 				}
 			});
+			
 			//页面顶部进度条
 			var progressbar3 = mui('#demo3');
 			progressbar3.on('tap', 'button', function() {
@@ -156,7 +156,7 @@
 			});
 			
 			//自定义颜色示例
-			mui("#demo5 div").each(function () {
+			mui("#demo5 .mui-progressbar").each(function () {
 				mui(this).progressbar({progress:this.getAttribute("data-progress")}).show();
 			});
 		</script>
