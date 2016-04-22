@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.9.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.0.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -3396,7 +3396,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				scrollTime: 500,
 				scrollEasing: ease.outCubic, //轮播动画曲线
 
-
 				directionLockThreshold: 5,
 
 				parallaxElement: false, //视差元素
@@ -3837,7 +3836,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		},
 		_scrollend: function(e) {
-			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
+			if ((this.y === 0 && this.maxScrollY === 0) || (Math.abs(this.y) > 0 && this.y <= this.maxScrollY)) {
 				$.trigger(this.scroller, 'scrollbottom', this);
 			}
 		},
@@ -4119,7 +4118,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			speedRatioX: 0,
 			speedRatioY: 0
 		}, options);
-
 
 		this.sizeRatioX = 1;
 		this.sizeRatioY = 1;
@@ -6999,6 +6997,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_POPUP_BACKDROP);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('webkitTransitionEnd', function() {
 			if (!this.classList.contains(CLASS_ACTIVE)) {
 				element.parentNode && element.parentNode.removeChild(element);
@@ -7011,7 +7010,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		return '<div class="' + CLASS_POPUP_INPUT + '"><input type="text" autofocus placeholder="' + (placeholder || '') + '"/></div>';
 	};
 	var createInner = function(message, title, extra) {
-		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><div class="' + CLASS_POPUP_TEXT + '">' + message + '</div>' + (extra || '') + '</div>';
+		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><pre class="' + CLASS_POPUP_TEXT + '">' + message + '</pre>' + (extra || '') + '</div>';
 	};
 	var createButtons = function(btnArray) {
 		var length = btnArray.length;
@@ -7030,7 +7029,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			popupElement.parentNode && popupElement.parentNode.removeChild(popupElement);
 			popupElement = null;
 		};
-
+		popupElement.addEventListener($.EVENT_MOVE, $.preventDefault);
 		popupElement.addEventListener('webkitTransitionEnd', function(e) {
 			if (popupElement && e.target === popupElement && popupElement.classList.contains(CLASS_POPUP_OUT)) {
 				removePopupElement();
@@ -7241,6 +7240,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					progressbar.innerHTML = '<span></span>';
 				}
 				container.appendChild(progressbar);
+			} else {
+				progressbar.classList.add(CLASS_PROGRESSBAR_IN);
 			}
 		}
 		if (progress) setProgressbar(container, progress);

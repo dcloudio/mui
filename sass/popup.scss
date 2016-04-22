@@ -1,4 +1,4 @@
-.#{$namespace}popup-backdrop{
+.#{$namespace}popup-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,13 +8,13 @@
     background: rgba(0,0,0,.4);
     opacity: 0;
     @include transition-duration(400ms);
-     &.#{$namespace}active {
+    &.#{$namespace}active {
         opacity: 1;
     }
 }
-.#{$namespace}popup{
+.#{$namespace}popup {
     width: 270px;
-    position: absolute;
+    position: fixed;
     z-index: z("max");
     left: 50%;
     top: 50%;
@@ -27,13 +27,13 @@
     transition-property: transform,opacity;
     color: #000;
     display: none;
-    &.#{$namespace}popup-in{
+    &.#{$namespace}popup-in {
         opacity: 1;
         @include transition-duration(400ms);
         @include transform(translate3d(-50%,-50%,0) scale(1));
         display: block;
     }
-    &.#{$namespace}popup-out{
+    &.#{$namespace}popup-out {
         opacity: 0;
         //z-index:max-1
         @include transition-duration(400ms);
@@ -69,7 +69,8 @@
     text-align: center;
 }
 .#{$namespace}popup-title+.#{$namespace}popup-text {
-    margin-top: 5px;
+    margin: 5px 0 0;
+    font-family: inherit;
     font-size: 14px;
 }
 .#{$namespace}popup-buttons {
@@ -80,9 +81,8 @@
     display: flex;
     -webkit-box-pack: center;
     -webkit-justify-content: center;
-    justify-content: center
+    justify-content: center;
 }
-
 .#{$namespace}popup-button {
     width: 100%;
     padding: 0 5px;
@@ -115,39 +115,38 @@
         -webkit-transform-origin: 100% 50%;
         transform-origin: 100% 50%;
         -webkit-transform: scaleX(.5);
-        transform: scaleX(.5)
+        transform: scaleX(.5);
     }
     &:first-child {
         border-radius: 0 0 0 13px;
         &:last-child {
-            border-radius: 0 0 13px 13px
+            border-radius: 0 0 13px 13px;
         }
     }
     &:last-child {
         border-radius: 0 0 13px 0;
         &:after {
-            display: none
+            display: none;
         }
     }
     &.#{$namespace}popup-button-bold {
-        font-weight: 600
+        font-weight: 600;
     }
 }
-.#{$namespace}popup-input input{
+.#{$namespace}popup-input input {
     height: 26px;
     background: #fff;
-    margin: 0;
-    margin-top: 15px;
+    margin: 15px 0 0;
     padding: 0 5px;
     border: 1px solid rgba(0,0,0,.3);
     border-radius: 0;
     width: 100%;
     font-size: 14px;
 }
-.#{$namespace}plus.#{$namespace}android .#{$namespace}popup-backdrop{
+.#{$namespace}plus.#{$namespace}android .#{$namespace}popup-backdrop {
     @include transition-duration(1ms);
 }
-.#{$namespace}plus.#{$namespace}android .#{$namespace}popup{
+.#{$namespace}plus.#{$namespace}android .#{$namespace}popup {
     @include transition-duration(1ms);
     @include transform(translate3d(-50%,-50%,0) scale(1));
 }

@@ -23,6 +23,7 @@
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_POPUP_BACKDROP);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('webkitTransitionEnd', function() {
 			if (!this.classList.contains(CLASS_ACTIVE)) {
 				element.parentNode && element.parentNode.removeChild(element);
@@ -35,7 +36,7 @@
 		return '<div class="' + CLASS_POPUP_INPUT + '"><input type="text" autofocus placeholder="' + (placeholder || '') + '"/></div>';
 	};
 	var createInner = function(message, title, extra) {
-		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><div class="' + CLASS_POPUP_TEXT + '">' + message + '</div>' + (extra || '') + '</div>';
+		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><pre class="' + CLASS_POPUP_TEXT + '">' + message + '</pre>' + (extra || '') + '</div>';
 	};
 	var createButtons = function(btnArray) {
 		var length = btnArray.length;
@@ -54,7 +55,7 @@
 			popupElement.parentNode && popupElement.parentNode.removeChild(popupElement);
 			popupElement = null;
 		};
-
+		popupElement.addEventListener($.EVENT_MOVE, $.preventDefault);
 		popupElement.addEventListener('webkitTransitionEnd', function(e) {
 			if (popupElement && e.target === popupElement && popupElement.classList.contains(CLASS_POPUP_OUT)) {
 				removePopupElement();

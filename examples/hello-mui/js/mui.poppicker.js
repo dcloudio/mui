@@ -74,10 +74,10 @@
 			}, false);
 			self._createPicker();
 			//防止滚动穿透
-			self.panel.addEventListener('touchstart', function(event) {
+			self.panel.addEventListener($.EVENT_START, function(event) {
 				event.preventDefault();
 			}, false);
-			self.panel.addEventListener('touchmove', function(event) {
+			self.panel.addEventListener($.EVENT_MOVE, function(event) {
 				event.preventDefault();
 			}, false);
 		},

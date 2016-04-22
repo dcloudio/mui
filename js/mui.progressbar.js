@@ -59,6 +59,8 @@
 					progressbar.innerHTML = '<span></span>';
 				}
 				container.appendChild(progressbar);
+			} else {
+				progressbar.classList.add(CLASS_PROGRESSBAR_IN);
 			}
 		}
 		if (progress) setProgressbar(container, progress);

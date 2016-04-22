@@ -4,12 +4,13 @@
 		init: function(element, options) {
 			var self = this;
 			this.container = this.element = element;
+//			placeholder //默认图片
 			this.options = $.extend({
-				selector: '',
-				diff: false,
-				force: false,
-				autoDestroy: true,
-				duration: 100
+				selector: '',//查询哪些元素需要lazyload
+				diff: false,//距离视窗底部多少像素出发lazyload
+				force: false,//强制加载(不论元素是否在是视窗内)
+				autoDestroy: true,//元素加载完后是否自动销毁当前插件对象
+				duration: 100//滑动停止多久后开始加载
 			}, options);
 
 			this._key = 0;
@@ -290,12 +291,12 @@
 				return;
 			}
 			window.removeEventListener('scroll', load);
-			window.removeEventListener('touchmove', load);
+			window.removeEventListener($.EVENT_MOVE, load);
 			window.removeEventListener('resize', load);
 			if (this._containerIsNotDocument) {
 				this.container.removeEventListener('scrollend', load);
 				this.container.removeEventListener('scroll', load);
-				this.container.removeEventListener('touchmove', load);
+				this.container.removeEventListener($.EVENT_MOVE, load);
 			}
 		},
 		resume: function() {
@@ -304,19 +305,19 @@
 				return;
 			}
 			window.addEventListener('scroll', load, false);
-			window.addEventListener('touchmove', load, false);
+			window.addEventListener($.EVENT_MOVE, load, false);
 			window.addEventListener('resize', load, false);
 			if (this._containerIsNotDocument) {
 				this.container.addEventListener('scrollend', load, false);
 				this.container.addEventListener('scroll', load, false);
-				this.container.addEventListener('touchmove', load, false);
+				this.container.addEventListener($.EVENT_MOVE, load, false);
 			}
 		},
 		destroy: function() {
 			var self = this;
 			self.pause();
 			self._callbacks = {};
-			$.trigger(this.container, 'destory', self);
+			$.trigger(this.container, 'destroy', self);
 			self._destroyed = 1;
 		}
 	});
