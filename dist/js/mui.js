@@ -4563,7 +4563,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					if (number) { //图文表格
 						number.innerText = (detail.slideNumber + 1);
 					} else { //segmented controls
-						var controlItems = self.wrapper.querySelectorAll('.mui-control-item');
+						var controlItems = indicatorWrap.querySelectorAll('.mui-control-item');
 						for (var i = 0, len = controlItems.length; i < len; i++) {
 							controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
 						}
@@ -4598,7 +4598,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this._handleSlide(e);
 					break;
 				case $.eventName('shown', 'tab'):
-					this._handleTabShow(e);
+					if (~this.snaps.indexOf(e.target)) { //避免嵌套监听错误的tab show
+						this._handleTabShow(e);
+					}
 					break;
 			}
 		},
@@ -6094,7 +6096,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		}
 
-
 		if (activeTab) {
 			activeTab.classList.remove(className);
 		}
@@ -6128,7 +6129,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 		targetBody.classList.add(className);
 
-		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		var contents = [];
+		var _contents = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		for (var i = 0; i < _contents.length; i++) { //查找直属子节点
+			_contents[i].parentNode === parentNode && (contents.push(_contents[i]));
+		}
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
 		});
