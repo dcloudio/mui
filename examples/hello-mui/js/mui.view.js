@@ -191,7 +191,7 @@
 			}
 		},
 		_isAnimateNavbarIOS: function() {
-			return $.os.ios && this.options.animateNavbar === 'ios';
+			return !$.os.android && this.options.animateNavbar === 'ios';
 		},
 		_webkitTransitionEnd: function(event) {
 			this.dragging = this.moved = false;
@@ -271,7 +271,7 @@
 					cancelable: true
 				});
 				for (var len = callbacks.length; len--;) {
-					callbacks[len].apply(this, event);
+					callbacks[len].call(this, event);
 				}
 			}
 			$.trigger(this.view, eventType, {

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<style>
+			h5 {
+				margin-bottom: 10px;
+				text-align: left;
+			}
+			
+			.mui-demo-container{
+				background-color: #fff;
+				padding: 10px 15px;
+			}
+			
+			.mui-btn-block{
+				padding: 5px 0;
+			}
+			
+			#demo5 .mui-progressbar{
+				margin: 15px 10px;
+			}
+			
+			.mui-progressbar-success span {
+				background-color: #4cd964;
+			}
+			.mui-progressbar-warning span {
+				background-color: #f0ad4e;
+			}
+			.mui-progressbar-danger span {
+				background-color: #dd524d;
+			}
+			.mui-progressbar-royal span {
+				background-color: #8a6de9;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">progress bar（进度条）</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-demo-container">
+				<div id="demo1" class="mui-text-center">
+					<h5>动态设置进度条进度</h5>
+					<p class="mui-progressbar mui-progressbar-in" data-progress="20"><span></span></p>
+					<ul id="progressbarBtn1" class="mui-pagination">
+						<li><a href="javascript:;" data-progress="10">10%</a></li>
+						<li><a href="javascript:;" data-progress="30">30%</a></li>
+						<li><a href="javascript:;" data-progress="50">50%</a></li>
+						<li><a href="javascript:;" data-progress="100">100%</a></li>
+					</ul>
+				</div>
+				<div id="demo2">
+					<h5>动态创建内联进度条及销毁</h5>
+					<p style="height: 2px;"></p>
+					<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-btn-block">开始加载</button>
+				</div>
+				<div id="demo3">
+					<h5>动态创建页面顶部进度条</h5>
+					<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-btn-block">开始加载</button>
+				</div>
+			</div>
+			<div style="padding-left: 10px;margin: 15px 0;">
+				<h5>无限循环进度条</h5>
+			</div>
+			<div class="mui-demo-container">
+				<div>
+					<h5>内联无限循环进度条</h5>
+					<p class="mui-progressbar mui-progressbar-infinite"></p>
+				</div>
+				<div id="demo4" style="margin-top: 18px;">
+					<h5>页面顶部无限循环进度条</h5>
+					<button type="button" class="mui-btn mui-btn-primary mui-btn-outlined mui-btn-block">开始加载</button>
+				</div>
+			</div>
+			<div style="padding-left: 10px;margin: 15px 0;"><h5>自定义进度条颜色</h5></div>
+			<div id="demo5" class="mui-demo-container" style="padding-bottom: 30px;">
+				<p class="mui-progressbar mui-progressbar-success" data-progress="20"><span></span></p>
+				<p class="mui-progressbar mui-progressbar-warning" data-progress="30" ><span></span></p>
+				<p class="mui-progressbar mui-progressbar-danger" data-progress="50"><span></span></p>
+				<p class="mui-progressbar mui-progressbar-royal" data-progress="80"><span></span></p>
+			</div>
+
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+			//示例1
+			var progressbar1 = mui('#demo1');
+			mui(progressbar1).progressbar().setProgress(10)
+			progressbar1.on('tap', 'a', function() {
+				mui(progressbar1).progressbar().setProgress(this.getAttribute('data-progress'));
+			});
+			/**
+			 * 通过随机数模拟业务进度，真实业务中需根据实际进度修改
+			 * @param {Object} container
+			 * @param {Object} progress
+			 */
+			function simulateLoading(container, progress) {
+				if (typeof container === 'number') {
+					progress = container;
+					container = 'body';
+				}
+				setTimeout(function() {
+					progress += Math.random() * 20;
+					mui(container).progressbar().setProgress(progress);
+					if (progress < 100) {
+						simulateLoading(container, progress);
+					} else {
+						mui(container).progressbar().hide();
+					}
+				}, Math.random() * 200 + 200);
+			}
+			//动态创建内联进度条
+			mui("#demo2").on('tap', '.mui-btn', function() {
+				var container = mui("#demo2 p");
+				if (container.progressbar({
+						progress: 0
+					}).show()) {
+					simulateLoading(container, 0);
+				}
+			});
+			
+			//页面顶部进度条
+			var progressbar3 = mui('#demo3');
+			progressbar3.on('tap', 'button', function() {
+				mui('body').progressbar({
+					progress: 0
+				}).show();
+				simulateLoading(0);
+			});
+			//页面顶部无限进度条
+			var progressbar4 = mui('#demo4');
+			progressbar4.on('tap', 'button', function() {
+				//因为本页面既有顶部准确进度的进度条，也有顶部无限循环的进度条，因此这里需要强制定义progress: undefined覆盖；
+				//一般使用时，mui(container).progress()构造方法中不传入参数，就表示无限循环；
+				mui('body').progressbar({
+					progress: undefined
+				}).show();
+				//本示例5秒后自动消失，实际可根据实际情况决定关闭进度条的时机；
+				setTimeout(function() {
+					mui('body').progressbar().hide();
+				}, 5000);
+			});
+			
+			//自定义颜色示例
+			mui("#demo5 .mui-progressbar").each(function () {
+				mui(this).progressbar({progress:this.getAttribute("data-progress")}).show();
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.9.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.0.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -3692,7 +3692,7 @@ select:focus
 
 .mui-popup
 {
-    position: absolute;
+    position: fixed;
     z-index: 10000;
     top: 50%;
     left: 50%;
@@ -3775,9 +3775,10 @@ select:focus
 
 .mui-popup-title + .mui-popup-text
 {
+    font-family: inherit;
     font-size: 14px;
 
-    margin-top: 5px;
+    margin: 5px 0 0;
 }
 
 .mui-popup-buttons
@@ -3869,8 +3870,7 @@ select:focus
 
     width: 100%;
     height: 26px;
-    margin: 0;
-    margin-top: 15px;
+    margin: 15px 0 0;
     padding: 0 5px;
 
     border: 1px solid rgba(0, 0, 0, .3);
@@ -3892,6 +3892,173 @@ select:focus
             transform: translate3d(-50%, -50%, 0) scale(1);
 }
 
+/* === Progress Bar === */
+.mui-progressbar
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    width: 100%;
+    height: 2px;
+
+    -webkit-transform-origin: center top;
+            transform-origin: center top;
+    vertical-align: middle;
+
+    border-radius: 2px;
+    background: #b6b6b6;
+
+    -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+}
+.mui-progressbar span
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    -webkit-transition: 150ms;
+            transition: 150ms;
+    -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+
+    background: #007aff;
+}
+.mui-progressbar.mui-progressbar-infinite:before
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    content: '';
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+    -webkit-transform-origin: left center;
+            transform-origin: left center;
+    -webkit-animation: mui-progressbar-infinite 1s linear infinite;
+            animation: mui-progressbar-infinite 1s linear infinite;
+
+    background: #007aff;
+}
+
+body > .mui-progressbar
+{
+    position: absolute;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+
+    border-radius: 0;
+}
+
+.mui-progressbar-in
+{
+    -webkit-animation: mui-progressbar-in 300ms forwards;
+            animation: mui-progressbar-in 300ms forwards;
+}
+
+.mui-progressbar-out
+{
+    -webkit-animation: mui-progressbar-out 300ms forwards;
+            animation: mui-progressbar-out 300ms forwards;
+}
+
+@-webkit-keyframes mui-progressbar-in
+{
+    from
+    {
+        -webkit-transform: scaleY(0);
+
+        opacity: 0;
+    }
+
+    to
+    {
+        -webkit-transform: scaleY(1);
+
+        opacity: 1;
+    }
+}
+@keyframes mui-progressbar-in
+{
+    from
+    {
+        transform: scaleY(0);
+
+        opacity: 0;
+    }
+
+    to
+    {
+        transform: scaleY(1);
+
+        opacity: 1;
+    }
+}
+@-webkit-keyframes mui-progressbar-out
+{
+    from
+    {
+        -webkit-transform: scaleY(1);
+
+        opacity: 1;
+    }
+
+    to
+    {
+        -webkit-transform: scaleY(0);
+
+        opacity: 0;
+    }
+}
+@keyframes mui-progressbar-out
+{
+    from
+    {
+        transform: scaleY(1);
+
+        opacity: 1;
+    }
+
+    to
+    {
+        transform: scaleY(0);
+
+        opacity: 0;
+    }
+}
+@-webkit-keyframes mui-progressbar-infinite
+{
+    0%
+    {
+        -webkit-transform: translate3d(-50%, 0, 0) scaleX(.5);
+    }
+
+    100%
+    {
+        -webkit-transform: translate3d(100%, 0, 0) scaleX(.5);
+    }
+}
+@keyframes mui-progressbar-infinite
+{
+    0%
+    {
+        transform: translate3d(-50%, 0, 0) scaleX(.5);
+    }
+
+    100%
+    {
+        transform: translate3d(100%, 0, 0) scaleX(.5);
+    }
+}
 .mui-pagination
 {
     display: inline-block;
@@ -5132,9 +5299,6 @@ select:focus
     right: 0;
     bottom: 0;
     left: 0;
-
-    width: 100%;
-    height: 100%;
 }
 .mui-fullscreen.mui-slider .mui-slider-group
 {
@@ -5162,6 +5326,11 @@ select:focus
 
     -webkit-transform: none;
             transform: none;
+}
+
+.mui-bar-nav ~ .mui-content .mui-slider.mui-fullscreen
+{
+    top: 44px;
 }
 
 .mui-bar-tab ~ .mui-content .mui-slider.mui-fullscreen .mui-segmented-control ~ .mui-slider-group

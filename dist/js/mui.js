@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v2.9.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.0.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -2207,6 +2207,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						trigger(webview, 'pagebeforeshow', false);
 					});
 					return webview;
+				} else {
+					if (!url) {
+						throw new Error('webview[' + id + '] does not exist');
+					}
 				}
 			}
 			//显示waiting
@@ -2224,7 +2228,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			//显示
 			nShow = $.showOptions(options.show);
 			if (nShow.autoShow) {
-				webview.addEventListener("loaded", function() {
+				var showWebview = function() {
 					//关闭等待框
 					if (nWaiting) {
 						nWaiting.close();
@@ -2236,7 +2240,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					});
 					webview.showed = true;
 					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
-				}, false);
+				};
+				if (!url) {
+					showWebview();
+				} else {
+					webview.addEventListener("loaded", showWebview, false);
+				}
 			}
 		}
 		return webview;
@@ -2270,11 +2279,16 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					}, options.extras));
 					if (options.subpages) {
 						$.each(options.subpages, function(index, subpage) {
-							//TODO 子窗口也可能已经创建，比如公用模板的情况；
-							var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), $.extend({
-								preload: true
-							}, subpage.extras));
-							webview.append(subWebview);
+							var subpageId = subpage.id || subpage.url;
+							if (subpageId) { //过滤空对象
+								var subWebview = plus.webview.getWebviewById(subpageId);
+								if (!subWebview) { //如果该webview不存在，则创建
+									subWebview = plus.webview.create(subpage.url, subpageId, $.windowOptions(subpage.styles), $.extend({
+										preload: true
+									}, subpage.extras));
+								}
+								webview.append(subWebview);
+							}
 						});
 					}
 				}
@@ -2311,7 +2325,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), options.extras);
 				if (options.subpages) {
 					$.each(options.subpages, function(index, subpage) {
-						var subWebview = plus.webview.create(subpage.url, subpage.id || subpage.url, $.windowOptions(subpage.styles), subpage.extras);
+						var subpageId = subpage.id || subpage.url;
+						var subWebview = plus.webview.getWebviewById(subpageId);
+						if (!subWebview) {
+							subWebview = plus.webview.create(subpage.url, subpageId, $.windowOptions(subpage.styles), subpage.extras);
+						}
 						webview.append(subWebview);
 					});
 				}
@@ -2384,7 +2402,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		var webview;
 		if (!$.webviews[id]) { //保证执行一遍
 			//TODO 这里也有隐患，比如某个webview不是作为subpage创建的，而是作为target webview的话；
-			webview = plus.webview.create(options.url, id, options.styles, options.extras);
+			if (!plus.webview.getWebviewById(id)) {
+				webview = plus.webview.create(options.url, id, options.styles, options.extras);
+			}
 			//之前的实现方案：子窗口loaded之后再append到父窗口中；
 			//问题：部分子窗口loaded事件发生较晚，此时执行父窗口的children方法会返回空，导致父子通讯失败；
 			//     比如父页面执行完preload事件后，需触发子页面的preload事件，此时未append的话，就无法触发；
@@ -2394,6 +2414,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			plus.webview.currentWebview().append(webview);
 			// });
 			$.webviews[id] = options;
+
 		}
 		return webview;
 	};
@@ -3375,7 +3396,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				scrollTime: 500,
 				scrollEasing: ease.outCubic, //轮播动画曲线
 
-
 				directionLockThreshold: 5,
 
 				parallaxElement: false, //视差元素
@@ -3816,7 +3836,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		},
 		_scrollend: function(e) {
-			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
+			if ((this.y === 0 && this.maxScrollY === 0) || (Math.abs(this.y) > 0 && this.y <= this.maxScrollY)) {
 				$.trigger(this.scroller, 'scrollbottom', this);
 			}
 		},
@@ -4098,7 +4118,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			speedRatioX: 0,
 			speedRatioY: 0
 		}, options);
-
 
 		this.sizeRatioX = 1;
 		this.sizeRatioY = 1;
@@ -4544,7 +4563,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					if (number) { //图文表格
 						number.innerText = (detail.slideNumber + 1);
 					} else { //segmented controls
-						var controlItems = self.wrapper.querySelectorAll('.mui-control-item');
+						var controlItems = indicatorWrap.querySelectorAll('.mui-control-item');
 						for (var i = 0, len = controlItems.length; i < len; i++) {
 							controlItems[i].classList[i === detail.slideNumber ? 'add' : 'remove'](CLASS_ACTIVE);
 						}
@@ -4579,7 +4598,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					this._handleSlide(e);
 					break;
 				case $.eventName('shown', 'tab'):
-					this._handleTabShow(e);
+					if (~this.snaps.indexOf(e.target)) { //避免嵌套监听错误的tab show
+						this._handleTabShow(e);
+					}
 					break;
 			}
 		},
@@ -6075,7 +6096,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		}
 
-
 		if (activeTab) {
 			activeTab.classList.remove(className);
 		}
@@ -6109,7 +6129,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 		targetBody.classList.add(className);
 
-		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		var contents = [];
+		var _contents = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		for (var i = 0; i < _contents.length; i++) { //查找直属子节点
+			_contents[i].parentNode === parentNode && (contents.push(_contents[i]));
+		}
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
 		});
@@ -6978,6 +7002,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var backdrop = (function() {
 		var element = document.createElement('div');
 		element.classList.add(CLASS_POPUP_BACKDROP);
+		element.addEventListener($.EVENT_MOVE, $.preventDefault);
 		element.addEventListener('webkitTransitionEnd', function() {
 			if (!this.classList.contains(CLASS_ACTIVE)) {
 				element.parentNode && element.parentNode.removeChild(element);
@@ -6990,7 +7015,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		return '<div class="' + CLASS_POPUP_INPUT + '"><input type="text" autofocus placeholder="' + (placeholder || '') + '"/></div>';
 	};
 	var createInner = function(message, title, extra) {
-		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><div class="' + CLASS_POPUP_TEXT + '">' + message + '</div>' + (extra || '') + '</div>';
+		return '<div class="' + CLASS_POPUP_INNER + '"><div class="' + CLASS_POPUP_TITLE + '">' + title + '</div><pre class="' + CLASS_POPUP_TEXT + '">' + message + '</pre>' + (extra || '') + '</div>';
 	};
 	var createButtons = function(btnArray) {
 		var length = btnArray.length;
@@ -7009,7 +7034,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			popupElement.parentNode && popupElement.parentNode.removeChild(popupElement);
 			popupElement = null;
 		};
-
+		popupElement.addEventListener($.EVENT_MOVE, $.preventDefault);
 		popupElement.addEventListener('webkitTransitionEnd', function(e) {
 			if (popupElement && e.target === popupElement && popupElement.classList.contains(CLASS_POPUP_OUT)) {
 				removePopupElement();
@@ -7159,6 +7184,158 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.confirm = createConfirm;
 	$.prompt = createPrompt;
 })(mui, window, document);
+(function($, document) {
+	var CLASS_PROGRESSBAR = 'mui-progressbar';
+	var CLASS_PROGRESSBAR_IN = 'mui-progressbar-in';
+	var CLASS_PROGRESSBAR_OUT = 'mui-progressbar-out';
+	var CLASS_PROGRESSBAR_INFINITE = 'mui-progressbar-infinite';
+
+	var SELECTOR_PROGRESSBAR = '.mui-progressbar';
+
+	var _findProgressbar = function(container) {
+		container = $(container || 'body');
+		if (container.length === 0) return;
+		container = container[0];
+		if (container.classList.contains(CLASS_PROGRESSBAR)) {
+			return container;
+		}
+		var progressbars = container.querySelectorAll(SELECTOR_PROGRESSBAR);
+		if (progressbars) {
+			for (var i = 0, len = progressbars.length; i < len; i++) {
+				var progressbar = progressbars[i];
+				if (progressbar.parentNode === container) {
+					return progressbar;
+				}
+			}
+		}
+	};
+	/**
+	 * 创建并显示进度条 
+	 * @param {Object} container  可选，默认body，支持selector,DOM Node,mui wrapper
+	 * @param {Object} progress 可选，undefined表示循环，数字表示具体进度
+	 * @param {Object} color 可选，指定颜色样式(目前暂未提供实际样式，可暂时不暴露此参数)
+	 */
+	var showProgressbar = function(container, progress, color) {
+		if (typeof container === 'number') {
+			color = progress;
+			progress = container;
+			container = 'body';
+		}
+		container = $(container || 'body');
+		if (container.length === 0) return;
+		container = container[0];
+		var progressbar;
+		if (container.classList.contains(CLASS_PROGRESSBAR)) {
+			progressbar = container;
+		} else {
+			var progressbars = container.querySelectorAll(SELECTOR_PROGRESSBAR + ':not(.' + CLASS_PROGRESSBAR_OUT + ')');
+			if (progressbars) {
+				for (var i = 0, len = progressbars.length; i < len; i++) {
+					var _progressbar = progressbars[i];
+					if (_progressbar.parentNode === container) {
+						progressbar = _progressbar;
+						break;
+					}
+				}
+			}
+			if (!progressbar) {
+				progressbar = document.createElement('span');
+				progressbar.className = CLASS_PROGRESSBAR + ' ' + CLASS_PROGRESSBAR_IN + (typeof progress !== 'undefined' ? '' : (' ' + CLASS_PROGRESSBAR_INFINITE)) + (color ? (' ' + CLASS_PROGRESSBAR + '-' + color) : '');
+				if (typeof progress !== 'undefined') {
+					progressbar.innerHTML = '<span></span>';
+				}
+				container.appendChild(progressbar);
+			} else {
+				progressbar.classList.add(CLASS_PROGRESSBAR_IN);
+			}
+		}
+		if (progress) setProgressbar(container, progress);
+		return progressbar;
+	};
+	/**
+	 * 关闭进度条 
+	 * @param {Object} container 可选，默认body，支持selector,DOM Node,mui wrapper
+	 */
+	var hideProgressbar = function(container) {
+		var progressbar = _findProgressbar(container);
+		if (!progressbar) {
+			return;
+		}
+		var classList = progressbar.classList;
+		if (!classList.contains(CLASS_PROGRESSBAR_IN) || classList.contains(CLASS_PROGRESSBAR_OUT)) {
+			return;
+		}
+		classList.remove(CLASS_PROGRESSBAR_IN);
+		classList.add(CLASS_PROGRESSBAR_OUT);
+		progressbar.addEventListener('webkitAnimationEnd', function() {
+			progressbar.parentNode && progressbar.parentNode.removeChild(progressbar);
+			progressbar = null;
+		});
+		return;
+	};
+	/**
+	 * 设置指定进度条进度 
+	 * @param {Object} container  可选，默认body，支持selector,DOM Node,mui wrapper
+	 * @param {Object} progress 可选，默认0 取值范围[0-100]
+	 * @param {Object} speed 进度条动画时间
+	 */
+	var setProgressbar = function(container, progress, speed) {
+		if (typeof container === 'number') {
+			speed = progress;
+			progress = container;
+			container = false;
+		}
+		var progressbar = _findProgressbar(container);
+		if (!progressbar || progressbar.classList.contains(CLASS_PROGRESSBAR_INFINITE)) {
+			return;
+		}
+		if (progress) progress = Math.min(Math.max(progress, 0), 100);
+		progressbar.offsetHeight;
+		var span = progressbar.querySelector('span');
+		if (span) {
+			var style = span.style;
+			style.webkitTransform = 'translate3d(' + (-100 + progress) + '%,0,0)';
+			if (typeof speed !== 'undefined') {
+				style.webkitTransitionDuration = speed + 'ms';
+			} else {
+				style.webkitTransitionDuration = '';
+			}
+		}
+		return progressbar;
+	};
+	$.fn.progressbar = function(options) {
+		var progressbarApis = [];
+		options = options || {};
+		this.each(function() {
+			var self = this;
+			var progressbarApi = self.mui_plugin_progressbar;
+			if (!progressbarApi) {
+				self.mui_plugin_progressbar = progressbarApi = {
+					options: options,
+					setOptions: function(options) {
+						this.options = options;
+					},
+					show: function() {
+						return showProgressbar(self, this.options.progress, this.options.color);
+					},
+					setProgress: function(progress) {
+						return setProgressbar(self, progress);
+					},
+					hide: function() {
+						return hideProgressbar(self);
+					}
+				};
+			} else if (options) {
+				progressbarApi.setOptions(options);
+			}
+			progressbarApis.push(progressbarApi);
+		});
+		return progressbarApis.length === 1 ? progressbarApis[0] : progressbarApis;
+	};
+	//	$.setProgressbar = setProgressbar;
+	//	$.showProgressbar = showProgressbar;
+	//	$.hideProgressbar = hideProgressbar;
+})(mui, document);
 /**
  * Input(TODO resize)
  * @param {type} $

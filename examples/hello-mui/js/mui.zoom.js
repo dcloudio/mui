@@ -40,19 +40,21 @@
 			target[action](EVENT_PINCH, zoom.onPinch);
 			target[action](EVENT_PINCH_END, zoom.onPinchend);
 
-			target[action]('touchstart', zoom.onTouchstart);
-			target[action]('touchmove', zoom.onTouchMove);
-			target[action]('touchcancel', zoom.onTouchEnd);
-			target[action]('touchend', zoom.onTouchEnd);
+			target[action]($.EVENT_START, zoom.onTouchstart);
+			target[action]($.EVENT_MOVE, zoom.onTouchMove);
+			target[action]($.EVENT_CANCEL, zoom.onTouchEnd);
+			target[action]($.EVENT_END, zoom.onTouchEnd);
 
-			target[action]('drag', function(e) {
-				if (imageIsMoved || isGesturing) {
-					e.stopPropagation();
-				}
-			});
-			target[action]('doubletap', function(e) {
-				zoom.toggleZoom(e.detail.center);
-			});
+			target[action]('drag', zoom.dragEvent);
+			target[action]('doubletap', zoom.doubleTapEvent);
+		};
+		zoom.dragEvent = function(e) {
+			if (imageIsMoved || isGesturing) {
+				e.stopPropagation();
+			}
+		};
+		zoom.doubleTapEvent = function(e) {
+			zoom.toggleZoom(e.detail.center);
 		};
 		zoom.transition = function(style, time) {
 			time = time || 0;
@@ -178,8 +180,8 @@
 		zoom.onTouchstart = function(e) {
 			e.preventDefault();
 			imageIsTouched = true;
-			imageTouchesStart.x = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-			imageTouchesStart.y = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+			imageTouchesStart.x = e.type === $.EVENT_START ? e.targetTouches[0].pageX : e.pageX;
+			imageTouchesStart.y = e.type === $.EVENT_START ? e.targetTouches[0].pageY : e.pageY;
 		};
 		zoom.onTouchMove = function(e) {
 			e.preventDefault();
@@ -204,8 +206,8 @@
 			imageMinY = Math.min((wrapperHeight / 2 - scaledHeight / 2), 0);
 			imageMaxY = -imageMinY;
 
-			imageTouchesCurrent.x = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.pageX;
-			imageTouchesCurrent.y = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.pageY;
+			imageTouchesCurrent.x = e.type === $.EVENT_MOVE ? e.targetTouches[0].pageX : e.pageX;
+			imageTouchesCurrent.y = e.type === $.EVENT_MOVE ? e.targetTouches[0].pageY : e.pageY;
 
 			if (!imageIsMoved && !isScaling) {
 				//				if (Math.abs(imageTouchesCurrent.y - imageTouchesStart.y) < Math.abs(imageTouchesCurrent.x - imageTouchesStart.x)) {
@@ -287,7 +289,7 @@
 
 			zoom.scrollerTransition(momentumDuration).scrollerTransform(imageCurrentX, imageCurrentY);
 		};
-		zoom.destory = function() {
+		zoom.destroy = function() {
 			zoom.initEvents(true); //detach
 			delete $.data[zoom.wrapper.getAttribute('data-zoomer')];
 			zoom.wrapper.setAttribute('data-zoomer', '');

@@ -59,7 +59,6 @@
 				scrollTime: 500,
 				scrollEasing: ease.outCubic, //轮播动画曲线
 
-
 				directionLockThreshold: 5,
 
 				parallaxElement: false, //视差元素
@@ -500,7 +499,7 @@
 			}
 		},
 		_scrollend: function(e) {
-			if (Math.abs(this.y) > 0 && this.y <= this.maxScrollY) {
+			if ((this.y === 0 && this.maxScrollY === 0) || (Math.abs(this.y) > 0 && this.y <= this.maxScrollY)) {
 				$.trigger(this.scroller, 'scrollbottom', this);
 			}
 		},
@@ -782,7 +781,6 @@
 			speedRatioX: 0,
 			speedRatioY: 0
 		}, options);
-
 
 		this.sizeRatioX = 1;
 		this.sizeRatioY = 1;

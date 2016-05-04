@@ -8,9 +8,9 @@
 (function($, doc) {
 
 	var touchSupport = ('ontouchstart' in document);
-	var startEventName = touchSupport ? 'touchstart' : 'mousedown';
-	var moveEventName = touchSupport ? 'touchmove' : 'mousemove';
-	var endEventName = touchSupport ? 'touchend' : 'mouseup';
+	var startEventName = touchSupport ? $.EVENT_START : 'mousedown';
+	var moveEventName = touchSupport ? $.EVENT_MOVE : 'mousemove';
+	var endEventName = touchSupport ? $.EVENT_END : 'mouseup';
 	var lockerHolderClassName = $.className('locker-holder');
 	var lockerClassName = $.className('locker');
 
