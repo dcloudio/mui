@@ -6,7 +6,7 @@
  */
 
 (function($, document) {
-	
+
 	//创建 DOM
 	$.dom = function(str) {
 		if (typeof(str) !== 'string') {
@@ -22,7 +22,7 @@
 		$.__create_dom_div__.innerHTML = str;
 		return [].slice.call($.__create_dom_div__.childNodes);
 	};
-	
+
 	var domBuffer = '<div class="mui-dtpicker" data-type="datetime">\
 		<div class="mui-dtpicker-header">\
 			<button data-id="btn-cancel" class="mui-btn">取消</button>\
@@ -101,23 +101,37 @@
 					self.hide();
 				}
 			}, false);
-			ui.y.addEventListener('change', function() {
+			ui.y.addEventListener('change', function(e) { //目前的change事件容易导致级联触发
+				if (self.options.beginMonth || self.options.endMonth) {
+					self._createMonth();
+				} else {
+					self._createDay();
+				}
+			}, false);
+			ui.m.addEventListener('change', function(e) {
 				self._createDay();
 			}, false);
-			ui.m.addEventListener('change', function() {
-				self._createDay();
+			ui.d.addEventListener('change', function(e) {
+				if (self.options.beginMonth || self.options.endMonth) { //仅提供了beginDate时，触发day,hours,minutes的change
+					self._createHours();
+				}
+			}, false);
+			ui.h.addEventListener('change', function(e) {
+				if (self.options.beginMonth || self.options.endMonth) {
+					self._createMinutes();
+				}
 			}, false);
 			ui.mask[0].addEventListener('tap', function() {
 				self.hide();
 			}, false);
 			self._create(options);
 			//防止滚动穿透
-			self.ui.picker.addEventListener('touchstart',function(event){
-				event.preventDefault();  
-			},false);
-			self.ui.picker.addEventListener('touchmove',function(event){
-				event.preventDefault();  
-			},false);
+			self.ui.picker.addEventListener($.EVENT_START, function(event) {
+				event.preventDefault();
+			}, false);
+			self.ui.picker.addEventListener($.EVENT_MOVE, function(event) {
+				event.preventDefault();
+			}, false);
 		},
 		getSelected: function() {
 			var self = this;
@@ -162,11 +176,16 @@
 			var self = this;
 			var ui = self.ui;
 			var parsedValue = self._parseValue(value);
-			ui.y.picker.setSelectedValue(parsedValue.y, 0);
-			ui.m.picker.setSelectedValue(parsedValue.m, 0);
-			ui.d.picker.setSelectedValue(parsedValue.d, 0);
-			ui.h.picker.setSelectedValue(parsedValue.h, 0);
-			ui.i.picker.setSelectedValue(parsedValue.i, 0);
+			//TODO 嵌套过多，因为picker的change时间是异步(考虑到性能)的，所以为了保证change之后再setSelected，目前使用回调处理
+			ui.y.picker.setSelectedValue(parsedValue.y, 0, function() {
+				ui.m.picker.setSelectedValue(parsedValue.m, 0, function() {
+					ui.d.picker.setSelectedValue(parsedValue.d, 0, function() {
+						ui.h.picker.setSelectedValue(parsedValue.h, 0, function() {
+							ui.i.picker.setSelectedValue(parsedValue.i, 0);
+						});
+					});
+				});
+			});
 		},
 		isLeapYear: function(year) {
 			return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
@@ -197,6 +216,30 @@
 			}
 			return num;
 		},
+		_isBeginYear: function() {
+			return this.options.beginYear === parseInt(this.ui.y.picker.getSelectedValue());
+		},
+		_isBeginMonth: function() {
+			return this.options.beginMonth && this._isBeginYear() && this.options.beginMonth === parseInt(this.ui.m.picker.getSelectedValue());
+		},
+		_isBeginDay: function() {
+			return this._isBeginMonth() && this.options.beginDay === parseInt(this.ui.d.picker.getSelectedValue());
+		},
+		_isBeginHours: function() {
+			return this._isBeginDay() && this.options.beginHours === parseInt(this.ui.h.picker.getSelectedValue());
+		},
+		_isEndYear: function() {
+			return this.options.endYear === parseInt(this.ui.y.picker.getSelectedValue());
+		},
+		_isEndMonth: function() {
+			return this.options.endMonth && this._isEndYear() && this.options.endMonth === parseInt(this.ui.m.picker.getSelectedValue());
+		},
+		_isEndDay: function() {
+			return this._isEndMonth() && this.options.endDay === parseInt(this.ui.d.picker.getSelectedValue());
+		},
+		_isEndHours: function() {
+			return this._isEndDay() && this.options.endHours === parseInt(this.ui.h.picker.getSelectedValue());
+		},
 		_createYear: function(current) {
 			var self = this;
 			var options = self.options;
@@ -222,12 +265,15 @@
 			var self = this;
 			var options = self.options;
 			var ui = self.ui;
+
 			//生成月列表
 			var mArray = [];
 			if (options.customData.m) {
 				mArray = options.customData.m;
 			} else {
-				for (var m = 1; m <= 12; m++) {
+				var m = options.beginMonth && self._isBeginYear() ? options.beginMonth : 1;
+				var maxMonth = options.endMonth && self._isEndYear() ? options.endMonth : 12;
+				for (; m <= maxMonth; m++) {
 					var val = self._fill(m);
 					mArray.push({
 						text: val,
@@ -242,13 +288,15 @@
 			var self = this;
 			var options = self.options;
 			var ui = self.ui;
+
 			//生成日列表
 			var dArray = [];
 			if (options.customData.d) {
 				dArray = options.customData.d;
 			} else {
-				var maxDay = self.getDayNum(parseInt(ui.y.picker.getSelectedValue()), parseInt(ui.m.picker.getSelectedValue()));
-				for (var d = 1; d <= maxDay; d++) {
+				var d = self._isBeginMonth() ? options.beginDay : 1;
+				var maxDay = self._isEndMonth() ? options.endDay : self.getDayNum(parseInt(this.ui.y.picker.getSelectedValue()), parseInt(this.ui.m.picker.getSelectedValue()));
+				for (; d <= maxDay; d++) {
 					var val = self._fill(d);
 					dArray.push({
 						text: val,
@@ -269,7 +317,9 @@
 			if (options.customData.h) {
 				hArray = options.customData.h;
 			} else {
-				for (var h = 0; h <= 23; h++) {
+				var h = self._isBeginDay() ? options.beginHours : 0;
+				var maxHours = self._isEndDay() ? options.endHours : 23;
+				for (; h <= maxHours; h++) {
 					var val = self._fill(h);
 					hArray.push({
 						text: val,
@@ -284,12 +334,15 @@
 			var self = this;
 			var options = self.options;
 			var ui = self.ui;
+
 			//生成分列表
 			var iArray = [];
 			if (options.customData.i) {
 				iArray = options.customData.i;
 			} else {
-				for (var i = 0; i <= 59; i++) {
+				var i = self._isBeginHours() ? options.beginMinutes : 0;
+				var maxMinutes = self._isEndHours() ? options.endMinutes : 59;
+				for (; i <= maxMinutes; i++) {
 					var val = self._fill(i);
 					iArray.push({
 						text: val,
@@ -344,6 +397,22 @@
 			options.customData = options.customData || {};
 			self.options = options;
 			var now = new Date();
+			var beginDate = options.beginDate;
+			if (beginDate instanceof Date && !isNaN(beginDate.valueOf())) { //设定了开始日期
+				options.beginYear = beginDate.getFullYear();
+				options.beginMonth = beginDate.getMonth() + 1;
+				options.beginDay = beginDate.getDate();
+				options.beginHours = beginDate.getHours();
+				options.beginMinutes = beginDate.getMinutes();
+			}
+			var endDate = options.endDate;
+			if (endDate instanceof Date && !isNaN(endDate.valueOf())) { //设定了结束日期
+				options.endYear = endDate.getFullYear();
+				options.endMonth = endDate.getMonth() + 1;
+				options.endDay = endDate.getDate();
+				options.endHours = endDate.getHours();
+				options.endMinutes = endDate.getMinutes();
+			}
 			options.beginYear = options.beginYear || (now.getFullYear() - 5);
 			options.endYear = options.endYear || (now.getFullYear() + 5);
 			var ui = self.ui;
@@ -383,7 +452,7 @@
 			ui.mask.close();
 			document.body.classList.remove($.className('dtpicker-active-for-page'));
 			//处理物理返回键
-			$.back=self.__back;
+			$.back = self.__back;
 		},
 		dispose: function() {
 			var self = this;

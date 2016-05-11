@@ -98,16 +98,16 @@
 					pointElement = null;
 				}
 			};
-			self.el.bar.addEventListener('touchmove', function(event) {
+			self.el.bar.addEventListener($.EVENT_MOVE, function(event) {
 				findStart(event);
 			}, false);
-			self.el.bar.addEventListener('touchstart', function(event) {
+			self.el.bar.addEventListener($.EVENT_START, function(event) {
 				findStart(event);
 			}, false);
-			document.body.addEventListener('touchend', function(event) {
+			document.body.addEventListener($.EVENT_END, function(event) {
 				findEnd(event);
 			}, false);
-			document.body.addEventListener('touchcancel', function(event) {
+			document.body.addEventListener($.EVENT_CANCEL, function(event) {
 				findEnd(event);
 			}, false);
 		},

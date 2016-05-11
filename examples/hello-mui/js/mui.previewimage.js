@@ -37,16 +37,12 @@
 	proto.initEvent = function() {
 		var self = this;
 		$(document.body).on('tap', 'img[data-preview-src]', function() {
-			if (self.isAnimationing()) {
-				return false;
-			}
 			self.open(this);
 			return false;
 		});
 		var laterClose = null;
 		var laterCloseEvent = function() {
 			!laterClose && (laterClose = $.later(function() {
-				self.isInAnimation = true;
 				self.loader.removeEventListener('tap', laterCloseEvent);
 				self.scroller.removeEventListener('tap', laterCloseEvent);
 				self.close();
@@ -62,12 +58,12 @@
 			if (self.element.classList.contains($.className('preview-out'))) { //close
 				self.element.style.display = 'none';
 				self.element.classList.remove($.className('preview-out'));
+				self.element.classList.remove($.className('preview-in'));
 				laterClose = null;
 			} else { //open
 				self.loader.addEventListener('tap', laterCloseEvent);
 				self.scroller.addEventListener('tap', laterCloseEvent);
 			}
-			self.isInAnimation = false;
 		});
 		this.element.addEventListener('slide', function(e) {
 			if (self.options.zoom) {
@@ -82,13 +78,6 @@
 			self._loadItem(slideNumber);
 
 		});
-	};
-	proto.isAnimationing = function() {
-		if (this.isInAnimation) {
-			return true;
-		}
-		this.isInAnimation = true;
-		return false;
 	};
 	proto.addImages = function(group, index) {
 		this.groups = {};
@@ -328,7 +317,7 @@
 		this.refresh(index, this.groups[group]);
 	};
 	proto.open = function(index, group) {
-		if (this.element.classList.contains($.className('preview-in'))) {
+		if (this.isShown()) {
 			return;
 		}
 		if (typeof index === "number") {
@@ -343,6 +332,9 @@
 		}
 	};
 	proto.close = function(index, group) {
+		if (!this.isShown()) {
+			return;
+		}
 		this.element.classList.remove($.className('preview-in'));
 		this.element.classList.add($.className('preview-out'));
 		var itemEl = this.scroller.querySelector($.classSelector('.slider-item:nth-child(' + (this.lastIndex + 1) + ')'));
@@ -367,10 +359,10 @@
 		}
 		var zoomers = this.element.querySelectorAll($.classSelector('.zoom-wrapper'));
 		for (var i = 0, len = zoomers.length; i < len; i++) {
-			$(zoomers[i]).zoom().destory();
+			$(zoomers[i]).zoom().destroy();
 		}
-		//		$(this.element).slider().destory();
-		//		this.empty();
+		$(this.element).slider().destroy();
+//		this.empty();
 	};
 	proto.isShown = function() {
 		return this.element.classList.contains($.className('preview-in'));

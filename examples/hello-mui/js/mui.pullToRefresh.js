@@ -58,7 +58,7 @@
 		},
 		initEvent: function() {
 			if ($.isFunction(this.options.down.callback)) {
-				this.element.addEventListener('touchstart', this);
+				this.element.addEventListener($.EVENT_START, this);
 				this.element.addEventListener('drag', this);
 				this.element.addEventListener('dragend', this);
 			}
@@ -73,7 +73,7 @@
 		},
 		handleEvent: function(e) {
 			switch (e.type) {
-				case 'touchstart':
+				case $.EVENT_START:
 					this.isInScroll && this._canPullDown() && e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
 					break;
 				case 'drag':
@@ -347,6 +347,9 @@
 			} else {
 				this.removing = true;
 			}
+			if (this.isInScroll) {
+				$(this.element.parentNode).scroll().refresh();
+			}
 		},
 		endPullUpToRefresh: function(finished) {
 			if (finished) {
@@ -358,6 +361,9 @@
 				this.pullUpTipsIcon.innerHTML = this.options.up.contentdown;
 			}
 			this.loading = false;
+			if (this.isInScroll) {
+				$(this.element.parentNode).scroll().refresh();
+			}
 		},
 		setStopped: function(stopped) {
 			if (stopped != this.stopped) {

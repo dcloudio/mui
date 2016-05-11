@@ -107,7 +107,7 @@
 				self.next();
 			}, false);
 			//处理划动
-			self.mask.addEventListener('touchmove', function(event) {
+			self.mask.addEventListener($.EVENT_MOVE, function(event) {
 				event.preventDefault();
 				event.cancelBubble = true;
 			}, false);
@@ -122,7 +122,7 @@
 				event.cancelBubble = true;
 			}, false);
 			//处理缩放开始
-			self.viewer.addEventListener('touchstart', function(event) {
+			self.viewer.addEventListener($.EVENT_START, function(event) {
 				var touches = event.touches;
 				if (touches.length == 2) {
 					var p1 = touches[0];
@@ -135,7 +135,7 @@
 					self.dragStart = touches[0];
 				}
 			}, false);
-			self.viewer.addEventListener('touchmove', function(event) {
+			self.viewer.addEventListener($.EVENT_MOVE, function(event) {
 				var img = self.currentItem.querySelector('img');
 				var touches = event.changedTouches;
 				if (touches.length == 2) {
@@ -160,7 +160,7 @@
 					//img.style.transform = "translate(" + self._dragX + "px," + self._dragY + "px) " + " scale(" + self.scaleValue || 1 + "," + self.scaleValue || 1 + ")";
 				}
 			}, false);
-			self.viewer.addEventListener('touchend', function() {
+			self.viewer.addEventListener($.EVENT_END, function() {
 				self.scaleValue = self._scaleValue || self.scaleValue;
 				self._scaleValue = null;
 				self.dragX = self._dragX;

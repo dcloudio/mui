@@ -59,7 +59,6 @@
 			}
 		}
 
-
 		if (activeTab) {
 			activeTab.classList.remove(className);
 		}
@@ -93,7 +92,11 @@
 
 		targetBody.classList.add(className);
 
-		var contents = targetBody.parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		var contents = [];
+		var _contents = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+		for (var i = 0; i < _contents.length; i++) { //查找直属子节点
+			_contents[i].parentNode === parentNode && (contents.push(_contents[i]));
+		}
 		$.trigger(targetBody, $.eventName('shown', name), {
 			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
 		});

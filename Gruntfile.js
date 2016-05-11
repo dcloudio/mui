@@ -91,6 +91,7 @@ module.exports = function(grunt) {
 					'js/mui.dialog.prompt.js',
 					'js/mui.dialog.toast.js',
 					'js/mui.popup.js',
+					'js/mui.progressbar.js',
 					'js/input.plugin.js',
 					'js/mui.number.js'
 

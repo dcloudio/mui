@@ -59,7 +59,7 @@
 		},
 		"Navigator":{
 			"description": "浏览器信息"
-		}
+		},"Payment":{}
 	},
 	"plus": {
 		"popGesture": "close",/*设置应用默认侧滑返回关闭Webview窗口，none为无侧滑返回功能，hide为侧滑隐藏Webview窗口。参考ask.dcloud.net.cn/article/102*/
@@ -84,7 +84,7 @@
 				"keystore": "",/*Android必选，打包证书文件*/
 				"password": "",/*Android必选，打包证书密码*/
 				"aliasname": "",/*Android必选，打包证书别名*/
-				"permissions": ["<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>", "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>", "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>", "<uses-permission android:name=\"android.permission.VIBRATE\"/>", "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>", "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>", "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>", "<uses-feature android:name=\"android.hardware.camera\"/>", "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.CAMERA\"/>"]
+				"permissions": ["<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>","<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>"]
 				/*使用 Native.js 调用原生安卓 API 需要申请的系统权限，用户可以添加多个权限的字符串*/
 			},
 			"orientation": ["portrait-primary", "landscape-primary", "portrait-secondary", "landscape-secondary"],/*必选*/
@@ -900,7 +900,8 @@
 				"resources": [
 					"js/mui.min.js",
 					"css/app.css",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"images/qrcode.png"
 				],
 				"refer": [],
 				"priority": 0
