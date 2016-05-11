@@ -1,0 +1,22 @@
+.@{namespace}toast-container {
+	position: fixed;
+	width: 100%;
+	bottom: 50px;
+	z-index: @z-layers-toast;
+	opacity: 0;
+	-webkit-transition: opacity .8s;
+    transition: opacity .8s;
+	&.@{namespace}active{
+	    opacity: 1;
+	}
+}
+.@{namespace}toast-message {
+	width: 270px;
+	margin: 5px auto;
+	padding: 5px;
+	background-color: #D8D8D8;
+	text-align: center;
+	color: #000;
+	border-radius: 7px;
+	font-size: 14px;
+}

@@ -1,0 +1,10 @@
+{
+    "always-semicolon": false,
+    "block-indent": 4,
+    "space-between-declarations": "\n",
+    "space-after-opening-brace": "\n",
+    "space-before-closing-brace": "\n",
+    "leading-zero": true,
+    "strip-spaces": true,
+    "vendor-prefix-align": true
+}
