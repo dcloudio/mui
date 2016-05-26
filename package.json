@@ -34,6 +34,7 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-csslint": "~0.2.0",
     "grunt-contrib-cssmin": "~0.9.0",
+    "grunt-contrib-handlebars": "~0.8.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-sass": "~0.7.3",
     "grunt-contrib-uglify": "~0.4.0",
@@ -42,12 +43,12 @@
     "grunt-html-validation": "~0.1.17",
     "grunt-jekyll": "~0.4.2",
     "grunt-jscs": "~1.7.0",
+    "grunt-jsdoc": "~0.5.4",
     "grunt-open": "^0.2.3",
     "grunt-sed": "~0.1.1",
+    "gulp": "^3.9.1",
     "load-grunt-tasks": "~0.4.0",
-    "time-grunt": "~0.3.1",
-    "grunt-jsdoc": "~0.5.4",
-    "grunt-contrib-handlebars": "~0.8.0"
+    "time-grunt": "~0.3.1"
   },
   "engines": {
     "node": "~0.10.1"
