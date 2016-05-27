@@ -117,31 +117,31 @@
 				swipeBack: true //启用右滑关闭功能
 			});
 			var header = document.getElementById("header");
-			//左侧icon
-			var lefticon = document.createElement('a');
-			lefticon.className = 'mui-action-back mui-icon mui-icon-left-nav mui-pull-left';
-			//左侧图标+文字按钮
-			var leftbtn = document.createElement('button');
-			leftbtn.className = 'mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left';
-			var span = document.createElement('span');
-			span.className = 'mui-icon mui-icon-left-nav';
-			leftbtn.appendChild(span);
-			var text = document.createTextNode('首页');
-			leftbtn.appendChild(text);
-			//右侧icon
-			var righticon = document.createElement('a');
-			righticon.className = 'mui-icon mui-icon-bars mui-pull-right';
-			//右侧文字按钮
-			var rightbtn = document.createElement('button');
-			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
-			rightbtn.innerText = '编辑';
-			//删除原先存在的节点
-			function remove(selector) {
-				var elem = header.querySelector(selector);
-				if (elem) {
-					header.removeChild(elem);
-				}
-			};
+//			//左侧icon
+//			var lefticon = document.createElement('a');
+//			lefticon.className = 'mui-action-back mui-icon mui-icon-left-nav mui-pull-left';
+//			//左侧图标+文字按钮
+//			var leftbtn = document.createElement('button');
+//			leftbtn.className = 'mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left';
+//			var span = document.createElement('span');
+//			span.className = 'mui-icon mui-icon-left-nav';
+//			leftbtn.appendChild(span);
+//			var text = document.createTextNode('首页');
+//			leftbtn.appendChild(text);
+//			//右侧icon
+//			var righticon = document.createElement('a');
+//			righticon.className = 'mui-icon mui-icon-bars mui-pull-right';
+//			//右侧文字按钮
+//			var rightbtn = document.createElement('button');
+//			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+//			rightbtn.innerText = '编辑';
+//			//删除原先存在的节点
+//			function remove(selector) {
+//				var elem = header.querySelector(selector);
+//				if (elem) {
+//					header.removeChild(elem);
+//				}
+//			};
 			var transparentApi;
 			var slider = document.getElementById("slider");
 			mui('.mui-input-group').on('change', 'input', function() {
@@ -158,29 +158,29 @@
 								document.getElementById("slider").classList.remove("mui-hidden");
 							}
 							break;
-						case 'left-btn':
-							remove('.mui-pull-left');
-							header.appendChild(leftbtn);
-							break;
-						case 'right-none':
-							remove('.mui-pull-right');
-							break;
-						case 'right-icon':
-							remove('.mui-pull-right')
-							header.appendChild(righticon);
-							break;
-						case 'right-btn':
-							remove('.mui-pull-right');
-							header.appendChild(rightbtn);
-							break;
-						case 'transparent':
-							header.className = 'mui-bar mui-bar-transparent';
-							transparentApi = mui('.mui-bar-transparent').transparent();
-							break;
-						case 'nav':
-							header.className = 'mui-bar mui-bar-nav';
-							transparentApi && transparentApi.destory();
-							break;
+//						case 'left-btn':
+//							remove('.mui-pull-left');
+//							header.appendChild(leftbtn);
+//							break;
+//						case 'right-none':
+//							remove('.mui-pull-right');
+//							break;
+//						case 'right-icon':
+//							remove('.mui-pull-right')
+//							header.appendChild(righticon);
+//							break;
+//						case 'right-btn':
+//							remove('.mui-pull-right');
+//							header.appendChild(rightbtn);
+//							break;
+//						case 'transparent':
+//							header.className = 'mui-bar mui-bar-transparent';
+//							transparentApi = mui('.mui-bar-transparent').transparent();
+//							break;
+//						case 'nav':
+//							header.className = 'mui-bar mui-bar-nav';
+//							transparentApi && transparentApi.destory();
+//							break;
 					}
 				}
 			});
