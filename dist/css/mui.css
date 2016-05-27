@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.0.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.1.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -1499,6 +1499,15 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     border-top: 0;
 }
 
+.mui-bar-transparent
+{
+    top: 0;
+
+    background-color: rgba(247, 247, 247, 0);
+    -webkit-box-shadow: none;
+            box-shadow: none;
+}
+
 .mui-bar-nav
 {
     top: 0;
@@ -1606,7 +1615,8 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     background: none;
 }
 
-.mui-focusin > .mui-bar-nav, .mui-focusin > .mui-bar-header-secondary
+.mui-focusin > .mui-bar-nav,
+.mui-focusin > .mui-bar-header-secondary
 {
     position: absolute;
 }
@@ -1733,13 +1743,15 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     margin-top: -10px;
 }
 
-.mui-bar .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-bar .mui-input-row .mui-input-speech ~ .mui-icon-speech
+.mui-bar .mui-input-row .mui-input-clear ~ .mui-icon-clear,
+.mui-bar .mui-input-row .mui-input-speech ~ .mui-icon-speech
 {
     top: 0;
     right: 12px;
 }
 
-.mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-clear ~ .mui-icon-clear, .mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-speech ~ .mui-icon-speech
+.mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-clear ~ .mui-icon-clear,
+.mui-bar.mui-bar-header-secondary .mui-input-row .mui-input-speech ~ .mui-icon-speech
 {
     top: 0;
     right: 0;
