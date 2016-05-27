@@ -105,7 +105,7 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
 	font-size: 22px;
 } 
 .mui-popover {
-	height: 150px;
+	height: 180px;
 }
 .stream{
 	display: none;
