@@ -143,6 +143,10 @@
 		if (feedback.question.value.length > 200 || feedback.contact.value.length > 200) {
 			return mui.toast('信息超长,请重新填写~')
 		}
+		//判断网络连接
+		if(plus.networkinfo.getCurrentType()==plus.networkinfo.CONNECTION_NONE){
+			return mui.toast("连接网络失败，请稍后再试");
+		}
 		feedback.send(mui.extend({}, feedback.deviceInfo, {
 			content: feedback.question.value,
 			contact: feedback.contact.value,
@@ -156,42 +160,39 @@
 		}, function(upload, status) {
 //			plus.nativeUI.closeWaiting()
 			console.log("upload cb:"+upload.responseText);
+			console.log("upload status:"+status);
 			if(status==200){
 				var data = JSON.parse(upload.responseText);
 				//上传成功，重置表单
 				if (data.ret === 0 && data.desc === 'Success') {
-//					mui.toast('反馈成功~')
 					console.log("upload success");
-//					feedback.clearForm();
 				}
 			}else{
 				console.log("upload fail");
 			}
-			
 		});
 		//添加上传数据
 		mui.each(content, function(index, element) {
 			if (index !== 'images') {
-				console.log("addData:"+index+","+element);
-//				console.log(index);
+//				console.log("addData:"+index+","+element);
 				feedback.uploader.addData(index, element)
 			} 
 		});
 		//添加上传文件
 		mui.each(feedback.files, function(index, element) {
 			var f = feedback.files[index];
-			console.log("addFile:"+JSON.stringify(f));
+//			console.log("addFile:"+JSON.stringify(f));
 			feedback.uploader.addFile(f.path, {
 				key: f.name
 			});
 		});
+		
 		//开始上传任务
 		feedback.uploader.start();
 		mui.alert("感谢反馈，点击确定关闭","问题反馈","确定",function () {
 			feedback.clearForm();
 			mui.back();
 		});
-//		plus.nativeUI.showWaiting();
 	};
 	
 	 //应用评分
