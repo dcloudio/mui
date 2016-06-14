@@ -185,7 +185,7 @@
 				//				});
 			});
 			//首页返回键处理
-			//处理逻辑：1秒内，连续两次按返回键，则退出应用；
+			//处理逻辑：2秒内，连续两次按返回键，则退出应用；
 			var first = null;
 			mui.back = function() {
 				if (showMenu) {
@@ -197,9 +197,9 @@
 						mui.toast('再按一次退出应用');
 						setTimeout(function() {
 							first = null;
-						}, 1000);
+						}, 2000);
 					} else {
-						if (new Date().getTime() - first < 1000) {
+						if (new Date().getTime() - first < 2000) {
 							plus.runtime.quit();
 						}
 					}
