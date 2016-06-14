@@ -32,6 +32,8 @@
 			}
 		});
 	}
+	//首次按下back按键的时间
+	$.__back__first = null;
 	/**
 	 * 5+ back
 	 */
@@ -55,8 +57,18 @@
 						//fixed by fxy 此处不应该用opener判断，因为用户有可能自己close掉当前窗口的opener。这样的话。opener就为空了，导致不能执行close
 						if (wobj.id === plus.runtime.appid) { //首页
 							//首页不存在opener的情况下，后退实际上应该是退出应用；
-							//这个交给项目具体实现，框架暂不处理；
-							//plus.runtime.quit();	
+							//首次按键，提示‘再按一次退出应用’
+							if (!$.__back__first) {
+								$.__back__first = new Date().getTime();
+								mui.toast('再按一次退出应用');
+								setTimeout(function() {
+									$.__back__first = null;
+								}, 2000);
+							} else {
+								if (new Date().getTime() - $.__back__first < 2000) {
+									plus.runtime.quit();
+								}
+							}
 						} else { //其他页面，
 							if (wobj.preload) {
 								wobj.hide("auto");
