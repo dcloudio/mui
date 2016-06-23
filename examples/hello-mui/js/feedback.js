@@ -29,7 +29,7 @@
 			p: mui.os.android ? 'a' : 'i', //平台类型，i表示iOS平台，a表示Android平台。
 			md: plus.device.model, //设备型号
 			app_version: plus.runtime.version,
-			plus_versin: plus.runtime.innerVersion, //基座版本号
+			plus_version: plus.runtime.innerVersion, //基座版本号
 			os:  mui.os.version,
 			net: ''+plus.networkinfo.getCurrentType()
 		}
