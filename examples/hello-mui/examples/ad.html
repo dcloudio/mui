@@ -20,6 +20,7 @@
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<p>本页为广告模板示例，集成了百度联盟的网站广告，目前支持广告固定在底部显示。</p>
+				<p>集成教程参考：<a href="http://ask.dcloud.net.cn/article/712">文档中心</a></p>
 				
 			</div>
 		</div>
@@ -29,6 +30,8 @@
 			if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE){
 				mui.toast("当前网络不给力，无法加载广告");
 			}else{
+				
+				//百度广告集成教程参考：http://ask.dcloud.net.cn/article/712
 				
 				//屏幕真实宽度
 				var width = window.innerWidth;
@@ -85,6 +88,18 @@
 				document.querySelector('.mui-content').style.paddingBottom = adHeight + 'px';
 			}
 		});		
+
+		//处理点击事件，需要打开原生浏览器
+		mui('body').on('tap', 'a', function(e) {
+			var href = this.getAttribute('href');
+			if (href) {
+				if (window.plus) {
+					plus.runtime.openURL(href);
+				} else {
+					location.href = href;
+				}
+			}
+		});
 
 	</script>
 
