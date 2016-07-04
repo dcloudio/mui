@@ -118,20 +118,23 @@
 
 .#{$namespace}card-header {
     border-radius: 2px 2px 0 0;
-    font-size: 17px;
+    font-size: $font-size-default;
     &:after {
         top: auto;
         bottom: 0;
     }
-    .#{$namespace}card-media-object {
+    >img:first-child{
         font-size: 0;
         line-height: 0;
+        width: 34px;
+        height: 34px;
+        float: left;
     }
 }
 
 .#{$namespace}card-footer {
     border-radius: 0 0 2px 2px;
-    color: #6d6d72;
+    color: $card-footer-color;
 }
 
 .#{$namespace}card-content {
@@ -154,19 +157,18 @@
 .#{$namespace}card-header.#{$namespace}card-media {
     display: block;
     padding: 10px;
-}
 
-.#{$namespace}card-header.#{$namespace}card-media .#{$namespace}card-media-body{
-    margin-bottom: 0;
-    margin-left: $card-media-body-margin-left;
-    font-size: $card-font-size;
-    font-weight: $font-weight;
-    color: #333;
-    line-height: $font-size-default;
-}
-    
-.#{$namespace}card-header.#{$namespace}card-media .#{$namespace}card-media-body p {
-    font-size: 13px;
-    margin-bottom: 0;
-}
+    .#{$namespace}media-body{
+        margin-bottom: 0;
+        margin-left: $card-media-body-margin-left;
+        font-size: $card-font-size;
+        font-weight: $font-weight;
+        color: #333;
+        line-height: $font-size-default;
+        p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
 
+    }
+}

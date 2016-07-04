@@ -1996,10 +1996,15 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     top: auto;
     bottom: 0;
 }
-.mui-card-header .mui-card-media-object
+.mui-card-header > img:first-child
 {
     font-size: 0;
     line-height: 0;
+
+    float: left;
+
+    width: 34px;
+    height: 34px;
 }
 
 .mui-card-footer
@@ -2037,8 +2042,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     padding: 10px;
 }
-
-.mui-card-header.mui-card-media .mui-card-media-body
+.mui-card-header.mui-card-media .mui-media-body
 {
     font-size: 14px;
     font-weight: 500;
@@ -2049,8 +2053,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     color: #333;
 }
-
-.mui-card-header.mui-card-media .mui-card-media-body p
+.mui-card-header.mui-card-media .mui-media-body p
 {
     font-size: 13px;
 
