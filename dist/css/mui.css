@@ -4107,7 +4107,7 @@ body > .mui-progressbar
 {
     position: absolute;
     z-index: 10000;
-    top: 0;
+    top: 44px;
     left: 0;
 
     border-radius: 0;
