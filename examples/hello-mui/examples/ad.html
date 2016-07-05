@@ -63,7 +63,7 @@
 				
 				var adBottom = mui.os.ios?('-'+adHeight+'px'):'0';
 				
-				var ad = plus.webview.create(url,'ad',{height:adHeight+'px',bottom:adBottom});
+				var ad = plus.webview.create(url,'ad',{height:adHeight+'px',bottom:adBottom,position:"absolute"});
 				//目前Android平台不支持子webview的setStyle动画，因此分平台处理；
 				if(mui.os.ios){
 					//为了支持iOS平台左侧边缘滑动关闭页面，需要append进去；
