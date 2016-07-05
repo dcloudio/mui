@@ -38,7 +38,8 @@
 	$.waitingOptions = function(options) {
 		return $.extend(true, {}, {
 			autoShow: true,
-			title: ''
+			title: '',
+			modal:false
 		}, options);
 	};
 	/**
