@@ -2416,7 +2416,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				var openedWebview = opened[i];
 				var open_open = openedWebview.opened();
 				if (open_open && open_open.length > 0) {
+					//关闭打开的webview
 					$.closeOpened(openedWebview);
+					//关闭自己
+					openedWebview.close("none");
 				} else {
 					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
 					if (openedWebview.parent() !== webview) {
