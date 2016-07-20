@@ -1,0 +1,136 @@
+.mui-dtpicker {
+	position: fixed;
+	left: 0px;
+	width: 100%;
+	z-index: 999999;
+	background-color: #eee;
+	border-top: solid 1px #ccc;
+	box-shadow: 0px -5px 7px 0px rgba(0, 0, 0, 0.1);
+	-webkit-transition: .3s;
+	bottom: 0px;
+	-webkit-transform: translateY(300px);
+}
+.mui-dtpicker.mui-active {
+	-webkit-transform: translateY(0px);
+}
+/*用于将 html body 禁止滚动条*/
+
+.mui-dtpicker-active-for-page {
+	overflow: hidden !important;
+}
+.mui-android-5-1 .mui-dtpicker {
+	bottom: -300px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-android-5-1 .mui-dtpicker.mui-active {
+	bottom: 0px;
+	-webkit-transition-property: bottom;
+	-webkit-transform: none;
+}
+.mui-dtpicker-header {
+	padding: 6px;
+	font-size: 14px;
+	color: #888;
+}
+.mui-dtpicker-header button {
+	font-size: 12px;
+	padding: 5px 10px;
+}
+.mui-dtpicker-header button:last-child {
+	float: right;
+}
+.mui-dtpicker-body {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	/*border-top: solid 1px #eee;
+	background-color: #fff;*/
+}
+.mui-ios .mui-dtpicker-body {
+	-webkit-perspective: 1200px;
+	perspective: 1200px;
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+.mui-dtpicker-title h5 {
+	display: inline-block;
+	width: 20%;
+	margin: 0px;
+	padding: 8px;
+	text-align: center;
+	border-top: solid 1px #ddd;
+	background-color: #f0f0f0;
+	border-bottom: solid 1px #ccc;
+}
+.mui-dtpicker .mui-picker {
+	width: 20%;
+	height: 100%;
+	margin: 0px;
+	float: left;
+	border: none;
+}
+/*年月日时分*/
+
+[data-type="datetime"] .mui-picker,
+[data-type="time"] .mui-dtpicker-title h5 {
+	width: 20%;
+}
+[data-type="datetime"] [data-id="picker-h"],
+[data-type="datetime"] [data-id="title-h"] {
+	border-left: dotted 1px #ccc;
+}
+/*年月日*/
+
+[data-type="date"] .mui-picker,
+[data-type="date"] .mui-dtpicker-title h5 {
+	width: 33.3%;
+}
+[data-type="date"] [data-id="picker-h"],
+[data-type="date"] [data-id="picker-i"],
+[data-type="date"] [data-id="title-h"],
+[data-type="date"] [data-id="title-i"] {
+	display: none;
+}
+/*年月日时*/
+
+[data-type="hour"] .mui-picker,
+[data-type="hour"] .mui-dtpicker-title h5 {
+	width: 25%;
+}
+[data-type="hour"] [data-id="picker-i"],
+[data-type="hour"] [data-id="title-i"] {
+	display: none;
+}
+[data-type="hour"] [data-id="picker-h"],
+[data-type="hour"] [data-id="title-h"] {
+	border-left: dotted 1px #ccc;
+}
+/*时分*/
+
+[data-type="time"] .mui-picker,
+[data-type="time"] .mui-dtpicker-title h5 {
+	width: 50%;
+}
+[data-type="time"] [data-id="picker-y"],
+[data-type="time"] [data-id="picker-m"],
+[data-type="time"] [data-id="picker-d"],
+[data-type="time"] [data-id="title-y"],
+[data-type="time"] [data-id="title-m"],
+[data-type="time"] [data-id="title-d"] {
+	display: none;
+}
+/*年月*/
+
+[data-type="month"] .mui-picker,
+[data-type="month"] .mui-dtpicker-title h5 {
+	width: 50%;
+}
+[data-type="month"] [data-id="picker-d"],
+[data-type="month"] [data-id="picker-h"],
+[data-type="month"] [data-id="picker-i"],
+[data-type="month"] [data-id="title-d"],
+[data-type="month"] [data-id="title-h"],
+[data-type="month"] [data-id="title-i"] {
+	display: none;
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-bar .mui-pull-left .mui-icon {
+				padding-right: 5px;
+				font-size: 28px;
+			}
+			
+			.mui-bar .mui-btn {
+				font-weight: normal;
+				font-size: 17px;
+			}
+			
+			.mui-bar .mui-btn-link {
+				top: 1px;
+			}
+			
+			.mui-content img{
+				width: 100%;
+			}
+			.hm-description{
+				margin: .5em 0 2em;
+			}
+			
+			.hm-description>li {
+				font-size: 14px;
+				color: #8f8f94;
+			}
+			
+			
+		</style>
+	</head>
+
+	<body>
+
+		<header id="header" class="mui-bar mui-bar-transparent">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">导航栏</h1>
+		</header>
+
+		<div class="mui-content">
+			<img id="img1" src="../images/yuantiao.jpg"/>
+			<div id="slider" class="mui-slider mui-hidden" >
+			  <div class="mui-slider-group">
+			    <!-- 第一张 -->
+			     <div class="mui-slider-item">
+			      <a href="#">
+			        <img src="../images/shuijiao.jpg">
+			      </a>
+			    </div>
+			    <!-- 第二张 -->
+			    <div class="mui-slider-item">
+			      <a href="#">
+			        <img src="../images/yuantiao.jpg">
+			      </a>
+			    </div>
+			  </div>
+			  <div class="mui-slider-indicator">
+			    <div class="mui-indicator mui-active"></div>
+			    <div class="mui-indicator"></div>
+			  </div>
+			</div>
+			<p style="margin: 35px 15px;">这是transparent bar（透明导航栏）演示页面， 默认情况下标题栏透明，
+				当用户向下滚动时，标题栏逐渐由透明转变为不透明；当用户再次向上滚动时，标题栏又从不透明变为透明状态。
+			</p>
+			<p style="margin: 5px 15px 15px 15px;">
+				这是一种解决滚动条通顶问题的变通解决方案，该方案相比双webview的方案，性能更高，动效更酷，但也有其适用场景：
+			</p>
+			<ul class="hm-description">
+				<li>顶部最好有图片或轮播组件</li>
+				<li>导航栏字体颜色和图片颜色互搭</li>
+			</ul>
+			<h5 class="mui-content-padded">图片类型</h5>
+			<form class="mui-input-group" style="margin-bottom: 300px;">
+				<div class="mui-input-row mui-radio">
+					<label>静态图片</label>
+					<input name="style" type="radio" checked value="left-none">
+				</div>
+				<div class="mui-input-row mui-radio">
+					<label>轮播图</label>
+					<input name="style" type="radio" value="left-icon">
+				</div>
+			</form>
+			<!--<h5 class="mui-content-padded" style="margin-top: 35px;">右侧显示内容</h5>
+			<form class="mui-input-group" style="margin-bottom: 500px;">
+				<div class="mui-input-row mui-radio">
+					<label>不显示</label>
+					<input name="style" type="radio" checked="" value="right-none">
+				</div>
+				<div class="mui-input-row mui-radio">
+					<label>仅图标</label>
+					<input name="style" type="radio" value="right-icon">
+				</div>
+				<div class="mui-input-row mui-radio">
+					<label>文字按钮</label>
+					<input name="style" type="radio" value="right-btn">
+				</div>
+			</form>-->
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			var header = document.getElementById("header");
+//			//左侧icon
+//			var lefticon = document.createElement('a');
+//			lefticon.className = 'mui-action-back mui-icon mui-icon-left-nav mui-pull-left';
+//			//左侧图标+文字按钮
+//			var leftbtn = document.createElement('button');
+//			leftbtn.className = 'mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left';
+//			var span = document.createElement('span');
+//			span.className = 'mui-icon mui-icon-left-nav';
+//			leftbtn.appendChild(span);
+//			var text = document.createTextNode('首页');
+//			leftbtn.appendChild(text);
+//			//右侧icon
+//			var righticon = document.createElement('a');
+//			righticon.className = 'mui-icon mui-icon-bars mui-pull-right';
+//			//右侧文字按钮
+//			var rightbtn = document.createElement('button');
+//			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+//			rightbtn.innerText = '编辑';
+//			//删除原先存在的节点
+//			function remove(selector) {
+//				var elem = header.querySelector(selector);
+//				if (elem) {
+//					header.removeChild(elem);
+//				}
+//			};
+			var transparentApi;
+			var slider = document.getElementById("slider");
+			mui('.mui-input-group').on('change', 'input', function() {
+				if (this.checked) {
+					switch (this.value) {
+						case 'left-none':
+//							remove('.mui-pull-left');
+							document.getElementById("img1").className = "";
+							document.getElementById("slider").classList.add("mui-hidden");
+							break;
+						case 'left-icon':
+							document.getElementById("img1").className = "mui-hidden";
+							if(slider.classList.contains("mui-hidden")){
+								document.getElementById("slider").classList.remove("mui-hidden");
+							}
+							break;
+//						case 'left-btn':
+//							remove('.mui-pull-left');
+//							header.appendChild(leftbtn);
+//							break;
+//						case 'right-none':
+//							remove('.mui-pull-right');
+//							break;
+//						case 'right-icon':
+//							remove('.mui-pull-right')
+//							header.appendChild(righticon);
+//							break;
+//						case 'right-btn':
+//							remove('.mui-pull-right');
+//							header.appendChild(rightbtn);
+//							break;
+//						case 'transparent':
+//							header.className = 'mui-bar mui-bar-transparent';
+//							transparentApi = mui('.mui-bar-transparent').transparent();
+//							break;
+//						case 'nav':
+//							header.className = 'mui-bar mui-bar-nav';
+//							transparentApi && transparentApi.destory();
+//							break;
+					}
+				}
+			});
+		</script>
+
+	</body>
+
+</html>

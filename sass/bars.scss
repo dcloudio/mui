@@ -1,7 +1,6 @@
 //
 // Bars
 // --------------------------------------------------
-
 .#{$namespace}bar {
     position: fixed;
     right: 0;
@@ -16,10 +15,9 @@
     -webkit-backface-visibility: hidden; // Make sure the bar is visible when a modal animates in.
     backface-visibility: hidden;
 }
-
 //fixed by fxy
-.#{$namespace}bar{
-    .#{$namespace}title{
+.#{$namespace}bar {
+    .#{$namespace}title {
         width: auto;
         left: 40px;
         right: 40px;
@@ -31,59 +29,55 @@
     .#{$namespace}backdrop {
         background: none;
     }
-
 }
-
 // Modifier class to dock any bar below .#{$namespace}bar-nav
 .#{$namespace}bar-header-secondary {
     top: $bar-base-height;
 }
-
 // Modifier class for footer bars
 .#{$namespace}bar-footer {
     bottom: 0;
 }
-
 // Modifier class to dock any bar above a standard bar
 .#{$namespace}bar-footer-secondary {
     bottom: $bar-base-height;
 }
-
 // Modifier class to dock any bar above a .#{$namespace}bar-tab
 .#{$namespace}bar-footer-secondary-tab {
     bottom: $bar-tab-height;
 }
-
 // Give the footers the correct border
 .#{$namespace}bar-footer,
 .#{$namespace}bar-footer-secondary,
 .#{$namespace}bar-footer-secondary-tab {
     border-top: 0;
 }
-
-
 // Nav bar
 // --------------------------------------------------
-
 // Bar docked to top of viewport for showing page title and actions
+.#{$namespace}bar-transparent {
+    top: 0;
+    background-color: rgba(247,247,247,0); //应该设置成变量
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 .#{$namespace}bar-nav {
     top: 0;
-    -webkit-box-shadow: 0px 1px 6px #CCC;
-    box-shadow: 0px 1px 6px #CCC;
-    ~ .#{$namespace}content .#{$namespace}anchor{
+    -webkit-box-shadow: 0 1px 6px #CCC;
+    box-shadow: 0 1px 6px #CCC;
+    ~ .#{$namespace}content .#{$namespace}anchor {
         display: block;
         height: 45px;
         margin-top: -45px;
         visibility: hidden;
     }
-    &.#{$namespace}bar .#{$namespace}icon{
+    &.#{$namespace}bar .#{$namespace}icon {
         margin-left: -10px;
         margin-right: -10px;
         padding-left: 10px;
         padding-right: 10px;
     }
 }
-
 // Centered text in the .#{$namespace}bar-nav
 //
 // We position the absolutely to make sure the title is always centered
@@ -104,11 +98,8 @@
 .#{$namespace}title a {
     color: inherit;
 }
-
-
 // Tab bar
 // --------------------------------------------------
-
 // Bar docked to bottom and used for primary app navigation
 .#{$namespace}bar-tab {
     display: table;
@@ -119,8 +110,7 @@
     table-layout: fixed;
     border-top: 0;
     border-bottom: 0;
-    -webkit-touch-callout: none;//选项卡上禁止长按弹出菜单；
-
+    -webkit-touch-callout: none; //选项卡上禁止长按弹出菜单；
     // Navigational tab (Nested to be more specific for the icons in tab-items)
     .#{$namespace}tab-item {
         display: table-cell;
@@ -133,12 +123,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-
         // Active states for the tab bar
         &.#{$namespace}active {
             color: $primary-color;
         }
-
         // Tab icon
         .#{$namespace}icon {
             top: 3px;
@@ -146,7 +134,6 @@
             height: 24px;
             padding-top: 0;
             padding-bottom: 0;
-
             // Make the text smaller if it's used with an icon
             ~ .#{$namespace}tab-label {
                 display: block;
@@ -161,16 +148,15 @@
         }
     }
 }
-.#{$namespace}focusin>.#{$namespace}bar-nav,.#{$namespace}focusin>.#{$namespace}bar-header-secondary{
-    position:absolute;
+.#{$namespace}focusin>.#{$namespace}bar-nav,
+.#{$namespace}focusin>.#{$namespace}bar-header-secondary {
+    position: absolute;
 }
-.#{$namespace}focusin>.#{$namespace}bar~.#{$namespace}content{
+.#{$namespace}focusin>.#{$namespace}bar~.#{$namespace}content {
     padding-bottom: 0;
 }
-
 // Bars with buttons
 // --------------------------------------------------
-
 .#{$namespace}bar .#{$namespace}btn {
     position: relative;
     top: 7px;
@@ -178,7 +164,6 @@
     padding: 6px 12px 7px;
     margin-top: 0;
     font-weight: $font-weight-light;
-
     // Give buttons that are floated left and right side margin
     &.#{$namespace}pull-right {
         margin-left: $bar-side-spacing;
@@ -187,7 +172,6 @@
         margin-right: $bar-side-spacing;
     }
 }
-
 // Bars with link buttons (Line the text up with content)
 .#{$namespace}bar .#{$namespace}btn-link {
     top: 0;
@@ -196,13 +180,11 @@
     line-height: $bar-base-height;
     color: $primary-color;
     border: 0;
-
     &:active,
-        &.#{$namespace}active {
+    &.#{$namespace}active {
         color: darken($primary-color, 10%);
     }
 }
-
 // Bars with block buttons
 //
 // Add proper padding
@@ -212,35 +194,29 @@
     margin-bottom: 0;
     font-size: 16px; // Scale down font size to fit in bar.
 }
-
 // Nav buttons (Only applicable within bars)
 //
 // Buttons inside bars that sit closer against the viewport.
 .#{$namespace}bar .#{$namespace}btn-nav {
     &.#{$namespace}pull-left {
         margin-left: -5px;
-
         .#{$namespace}icon-left-nav {
             margin-right: -3px;
         }
     }
     &.#{$namespace}pull-right {
         margin-right: -5px;
-
         .#{$namespace}icon-right-nav {
             margin-left: -3px;
         }
     }
-    &:active{
-        opacity: .3;
+    &:active {
+        opacity: 0.3;
         //background-color: rgba(0,0,0,.07);
     }
 }
-
-
 // Bars with Muiicons
 // --------------------------------------------------
-
 .#{$namespace}bar {
     .#{$namespace}icon {
         position: relative;
@@ -248,24 +224,21 @@
         padding-top: 10px;
         padding-bottom: 10px;
         font-size: 24px;
-
         &:active {
-            opacity: .3;
+            opacity: 0.3;
             //background-color: rgba(0,0,0,.07);
         }
     }
-
     // Vertical center the larger icons in btns.
     .#{$namespace}btn .#{$namespace}icon {
         top: 1px;
         padding: 0;
-        margin:0;
+        margin: 0;
     }
-
     // Handle carets in the titles
     .#{$namespace}title .#{$namespace}icon {
         padding: 0;
-        margin:0;
+        margin: 0;
         // Specific postioning of the caret icon within a title. Used with popover.js.
         &.#{$namespace}icon-caret {
             top: 4px;
@@ -273,34 +246,31 @@
         }
     }
 }
-
-
 // Bars for search forms
 // --------------------------------------------------
-
 // Position/size search bar within the bar
 .#{$namespace}bar input[type="search"] {
     height: 29px;
     margin: 6px 0;
 }
-.#{$namespace}bar .#{$namespace}input-row .#{$namespace}btn{
+.#{$namespace}bar .#{$namespace}input-row .#{$namespace}btn {
     padding: 12px 10px;
 }
-.#{$namespace}bar .#{$namespace}search:before{
-        margin-top: -10px;
-    }
-.#{$namespace}bar .#{$namespace}input-row .#{$namespace}input-clear~.#{$namespace}icon-clear, .#{$namespace}bar .#{$namespace}input-row .#{$namespace}input-speech~.#{$namespace}icon-speech{
+.#{$namespace}bar .#{$namespace}search:before {
+    margin-top: -10px;
+}
+.#{$namespace}bar .#{$namespace}input-row .#{$namespace}input-clear~.#{$namespace}icon-clear,
+.#{$namespace}bar .#{$namespace}input-row .#{$namespace}input-speech~.#{$namespace}icon-speech {
     top: 0;
     right: 12px;
 }
-.#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}input-row .#{$namespace}input-clear~.#{$namespace}icon-clear, .#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}input-row .#{$namespace}input-speech~.#{$namespace}icon-speech{
+.#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}input-row .#{$namespace}input-clear~.#{$namespace}icon-clear,
+.#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}input-row .#{$namespace}input-speech~.#{$namespace}icon-speech {
     top: 0;
     right: 0;
 }
-
 // Bars with segmented controls
 // --------------------------------------------------
-
 // Position the control correctly inside a bar.
 .#{$namespace}bar .#{$namespace}segmented-control {
     top: 7px;
@@ -308,5 +278,5 @@
     width: auto;
 }
 .#{$namespace}bar.#{$namespace}bar-header-secondary .#{$namespace}segmented-control {
-    top: 0px;
+    top: 0;
 }

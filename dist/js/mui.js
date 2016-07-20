@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.0.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.2.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -206,6 +206,53 @@ var mui = (function(document, undefined) {
 			}, false);
 		}
 		return this;
+	};
+	/**
+	 * 将 fn 缓存一段时间后, 再被调用执行
+	 * 此方法为了避免在 ms 段时间内, 执行 fn 多次. 常用于 resize , scroll , mousemove 等连续性事件中;
+	 * 当 ms 设置为 -1, 表示立即执行 fn, 即和直接调用 fn 一样;
+	 * 调用返回函数的 stop 停止最后一次的 buffer 效果
+	 * @param {Object} fn
+	 * @param {Object} ms
+	 * @param {Object} context
+	 */
+	$.buffer = function(fn, ms, context) {
+		var timer;
+		var lastStart = 0;
+		var lastEnd = 0;
+		var ms = ms || 150;
+
+		function run() {
+			if (timer) {
+				timer.cancel();
+				timer = 0;
+			}
+			lastStart = $.now();
+			fn.apply(context || this, arguments);
+			lastEnd = $.now();
+		}
+
+		return $.extend(function() {
+			if (
+				(!lastStart) || // 从未运行过
+				(lastEnd >= lastStart && $.now() - lastEnd > ms) || // 上次运行成功后已经超过ms毫秒
+				(lastEnd < lastStart && $.now() - lastStart > ms * 8) // 上次运行或未完成，后8*ms毫秒
+			) {
+				run();
+			} else {
+				if (timer) {
+					timer.cancel();
+				}
+				timer = $.later(run, ms, null, arguments);
+			}
+		}, {
+			stop: function() {
+				if (timer) {
+					timer.cancel();
+					timer = 0;
+				}
+			}
+		});
 	};
 	/**
 	 * each
@@ -2037,7 +2084,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.waitingOptions = function(options) {
 		return $.extend(true, {}, {
 			autoShow: true,
-			title: ''
+			title: '',
+			modal:false
 		}, options);
 	};
 	/**
@@ -2235,16 +2283,25 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 					}
 					//显示页面
 					webview.show(nShow.aniShow, nShow.duration, function() {
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
+						//titleUpdate事件发生较早，很多环境尚不具备
+						// triggerPreload(webview);
+						// trigger(webview, 'pagebeforeshow', false);
 					});
 					webview.showed = true;
 					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 				};
+				//TODO 能走到这一步，应该不用判断url了吧？
 				if (!url) {
 					showWebview();
 				} else {
-					webview.addEventListener("loaded", showWebview, false);
+					// webview.addEventListener("loaded", showWebview, false);
+					//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
+					webview.addEventListener("titleUpdate", showWebview, false);
+					//loaded事件发生后，触发预加载和pagebeforeshow事件
+					webview.addEventListener("loaded",function(){
+						triggerPreload(webview);
+						trigger(webview, 'pagebeforeshow', false);
+					}, false);
 				}
 			}
 		}
@@ -2359,7 +2416,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				var openedWebview = opened[i];
 				var open_open = openedWebview.opened();
 				if (open_open && open_open.length > 0) {
+					//关闭打开的webview
 					$.closeOpened(openedWebview);
+					//关闭自己
+					openedWebview.close("none");
 				} else {
 					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
 					if (openedWebview.parent() !== webview) {
@@ -2598,6 +2658,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			}
 		});
 	}
+	//首次按下back按键的时间
+	$.__back__first = null;
 	/**
 	 * 5+ back
 	 */
@@ -2621,8 +2683,18 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						//fixed by fxy 此处不应该用opener判断，因为用户有可能自己close掉当前窗口的opener。这样的话。opener就为空了，导致不能执行close
 						if (wobj.id === plus.runtime.appid) { //首页
 							//首页不存在opener的情况下，后退实际上应该是退出应用；
-							//这个交给项目具体实现，框架暂不处理；
-							//plus.runtime.quit();	
+							//首次按键，提示‘再按一次退出应用’
+							if (!$.__back__first) {
+								$.__back__first = new Date().getTime();
+								mui.toast('再按一次退出应用');
+								setTimeout(function() {
+									$.__back__first = null;
+								}, 2000);
+							} else {
+								if (new Date().getTime() - $.__back__first < 2000) {
+									plus.runtime.quit();
+								}
+							}
 						} else { //其他页面，
 							if (wobj.preload) {
 								wobj.hide("auto");
@@ -7604,6 +7676,83 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		$('.mui-input-row input').input();
 	});
 })(mui, window, document);
+(function($, window) {
+	var rgbaRegex = /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
+	var getColor = function(colorStr) {
+		var matches = colorStr.match(rgbaRegex);
+		if (matches && matches.length === 5) {
+			return [
+				matches[1],
+				matches[2],
+				matches[3],
+				matches[4]
+			];
+		}
+		return [];
+	};
+	var Transparent = function(element, options) {
+		this.element = element;
+		this.options = $.extend({
+			top: 0,
+			offset: 150,
+			duration: 16
+		}, options || {});
+		this._style = this.element.style;
+		this._bgColor = this._style.backgroundColor;
+		var color = getColor(mui.getStyles(this.element, 'backgroundColor'));
+		if (color.length) {
+			this._R = color[0];
+			this._G = color[1];
+			this._B = color[2];
+			this._A = color[3];
+			this._bufferFn = $.buffer(this.handleScroll, this.options.duration, this);
+			this.initEvent();
+		} else {
+			throw new Error("元素背景颜色必须为RGBA");
+		}
+	};
+
+	Transparent.prototype.initEvent = function() {
+		window.addEventListener('scroll', this._bufferFn);
+		window.addEventListener($.EVENT_MOVE, this._bufferFn);
+	};
+	Transparent.prototype.handleScroll = function() {
+		this._style.backgroundColor = 'rgba(' + this._R + ',' + this._G + ',' + this._B + ',' + (window.scrollY - this.options.top) / this.options.offset + ')';
+	};
+	Transparent.prototype.destory = function() {
+		window.removeEventListener('scroll', this._bufferFn);
+		window.removeEventListener($.EVENT_MOVE, this._bufferFn);
+		this.element.style.backgroundColor = this._bgColor;
+		this.element.mui_plugin_transparent = null;
+	};
+	$.fn.transparent = function(options) {
+		options = options || {};
+		var transparentApis = [];
+		this.each(function() {
+			var transparentApi = this.mui_plugin_transparent;
+			if (!transparentApi) {
+				var top = this.getAttribute('data-top');
+				var offset = this.getAttribute('data-offset');
+				var duration = this.getAttribute('data-duration');
+				if (top !== null && typeof options.top === 'undefined') {
+					options.top = top;
+				}
+				if (offset !== null && typeof options.offset === 'undefined') {
+					options.offset = offset;
+				}
+				if (duration !== null && typeof options.duration === 'undefined') {
+					options.duration = duration;
+				}
+				transparentApi = this.mui_plugin_transparent = new Transparent(this, options);
+			}
+			transparentApis.push(transparentApi);
+		});
+		return transparentApis.length === 1 ? transparentApis[0] : transparentApis;
+	};
+	$.ready(function() {
+		$('.mui-bar-transparent').transparent();
+	});
+})(mui, window);
 /**
  * 数字输入框
  * varstion 1.0.1

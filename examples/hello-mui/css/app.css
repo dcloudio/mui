@@ -9,3 +9,13 @@
 .mui-plus.mui-android .mui-bar-nav~.mui-content{
 	padding: 0;
 }
+
+/*hm开头的表示仅为 Hello MUI示例定义*/
+.hm-description{
+	margin: .5em 0;
+}
+
+.hm-description>li {
+	font-size: 14px;
+	color: #8f8f94;
+}

@@ -93,6 +93,7 @@ module.exports = function(grunt) {
 					'js/mui.popup.js',
 					'js/mui.progressbar.js',
 					'js/input.plugin.js',
+					'js/mui.transparent.js',
 					'js/mui.number.js'
 
 				],

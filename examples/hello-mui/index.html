@@ -185,24 +185,14 @@
 				//				});
 			});
 			//首页返回键处理
-			//处理逻辑：1秒内，连续两次按返回键，则退出应用；
-			var first = null;
+			//1、若侧滑菜单显示，则关闭侧滑菜单
+			//2、否则，执行mui框架默认的关闭首页功能
+			var _back = mui.back;
 			mui.back = function() {
 				if (showMenu) {
 					closeMenu();
 				} else {
-					//首次按键，提示‘再按一次退出应用’
-					if (!first) {
-						first = new Date().getTime();
-						mui.toast('再按一次退出应用');
-						setTimeout(function() {
-							first = null;
-						}, 1000);
-					} else {
-						if (new Date().getTime() - first < 1000) {
-							plus.runtime.quit();
-						}
-					}
+					_back();
 				}
 			};
 		</script>

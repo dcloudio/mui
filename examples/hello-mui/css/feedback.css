@@ -1,3 +1,11 @@
+/*!
+ * ======================================================
+ * FeedBack Template For MUI (http://dev.dcloud.net.cn/mui)
+ * =======================================================
+ * @version:1.0.0
+ * @author:cuihongbao@dcloud.io
+ */
+
 .feedback body {
 	background-color: #EFEFF4;
 }
@@ -17,12 +25,17 @@
 .feedback p {
 	padding: 10px 15px 0;
 }
-.feedback button { 
+/*.feedback button#submit { 
 	width: 90%;
 	height: 46px;
 	left: 50%;
 	-webkit-transform: translate(-50%);
+}*/
+
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
+	font-size: 14px;
 }
+
 .feedback .hidden {
 	display: none;
 }
@@ -36,7 +49,7 @@
 .feedback .image-item {
 	width: 65px;
 	height: 65px;
-	background-image: url(../images/iconfont-tianjia.png);
+	/*background-image: url(../images/iconfont-tianjia.png);*/
 	background-size: 100% 100%;
 	display: inline-block;
 	position: relative;
@@ -44,8 +57,9 @@
 	margin-right: 10px;
 	margin-bottom: 10px;
 	border: solid 1px #e8e8e8;
+	vertical-align: top;
 }
-.feedback .image-item input[type="file"] {
+.feedback .image-item .file {
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -75,6 +89,43 @@
 	font-weight: 200;
 	z-index: 1;
 }
+.feedback .image-item .image-up{
+	height: 65px;
+	width: 65px;
+	border-radius: 10px;
+	line-height: 65px;
+	border: 1px solid #ccc;
+	color: #ccc; 
+	display: inline-block;
+	text-align: center;
+}
+.feedback .image-item .image-up:after{
+	font-family: "微软雅黑";
+	content: '+';
+	font-size: 60px;
+}
 .feedback .image-item.space .image-close {
 	display: none;
+}
+.feedback .mui-inline{
+	vertical-align: bottom;
+	font-size: 14px;
+	color: #8f8f94;
+}
+.mui-icon-star{
+	color: #B5B5B5;
+	font-size: 22px;
+}
+.mui-icon-star-filled{
+	color: #FFB400;
+	font-size: 22px;
+} 
+.mui-popover {
+	height: 180px;
+}
+.stream{
+	display: none;
+}
+.mui-plus-stream .stream{
+	display: block;
 }

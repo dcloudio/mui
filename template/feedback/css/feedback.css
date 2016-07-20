@@ -1,0 +1,131 @@
+/*!
+ * ======================================================
+ * FeedBack Template For MUI (http://dev.dcloud.net.cn/mui)
+ * =======================================================
+ * @version:1.0.0
+ * @author:cuihongbao@dcloud.io
+ */
+
+.feedback body {
+	background-color: #EFEFF4;
+}
+.feedback input,
+.feedback textarea {
+	border: none !important;
+}
+.feedback textarea {
+	height: 100px;
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;
+}
+.feedback .row {
+	width: 100%;
+	background-color: #fff;
+}
+.feedback p {
+	padding: 10px 15px 0;
+}
+/*.feedback button#submit { 
+	width: 90%;
+	height: 46px;
+	left: 50%;
+	-webkit-transform: translate(-50%);
+}*/
+
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
+	font-size: 14px;
+}
+
+.feedback .hidden {
+	display: none;
+}
+.feedback .image-list {
+	width: 100%;
+	height: 85px;
+	background-size: cover;
+	padding: 10px 10px;
+	overflow: hidden;
+}
+.feedback .image-item {
+	width: 65px;
+	height: 65px;
+	/*background-image: url(../images/iconfont-tianjia.png);*/
+	background-size: 100% 100%;
+	display: inline-block;
+	position: relative;
+	border-radius: 5px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	border: solid 1px #e8e8e8;
+	vertical-align: top;
+}
+.feedback .image-item .file {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+	z-index: 0;
+}
+.feedback .image-item.space {
+	border: none;
+}
+.feedback .image-item .image-close {
+	position: absolute;
+	display: inline-block;
+	right: -6px;
+	top: -6px;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+	border-radius: 12px;
+	background-color: #FF5053;
+	color: #f3f3f3;
+	border: solid 1px #FF5053;
+	font-size: 9px;
+	font-weight: 200;
+	z-index: 1;
+}
+.feedback .image-item .image-up{
+	height: 65px;
+	width: 65px;
+	border-radius: 10px;
+	line-height: 65px;
+	border: 1px solid #ccc;
+	color: #ccc; 
+	display: inline-block;
+	text-align: center;
+}
+.feedback .image-item .image-up:after{
+	font-family: "微软雅黑";
+	content: '+';
+	font-size: 60px;
+}
+.feedback .image-item.space .image-close {
+	display: none;
+}
+.feedback .mui-inline{
+	vertical-align: bottom;
+	font-size: 14px;
+	color: #8f8f94;
+}
+.mui-icon-star{
+	color: #B5B5B5;
+	font-size: 22px;
+}
+.mui-icon-star-filled{
+	color: #FFB400;
+	font-size: 22px;
+} 
+.mui-popover {
+	height: 180px;
+}
+.stream{
+	display: none;
+}
+.mui-plus-stream .stream{
+	display: block;
+}
