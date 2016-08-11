@@ -93,7 +93,8 @@
 				pickerElement.style.width = width;
 				self.body.appendChild(pickerElement);
 				var picker = $(pickerElement).picker({
-					onMyEndScroll:self.options.onMyEndScroll||function(){}
+					onMyEndScroll:self.options.onMyEndScroll||function(){},
+					myCurrentLayer:i
 				});
 				self.pickers.push(picker);
 				pickerElement.addEventListener('change', function(event) {

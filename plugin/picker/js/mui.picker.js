@@ -369,6 +369,11 @@
 		}
 	};
 
+	Picker.prototype.getMyCurrentLayer = function() {
+		var self = this;
+		return self.options.myCurrentLayer;
+	};
+
 	if ($.fn) {
 		$.fn.picker = function(options) {
 			//遍历选择的元素
