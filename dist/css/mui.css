@@ -1848,14 +1848,8 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     margin: 10px;
 
-<<<<<<< HEAD
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background-color: #fff;
-=======
     border-radius: 2px;
-    background-color: white;
->>>>>>> 0967feff7ad41a291f0471ad36744d2148356bcc
+    background-color: #fff;
     background-clip: padding-box;
     box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
