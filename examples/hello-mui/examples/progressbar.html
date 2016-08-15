@@ -43,6 +43,12 @@
 			.mui-progressbar-royal span {
 				background-color: #8a6de9;
 			}
+			
+			/*Android平台使用父子webview，因此需要修改顶部进度条的显示位置*/
+			.mui-plus.mui-android>.mui-progressbar{
+				top:0
+			}
+
 		</style>
 	</head>
 

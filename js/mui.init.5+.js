@@ -38,7 +38,8 @@
 	$.waitingOptions = function(options) {
 		return $.extend(true, {}, {
 			autoShow: true,
-			title: ''
+			title: '',
+			modal:false
 		}, options);
 	};
 	/**
@@ -236,16 +237,25 @@
 					}
 					//显示页面
 					webview.show(nShow.aniShow, nShow.duration, function() {
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
+						//titleUpdate事件发生较早，很多环境尚不具备
+						// triggerPreload(webview);
+						// trigger(webview, 'pagebeforeshow', false);
 					});
 					webview.showed = true;
 					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 				};
+				//TODO 能走到这一步，应该不用判断url了吧？
 				if (!url) {
 					showWebview();
 				} else {
-					webview.addEventListener("loaded", showWebview, false);
+					// webview.addEventListener("loaded", showWebview, false);
+					//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
+					webview.addEventListener("titleUpdate", showWebview, false);
+					//loaded事件发生后，触发预加载和pagebeforeshow事件
+					webview.addEventListener("loaded",function(){
+						triggerPreload(webview);
+						trigger(webview, 'pagebeforeshow', false);
+					}, false);
 				}
 			}
 		}
@@ -360,7 +370,10 @@
 				var openedWebview = opened[i];
 				var open_open = openedWebview.opened();
 				if (open_open && open_open.length > 0) {
+					//关闭打开的webview
 					$.closeOpened(openedWebview);
+					//关闭自己
+					openedWebview.close("none");
 				} else {
 					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
 					if (openedWebview.parent() !== webview) {

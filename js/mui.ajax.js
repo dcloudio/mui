@@ -35,7 +35,7 @@
 	};
 	var ajaxBeforeSend = function(xhr, settings) {
 		var context = settings.context
-		if (settings.beforeSend.call(context, xhr, settings) === false) {
+		if(settings.beforeSend.call(context, xhr, settings) === false) {
 			return false;
 		}
 	};
@@ -58,16 +58,16 @@
 			hash = $.isPlainObject(obj);
 		$.each(obj, function(key, value) {
 			type = $.type(value);
-			if (scope) {
+			if(scope) {
 				key = traditional ? scope :
 					scope + '[' + (hash || type === 'object' || type === 'array' ? key : '') + ']';
 			}
 			// handle data in serializeArray() format
-			if (!scope && array) {
+			if(!scope && array) {
 				params.add(value.name, value.value);
 			}
 			// recurse into nested objects
-			else if (type === "array" || (!traditional && type === "object")) {
+			else if(type === "array" || (!traditional && type === "object")) {
 				serialize(params, value, traditional, key);
 			} else {
 				params.add(key, value);
@@ -75,22 +75,30 @@
 		});
 	};
 	var serializeData = function(options) {
-		if (options.processData && options.data && typeof options.data !== "string") {
-			options.data = $.param(options.data, options.traditional);
+		if(options.processData && options.data && typeof options.data !== "string") {
+			var contentType = options.contentType;
+			if(!contentType && options.headers) {
+				contentType = options.headers['Content-Type'];
+			}
+			if(contentType && ~contentType.indexOf(jsonType)) { //application/json
+				options.data = JSON.stringify(options.data);
+			} else {
+				options.data = $.param(options.data, options.traditional);
+			}
 		}
-		if (options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
+		if(options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
 			options.url = appendQuery(options.url, options.data);
 			options.data = undefined;
 		}
 	};
 	var appendQuery = function(url, query) {
-		if (query === '') {
+		if(query === '') {
 			return url;
 		}
-		return (url + '&' + query).replace(/[&?]{1,2}/, '?');
+		return(url + '&' + query).replace(/[&?]{1,2}/, '?');
 	};
 	var mimeToDataType = function(mime) {
-		if (mime) {
+		if(mime) {
 			mime = mime.split(';', 2)[0];
 		}
 		return mime && (mime === htmlType ? 'html' :
@@ -99,10 +107,10 @@
 			xmlTypeRE.test(mime) && 'xml') || 'text';
 	};
 	var parseArguments = function(url, data, success, dataType) {
-		if ($.isFunction(data)) {
+		if($.isFunction(data)) {
 			dataType = success, success = data, data = undefined;
 		}
-		if (!$.isFunction(success)) {
+		if(!$.isFunction(success)) {
 			dataType = success, success = undefined;
 		}
 		return {
@@ -113,21 +121,21 @@
 		};
 	};
 	$.ajax = function(url, options) {
-		if (typeof url === "object") {
+		if(typeof url === "object") {
 			options = url;
 			url = undefined;
 		}
 		var settings = options || {};
 		settings.url = url || settings.url;
-		for (var key in $.ajaxSettings) {
-			if (settings[key] === undefined) {
+		for(var key in $.ajaxSettings) {
+			if(settings[key] === undefined) {
 				settings[key] = $.ajaxSettings[key];
 			}
 		}
 		serializeData(settings);
 		var dataType = settings.dataType;
 
-		if (settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
+		if(settings.cache === false || ((!options || options.cache !== true) && ('script' === dataType))) {
 			settings.url = appendQuery(settings.url, '_=' + $.now());
 		}
 		var mime = settings.accepts[dataType && dataType.toLowerCase()];
@@ -142,44 +150,44 @@
 
 		setHeader('X-Requested-With', 'XMLHttpRequest');
 		setHeader('Accept', mime || '*/*');
-		if (!!(mime = settings.mimeType || mime)) {
-			if (mime.indexOf(',') > -1) {
+		if(!!(mime = settings.mimeType || mime)) {
+			if(mime.indexOf(',') > -1) {
 				mime = mime.split(',', 2)[0];
 			}
 			xhr.overrideMimeType && xhr.overrideMimeType(mime);
 		}
-		if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() !== 'GET')) {
+		if(settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() !== 'GET')) {
 			setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded');
 		}
-		if (settings.headers) {
-			for (var name in settings.headers)
+		if(settings.headers) {
+			for(var name in settings.headers)
 				setHeader(name, settings.headers[name]);
 		}
 		xhr.setRequestHeader = setHeader;
 
 		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4) {
+			if(xhr.readyState === 4) {
 				xhr.onreadystatechange = $.noop;
 				clearTimeout(abortTimeout);
 				var result, error = false;
 				var isLocal = protocol === 'file:';
-				if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && isLocal && xhr.responseText)) {
+				if((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304 || (xhr.status === 0 && isLocal && xhr.responseText)) {
 					dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'));
 					result = xhr.responseText;
 					try {
 						// http://perfectionkills.com/global-eval-what-are-the-options/
-						if (dataType === 'script') {
+						if(dataType === 'script') {
 							(1, eval)(result);
-						} else if (dataType === 'xml') {
+						} else if(dataType === 'xml') {
 							result = xhr.responseXML;
-						} else if (dataType === 'json') {
+						} else if(dataType === 'json') {
 							result = blankRE.test(result) ? null : $.parseJSON(result);
 						}
-					} catch (e) {
+					} catch(e) {
 						error = e;
 					}
 
-					if (error) {
+					if(error) {
 						ajaxError(error, 'parsererror', xhr, settings);
 					} else {
 						ajaxSuccess(result, xhr, settings);
@@ -187,7 +195,7 @@
 				} else {
 					var status = xhr.status ? 'error' : 'abort';
 					var statusText = xhr.statusText || null;
-					if (isLocal) {
+					if(isLocal) {
 						status = 'error';
 						statusText = '404';
 					}
@@ -195,14 +203,14 @@
 				}
 			}
 		};
-		if (ajaxBeforeSend(xhr, settings) === false) {
+		if(ajaxBeforeSend(xhr, settings) === false) {
 			xhr.abort();
 			ajaxError(null, 'abort', xhr, settings);
 			return xhr;
 		}
 
-		if (settings.xhrFields) {
-			for (var name in settings.xhrFields) {
+		if(settings.xhrFields) {
+			for(var name in settings.xhrFields) {
 				xhr[name] = settings.xhrFields[name];
 			}
 		}
@@ -211,10 +219,12 @@
 
 		xhr.open(settings.type.toUpperCase(), settings.url, async, settings.username, settings.password);
 
-		for (var name in headers) {
-			nativeSetHeader.apply(xhr, headers[name]);
+		for(var name in headers) {
+			if(headers.hasOwnProperty(name)) {
+				nativeSetHeader.apply(xhr, headers[name]);
+			}
 		}
-		if (settings.timeout > 0) {
+		if(settings.timeout > 0) {
 			abortTimeout = setTimeout(function() {
 				xhr.onreadystatechange = $.noop;
 				xhr.abort();
@@ -224,7 +234,6 @@
 		xhr.send(settings.data ? settings.data : null);
 		return xhr;
 	};
-
 
 	$.param = function(obj, traditional) {
 		var params = [];
@@ -251,23 +260,23 @@
 	};
 
 	$.fn.load = function(url, data, success) {
-		if (!this.length)
+		if(!this.length)
 			return this;
 		var self = this,
 			parts = url.split(/\s/),
 			selector,
 			options = parseArguments(url, data, success),
 			callback = options.success;
-		if (parts.length > 1)
+		if(parts.length > 1)
 			options.url = parts[0], selector = parts[1];
 		options.success = function(response) {
-			if (selector) {
+			if(selector) {
 				var div = document.createElement('div');
 				div.innerHTML = response.replace(rscript, "");
 				var selectorDiv = document.createElement('div');
 				var childs = div.querySelectorAll(selector);
-				if (childs && childs.length > 0) {
-					for (var i = 0, len = childs.length; i < len; i++) {
+				if(childs && childs.length > 0) {
+					for(var i = 0, len = childs.length; i < len; i++) {
 						selectorDiv.appendChild(childs[i]);
 					}
 				}

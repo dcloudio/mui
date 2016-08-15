@@ -159,7 +159,6 @@ select {
     float: right;
     width: 15%;
     padding: 10px 15px;
-    font-family: $font-family-default;
     line-height: 1.1; // Put the text on the baseline.
 }
 .#{$namespace}input-row .mui-btn ~
