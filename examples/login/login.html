@@ -138,6 +138,10 @@
 						"id": 'main',
 						"url": 'main.html'
 					});
+					var main_loaded_flag = false;
+					mainPage.addEventListener("loaded",function () {
+						main_loaded_flag = true;
+					});
 					var toMain = function() {
 						//使用定时器的原因：
 						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
