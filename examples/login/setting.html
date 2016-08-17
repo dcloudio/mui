@@ -409,16 +409,9 @@
 				switch (index) {
 					case 1:
 						app.setState({});
-						mui.openWindow({
-							url: 'login.html',
-							id: 'login',
-							show: {
-								aniShow: 'pop-in'
-							},
-							waiting: {
-								autoShow: false
-							}
-						});
+						// 登录页为入口，直接获取窗口对象展示即可；
+						var loginView = plus.webview.getLaunchWebview();
+						loginView.show('slide-in-right');
 						break;
 					case 2:
 						plus.runtime.quit();
