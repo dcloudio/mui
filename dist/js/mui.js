@@ -7166,6 +7166,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						popupStack[popupStack.length - 1]['show'](animate);
 					} else {
 						backdrop.classList.remove(CLASS_ACTIVE);
+						document.body.removeChild(backdrop);
 					}
 				}
 			}
