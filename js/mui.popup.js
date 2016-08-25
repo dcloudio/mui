@@ -90,13 +90,12 @@
 					}
 					popupStack.pop();
 					//如果还有其他popup，则不remove backdrop
-					// if (popupStack.length) {
-					// 	popupStack[popupStack.length - 1]['show'](animate);
-					// } else {
-					// 	backdrop.classList.remove(CLASS_ACTIVE);
-					// }
-					// remove backdrop 不判断
-					backdrop.classList.remove(CLASS_ACTIVE);
+					if (popupStack.length) {
+						popupStack[popupStack.length - 1]['show'](animate);
+					} else {
+						backdrop.classList.remove(CLASS_ACTIVE);
+						document.body.removeChild(backdrop);
+					}
 				}
 			}
 		};
