@@ -236,8 +236,10 @@
 						app.login(loginInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
+								main_loaded_flag = false;
 								return;
 							}
+							main_loaded_flag = true;
 							toMain();
 						});
 					});
