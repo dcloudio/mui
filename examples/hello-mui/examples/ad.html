@@ -51,7 +51,7 @@
 				//百度广告地址
 				var p = ["acom","icxm","tcmm","icfm","mcum"];
 				var t = new Date().getTime();
-				var url = "http://pos.baidu.com/"+p[parseInt(5*Math.random())]+"?dc=2&dri=0&dis=0&dai=1&ps=0x0&dcb=BAIDU_SSP_define&dtm=BAIDU_DUP_SETJSONADSLOT&dvi=0.0&dci=-1&dpt=none&tsr=0&tpr="+t+"&ari=1&dbv=2&drs=1&cfv=0&cpl=0&chi=4&cce=true&cec=UTF-8&tlm=1437985083&ecd=1&pis=-1x-1&ccd=24&cja=false&cmi=0&col=en-US&cdo=0&tcn=1467173621&qn=d5d5b72998fc778b&tt=1467173620584.25.60.68";
+				var url = "http://pos.baidu.com/"+p[parseInt(5*Math.random())]+"?dc=2&dri=0&dis=0&dai=1&ps=0x0&dcb=BAIDU_SSP_define&dtm=HTML_POST&dvi=0.0&dci=-1&dpt=none&tsr=0&tpr="+t+"&ari=1&dbv=2&drs=1&cfv=0&cpl=0&chi=4&cce=true&cec=UTF-8&tlm=1437985083&ecd=1&pis=-1x-1&ccd=24&cja=false&cmi=0&col=en-US&cdo=0&tcn=1467173621&qn=d5d5b72998fc778b&tt=1467173620584.25.60.68";
 				url += "&sz="+width+"x"+adHeight;
 				url +="&rdid="+cpro_id.substring(1);
 				url +="&di="+cpro_id;
@@ -59,7 +59,7 @@
 				url +="&ltu="+ltu;
 				url +="&psr="+window.screen.availWidth+"x"+window.screen.availHeight+"&par="+window.screen.availWidth+"x"+window.screen.availHeight;
 				url +="&pcs="+window.outerWidth+"x"+window.outerHeight+"&pss="+window.outerWidth+"x0";
-				url +="&rw="+window.outerWidth;
+				url +="&rw="+Math.max(320, Math.min(window.innerWidth, window.innerHeight));
 				
 				var adBottom = mui.os.ios?('-'+adHeight+'px'):'0';
 				
