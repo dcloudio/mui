@@ -199,6 +199,12 @@
 		}
 	};
 
+	var createPreloader = function (title) {
+		return createPopup(createInner('<div class="mui-preloader"></div>', title || '加载中'));
+	};
+
+	$.showPreloader = createPreloader;
+	$.hidePreloader = closePopup;
 	$.closePopup = closePopup;
 	$.closePopups = closePopups;
 	$.alert = createAlert;

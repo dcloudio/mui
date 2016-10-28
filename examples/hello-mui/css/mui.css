@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.3.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.1.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -1840,24 +1840,14 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
 .mui-card
 {
-    font-size: 14px;
-
-    position: relative;
-
     overflow: hidden;
 
-    margin: 10px;
+    margin: 0 15px;
 
-<<<<<<< HEAD
     border: 1px solid #ddd;
     border-radius: 6px;
     background-color: #fff;
-=======
-    border-radius: 2px;
-    background-color: white;
->>>>>>> 0967feff7ad41a291f0471ad36744d2148356bcc
     background-clip: padding-box;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 
 .mui-content > .mui-card:first-child
@@ -1902,144 +1892,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 .mui-card > .mui-table-view > .mui-table-view-cell:last-child:before, .mui-card > .mui-table-view > .mui-table-view-cell:last-child:after
 {
     height: 0;
-}
-
-.mui-card-header,
-.mui-card-footer
-{
-    position: relative;
-
-    display: -webkit-box;
-    display: -webkit-flex;
-    display:         flex;
-
-    min-height: 44px;
-    padding: 10px 15px;
-
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-            justify-content: space-between;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-            align-items: center;
-}
-.mui-card-header .mui-card-link,
-.mui-card-footer .mui-card-link
-{
-    line-height: 44px;
-
-    position: relative;
-
-    display: -webkit-box;
-    display: -webkit-flex;
-    display:         flex;
-
-    height: 44px;
-    margin-top: -10px;
-    margin-bottom: -10px;
-
-    -webkit-transition-duration: .3s;
-            transition-duration: .3s;
-    text-decoration: none;
-
-    -webkit-box-pack: start;
-    -webkit-justify-content: flex-start;
-            justify-content: flex-start;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-            align-items: center;
-}
-
-.mui-card-header:after,
-.mui-card-footer:before
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-
-    height: 1px;
-
-    content: '';
-    -webkit-transform: scaleY(.5);
-            transform: scaleY(.5);
-
-    background-color: #c8c7cc;
-}
-
-.mui-card-header
-{
-    font-size: 17px;
-
-    border-radius: 2px 2px 0 0;
-}
-.mui-card-header:after
-{
-    top: auto;
-    bottom: 0;
-}
-.mui-card-header > img:first-child
-{
-    font-size: 0;
-    line-height: 0;
-
-    float: left;
-
-    width: 34px;
-    height: 34px;
-}
-
-.mui-card-footer
-{
-    color: #6d6d72;
-    border-radius: 0 0 2px 2px;
-}
-
-.mui-card-content
-{
-    font-size: 14px;
-
-    position: relative;
-}
-
-.mui-card-content-inner
-{
-    position: relative;
-
-    padding: 15px;
-}
-
-.mui-card-media
-{
-    vertical-align: bottom;
-
-    color: #fff;
-    background-position: center;
-    background-size: cover;
-}
-
-.mui-card-header.mui-card-media
-{
-    display: block;
-
-    padding: 10px;
-}
-.mui-card-header.mui-card-media .mui-media-body
-{
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 17px;
-
-    margin-bottom: 0;
-    margin-left: 44px;
-
-    color: #333;
-}
-.mui-card-header.mui-card-media .mui-media-body p
-{
-    font-size: 13px;
-
-    margin-bottom: 0;
 }
 
 .mui-table-view
@@ -3004,6 +2856,7 @@ select:focus
 
 .mui-input-row .mui-btn
 {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
     line-height: 1.1;
 
     float: right;
@@ -4136,7 +3989,7 @@ body > .mui-progressbar
 {
     position: absolute;
     z-index: 10000;
-    top: 44px;
+    top: 0;
     left: 0;
 
     border-radius: 0;
