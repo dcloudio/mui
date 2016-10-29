@@ -7166,6 +7166,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						popupStack[popupStack.length - 1]['show'](animate);
 					} else {
 						backdrop.classList.remove(CLASS_ACTIVE);
+						document.body.removeChild(backdrop);
 					}
 				}
 			}
@@ -7271,6 +7272,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		}
 	};
 
+	var createPreloader = function (title) {
+		return createPopup(createInner('<div class="mui-preloader"></div>', title || '加载中'));
+	};
+
+	$.showPreloader = createPreloader;
+	$.hidePreloader = closePopup;
 	$.closePopup = closePopup;
 	$.closePopups = closePopups;
 	$.alert = createAlert;
