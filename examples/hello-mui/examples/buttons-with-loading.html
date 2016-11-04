@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello MUI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <!--标准mui.css-->
+        <link rel="stylesheet" href="../css/mui.min.css">
+        <!--App自定义的css-->
+        <link rel="stylesheet" type="text/css" href="../css/app.css" />
+        <style>
+            input,
+            button,
+            .mui-btn {
+                margin: 5px 15px 10px 5px;
+                
+            }
+            .mui-spinner {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                -webkit-transform-origin: 50%;
+                transform-origin: 50%;
+                -webkit-animation: spinner-spin 1s step-end infinite;
+                animation: spinner-spin 1s step-end infinite;
+            }
+            
+            .mui-spinner:after {
+                display: block;
+                content: "";
+                width: 100%;
+                height: 100%;
+                background-position: 50%;
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+            
+            .mui-spinner-custom:after {
+                background-image: url("data:image/svg+xml;charset=utf-8,<svg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><defs><line id='l' x1='60' x2='60' y1='7' y2='27' stroke='red' stroke-width='11' stroke-linecap='round'/></defs><g><use xlink:href='%23l' opacity='.27'/><use xlink:href='%23l' opacity='.27' transform='rotate(30 60,60)'/><use xlink:href='%23l' opacity='.27' transform='rotate(60 60,60)'/><use xlink:href='%23l' opacity='.27' transform='rotate(90 60,60)'/><use xlink:href='%23l' opacity='.27' transform='rotate(120 60,60)'/><use xlink:href='%23l' opacity='.27' transform='rotate(150 60,60)'/><use xlink:href='%23l' opacity='.37' transform='rotate(180 60,60)'/><use xlink:href='%23l' opacity='.46' transform='rotate(210 60,60)'/><use xlink:href='%23l' opacity='.56' transform='rotate(240 60,60)'/><use xlink:href='%23l' opacity='.66' transform='rotate(270 60,60)'/><use xlink:href='%23l' opacity='.75' transform='rotate(300 60,60)'/><use xlink:href='%23l' opacity='.85' transform='rotate(330 60,60)'/></g></svg>");
+            }
+        </style>
+    </head>
+
+    <body>
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">加载中按钮插件</h1>
+        </header>
+        <div class="mui-content">
+            <div class="mui-content-padded">
+                    <p style="margin-bottom: 25px;">当用户点击按钮后，需要向服务端提交数据或等待服务端响应时，
+                        常常需要提示“正在提交”，并将按钮设置为disabled，避免用户重复点击、重复提交；
+                        mui的加载中按钮就实现了类似效果，点击如下按钮体验：</p>
+                <h5>左侧loading图标：</h5>
+                <button type="button" class="mui-btn mui-btn-primary" >确认</button>
+                <h5>右侧loading图标：</h5>
+                <button type="button" class="mui-btn mui-btn-primary" data-loading-text = "提交中" data-loading-icon-position="right">确认</button>
+                <h5>无loading图标：</h5>
+                <button type="button" class="mui-btn mui-btn-primary" data-loading-icon="">确认</button>
+                <h5>自定义loading图标：</h5>
+                <button type="button" class="mui-btn mui-btn-primary" data-loading-icon="mui-spinner mui-spinner-custom">确认</button>
+                <h5>其他button效果</h5>
+                <button type="button" class="mui-btn">确认</button>
+                <button type="button" class="mui-btn mui-btn-outlined mui-btn-primary">确认</button>
+                <button type="button" class="mui-btn mui-btn-primary">确认 <span class="mui-badge mui-badge-primary">2</span></button>
+                <button type="button" class="mui-btn mui-btn-block mui-btn-primary">确认</button>
+            </div>
+        </div>
+    </body>
+    <script src="../js/mui.min.js"></script>
+    <script>
+        mui.init({
+            swipeBack: true //启用右滑关闭功能
+        });
+        mui(document.body).on('tap', '.mui-btn', function(e) {
+            mui(this).button('loading');
+            setTimeout(function() {
+                mui(this).button('reset');
+            }.bind(this), 2000);
+        });
+    </script>
+
+</html>
