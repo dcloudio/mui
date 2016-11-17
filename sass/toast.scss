@@ -1,22 +1,23 @@
 .#{$namespace}toast-container {
+	line-height:17px;
 	position: fixed;
-	width: 100%;
 	bottom: 50px;
 	z-index: z("toast");
 	opacity: 0;
-	-webkit-transition: opacity .8s;
-    transition: opacity .8s;
+	left:50%;
+	-webkit-transform:translate(-50%,0);
+	transform:translate(-50%,0);
+	-webkit-transition: opacity .3s;
+    transition: opacity .3s;
 	&.#{$namespace}active{
-	    opacity: 1;
+	    opacity: .9;
 	}
 }
 .#{$namespace}toast-message {
-	width: 270px;
-	margin: 5px auto;
-	padding: 5px;
-	background-color: #D8D8D8;
+	padding: 10px 25px;
+	background-color: #323232;
 	text-align: center;
-	color: #000;
-	border-radius: 7px;
+	color: #fff;
+	border-radius: 6px;
 	font-size: 14px;
 }
