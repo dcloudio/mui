@@ -186,13 +186,14 @@
 			});
 			//首页返回键处理
 			//1、若侧滑菜单显示，则关闭侧滑菜单
-			//2、否则，执行mui框架默认的关闭首页功能
-			var _back = mui.back;
+			//2、否则，通知子窗口(list.html)显示toast提醒
 			mui.back = function() {
 				if (showMenu) {
 					closeMenu();
 				} else {
-					_back();
+					//通知子窗口弹toast提醒
+					var sub = plus.webview.getWebviewById("list");
+					mui.fire(sub,"back");
 				}
 			};
 		</script>

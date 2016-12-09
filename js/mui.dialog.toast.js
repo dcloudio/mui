@@ -52,7 +52,11 @@
 			setTimeout(function() {
 				toast && toast.classList.remove(CLASS_ACTIVE);
 			}, duration);
-		}
+			
+			return {
+		        isVisible: function() {return !!toast;}
+		    }
+		}   
 	};
 
 })(mui, window);

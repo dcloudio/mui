@@ -685,6 +685,38 @@
 					openMenu();
 				}
 			});
+			var _toast = false;
+			window.addEventListener('back',function(event){
+				if(!_toast || !_toast.isVisible()){
+					_toast = mui.toast('再按一次返回键退出<br>点此可&nbsp;<span style="border-bottom:1px solid #fff" onclick="openFeedback();">反馈意见</span>',{duration:'long',type:'div'});
+				}else{
+					plus.runtime.quit();					
+				}
+			});
+			/**
+			* 退出时提醒用户参加问题反馈
+			*/
+			function openFeedback(){
+				plus.nativeUI.showWaiting();
+				var _p = plus.os.name === 'Android' ? 'a' : plus.os.name === 'iOS' ? 'i' : '';
+				//TODO：这里使用的是FeedBack云地址，开发者也可以替换为本地页面地址
+		        var url = 'http://stream.dcloud.net.cn/wap2app/feedback?p=' + _p; 
+		        url += "&plus_version="+plus.runtime.innerVersion;
+		        url += "&vendor="+plus.device.vendor;
+		        url += "&md="+plus.device.model;
+		        /*****开发者需修改的部分   开始*****/
+		        url += "&app_name=HelloMUI&app_vendor=DCloud";
+		        //如有本地关于页面，则填写关于页面的路径
+		        //注意：需要_www/前缀
+		        url += "&about=_www/examples/info.html";
+		        /*****开发者需修改的部分   结束*****/
+		        
+		        var feedbackWebview = plus.webview.create(url, "__W2A_FEEDBACK");
+		        feedbackWebview.addEventListener('titleUpdate', function() {
+		            plus.nativeUI.closeWaiting();
+		            feedbackWebview.show('slide-in-right', 300);
+		        });
+			}
 		</script>
 	</body>
 

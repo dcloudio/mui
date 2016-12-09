@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.4.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.4.1 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -7102,7 +7102,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			setTimeout(function() {
 				toast && toast.classList.remove(CLASS_ACTIVE);
 			}, duration);
-		}
+			
+			return {
+		        isVisible: function() {return !!toast;}
+		    }
+		}   
 	};
 
 })(mui, window);
