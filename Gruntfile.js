@@ -94,8 +94,8 @@ module.exports = function(grunt) {
 					'js/mui.progressbar.js',
 					'js/input.plugin.js',
 					'js/mui.transparent.js',
-					'js/mui.number.js'
-
+					'js/mui.number.js',
+					'js/mui.button.js'
 				],
 				dest: '<%= meta.distPath %>js/<%= pkg.name %>.js',
 			}

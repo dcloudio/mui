@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.3.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.4.1 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -1234,7 +1234,8 @@ button.mui-disabled,
 }
 
 input[type='submit'],
-.mui-btn-primary, .mui-btn-blue
+.mui-btn-primary,
+.mui-btn-blue
 {
     color: #fff;
     border: 1px solid #007aff;
@@ -1242,59 +1243,79 @@ input[type='submit'],
 }
 input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 .mui-btn-primary:enabled:active,
-.mui-btn-primary.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-blue.mui-active:enabled
+.mui-btn-primary.mui-active:enabled,
+.mui-btn-blue:enabled:active,
+.mui-btn-blue.mui-active:enabled
 {
     color: #fff;
     border: 1px solid #0062cc;
     background-color: #0062cc;
 }
 
-.mui-btn-positive, .mui-btn-success, .mui-btn-green
+.mui-btn-positive,
+.mui-btn-success,
+.mui-btn-green
 {
     color: #fff;
     border: 1px solid #4cd964;
     background-color: #4cd964;
 }
-.mui-btn-positive:enabled:active, .mui-btn-positive.mui-active:enabled, .mui-btn-success:enabled:active, .mui-btn-success.mui-active:enabled, .mui-btn-green:enabled:active, .mui-btn-green.mui-active:enabled
+.mui-btn-positive:enabled:active, .mui-btn-positive.mui-active:enabled,
+.mui-btn-success:enabled:active,
+.mui-btn-success.mui-active:enabled,
+.mui-btn-green:enabled:active,
+.mui-btn-green.mui-active:enabled
 {
     color: #fff;
     border: 1px solid #2ac845;
     background-color: #2ac845;
 }
 
-.mui-btn-warning, .mui-btn-yellow
+.mui-btn-warning,
+.mui-btn-yellow
 {
     color: #fff;
     border: 1px solid #f0ad4e;
     background-color: #f0ad4e;
 }
-.mui-btn-warning:enabled:active, .mui-btn-warning.mui-active:enabled, .mui-btn-yellow:enabled:active, .mui-btn-yellow.mui-active:enabled
+.mui-btn-warning:enabled:active, .mui-btn-warning.mui-active:enabled,
+.mui-btn-yellow:enabled:active,
+.mui-btn-yellow.mui-active:enabled
 {
     color: #fff;
     border: 1px solid #ec971f;
     background-color: #ec971f;
 }
 
-.mui-btn-negative, .mui-btn-danger, .mui-btn-red
+.mui-btn-negative,
+.mui-btn-danger,
+.mui-btn-red
 {
     color: #fff;
     border: 1px solid #dd524d;
     background-color: #dd524d;
 }
-.mui-btn-negative:enabled:active, .mui-btn-negative.mui-active:enabled, .mui-btn-danger:enabled:active, .mui-btn-danger.mui-active:enabled, .mui-btn-red:enabled:active, .mui-btn-red.mui-active:enabled
+.mui-btn-negative:enabled:active, .mui-btn-negative.mui-active:enabled,
+.mui-btn-danger:enabled:active,
+.mui-btn-danger.mui-active:enabled,
+.mui-btn-red:enabled:active,
+.mui-btn-red.mui-active:enabled
 {
     color: #fff;
     border: 1px solid #cf2d28;
     background-color: #cf2d28;
 }
 
-.mui-btn-royal, .mui-btn-purple
+.mui-btn-royal,
+.mui-btn-purple
 {
     color: #fff;
     border: 1px solid #8a6de9;
     background-color: #8a6de9;
 }
-.mui-btn-royal:enabled:active, .mui-btn-royal.mui-active:enabled, .mui-btn-purple:enabled:active, .mui-btn-purple.mui-active:enabled
+.mui-btn-royal:enabled:active, .mui-btn-royal.mui-active:enabled,
+.mui-btn-purple:enabled:active,
+.mui-btn-purple.mui-active:enabled
 {
     color: #fff;
     border: 1px solid #6641e2;
@@ -1432,6 +1453,20 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 
     width: 24px;
     height: 24px;
+}
+
+.mui-btn .mui-spinner
+{
+    width: 14px;
+    height: 14px;
+
+    vertical-align: text-bottom;
+}
+
+.mui-btn-block .mui-spinner
+{
+    width: 22px;
+    height: 22px;
 }
 
 .mui-bar
@@ -3022,7 +3057,6 @@ select:focus
 
 .mui-input-row .mui-btn
 {
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
     line-height: 1.1;
 
     float: right;
@@ -4861,35 +4895,36 @@ body > .mui-progressbar
 
 .mui-toast-container
 {
+    line-height: 17px;
+
     position: fixed;
     z-index: 9999;
     bottom: 50px;
+    left: 50%;
 
-    width: 100%;
-
-    -webkit-transition: opacity .8s;
-            transition: opacity .8s;
+    -webkit-transition: opacity .3s;
+            transition: opacity .3s;
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
 
     opacity: 0;
 }
 .mui-toast-container.mui-active
 {
-    opacity: 1;
+    opacity: .9;
 }
 
 .mui-toast-message
 {
     font-size: 14px;
 
-    width: 270px;
-    margin: 5px auto;
-    padding: 5px;
+    padding: 10px 25px;
 
     text-align: center;
 
-    color: #000;
-    border-radius: 7px;
-    background-color: #d8d8d8;
+    color: #fff;
+    border-radius: 6px;
+    background-color: #323232;
 }
 
 .mui-numbox
