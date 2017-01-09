@@ -43,6 +43,7 @@
 				//仅支持竖屏显示
 				plus.screen.lockOrientation("portrait-primary");
 				main = plus.webview.currentWebview();
+				main.setStyle({popGesture:'none'});
 				main.addEventListener('maskClick', closeMenu);
 				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
 				setTimeout(function() {
