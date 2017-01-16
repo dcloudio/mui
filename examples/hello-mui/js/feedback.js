@@ -59,7 +59,7 @@
 		return [].slice.call(feedback.imageList.querySelectorAll('.file'));
 	};
 	feedback.addFile = function(path) {
-		feedback.files.push({name:"images"+index,path:path});
+		feedback.files.push({name:"images"+index,path:path,id:"img-"+index});
 		index++;
 	};
 	/**
@@ -81,9 +81,15 @@
 		var closeButton = document.createElement('div');
 		closeButton.setAttribute('class', 'image-close');
 		closeButton.innerHTML = 'X';
+		closeButton.id = "img-"+index;
 		//小X的点击事件
 		closeButton.addEventListener('tap', function(event) {
 			setTimeout(function() {
+				for(var temp=0;temp<feedback.files.length;temp++){
+					if(feedback.files[temp].id==closeButton.id){
+						feedback.files.splice(temp,1);
+					}
+				}
 				feedback.imageList.removeChild(placeholder);
 			}, 0);
 			return false;
