@@ -555,7 +555,7 @@
 					//延迟的原因：优先打开启动导航页面，避免资源争夺
 					setTimeout(function() {
 						//预加载
-						//preload();
+						preload();
 					}, 200);
 				}
 
@@ -703,9 +703,11 @@
 					if(~id.indexOf('im-chat.html')) {
 						extras.acceleration = "none";
 					}
-					webview.addEventListener("loaded", function() {
-						webview.show(aniShow, 300, null, extras);
-					})
+					webview.addEventListener("titleUpdate", function() {
+						setTimeout(function () {
+							webview.show(aniShow, 300, null, extras);
+						},100);
+					});
 				} else if(href && ~href.indexOf('.html')) {
 					//侧滑菜单需动态控制一下zindex值；
 					if(~id.indexOf('offcanvas-')) {
@@ -720,8 +722,10 @@
 					
 					
 					var webview = plus.webview.create(this.href,id,webview_style,extras);
-					webview.addEventListener("loaded",function () {
-						webview.show(aniShow,300);
+					webview.addEventListener("titleUpdate",function () {
+						setTimeout(function () {
+							webview.show(aniShow,300);
+						},100);
 					});
 				}
 			});
