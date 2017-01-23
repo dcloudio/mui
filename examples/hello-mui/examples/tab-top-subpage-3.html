@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.title {
+				padding: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				background-color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div class="title">
+					这是webview模式选项卡中的第3个子页面
+				</div>
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">北京-Item 1</a>
+					</li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">北京-Item 2</a>
+					</li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">北京-Item 3</a>
+					</li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">北京-Item 4</a>
+					</li>
+					<li class="mui-table-view-cell"><a href="" class="mui-navigate-right">北京-Item 5</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack: false,
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+		</script>
+	</body>
+
+</html>
