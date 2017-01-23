@@ -62,7 +62,8 @@
 		},
 		"Payment":{},
 		"Uploader": {},
-		"Share":{}
+		"Share":{},
+		"NativeObj": {}
 	},
 	"plus": {
 		"launchwebview": {
