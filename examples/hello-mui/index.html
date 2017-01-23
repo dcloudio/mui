@@ -236,12 +236,17 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav.html">
-								默认实现
+								div title
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" data-title-type="native" href="examples/nav-nativeObj.html">
+								native title
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav_transparent.html">
-								透明渐变
+								透明渐变(div模式)
 							</a>
 						</li>
 					</ul>
@@ -351,7 +356,7 @@
 							</a>
 						</li>
 						<li class="mui-table-view-cell mui-plus-visible">
-							<a class="mui-navigate-right" open-type="common" href="examples/tab-webview-main.html">
+							<a class="mui-navigate-right" href="examples/tab-webview-main.html">
 								底部选项卡-webview模式
 							</a>
 						</li>
@@ -368,6 +373,11 @@
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/tab-with-viewpagerindicator.html">
 								顶部选项卡-可左右拖动(div)
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" data-wid="viewgroup" href="examples/tab-top-webview-main.html">
+								顶部选项卡-可左右拖动(webview)
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
@@ -394,7 +404,7 @@
 						advertisement（广告模板）
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell ios-only">
 					<a class="mui-navigate-right" data-title-type="native" href="examples/echarts.html">
 						chart（EChart图表）
 					</a>
@@ -466,8 +476,16 @@
 			</ul>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
 		<script>
+			mui.init({
+				statusBarBackground: '#f7f7f7'
+			});
 			var aniShow = "pop-in";
+			var menu = null,
+				showMenu = false;
+			var isInTransition = false;
+			var _self;
 			//只有ios支持的功能需要在Android平台隐藏；
 			if(mui.os.android) {
 				var list = document.querySelectorAll('.ios-only');
@@ -483,16 +501,20 @@
 			}
 			//初始化，并预加载webview模式的选项卡			
 			function preload() {
-				mui.preload({
-					url: 'examples/tab-webview-main.html',
+				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
+				menu = mui.openWindow({
+					id: 'index-menu',
+					url: 'index-menu.html',
 					styles: {
-						popGesture: 'hide'
-					}
-				});
-				mui.preload({
-					url: "examples/pullrefresh_main.html",
-					styles: {
-						popGesture: 'hide'
+						left: "-70%",
+						width: '70%',
+						popGesture: "none"
+					},
+					show: {
+						aniShow: 'none'
+					},
+					waiting: {
+						autoShow: false
 					}
 				});
 			}
@@ -527,19 +549,98 @@
 						preload();
 					}, 200);
 				}
+
+				//绘制顶部图标
+				_self = plus.webview.currentWebview();
+				var titleView = _self.getNavigationbar();
+
+				if(!titleView) {
+					titleView = plus.webview.getLaunchWebview().getNavigationbar();
+				}
+
+				if(mui.os.android) {
+					var bitmap_menu = new plus.nativeObj.Bitmap("menu");
+					bitmap_menu.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAKlBMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAABINtoqAAAADHRSTlMA/fPQ0M/e3tzs7OjgY5g4AAAAAWJLR0QAiAUdSAAAAAd0SU1FB+EBFwEbOGGUPSIAAAA2SURBVDjLY2AY9oDxDBZwCJ8EswsW4DrQ/hicgPTQZSvHAioG2h+DE5AeupyrsIDVA+0PqgEAu36BkQX5nBQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDEtMjNUMDE6Mjc6NTYrMDg6MDC8FK1uAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTAxLTIzVDAxOjI3OjU2KzA4OjAwzUkV0gAAAABJRU5ErkJggg==");
+					titleView.drawBitmap(bitmap_menu, {}, {
+						top: "10px",
+						left: "10px",
+						width: "24px",
+						height: "24px"
+					});
+				}
+
+				var about_left = window.innerWidth - 34;
+				var bitmap = new plus.nativeObj.Bitmap("about");
+				bitmap.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQfhARcBEina5qaZAAAB10lEQVRYw+2XP0vDQBiHf7Wlq63gLAgV/QpOBnEpZHJycBL6Lq2LuFq6Kn6AK2RxKQhu2aS0XQT7DbTgLqVGR4OlDtL8uUu8S3Lape/Wy93z5L1r7t4DlrHoyCXrznZRhEsPWgUsj0PUsC886KKNO5pmErAKWjj6tUsHTRqlErBVXONEaR4snNFHQgHbQ08JPg+D+lHNKzH4ekI80GP1qOZ8JP4ClwnxAFA1Z/ZAQcDqqfAAYJgTexhuEtYg8dwLkvBacAJWxlsmPACskeP/4Bf5KjOeY4QyYBU8SwZv4x2P2JD02vI/vXAGLcnAFj3RK06lOQQ4gQwU5v8FO3Bxg2OpwluHQqDxQDpsE5/SPnPWrThFNcXBKuGxvClieXxpFACFn43cz6CsNMygHAylnmV+ita1vr/HS5qBeggZFDULirzA1SxweYGTEhQXDi8YaxaM/zsDmqKrEd+d10vBraKtUeCxgoJ7jQKPFRCQg44mfMc/NJOeaGoRd6LRCJYGvBWsVflD/1yDIMTgBOQobsbxYVDoixJqU+qjkQHf4EvgiNLRHpqzlHk0SairIotfe2BOUE3x9hFl26LuBwD1UVL+01ooReMXe0fzJH95yxRkie/Jy5DGN/4FegI2+YzMAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTIzVDAxOjE4OjQxKzA4OjAw3fCu8gAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0yM1QwMToxODo0MSswODowMKytFk4AAAAASUVORK5CYII=");
+				titleView.drawBitmap(bitmap, {}, {
+					top: "10px",
+					left: about_left + "px",
+					width: "24px",
+					height: "24px"
+				});
+
+				titleView.interceptTouchEvent(true);
+				titleView.addEventListener("click", function(e) {
+					var x = e.clientX;
+					if(x < 44 && mui.os.android) { //触发menu菜单
+
+						var _left = parseInt(_self.getStyle().left);
+						if(_left > 0) { //处于显示状态
+							closeMenu();
+						} else {
+							openMenu();
+						}
+					} else if(x > about_left) { //触发关于页面
+						var aniShow = mui.os.plus ? "slide-in-right" : "zoom-fade-out";
+						mui.openWindow({
+							url: "examples/info.html",
+							id: "info",
+							styles: {
+								popGesture: "close"
+							},
+							show: {
+								aniShow: aniShow,
+								duration: 300
+							}
+						});
+					}
+				}, false);
+
+				if(mui.os.android) {
+					_self.drag({
+						direction: "right",
+						moveMode: "followFinger"
+					}, {
+						view: menu,
+						moveMode: "follow"
+					}, function(e) {
+						console.log(JSON.stringify(e));
+					});
+				}
 			});
 			//主列表点击事件
 			mui('#list').on('tap', 'a', function() {
-				var id = this.getAttribute('href');
-				var href = this.href;
-				var type = this.getAttribute("open-type");
-				var animate = this.getAttribute('data-openanimate');
-				var canimate = this.getAttribute('data-closeanimate');
-				var animatename = this.innerHTML;
-
+				var id = this.getAttribute("data-wid");
+				if(!id) {
+					id = this.getAttribute('href');
+				}
+				var href = this.getAttribute('href');
 				var titleType = this.getAttribute("data-title-type");
+
+				var webview_style = {
+					popGesture: "close"
+				}
+
 				if(titleType == "native") {
-					var webview = plus.webview.create(href, href);
+					if(!~id.indexOf('pullrefresh.html')){
+						webview_style.bounce = "vertical";
+					}
+					//图标页面需要启动硬件加速
+					if(~id.indexOf('icons.html') || ~id.indexOf("echarts.html")) {
+						webview_style.hardwareAccelerated = true;
+					}
+
+					var webview = plus.webview.create(href, id, webview_style);
 					var view = new plus.nativeObj.View("title", {
 						top: 0,
 						height: "44px",
@@ -577,31 +678,28 @@
 					view.addEventListener("click", function(e) {
 						webview.evalJS("mui.back();");
 					}, false);
-
-					//					view.show();
 					webview.append(view);
+					var extras = {};
+					if(~id.indexOf('im-chat.html')){
+						extras.acceleration = "none";
+					}
 					webview.addEventListener("loaded", function() {
-						webview.show("slide-in-right", 300);
+						webview.show(aniShow, 300,null,extras);
 					})
-				} else if(id && ~id.indexOf('.html')) {
-					var webview_style = {
-						popGesture: "close"
-					};
+				} else if(href && ~href.indexOf('.html')) {
 					//侧滑菜单需动态控制一下zindex值；
 					if(~id.indexOf('offcanvas-')) {
 						webview_style.zindex = 9998;
 						webview_style.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
 					}
-					//图标页面需要启动硬件加速
-					if(~id.indexOf('icons.html')){
-						webview_style.hardwareAccelerated = true;
-					}
+
 					mui.openWindow({
 						id: id,
 						url: this.href,
 						styles: webview_style,
 						show: {
-							aniShow: aniShow
+							aniShow: aniShow,
+							duration: 300
 						},
 						waiting: {
 							autoShow: false
@@ -609,59 +707,109 @@
 					});
 				}
 			});
-			var index = null; //主页面
+			/**
+			 * 显示侧滑菜单
+			 */
 			function openMenu() {
-				!index && (index = mui.currentWebview.parent());
-				mui.fire(index, "menu:open");
-			}
-			//在android4.4.2中的swipe事件，需要preventDefault一下，否则触发不正常
-			window.addEventListener('dragstart', function(e) {
-				mui.gestures.session.lockDirection = true; //锁定方向
-				mui.gestures.session.startDirection = e.detail.direction;
-			});
-			window.addEventListener('dragright', function(e) {
-				if(!mui.isScrolling) {
-					e.detail.gesture.preventDefault();
+				plus.webview.startAnimation({
+						'view': _self,
+						'styles': {
+							'fromLeft': '0',
+							'toLeft': "70%"
+						},
+						'action': 'show'
+					}, {
+						'view': menu,
+						'styles': {
+							'fromLeft': "-70%",
+							'toLeft': '0'
+						},
+						'action': 'show'
+					},
+					function(e) {
+						console.log(JSON.stringify(e));
+						if(e.id == menu.id) { //侧滑菜单打开
+						}
+					}.bind(this)
+				)
+			};
+			/**
+			 * 关闭菜单
+			 */
+			function closeMenu() {
+				plus.webview.startAnimation({
+						'view': _self,
+						'styles': {
+							'fromLeft': '70%',
+							'toLeft': "0"
+						},
+						'action': 'show'
+					}, {
+						'view': menu,
+						'styles': {
+							'fromLeft': "0",
+							'toLeft': '-70%'
+						},
+						'action': 'show'
+					},
+					function(e) {
+						console.log(JSON.stringify(e));
+						if(e.id == _self.id) {}
+					}.bind(this)
+				)
+			};
+			window.addEventListener("menu:close", closeMenu);
+
+			var _toast = false;
+
+			mui.back = function() {
+				if(parseInt(_self.getStyle().left) > 0) {
+					closeMenu();
+					return;
 				}
-			});
-			//监听右滑事件，若侧滑菜单未显示，右滑要显示菜单；
-			window.addEventListener("swiperight", function(e) {
-				//默认滑动角度在-45度到45度之间，都会触发右滑菜单，为避免误操作，可自定义限制滑动角度；
-				if(Math.abs(e.detail.angle) < 4) {
+
+				if(!_toast || !_toast.isVisible()) {
+					_toast = mui.toast('再按一次返回键退出<br>点此可&nbsp;<span style="border-bottom:1px solid #fff" onclick="openFeedback();">反馈意见</span>', {
+						duration: 'long',
+						type: 'div'
+					});
+				} else {
+					plus.runtime.quit();
+				}
+			}
+
+			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
+			mui.menu = function() {
+				if(parseInt(_self.getStyle().left) > 0) {
+					closeMenu();
+				} else {
 					openMenu();
 				}
-			});
-			var _toast = false;
-			window.addEventListener('back',function(event){
-				if(!_toast || !_toast.isVisible()){
-					_toast = mui.toast('再按一次返回键退出<br>点此可&nbsp;<span style="border-bottom:1px solid #fff" onclick="openFeedback();">反馈意见</span>',{duration:'long',type:'div'});
-				}else{
-					plus.runtime.quit();					
-				}
-			});
+			}
+
 			/**
-			* 退出时提醒用户参加问题反馈
-			*/
-			function openFeedback(){
+			 * 退出时提醒用户参加问题反馈
+			 */
+			function openFeedback() {
 				plus.nativeUI.showWaiting();
 				var _p = plus.os.name === 'Android' ? 'a' : plus.os.name === 'iOS' ? 'i' : '';
 				//TODO：这里使用的是FeedBack云地址，开发者也可以替换为本地页面地址
-		        var url = 'http://stream.dcloud.net.cn/wap2app/feedback?p=' + _p; 
-		        url += "&plus_version="+plus.runtime.innerVersion;
-		        url += "&vendor="+plus.device.vendor;
-		        url += "&md="+plus.device.model;
-		        /*****开发者需修改的部分   开始*****/
-		        url += "&app_name=HelloMUI&app_vendor=DCloud";
-		        //如有本地关于页面，则填写关于页面的路径
-		        //注意：需要_www/前缀
-		        url += "&about=_www/examples/info.html";
-		        /*****开发者需修改的部分   结束*****/
-		        
-		        var feedbackWebview = plus.webview.create(url, "__W2A_FEEDBACK");
-		        feedbackWebview.addEventListener('titleUpdate', function() {
-		            plus.nativeUI.closeWaiting();
-		            feedbackWebview.show('slide-in-right', 300);
-		        });
+				var url = 'http://stream.dcloud.net.cn/wap2app/feedback?p=' + _p;
+				url += "&plus_version=" + plus.runtime.innerVersion;
+				url += "&vendor=" + plus.device.vendor;
+				url += "&md=" + plus.device.model;
+				/*****开发者需修改的部分   开始*****/
+				url += "&app_name=HelloMUI&app_vendor=DCloud";
+				//如有本地关于页面，则填写关于页面的路径
+				//注意：需要_www/前缀
+				url += "&about=_www/examples/info.html";
+				/*****开发者需修改的部分   结束*****/
+
+				var feedbackWebview = plus.webview.create(url, "__W2A_FEEDBACK");
+				feedbackWebview.addEventListener('titleUpdate', function() {
+					plus.nativeUI.closeWaiting();
+					feedbackWebview.show('slide-in-right', 300);
+				});
 			}
 		</script>
 	</body>

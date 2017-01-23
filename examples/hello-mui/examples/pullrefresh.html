@@ -17,10 +17,6 @@
 	</head>
 
 	<body>
-		<!--<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">单webview模式下拉刷新</h1>
-		</header>-->
 		<!--下拉刷新容器-->
 		<div id="pullrefresh" class="mui-content">
 			<!--数据列表-->
@@ -28,12 +24,17 @@
 
 			</ul>
 		</div>
-		<script src="../js/mui.min.js"></script>
 		<script>
-			mui.init();
-
 			var _self;
-			mui.plusReady(function() {
+			if(window.plus) {
+				plusReady();
+			} else {
+				document.addEventListener("plusready", function() {
+					plusReady();
+				}, false);
+			}
+
+			function plusReady() {
 				_self = plus.webview.currentWebview();
 				_self.setPullToRefresh({
 					support: true,
@@ -42,12 +43,16 @@
 					style: 'circle',
 					offset: '0px'
 				}, pulldownRefresh);
-			});
+				
+				plus.key.addEventListener("backbutton",function () {
+					_self.close("auto");
+				},false);
+			}
 
 			function addData() {
 				var table = document.body.querySelector('.mui-table-view');
 				var cells = document.body.querySelectorAll('.mui-table-view-cell');
-				for(var i = cells.length, len = i + 3; i < len; i++) {
+				for(var i = cells.length, len = i + 5; i < len; i++) {
 					var li = document.createElement('li');
 					li.className = 'mui-table-view-cell';
 					li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
@@ -55,7 +60,6 @@
 					table.insertBefore(li, table.firstChild);
 				}
 			}
-
 			/**
 			 * 下拉刷新具体业务实现
 			 */
@@ -65,26 +69,14 @@
 					_self.endPullToRefresh();
 				}, 1500);
 			}
-			var count = 0;
-			/**
-			 * 上拉加载具体业务实现
-			 */
-			function pullupRefresh() {
-				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for(var i = cells.length, len = i + 20; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-						table.appendChild(li);
-					}
-				}, 1500);
-			}
 
 			addData();
-
+			
+			mui = {};
+			mui.back = function () {
+				_self.close("auto");
+			}
+			
 		</script>
 	</body>
 
