@@ -63,7 +63,8 @@
 		"Payment":{},
 		"Uploader": {},
 		"Share":{},
-		"NativeObj": {}
+		"NativeObj": {},
+		"Invocation":{}
 	},
 	"plus": {
 		"launchwebview": {
