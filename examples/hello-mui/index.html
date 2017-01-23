@@ -501,15 +501,22 @@
 			}
 			//初始化，并预加载webview模式的选项卡			
 			function preload() {
+
+				var menu_style = {
+					left: "-70%",
+					width: '70%',
+					popGesture: "none"
+				};
+
+				if(mui.os.ios) {
+					menu_style.zindex = -1;
+				}
+
 				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
 				menu = mui.openWindow({
 					id: 'index-menu',
 					url: 'index-menu.html',
-					styles: {
-						left: "-70%",
-						width: '70%',
-						popGesture: "none"
-					},
+					styles: menu_style,
 					show: {
 						aniShow: 'none'
 					},
@@ -521,6 +528,8 @@
 			mui.plusReady(function() {
 				//读取本地存储，检查是否为首次启动
 				var showGuide = plus.storage.getItem("lauchFlag");
+				//仅支持竖屏显示
+				plus.screen.lockOrientation("portrait-primary");
 				if(showGuide) {
 					//有值，说明已经显示过了，无需显示；
 					//关闭splash页面；
@@ -546,7 +555,7 @@
 					//延迟的原因：优先打开启动导航页面，避免资源争夺
 					setTimeout(function() {
 						//预加载
-						preload();
+						//preload();
 					}, 200);
 				}
 
@@ -557,6 +566,18 @@
 				if(!titleView) {
 					titleView = plus.webview.getLaunchWebview().getNavigationbar();
 				}
+
+				titleView.drawRect("#cccccc", {
+					top: "43px",
+					height:"1px",
+					left: "0px"
+				}); //绘制底部边线
+
+				//开启回弹
+				_self.setStyle({
+					bounce: "vertical",
+					bounceBackground:"#efeff4"
+				});
 
 				if(mui.os.android) {
 					var bitmap_menu = new plus.nativeObj.Bitmap("menu");
@@ -583,7 +604,6 @@
 				titleView.addEventListener("click", function(e) {
 					var x = e.clientX;
 					if(x < 44 && mui.os.android) { //触发menu菜单
-
 						var _left = parseInt(_self.getStyle().left);
 						if(_left > 0) { //处于显示状态
 							closeMenu();
@@ -632,7 +652,7 @@
 				}
 
 				if(titleType == "native") {
-					if(!~id.indexOf('pullrefresh.html')){
+					if(!~id.indexOf('pullrefresh.html')) {
 						webview_style.bounce = "vertical";
 					}
 					//图标页面需要启动硬件加速
@@ -680,11 +700,11 @@
 					}, false);
 					webview.append(view);
 					var extras = {};
-					if(~id.indexOf('im-chat.html')){
+					if(~id.indexOf('im-chat.html')) {
 						extras.acceleration = "none";
 					}
 					webview.addEventListener("loaded", function() {
-						webview.show(aniShow, 300,null,extras);
+						webview.show(aniShow, 300, null, extras);
 					})
 				} else if(href && ~href.indexOf('.html')) {
 					//侧滑菜单需动态控制一下zindex值；
