@@ -505,7 +505,8 @@
 				var menu_style = {
 					left: "-70%",
 					width: '70%',
-					popGesture: "none"
+					popGesture: "none",
+					render:"always"
 				};
 
 				if(mui.os.ios) {
@@ -627,15 +628,17 @@
 				}, false);
 
 				if(mui.os.android) {
-					_self.drag({
-						direction: "right",
-						moveMode: "followFinger"
-					}, {
-						view: menu,
-						moveMode: "follow"
-					}, function(e) {
-						console.log(JSON.stringify(e));
-					});
+					setTimeout(function() {
+						_self.drag({
+							direction: "right",
+							moveMode: "followFinger"
+						}, {
+							view: menu,
+							moveMode: "follow"
+						}, function(e) {
+							console.log(JSON.stringify(e));
+						});
+					}, 350);
 				}
 			});
 			//主列表点击事件
