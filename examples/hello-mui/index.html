@@ -387,7 +387,7 @@
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" data-title-type="native" href="examples/tab-vertical-scroll.html">
-								左侧选项卡-div模式-滚动监听
+								左侧选项卡-div模式-联动高亮
 							</a>
 						</li>
 					</ul>
@@ -404,8 +404,8 @@
 						advertisement（广告模板）
 					</a>
 				</li>
-				<li class="mui-table-view-cell ios-only">
-					<a class="mui-navigate-right" data-title-type="native" href="examples/echarts.html">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" href="examples/echarts.html">
 						chart（EChart图表）
 					</a>
 				</li>
@@ -650,7 +650,7 @@
 				var webview_style = {
 					popGesture: "close"
 				}
-
+				var extras = {};
 				if(titleType == "native") {
 					if(!~id.indexOf('pullrefresh.html')) {
 						webview_style.bounce = "vertical";
@@ -699,7 +699,7 @@
 						webview.evalJS("mui.back();");
 					}, false);
 					webview.append(view);
-					var extras = {};
+					
 					if(~id.indexOf('im-chat.html')) {
 						extras.acceleration = "none";
 					}
@@ -712,18 +712,16 @@
 						webview_style.zindex = 9998;
 						webview_style.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
 					}
-
-					mui.openWindow({
-						id: id,
-						url: this.href,
-						styles: webview_style,
-						show: {
-							aniShow: aniShow,
-							duration: 300
-						},
-						waiting: {
-							autoShow: false
-						}
+					
+					var extras = {};
+					if(id && id == "viewgroup"){//强制启用截屏
+						extras.acceleration = "capture";
+					}
+					
+					
+					var webview = plus.webview.create(this.href,id,webview_style,extras);
+					webview.addEventListener("loaded",function () {
+						webview.show(aniShow,300);
 					});
 				}
 			});

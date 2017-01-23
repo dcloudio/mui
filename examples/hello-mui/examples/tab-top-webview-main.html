@@ -173,20 +173,7 @@
 			});
 			mui.back = function() {
 				var _self = plus.webview.currentWebview();
-				var list = _self.opened();
-				
-				var top = plus.webview.getTopWebview().id;
-				for(var i = list.length - 1; i >= 0; i--) {
-					if(list[i].id == top){
-						console.log(list[i].id+" is top");
-						_self.append(list[i]);
-					}else{
-						list[i].close("none");
-					}
-				}
-				setTimeout(function () {
-					_self.close("auto");
-				},50);
+				_self.close("auto");
 			}
 		</script>
 	</body>

@@ -82,7 +82,6 @@ proto._dragCallback = function(dir, fromWebview, view, viewId) {
 		//第一步:初始化目标webview
 		this.webviewContexts[viewId].createWebview('drag');
 		var targetWebview = this.webviewContexts[viewId].webview;
-		//targetWebview.showBehind(plus.webview.getSecondWebview());
 		targetWebview.show();
 		this.nativeView.setStyle({
 			left: '100%'
@@ -249,6 +248,8 @@ _proto.createWebview = function(from) {
 			plus.nativeUI.showWaiting();
 		}
 		this.webview = plus.webview.create(this.url, this.id, options.styles, options.extras);
+		//append进去，避免返回时闪屏
+		plus.webview.currentWebview().append(this.webview);
 	}
 	this._initWebview();
 	this.inited = true;
