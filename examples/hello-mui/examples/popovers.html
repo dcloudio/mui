@@ -11,16 +11,8 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
 		<style>
-			/*跨webview需要手动指定位置*/
-			
-			.mui-plus header.mui-bar {
-				display: none!important;
-			}
-			.mui-plus .mui-bar-nav~.mui-content {
-				padding: 0!important;
-			}
 			
 			.mui-plus .plus{
 				display: inline;
@@ -68,11 +60,13 @@
 		</footer>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<p>popover（弹出菜单是）mobile App中常见的UI组件，在用户点击位置附近弹出悬浮菜单，向用户展示更多信息或提供快捷操作。</p>
+				<p>popover（弹出菜单）是mobile App中常见的UI组件，在用户点击位置附近弹出悬浮菜单，向用户展示更多信息或提供快捷操作。</p>
 				<p>popover最常用的两个位置：顶部导航栏右侧和底部工具栏右侧； 点击本页右上角的
-					<span class="mui-icon mui-icon-bars"></span> 图标体验，<span class="plus">这是一个
-					<strong>跨webview</strong>的popover示例，
-					<span class="mui-icon mui-icon-bars"></span>在父webview中，点击后通过自定义事件 通知子webview， 子webview再执行popover的显示隐藏逻辑； </span>接着点击本页面右下角的“菜单”按钮体验。
+					<span class="mui-icon mui-icon-bars"></span> 图标体验，
+					<!--TODO 后续增加原生标题示例-->
+					<!--<span class="plus">这是一个<strong>原生标题栏</strong>触发的popover示例，
+					<span class="mui-icon mui-icon-bars"></span>在父webview中，点击后通过自定义事件 通知子webview， 子webview再执行popover的显示隐藏逻辑； </span>-->
+					接着点击本页面右下角的“菜单”按钮体验。
 				</p>
 				<p>除了页面顶部导航栏、底部工具栏固定位置之外，其它区域要使用弹出菜单，都要准确计算物理位置，从而实现弹出菜单的绝对定位； mui封装的手势事件中，可以获得点击位置，通过这些位置可实现任意区域的弹出菜单显示，点击如下按钮体验：
 				</p>
@@ -176,9 +170,23 @@
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script>
-			mui.init({
-				swipeBack: true //启用右滑关闭功能
+			mui.init();
+			
+			mui.plusReady(function () {
+//				var view = plus.nativeObj.View.getViewById("title");
+//				
+//				var bitmap = new plus.nativeObj.Bitmap("back");
+//				bitmap.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAb1BMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAACubimgAAAAI3RSTlMAGfUTGfQTGPMSGPIYGhgaGBsXGxcbFxwXHBccFhwWHRYdHWufDPQAAAABYktHRACIBR1IAAAAB3RJTUUH4QETEBwooeTlkQAAAJVJREFUSMft1EkSgkAQRNFGUXFWHBDBibr/HTUwD5B/48Ig1y+io7u6MqUhf5hsNEY+j5hMgZ/FJ8Xc9ovos3T96utjbfqN/Nb0O/m96Uv5g+mP8ifTn+Ur01/ka9Nf5RvTt/I309/lH6Z/yr9Mn+Q71/MT8B34K/E58Enzv8R/K98HvnF8p3lr8F7izce7lbf3kJ/lDQp9HdBhgg3PAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTE5VDE2OjI4OjQwKzA4OjAwpTDFwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0xOVQxNjoyODo0MCswODowMNRtfX0AAAAASUVORK5CYII=");
+//				view.drawBitmap(bitmap, {}, {
+//					top: "10px",
+//					left: "10px",
+//					width: "24px",
+//					height: "24px"
+//				});
+//				
+//				view.setTouchEventRect({top:"0px",left:"0px",width:"44px",height:"100%"});
 			});
+			
 			mui('.mui-scroll-wrapper').scroll();
 			mui('body').on('shown', '.mui-popover', function(e) {
 				//console.log('shown', e.detail.id);//detail为当前popover元素

@@ -11,7 +11,7 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
 		<style>
 		 	.mui-content-padded {
 				padding: 10px;
@@ -38,7 +38,7 @@
 		<div class="mui-content">
 			<div class="mui-content-padded" style="padding-bottom: 50px;">
 				<p style="text-indent: 22px;">
-					mui基于html5plus的<a href="http://www.dcloud.io/docs/api/zh_cn/xhr.shtml">XMLHttpRequest</a>，封装了常用的ajax函数，支持Get、Post请求方式， 支持返回json、xml、html、text、script数据类型；本示例使用<a href="http://www.oschina.net/question/82993_78609">RunJS</a>的Echo Ajax功能演示网络请求。
+					mui基于html5plus的<a href="http://www.dcloud.io/docs/api/zh_cn/xhr.shtml">XMLHttpRequest</a>，封装了常用的ajax函数，支持Get、Post请求方式， 支持返回json、xml、html、text、script数据类型；
 				</p>
 				<h4 class="mui-content-padded">发送请求：</h4>
 				<div class="mui-input-group">
@@ -105,7 +105,7 @@
 				}
 				var ajax = function() {
 					//利用RunJS的Echo Ajax功能测试
-					var url = 'http://runjs.cn/action/echo/';
+					var url = 'https://service.dcloud.net.cn/ajax/echo/';
 					//请求方式，默认为Get；
 					var type = methodEl.value;
 					//预期服务器范围的数据类型

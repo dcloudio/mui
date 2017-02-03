@@ -11,16 +11,18 @@
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<!--App自定义的css-->
-		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
 		<style>
 			.mui-card .mui-control-content {
 				padding: 10px;
 			}
+			
 			.mui-control-content {
 				height: 150px;
 			}
 		</style>
 	</head>
+
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -29,15 +31,9 @@
 		<div class="mui-content">
 			<div style="padding: 10px 10px;">
 				<div id="segmentedControl" class="mui-segmented-control">
-					<a class="mui-control-item mui-active" href="#item1">
-				待办公文（8）
-			</a>
-					<a class="mui-control-item" href="#item2">
-				已办公文
-			</a>
-					<a class="mui-control-item" href="#item3">
-				全部公文
-			</a>
+					<a class="mui-control-item mui-active" href="#item1">待办公文（8）</a>
+					<a class="mui-control-item" href="#item2">已办公文</a>
+					<a class="mui-control-item" href="#item3">全部公文</a>
 				</div>
 			</div>
 			<div>
@@ -173,7 +169,7 @@
 		<script src="../js/mui.min.js"></script>
 		<script>
 			mui.init({
-				swipeBack:true //启用右滑关闭功能
+				swipeBack: true //启用右滑关闭功能
 			});
 			(function($) {
 				$('#scroll').scroll({
