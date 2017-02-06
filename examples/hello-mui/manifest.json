@@ -84,7 +84,7 @@
 		"distribute": {
 			"debug": "",/*可选，是否为debug模式，可取值：true表示debug模式运行，false表示release模式运行，默认值为false*/
 			"apple": {
-				"appid": "",/*iOS必选，苹果开发网站申请的appid，如com.dheaven.hbuilder*/
+				"appid": "",/*iOS必选，苹果开发网站申请的appid，如io.dcloud.HelloMUI*/
 				"mobileprovision": "",/*iOS必选，打包配置文件*/
 				"password": "",/*iOS必选，导入配置文件密码*/
 				"p12": "",/*iOS必选，打包配置文件关联的个人证书*/
@@ -92,7 +92,7 @@
 				"frameworks":[]/*用户在调用 Native.js 或开发第三方插件时使用到的 FrameWork 名*/
 			},
 			"google": {
-				"packagename": "",/*Android必选，程序包名，如com.dheaven.hbuilder*/
+				"packagename": "",/*Android必选，程序包名，如io.dcloud.HelloMUI*/
 				"keystore": "",/*Android必选，打包证书文件*/
 				"password": "",/*Android必选，打包证书密码*/
 				"aliasname": "",/*Android必选，打包证书别名*/
