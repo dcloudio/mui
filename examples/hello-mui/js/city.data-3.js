@@ -5651,31 +5651,6 @@ var cityData3 = [{
 		value: "411000",
 		text: "许昌市",
 		children: [{
-			value: "410902",
-			text: "华龙区"
-		}, {
-			value: "410922",
-			text: "清丰县"
-		}, {
-			value: "410923",
-			text: "南乐县"
-		}, {
-			value: "410926",
-			text: "范县"
-		}, {
-			value: "410927",
-			text: "台前县"
-		}, {
-			value: "410928",
-			text: "濮阳县"
-		}, {
-			value: "410929",
-			text: "其它区"
-		}]
-	}, {
-		value: "411100",
-		text: "漯河市",
-		children: [{
 			value: "411002",
 			text: "魏都区"
 		}, {
@@ -5698,8 +5673,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411200",
-		text: "三门峡市",
+		value: "411100",
+		text: "漯河市",
 		children: [{
 			value: "411102",
 			text: "源汇区"
@@ -5720,8 +5695,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411300",
-		text: "南阳市",
+		value: "411200",
+		text: "三门峡市",
 		children: [{
 			value: "411202",
 			text: "湖滨区"
@@ -5745,8 +5720,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411400",
-		text: "商丘市",
+		value: "411300",
+		text: "南阳市",
 		children: [{
 			value: "411302",
 			text: "宛城区"
@@ -5791,8 +5766,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411500",
-		text: "信阳市",
+		value: "411400",
+		text: "商丘市",
 		children: [{
 			value: "411402",
 			text: "梁园区"
@@ -5825,8 +5800,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411600",
-		text: "周口市",
+		value: "411500",
+		text: "信阳市",
 		children: [{
 			value: "411502",
 			text: "浉河区"
@@ -5862,8 +5837,8 @@ var cityData3 = [{
 			text: "其它区"
 		}]
 	}, {
-		value: "411700",
-		text: "驻马店市",
+		value: "411600",
+		text: "周口市",
 		children: [{
 			value: "411602",
 			text: "川汇区"
@@ -5897,6 +5872,40 @@ var cityData3 = [{
 		}, {
 			value: "411682",
 			text: "其它区"
+		}]
+	},{
+		value: "411700",
+		text: "驻马店市",
+		children: [{
+			value: "411702",
+			text: "驿城区"
+		}, {
+			value: "411721",
+			text: "西平县"
+		}, {
+			value: "411722",
+			text: "上蔡县"
+		}, {
+			value: "411723",
+			text: "平舆县"
+		}, {
+			value: "411724",
+			text: "正阳县"
+		}, {
+			value: "411725",
+			text: "确山县"
+		}, {
+			value: "411726",
+			text: "泌阳县"
+		}, {
+			value: "411727",
+			text: "汝南县"
+		}, {
+			value: "411628",
+			text: "遂平县"
+		}, {
+			value: "411729",
+			text: "新蔡县"
 		}]
 	}]
 }, {
