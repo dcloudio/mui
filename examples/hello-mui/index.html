@@ -580,16 +580,15 @@
 					bounceBackground:"#efeff4"
 				});
 
-				if(mui.os.android) {
-					var bitmap_menu = new plus.nativeObj.Bitmap("menu");
-					bitmap_menu.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAKlBMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAABINtoqAAAADHRSTlMA/fPQ0M/e3tzs7OjgY5g4AAAAAWJLR0QAiAUdSAAAAAd0SU1FB+EBFwEbOGGUPSIAAAA2SURBVDjLY2AY9oDxDBZwCJ8EswsW4DrQ/hicgPTQZSvHAioG2h+DE5AeupyrsIDVA+0PqgEAu36BkQX5nBQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDEtMjNUMDE6Mjc6NTYrMDg6MDC8FK1uAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTAxLTIzVDAxOjI3OjU2KzA4OjAwzUkV0gAAAABJRU5ErkJggg==");
-					titleView.drawBitmap(bitmap_menu, {}, {
-						top: "10px",
-						left: "10px",
-						width: "24px",
-						height: "24px"
-					});
-				}
+				//绘制左上角menu图标
+				var bitmap_menu = new plus.nativeObj.Bitmap("menu");
+				bitmap_menu.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAKlBMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAABINtoqAAAADHRSTlMA/fPQ0M/e3tzs7OjgY5g4AAAAAWJLR0QAiAUdSAAAAAd0SU1FB+EBFwEbOGGUPSIAAAA2SURBVDjLY2AY9oDxDBZwCJ8EswsW4DrQ/hicgPTQZSvHAioG2h+DE5AeupyrsIDVA+0PqgEAu36BkQX5nBQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTctMDEtMjNUMDE6Mjc6NTYrMDg6MDC8FK1uAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE3LTAxLTIzVDAxOjI3OjU2KzA4OjAwzUkV0gAAAABJRU5ErkJggg==");
+				titleView.drawBitmap(bitmap_menu, {}, {
+					top: "10px",
+					left: "10px",
+					width: "24px",
+					height: "24px"
+				});
 
 				var about_left = window.innerWidth - 34;
 				var bitmap = new plus.nativeObj.Bitmap("about");
@@ -604,7 +603,7 @@
 				titleView.interceptTouchEvent(true);
 				titleView.addEventListener("click", function(e) {
 					var x = e.clientX;
-					if(x < 44 && mui.os.android) { //触发menu菜单
+					if(x < 44) { //触发menu菜单
 						var _left = parseInt(_self.getStyle().left);
 						if(_left > 0) { //处于显示状态
 							closeMenu();
