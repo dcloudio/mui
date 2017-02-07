@@ -626,19 +626,19 @@
 					}
 				}, false);
 
-				if(mui.os.android) {
-					setTimeout(function() {
-						_self.drag({
-							direction: "right",
-							moveMode: "followFinger"
-						}, {
-							view: menu,
-							moveMode: "follow"
-						}, function(e) {
-							console.log(JSON.stringify(e));
-						});
-					}, 350);
-				}
+				
+				setTimeout(function() {
+					_self.drag({
+						direction: "right",
+						moveMode: "followFinger"
+					}, {
+						view: menu,
+						moveMode: "follow"
+					}, function(e) {
+						console.log(JSON.stringify(e));
+					});
+				}, 350);
+				
 			});
 			//主列表点击事件
 			mui('#list').on('tap', 'a', function() {
