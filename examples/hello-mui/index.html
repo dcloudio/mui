@@ -239,7 +239,7 @@
 								div title
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" data-title-type="native" href="examples/nav-nativeObj.html">
 								native title
 							</a>
@@ -375,7 +375,7 @@
 								顶部选项卡-可左右拖动(div)
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" data-wid="viewgroup" href="examples/tab-top-webview-main.html">
 								顶部选项卡-可左右拖动(webview)
 							</a>
@@ -647,6 +647,13 @@
 					id = this.getAttribute('href');
 				}
 				var href = this.getAttribute('href');
+
+				//非plus环境，直接走href跳转
+				if(!mui.os.plus){
+					location.href = href;
+					return;
+				}
+
 				var titleType = this.getAttribute("data-title-type");
 
 				var webview_style = {
