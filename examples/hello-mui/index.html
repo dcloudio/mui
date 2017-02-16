@@ -654,7 +654,9 @@
 				}
 				var extras = {};
 				if(titleType == "native") {
-					if(!~id.indexOf('pullrefresh.html')) {
+					//如下场景不适用下拉回弹：
+					//1、单webview下拉刷新；2、底部有fixed定位的div的页面
+					if(!~id.indexOf('pullrefresh.html') && !~href.indexOf("examples/tabbar.html")) {
 						webview_style.bounce = "vertical";
 					}
 					//图标页面需要启动硬件加速
