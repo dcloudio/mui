@@ -4,13 +4,13 @@
 		init: function(element, options) {
 			var self = this;
 			this.container = this.element = element;
-//			placeholder //默认图片
+			//			placeholder //默认图片
 			this.options = $.extend({
-				selector: '',//查询哪些元素需要lazyload
-				diff: false,//距离视窗底部多少像素出发lazyload
-				force: false,//强制加载(不论元素是否在是视窗内)
-				autoDestroy: true,//元素加载完后是否自动销毁当前插件对象
-				duration: 100//滑动停止多久后开始加载
+				selector: '', //查询哪些元素需要lazyload
+				diff: false, //距离视窗底部多少像素出发lazyload
+				force: false, //强制加载(不论元素是否在是视窗内)
+				autoDestroy: true, //元素加载完后是否自动销毁当前插件对象
+				duration: 100 //滑动停止多久后开始加载
 			}, options);
 
 			this._key = 0;
@@ -35,7 +35,7 @@
 		_initLoadFn: function() {
 			var self = this;
 			self._loadFn = this._buffer(function() { // 加载延迟项
-				if (self.options.autoDestroy && self._counter == 0 && $.isEmptyObject(self._callbacks)) {
+				if(self.options.autoDestroy && self._counter == 0 && $.isEmptyObject(self._callbacks)) {
 					self.destroy();
 				}
 				self._loadItems();
@@ -50,14 +50,14 @@
 			var value, loading, handles = [],
 				h;
 			return function(handle) {
-				if (!loading) {
+				if(!loading) {
 					loading = true;
 					load(function(v) {
 						value = v;
-						while (h = handles.shift()) {
+						while(h = handles.shift()) {
 							try {
 								h && h.apply(null, [value]);
-							} catch (e) {
+							} catch(e) {
 								setTimeout(function() {
 									throw e;
 								}, 0)
@@ -65,7 +65,7 @@
 						}
 					})
 				}
-				if (value) {
+				if(value) {
 					handle && handle.apply(null, [value]);
 					return value;
 				}
@@ -80,7 +80,7 @@
 			var ms = ms || 150;
 
 			function run() {
-				if (timer) {
+				if(timer) {
 					timer.cancel();
 					timer = 0;
 				}
@@ -90,21 +90,21 @@
 			}
 
 			return $.extend(function() {
-				if (
+				if(
 					(!lastStart) || // 从未运行过
 					(lastEnd >= lastStart && $.now() - lastEnd > ms) || // 上次运行成功后已经超过ms毫秒
 					(lastEnd < lastStart && $.now() - lastStart > ms * 8) // 上次运行或未完成，后8*ms毫秒
 				) {
 					run();
 				} else {
-					if (timer) {
+					if(timer) {
 						timer.cancel();
 					}
 					timer = $.later(run, ms, null, arguments);
 				}
 			}, {
 				stop: function() {
-					if (timer) {
+					if(timer) {
 						timer.cancel();
 						timer = 0;
 					}
@@ -114,7 +114,7 @@
 		_getBoundingRect: function(c) {
 			var vh, vw, left, top;
 
-			if (c !== undefined) {
+			if(c !== undefined) {
 				vh = c.offsetHeight;
 				vw = c.offsetWidth;
 				var offset = $.offset(c);
@@ -140,7 +140,6 @@
 			var right = left + vw;
 			var bottom = top + vh;
 
-
 			left -= diffX0;
 			right += diffX1;
 			top -= diffY0;
@@ -153,13 +152,13 @@
 			};
 		},
 		_cacheWidth: function(el) {
-			if (el._mui_lazy_width) {
+			if(el._mui_lazy_width) {
 				return el._mui_lazy_width;
 			}
 			return el._mui_lazy_width = el.offsetWidth;
 		},
 		_cacheHeight: function(el) {
-			if (el._mui_lazy_height) {
+			if(el._mui_lazy_height) {
 				return el._mui_lazy_height;
 			}
 			return el._mui_lazy_height = el.offsetHeight;
@@ -174,7 +173,7 @@
 		},
 		_elementInViewport: function(elem, windowRegion, containerRegion) {
 			// display none or inside display none
-			if (!elem.offsetWidth) {
+			if(!elem.offsetWidth) {
 				return false;
 			}
 			var elemOffset = $.offset(elem);
@@ -191,7 +190,7 @@
 
 			inWin = this._isCross(windowRegion, elemRegion);
 
-			if (inWin && containerRegion) {
+			if(inWin && containerRegion) {
 				inContainer = this._isCross(containerRegion, elemRegion);
 			}
 			// 确保在容器内出现
@@ -201,12 +200,12 @@
 		_loadItems: function() {
 			var self = this;
 			// container is display none
-			if (self._containerIsNotDocument && !self.container.offsetWidth) {
+			if(self._containerIsNotDocument && !self.container.offsetWidth) {
 				return;
 			}
 			self._windowRegion = self._getBoundingRect();
 
-			if (self._containerIsNotDocument) {
+			if(self._containerIsNotDocument) {
 				self._containerRegion = self._getBoundingRect(this.container);
 			}
 			$.each(self._callbacks, function(key, callback) {
@@ -216,22 +215,22 @@
 		_loadItem: function(key, callback) {
 			var self = this;
 			callback = callback || self._callbacks[key];
-			if (!callback) {
+			if(!callback) {
 				return true;
 			}
 			var el = callback.el;
 			var remove = false;
 			var fn = callback.fn;
-			if (self.options.force || self._elementInViewport(el, self._windowRegion, self._containerRegion)) {
+			if(self.options.force || self._elementInViewport(el, self._windowRegion, self._containerRegion)) {
 				try {
 					remove = fn.call(self, el, key);
-				} catch (e) {
+				} catch(e) {
 					setTimeout(function() {
 						throw e;
 					}, 0);
 				}
 			}
-			if (remove !== false) {
+			if(remove !== false) {
 				delete self._callbacks[key];
 			}
 			return remove;
@@ -247,7 +246,7 @@
 			callbacks[key] = callback;
 
 			// add 立即检测，防止首屏元素问题
-			if (self._windowRegion) {
+			if(self._windowRegion) {
 				self._loadItem(key, callback);
 			} else {
 				self.refresh();
@@ -257,16 +256,20 @@
 			var self = this;
 			self._counter = self._counter || 0;
 			var lazyloads = [];
-			if (!elements && self.options.selector) {
+			if(!elements && self.options.selector) {
 				lazyloads = self.container.querySelectorAll(self.options.selector);
 			} else {
 				$.each(elements, function(index, el) {
 					lazyloads = lazyloads.concat($.qsa(self.options.selector, el));
 				});
 			}
+			//addElements时，自动初始化一次
+			if(self._containerIsNotDocument) {
+				self._containerRegion = self._getBoundingRect(self.container);
+			}
 			$.each(lazyloads, function(index, el) {
-				if (!el.getAttribute('data-lazyload-id')) {
-					if (self.addElement(el)) {
+				if(!el.getAttribute('data-lazyload-id')) {
+					if(self.addElement(el)) {
 						el.setAttribute('data-lazyload-id', mid++);
 						self.addCallback(el, self.handle);
 					}
@@ -280,20 +283,20 @@
 			//throw new Error('需子类实现');
 		},
 		refresh: function(check) {
-			if (check) { //检查新的lazyload
+			if(check) { //检查新的lazyload
 				this.addElements();
 			}
 			this._loadFn();
 		},
 		pause: function() {
 			var load = this._loadFn;
-			if (this._destroyed) {
+			if(this._destroyed) {
 				return;
 			}
 			window.removeEventListener('scroll', load);
 			window.removeEventListener($.EVENT_MOVE, load);
 			window.removeEventListener('resize', load);
-			if (this._containerIsNotDocument) {
+			if(this._containerIsNotDocument) {
 				this.container.removeEventListener('scrollend', load);
 				this.container.removeEventListener('scroll', load);
 				this.container.removeEventListener($.EVENT_MOVE, load);
@@ -301,13 +304,13 @@
 		},
 		resume: function() {
 			var load = this._loadFn;
-			if (this._destroyed) {
+			if(this._destroyed) {
 				return;
 			}
 			window.addEventListener('scroll', load, false);
 			window.addEventListener($.EVENT_MOVE, load, false);
 			window.addEventListener('resize', load, false);
-			if (this._containerIsNotDocument) {
+			if(this._containerIsNotDocument) {
 				this.container.addEventListener('scrollend', load, false);
 				this.container.addEventListener('scroll', load, false);
 				this.container.addEventListener($.EVENT_MOVE, load, false);
