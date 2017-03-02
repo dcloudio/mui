@@ -27,21 +27,11 @@
 	};
 	var inits = {};
 
-	var isInitialized = false;
-	//TODO 自动调用init?因为用户自己调用init的时机可能不确定，如果晚于自动init，则会有潜在问题
-	//	$.ready(function() {
-	//		setTimeout(function() {
-	//			if (!isInitialized) {
-	//				$.init();
-	//			}
-	//		}, 300);
-	//	});
 	/**
 	 * 单页配置 初始化
 	 * @param {object} options
 	 */
 	$.init = function(options) {
-		isInitialized = true;
 		$.options = $.extend(true, $.global, options || {});
 		$.ready(function() {
 			$.doAction('inits', function(index, init) {
