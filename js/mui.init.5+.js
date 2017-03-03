@@ -17,7 +17,7 @@
 	//默认页面动画
 	var defaultShow = {
 		autoShow: true,
-		duration: $.os.ios ? 200 : 100,
+		duration: 300,
 		aniShow: 'slide-in-right'
 	};
 	//若执行了显示动画初始化操作，则要覆盖默认配置
@@ -114,7 +114,7 @@
 		}
 	};
 	var triggerPreload = function(webview) {
-		if(!webview.preloaded) {
+		if(!webview.preloaded) {//保证仅触发一次
 			$.fire(webview, 'preload');
 			var list = webview.children();
 			for(var i = 0; i < list.length; i++) {
@@ -156,7 +156,7 @@
 		} else {
 			if(typeof id === 'object') {
 				options = id;
-				id = url;
+				id = options.id || url;
 			} else {
 				id = id || url;
 			}
@@ -186,41 +186,34 @@
 			if(plus.webview.getWebviewById(id)) {
 				webview = webviewCache.webview;
 			}
+		}else if(options.createNew !== true){
+			webview = plus.webview.getWebviewById(id);
 		}
 
-		if(webviewCache && webview) { //已缓存
+		if(webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
-			nShow = webviewCache.show;
+			nShow = webviewCache ? webviewCache.show : defaultShow;
 			nShow = options.show ? $.extend(nShow, options.show) : nShow;
-			webview.show(nShow.aniShow, nShow.duration, function() {
+			nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
 				triggerPreload(webview);
 				trigger(webview, 'pagebeforeshow', false);
 			});
-
-			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			if(webviewCache){
+				webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			}
 			return webview;
 		} else { //新窗口
-			if(options.createNew !== true) {
-				webview = plus.webview.getWebviewById(id);
-				if(webview) { //如果已存在
-					nShow = $.showOptions(options.show);
-					nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
-					});
-					return webview;
-				} else {
-					if(!url) {
-						throw new Error('webview[' + id + '] does not exist');
-					}
-				}
+			if(!url) {
+				throw new Error('webview[' + id + '] does not exist');
 			}
+			
 			//显示waiting
 			var waitingConfig = $.waitingOptions(options.waiting);
 			if(waitingConfig.autoShow) {
 				nWaiting = plus.nativeUI.showWaiting(waitingConfig.title, waitingConfig.options);
 			}
+			
 			//创建页面
 			options = $.extend(options, {
 				id: id,
@@ -228,6 +221,7 @@
 			});
 
 			webview = $.createWindow(options);
+			
 			//显示
 			nShow = $.showOptions(options.show);
 			if(nShow.autoShow) {
@@ -237,26 +231,16 @@
 						nWaiting.close();
 					}
 					//显示页面
-					webview.show(nShow.aniShow, nShow.duration, function() {
-						//titleUpdate事件发生较早，很多环境尚不具备
-						// triggerPreload(webview);
-						// trigger(webview, 'pagebeforeshow', false);
-					});
-					webview.showed = true;
+					webview.show(nShow.aniShow, nShow.duration, function() {});
 					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 				};
-				//TODO 能走到这一步，应该不用判断url了吧？
-				if(!url) {
-					showWebview();
-				} else {
-					//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
-					webview.addEventListener("titleUpdate", showWebview, false);
-					//loaded事件发生后，触发预加载和pagebeforeshow事件
-					webview.addEventListener("loaded", function() {
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
-					}, false);
-				}
+				//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
+				webview.addEventListener("titleUpdate", showWebview, false);
+				//loaded事件发生后，触发预加载和pagebeforeshow事件
+				webview.addEventListener("loaded", function() {
+					triggerPreload(webview);
+					trigger(webview, 'pagebeforeshow', false);
+				}, false);
 			}
 		}
 		return webview;
