@@ -667,57 +667,30 @@
 						webview_style.bounce = "vertical";
 					}
 					//图标页面需要启动硬件加速
-					if(~id.indexOf('icons.html') || ~id.indexOf("echarts.html") || ~id.indexOf("tableviews-with-swipe")) {
+					if(~id.indexOf('icons.html') || ~id.indexOf("echarts.html")) {
 						webview_style.hardwareAccelerated = true;
 					}
-
-					var webview = plus.webview.create(href, id, webview_style);
-					var view = new plus.nativeObj.View("title", {
-						top: 0,
-						height: "44px",
-						width: "100%",
-						dock: "top",
-						position: "dock"
-					});
-
-					view.drawRect("#f7f7f7"); //绘制背景色
-					view.drawRect("#cccccc", {
-						top: "43px",
-						left: "0px"
-					}); //绘制底部边线
-
-					var bitmap = new plus.nativeObj.Bitmap("back");
-					bitmap.loadBase64Data("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAb1BMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAACubimgAAAAI3RSTlMAGfUTGfQTGPMSGPIYGhgaGBsXGxcbFxwXHBccFhwWHRYdHWufDPQAAAABYktHRACIBR1IAAAAB3RJTUUH4QETEBwooeTlkQAAAJVJREFUSMft1EkSgkAQRNFGUXFWHBDBibr/HTUwD5B/48Ig1y+io7u6MqUhf5hsNEY+j5hMgZ/FJ8Xc9ovos3T96utjbfqN/Nb0O/m96Uv5g+mP8ifTn+Ur01/ka9Nf5RvTt/I309/lH6Z/yr9Mn+Q71/MT8B34K/E58Enzv8R/K98HvnF8p3lr8F7izce7lbf3kJ/lDQp9HdBhgg3PAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTE5VDE2OjI4OjQwKzA4OjAwpTDFwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0xOVQxNjoyODo0MCswODowMNRtfX0AAAAASUVORK5CYII=");
-					view.drawBitmap(bitmap, {}, {
-						top: "10px",
-						left: "10px",
-						width: "24px",
-						height: "24px"
-					});
-					view.drawText(this.innerText.trim(), {}, {
-						size: "17px",
-						weight: "normal"
-					});
-
-					view.setTouchEventRect({
-						top: "0px",
-						left: "0px",
-						width: "44px",
-						height: "100%"
-					});
-					view.interceptTouchEvent(true);
-					view.addEventListener("click", function(e) {
-						webview.evalJS("mui.back();");
-					}, false);
-					webview.append(view);
-					
 					if(~id.indexOf('im-chat.html')) {
 						extras.acceleration = "none";
 					}
-					webview.addEventListener("titleUpdate", function() {
-						setTimeout(function () {
-							webview.show(aniShow, 300, null, extras);
-						},100);
+					
+					mui.openWindowWithTitle({
+						url:href,
+						id:id,
+						styles:webview_style,
+						show:{
+							event:"loaded",
+							extras:extras
+						}
+					},{
+						title:{
+							text:this.innerText.trim()
+						},
+						back:{
+							image:{
+								base64Data:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAb1BMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAACubimgAAAAI3RSTlMAGfUTGfQTGPMSGPIYGhgaGBsXGxcbFxwXHBccFhwWHRYdHWufDPQAAAABYktHRACIBR1IAAAAB3RJTUUH4QETEBwooeTlkQAAAJVJREFUSMft1EkSgkAQRNFGUXFWHBDBibr/HTUwD5B/48Ig1y+io7u6MqUhf5hsNEY+j5hMgZ/FJ8Xc9ovos3T96utjbfqN/Nb0O/m96Uv5g+mP8ifTn+Ur01/ka9Nf5RvTt/I309/lH6Z/yr9Mn+Q71/MT8B34K/E58Enzv8R/K98HvnF8p3lr8F7izce7lbf3kJ/lDQp9HdBhgg3PAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTE5VDE2OjI4OjQwKzA4OjAwpTDFwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0xOVQxNjoyODo0MCswODowMNRtfX0AAAAASUVORK5CYII="
+							}
+						}
 					});
 				} else if(href && ~href.indexOf('.html')) {
 					//侧滑菜单需动态控制一下zindex值；
