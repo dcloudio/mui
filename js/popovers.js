@@ -42,13 +42,6 @@
 		isContinue: true
 	});
 
-	var fixedPopoverScroll = function(isPopoverScroll) {
-		//		if (isPopoverScroll) {
-		//			document.body.setAttribute('style', 'overflow:hidden;');
-		//		} else {
-		//			document.body.setAttribute('style', '');
-		//		}
-	};
 	var onPopoverShown = function(e) {
 		this.removeEventListener('webkitTransitionEnd', onPopoverShown);
 		this.addEventListener($.EVENT_MOVE, $.preventDefault);
@@ -58,7 +51,6 @@
 		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener($.EVENT_MOVE, $.preventDefault);
-		fixedPopoverScroll(false);
 		$.trigger(this, 'hidden', this);
 	};
 
@@ -72,7 +64,6 @@
 				popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 				popover.classList.remove(CLASS_ACTIVE);
 				removeBackdrop(popover);
-				document.body.setAttribute('style', ''); //webkitTransitionEnd有时候不触发？
 			}
 		});
 
@@ -122,7 +113,6 @@
 			_popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 			_popover.classList.remove(CLASS_ACTIVE);
 			//			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
-			//			fixedPopoverScroll(false);
 			//同一个弹出则直接返回，解决同一个popover的toggle
 			if (popover === _popover) {
 				removeBackdrop(_popover);
@@ -153,7 +143,6 @@
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
 		document.body.appendChild(backdrop);
-		fixedPopoverScroll(true);
 		calPosition(popover, anchor, isActionSheet); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 		popover.addEventListener('webkitTransitionEnd', onPopoverShown);
