@@ -35,8 +35,8 @@
 		}
 
 		var functionStr = "return function " + className + "(){";
-		if (typeof proto.initializing === "function")
-			functionStr += "this.initializing.apply(this, arguments);";
+		if (typeof proto.init === "function")
+			functionStr += "this.init.apply(this, arguments);";
 
 		var newClass = new Function(functionStr + "}")();
 
