@@ -31,9 +31,24 @@
 	var overFactor = 0.8;
 	var cell, a;
 
-	var isMoved = isOpened = openedActions = progress = false;
-	var sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
-	var timer = translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
+	var isMoved    	  = false,
+		isOpened      = false,
+		openedActions = false,
+		progress      = false;
+
+	var sliderHandle   	  = false,
+		sliderActionLeft  = false,
+		sliderActionRight = false,
+		buttonsLeft       = false,
+		buttonsRight      = false,
+		sliderDirection   = false,
+		sliderRequestAnimationFrame = false;
+
+	var timer                  = 0,
+		translateX             = 0,
+		lastTranslateX         = 0,
+		sliderActionLeftWidth  = 0,
+		sliderActionRightWidth = 0;
 
 
 

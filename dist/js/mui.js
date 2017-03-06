@@ -3186,24 +3186,30 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 })(mui, window);
 (function($) {
-	var initializing = false,
-		fnTest = /xyz/.test(function() {
-			xyz;
-		}) ? /\b_super\b/ : /.*/;
+	"use strict";
 
-	var Class = function() {};
-	Class.extend = function(prop) {
+	var fnTest = /xyz/.test(function() {
+		xyz;
+	}) ? /\b_super\b/ : /.*/;
+
+	function BaseClass() {}
+
+	BaseClass.extend = function(className, props) {
+		if (props === undefined) {
+			props = className;
+			className = "SubClass";
+		}
+
 		var _super = this.prototype;
-		initializing = true;
-		var prototype = new this();
-		initializing = false;
-		for (var name in prop) {
-			prototype[name] = typeof prop[name] == "function" &&
-				typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+
+		var proto = Object.create(_super);
+
+		for (var name in props) {
+			proto[name] = typeof props[name] === "function" &&
+				typeof _super[name] == "function" && fnTest.test(props[name]) ?
 				(function(name, fn) {
 					return function() {
 						var tmp = this._super;
-
 						this._super = _super[name];
 
 						var ret = fn.apply(this, arguments);
@@ -3211,20 +3217,25 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 						return ret;
 					};
-				})(name, prop[name]) :
-				prop[name];
+				})(name, props[name]) :
+				props[name];
 		}
-		function Class() {
-			if (!initializing && this.init)
-				this.init.apply(this, arguments);
-		}
-		Class.prototype = prototype;
-		Class.prototype.constructor = Class;
-		Class.extend = arguments.callee;
-		return Class;
+
+		var functionStr = "return function " + className + "(){";
+		if (typeof proto.initializing === "function")
+			functionStr += "this.initializing.apply(this, arguments);";
+
+		var newClass = new Function(functionStr + "}")();
+
+		newClass.prototype = proto;
+		proto.constructor = newClass;
+		newClass.extend = BaseClass.extend;
+		return newClass;
 	};
-	$.Class = Class;
+
+	$.Class = BaseClass;
 })(mui);
+
 (function($, document, undefined) {
 	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
 	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
@@ -6437,9 +6448,24 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	var overFactor = 0.8;
 	var cell, a;
 
-	var isMoved = isOpened = openedActions = progress = false;
-	var sliderHandle = sliderActionLeft = sliderActionRight = buttonsLeft = buttonsRight = sliderDirection = sliderRequestAnimationFrame = false;
-	var timer = translateX = lastTranslateX = sliderActionLeftWidth = sliderActionRightWidth = 0;
+	var isMoved    	  = false,
+		isOpened      = false,
+		openedActions = false,
+		progress      = false;
+
+	var sliderHandle   	  = false,
+		sliderActionLeft  = false,
+		sliderActionRight = false,
+		buttonsLeft       = false,
+		buttonsRight      = false,
+		sliderDirection   = false,
+		sliderRequestAnimationFrame = false;
+
+	var timer                  = 0,
+		translateX             = 0,
+		lastTranslateX         = 0,
+		sliderActionLeftWidth  = 0,
+		sliderActionRightWidth = 0;
 
 
 
@@ -6925,6 +6951,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		}
 	});
 })(mui, window, document);
+
 (function($, window) {
 	/**
 	 * 警告消息框
