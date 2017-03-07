@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.5.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.6.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -1917,21 +1917,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	};
 	var inits = {};
 
-	var isInitialized = false;
-	//TODO 自动调用init?因为用户自己调用init的时机可能不确定，如果晚于自动init，则会有潜在问题
-	//	$.ready(function() {
-	//		setTimeout(function() {
-	//			if (!isInitialized) {
-	//				$.init();
-	//			}
-	//		}, 300);
-	//	});
 	/**
 	 * 单页配置 初始化
 	 * @param {object} options
 	 */
 	$.init = function(options) {
-		isInitialized = true;
 		$.options = $.extend(true, $.global, options || {});
 		$.ready(function() {
 			$.doAction('inits', function(index, init) {
@@ -2057,22 +2047,64 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		keyEventBind: {
 			backbutton: true,
 			menubutton: true
+		},
+		titleConfig: {
+			height: "44px",
+			backgroundColor: "#f7f7f7", //导航栏背景色
+			bottomBorderColor: "#cccccc", //底部边线颜色
+			title: { //标题配置
+				text: "", //标题文字
+				position: {
+					top: 0,
+					left: 0,
+					width: "100%",
+					height: "100%"
+				},
+				styles: {
+					color: "#000000",
+					align: "center",
+					family: "'Helvetica Neue',Helvetica,sans-serif",
+					size: "17px",
+					style: "normal",
+					weight: "normal",
+					fontSrc: ""
+				}
+			},
+			back: {
+				image: {
+					base64Data: '',
+					imgSrc: '',
+					sprite: {
+						top: '0px',
+						left: '0px',
+						width: '100%',
+						height: '100%'
+					},
+					position: {
+						top: "10px",
+						left: "10px",
+						width: "24px",
+						height: "24px"
+					}
+				}
+			}
 		}
 	};
 
 	//默认页面动画
 	var defaultShow = {
+		event:"titleUpdate",
 		autoShow: true,
-		duration: $.os.ios ? 200 : 100,
-		aniShow: 'slide-in-right'
+		duration: 300,
+		aniShow: 'slide-in-right',
+		extras:{}
 	};
 	//若执行了显示动画初始化操作，则要覆盖默认配置
-	if ($.options.show) {
+	if($.options.show) {
 		defaultShow = $.extend(true, defaultShow, $.options.show);
 	}
 
 	$.currentWebview = null;
-	$.isHomePage = false;
 
 	$.extend(true, $.global, defaultOptions);
 	$.extend(true, $.options, defaultOptions);
@@ -2085,7 +2117,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		return $.extend(true, {}, {
 			autoShow: true,
 			title: '',
-			modal:false
+			modal: false
 		}, options);
 	};
 	/**
@@ -2113,7 +2145,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {_L6.$}
 	 */
 	$.plusReady = function(callback) {
-		if (window.plus) {
+		if(window.plus) {
 			setTimeout(function() { //解决callback与plusready事件的执行时机问题(典型案例:showWaiting,closeWaiting)
 				callback();
 			}, 0);
@@ -2132,12 +2164,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {undefined}
 	 */
 	$.fire = function(webview, eventType, data) {
-		if (webview) {
-			if (data !== '') {
-				data = data || {};
-				if ($.isPlainObject(data)) {
-					data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
-				}
+		if(webview) {
+			if(typeof data === 'undefined') {
+				data = '';
+			} else if(typeof data === 'boolean' || typeof data === 'number') {
+				webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "'," + data + ")");
+				return;
+			} else if($.isPlainObject(data)) {
+				data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
 			}
 			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
 		}
@@ -2149,31 +2183,31 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {undefined}
 	 */
 	$.receive = function(eventType, data) {
-		if (eventType) {
+		if(eventType) {
 			try {
-				if (data) {
+				if(data && typeof data === 'string') {
 					data = JSON.parse(data);
 				}
-			} catch (e) {}
+			} catch(e) {}
 			$.trigger(document, eventType, data);
 		}
 	};
 	var triggerPreload = function(webview) {
-		if (!webview.preloaded) {
+		if(!webview.preloaded) { //保证仅触发一次
 			$.fire(webview, 'preload');
 			var list = webview.children();
-			for (var i = 0; i < list.length; i++) {
+			for(var i = 0; i < list.length; i++) {
 				$.fire(list[i], 'preload');
 			}
 			webview.preloaded = true;
 		}
 	};
 	var trigger = function(webview, eventType, timeChecked) {
-		if (timeChecked) {
-			if (!webview[eventType + 'ed']) {
+		if(timeChecked) {
+			if(!webview[eventType + 'ed']) {
 				$.fire(webview, eventType);
 				var list = webview.children();
-				for (var i = 0; i < list.length; i++) {
+				for(var i = 0; i < list.length; i++) {
 					$.fire(list[i], eventType);
 				}
 				webview[eventType + 'ed'] = true;
@@ -2181,7 +2215,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		} else {
 			$.fire(webview, eventType);
 			var list = webview.children();
-			for (var i = 0; i < list.length; i++) {
+			for(var i = 0; i < list.length; i++) {
 				$.fire(list[i], eventType);
 			}
 		}
@@ -2194,28 +2228,28 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
 	 */
 	$.openWindow = function(url, id, options) {
-		if (typeof url === 'object') {
+		if(typeof url === 'object') {
 			options = url;
 			url = options.url;
 			id = options.id || url;
 		} else {
-			if (typeof id === 'object') {
+			if(typeof id === 'object') {
 				options = id;
-				id = url;
+				id = options.id || url;
 			} else {
 				id = id || url;
 			}
 		}
-		if (!$.os.plus) {
+		if(!$.os.plus) {
 			//TODO 先临时这么处理：手机上顶层跳，PC上parent跳
-			if ($.os.ios || $.os.android) {
+			if($.os.ios || $.os.android) {
 				window.top.location.href = url;
 			} else {
 				window.parent.location.href = url;
 			}
 			return;
 		}
-		if (!window.plus) {
+		if(!window.plus) {
 			return;
 		}
 
@@ -2225,47 +2259,40 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			webviewCache = null,
 			nShow, nWaiting;
 
-		if ($.webviews[id]) {
+		if($.webviews[id]) {
 			webviewCache = $.webviews[id];
 			//webview真实存在，才能获取
-			if (plus.webview.getWebviewById(id)) {
+			if(plus.webview.getWebviewById(id)) {
 				webview = webviewCache.webview;
 			}
+		} else if(options.createNew !== true) {
+			webview = plus.webview.getWebviewById(id);
 		}
 
-		if (webviewCache && webview) { //已缓存
+		if(webview) { //已缓存
 			//每次show都需要传递动画参数；
 			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
-			nShow = webviewCache.show;
+			nShow = webviewCache ? webviewCache.show : defaultShow;
 			nShow = options.show ? $.extend(nShow, options.show) : nShow;
-			webview.show(nShow.aniShow, nShow.duration, function() {
+			nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
 				triggerPreload(webview);
 				trigger(webview, 'pagebeforeshow', false);
 			});
-
-			webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			if(webviewCache) {
+				webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			}
 			return webview;
 		} else { //新窗口
-			if (options.createNew !== true) {
-				webview = plus.webview.getWebviewById(id);
-				if (webview) { //如果已存在
-					nShow = $.showOptions(options.show);
-					nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
-					});
-					return webview;
-				} else {
-					if (!url) {
-						throw new Error('webview[' + id + '] does not exist');
-					}
-				}
+			if(!url) {
+				throw new Error('webview[' + id + '] does not exist');
 			}
+
 			//显示waiting
 			var waitingConfig = $.waitingOptions(options.waiting);
-			if (waitingConfig.autoShow) {
+			if(waitingConfig.autoShow) {
 				nWaiting = plus.nativeUI.showWaiting(waitingConfig.title, waitingConfig.options);
 			}
+
 			//创建页面
 			options = $.extend(options, {
 				id: id,
@@ -2273,40 +2300,182 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			});
 
 			webview = $.createWindow(options);
+
 			//显示
 			nShow = $.showOptions(options.show);
-			if (nShow.autoShow) {
+			if(nShow.autoShow) {
 				var showWebview = function() {
 					//关闭等待框
-					if (nWaiting) {
+					if(nWaiting) {
 						nWaiting.close();
 					}
 					//显示页面
-					webview.show(nShow.aniShow, nShow.duration, function() {
-						//titleUpdate事件发生较早，很多环境尚不具备
-						// triggerPreload(webview);
-						// trigger(webview, 'pagebeforeshow', false);
-					});
-					webview.showed = true;
+					webview.show(nShow.aniShow, nShow.duration, function() {},nShow.extras);
 					options.afterShowMethodName && webview.evalJS(options.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
 				};
-				//TODO 能走到这一步，应该不用判断url了吧？
-				if (!url) {
-					showWebview();
-				} else {
-					// webview.addEventListener("loaded", showWebview, false);
-					//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
-					webview.addEventListener("titleUpdate", showWebview, false);
-					//loaded事件发生后，触发预加载和pagebeforeshow事件
-					webview.addEventListener("loaded",function(){
-						triggerPreload(webview);
-						trigger(webview, 'pagebeforeshow', false);
-					}, false);
-				}
+				//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
+				webview.addEventListener(nShow.event, showWebview, false);
+				//loaded事件发生后，触发预加载和pagebeforeshow事件
+				webview.addEventListener("loaded", function() {
+					triggerPreload(webview);
+					trigger(webview, 'pagebeforeshow', false);
+				}, false);
 			}
 		}
 		return webview;
 	};
+
+	$.openWindowWithTitle = function(options, titleConfig) {
+		options = options || {};
+		var url = options.url;
+		var id = options.id || url;
+
+		if(!$.os.plus) {
+			//TODO 先临时这么处理：手机上顶层跳，PC上parent跳
+			if($.os.ios || $.os.android) {
+				window.top.location.href = url;
+			} else {
+				window.parent.location.href = url;
+			}
+			return;
+		}
+		if(!window.plus) {
+			return;
+		}
+
+		var params = options.params || {};
+		var webview = null,
+			webviewCache = null,
+			nShow, nWaiting;
+
+		if($.webviews[id]) {
+			webviewCache = $.webviews[id];
+			//webview真实存在，才能获取
+			if(plus.webview.getWebviewById(id)) {
+				webview = webviewCache.webview;
+			}
+		} else if(options.createNew !== true) {
+			webview = plus.webview.getWebviewById(id);
+		}
+
+		if(webview) { //已缓存
+			//每次show都需要传递动画参数；
+			//预加载的动画参数优先级：openWindow配置>preloadPages配置>mui默认配置；
+			nShow = webviewCache ? webviewCache.show : defaultShow;
+			nShow = options.show ? $.extend(nShow, options.show) : nShow;
+			nShow.autoShow && webview.show(nShow.aniShow, nShow.duration, function() {
+				triggerPreload(webview);
+				trigger(webview, 'pagebeforeshow', false);
+			});
+			if(webviewCache) {
+				webviewCache.afterShowMethodName && webview.evalJS(webviewCache.afterShowMethodName + '(\'' + JSON.stringify(params) + '\')');
+			}
+			return webview;
+		} else { //新窗口
+			if(!url) {
+				throw new Error('webview[' + id + '] does not exist');
+			}
+
+			//显示waiting
+			var waitingConfig = $.waitingOptions(options.waiting);
+			if(waitingConfig.autoShow) {
+				nWaiting = plus.nativeUI.showWaiting(waitingConfig.title, waitingConfig.options);
+			}
+
+			//创建页面
+			options = $.extend(options, {
+				id: id,
+				url: url
+			});
+
+			webview = $.createWindow(options);
+
+			if(titleConfig) { //处理原生头
+				$.extend(true, $.options.titleConfig, titleConfig);
+				var tid = $.options.titleConfig.id ? $.options.titleConfig.id : id + "_title";
+				var view = new plus.nativeObj.View(tid, {
+					top: 0,
+					height: $.options.titleConfig.height,
+					width: "100%",
+					dock: "top",
+					position: "dock"
+				});
+				view.drawRect($.options.titleConfig.backgroundColor); //绘制背景色
+				var _b = parseInt($.options.titleConfig.height) - 1;
+				view.drawRect($.options.titleConfig.bottomBorderColor, {
+					top: _b + "px",
+					left: "0px"
+				}); //绘制底部边线
+
+				//绘制文字
+				if($.options.titleConfig.title.text){
+					var _title = $.options.titleConfig.title;
+					view.drawText(_title.text,_title.position , _title.styles);
+				}
+				
+				//返回图标绘制
+				var _back = $.options.titleConfig.back;
+				var backClick = null;
+				//优先字体
+
+				//其次是图片
+				var _backImage = _back.image;
+				if(_backImage.base64Data || _backImage.imgSrc) {
+					//TODO 此处需要处理百分比的情况
+					backClick = {
+						left:parseInt(_backImage.position.left),
+						right:parseInt(_backImage.position.left) + parseInt(_backImage.position.width)
+					};
+					var bitmap = new plus.nativeObj.Bitmap(id + "_back");
+					if(_backImage.base64Data) { //优先base64编码字符串
+						bitmap.loadBase64Data(_backImage.base64Data);
+					} else { //其次加载图片文件
+						bitmap.load(_backImage.imgSrc);
+					}
+					view.drawBitmap(bitmap,_backImage.sprite , _backImage.position);
+				}
+
+				//处理点击事件
+				view.setTouchEventRect({
+					top: "0px",
+					left: "0px",
+					width: "100%",
+					height: "100%"
+				});
+				view.interceptTouchEvent(true);
+				view.addEventListener("click", function(e) {
+					var x = e.clientX;
+					
+					//返回按钮点击
+					if(backClick&& x > backClick.left && x < backClick.right){
+						if( _back.click && $.isFunction(_back.click)){
+							_back.click();
+						}else{
+							webview.evalJS("mui&&mui.back();");
+						}
+					}
+				}, false);
+				webview.append(view);
+
+			}
+
+			//显示
+			nShow = $.showOptions(options.show);
+			if(nShow.autoShow) {
+				//titleUpdate触发时机早于loaded，更换为titleUpdate后，可以更早的显示webview
+				webview.addEventListener(nShow.event, function () {
+					//关闭等待框
+					if(nWaiting) {
+						nWaiting.close();
+					}
+					//显示页面
+					webview.show(nShow.aniShow, nShow.duration, function() {},nShow.extras);
+				}, false);
+			}
+		}
+		return webview;
+	};
+
 	/**
 	 * 根据配置信息创建一个webview
 	 * @param {type} options
@@ -2314,32 +2483,31 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {webview}
 	 */
 	$.createWindow = function(options, isCreate) {
-		if (!window.plus) {
+		if(!window.plus) {
 			return;
 		}
 		var id = options.id || options.url;
 		var webview;
-		if (options.preload) {
-			if ($.webviews[id] && $.webviews[id].webview.getURL()) { //已经cache
+		if(options.preload) {
+			if($.webviews[id] && $.webviews[id].webview.getURL()) { //已经cache
 				webview = $.webviews[id].webview;
 			} else { //新增预加载窗口
-				//preload
 				//判断是否携带createNew参数，默认为false
-				if (options.createNew !== true) {
+				if(options.createNew !== true) {
 					webview = plus.webview.getWebviewById(id);
 				}
 
 				//之前没有，那就新创建	
-				if (!webview) {
+				if(!webview) {
 					webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), $.extend({
 						preload: true
 					}, options.extras));
-					if (options.subpages) {
+					if(options.subpages) {
 						$.each(options.subpages, function(index, subpage) {
 							var subpageId = subpage.id || subpage.url;
-							if (subpageId) { //过滤空对象
+							if(subpageId) { //过滤空对象
 								var subWebview = plus.webview.getWebviewById(subpageId);
-								if (!subWebview) { //如果该webview不存在，则创建
+								if(!subWebview) { //如果该webview不存在，则创建
 									subWebview = plus.webview.create(subpage.url, subpageId, $.windowOptions(subpage.styles), $.extend({
 										preload: true
 									}, subpage.extras));
@@ -2361,15 +2529,15 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			//索引该预加载窗口
 			var preloads = $.data.preloads;
 			var index = preloads.indexOf(id);
-			if (~index) { //删除已存在的(变相调整插入位置)
+			if(~index) { //删除已存在的(变相调整插入位置)
 				preloads.splice(index, 1);
 			}
 			preloads.push(id);
-			if (preloads.length > $.options.preloadLimit) {
+			if(preloads.length > $.options.preloadLimit) {
 				//先进先出
 				var first = $.data.preloads.shift();
 				var webviewCache = $.webviews[first];
-				if (webviewCache && webviewCache.webview) {
+				if(webviewCache && webviewCache.webview) {
 					//需要将自己打开的所有页面，全部close；
 					//关闭该预加载webview	
 					$.closeAll(webviewCache.webview);
@@ -2378,13 +2546,13 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				delete $.webviews[first];
 			}
 		} else {
-			if (isCreate !== false) { //直接创建非预加载窗口
+			if(isCreate !== false) { //直接创建非预加载窗口
 				webview = plus.webview.create(options.url, id, $.windowOptions(options.styles), options.extras);
-				if (options.subpages) {
+				if(options.subpages) {
 					$.each(options.subpages, function(index, subpage) {
 						var subpageId = subpage.id || subpage.url;
 						var subWebview = plus.webview.getWebviewById(subpageId);
-						if (!subWebview) {
+						if(!subWebview) {
 							subWebview = plus.webview.create(subpage.url, subpageId, $.windowOptions(subpage.styles), subpage.extras);
 						}
 						webview.append(subWebview);
@@ -2400,7 +2568,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 */
 	$.preload = function(options) {
 		//调用预加载函数，不管是否传递preload参数，强制变为true
-		if (!options.preload) {
+		if(!options.preload) {
 			options.preload = true;
 		}
 		return $.createWindow(options);
@@ -2411,18 +2579,18 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 */
 	$.closeOpened = function(webview) {
 		var opened = webview.opened();
-		if (opened) {
-			for (var i = 0, len = opened.length; i < len; i++) {
+		if(opened) {
+			for(var i = 0, len = opened.length; i < len; i++) {
 				var openedWebview = opened[i];
 				var open_open = openedWebview.opened();
-				if (open_open && open_open.length > 0) {
+				if(open_open && open_open.length > 0) {
 					//关闭打开的webview
 					$.closeOpened(openedWebview);
 					//关闭自己
 					openedWebview.close("none");
 				} else {
 					//如果直接孩子节点，就不用关闭了，因为父关闭的时候，会自动关闭子；
-					if (openedWebview.parent() !== webview) {
+					if(openedWebview.parent() !== webview) {
 						openedWebview.close('none');
 					}
 				}
@@ -2431,7 +2599,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	};
 	$.closeAll = function(webview, aniShow) {
 		$.closeOpened(webview);
-		if (aniShow) {
+		if(aniShow) {
 			webview.close(aniShow);
 		} else {
 			webview.close();
@@ -2455,14 +2623,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	 * @returns {webview}
 	 */
 	$.appendWebview = function(options) {
-		if (!window.plus) {
+		if(!window.plus) {
 			return;
 		}
 		var id = options.id || options.url;
 		var webview;
-		if (!$.webviews[id]) { //保证执行一遍
+		if(!$.webviews[id]) { //保证执行一遍
 			//TODO 这里也有隐患，比如某个webview不是作为subpage创建的，而是作为target webview的话；
-			if (!plus.webview.getWebviewById(id)) {
+			if(!plus.webview.getWebviewById(id)) {
 				webview = plus.webview.create(options.url, id, options.styles, options.extras);
 			}
 			//之前的实现方案：子窗口loaded之后再append到父窗口中；
@@ -2493,7 +2661,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		handle: function() {
 			var options = $.options;
 			var subpages = options.subpages || [];
-			if ($.os.plus) {
+			if($.os.plus) {
 				$.plusReady(function() {
 					//TODO  这里需要判断一下，最好等子窗口加载完毕后，再调用主窗口的show方法；
 					//或者：在openwindow方法中，监听实现；
@@ -2501,8 +2669,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						$.appendWebview(subpage);
 					});
 					//判断是否首页
-					if (plus.webview.currentWebview() === plus.webview.getWebviewById(plus.runtime.appid)) {
-						$.isHomePage = true;
+					if(plus.webview.currentWebview() === plus.webview.getWebviewById(plus.runtime.appid)) {
 						//首页需要自己激活预加载；
 						//timeout因为子页面loaded之后才append的，防止子页面尚未append、从而导致其preload未触发的问题；
 						setTimeout(function() {
@@ -2510,12 +2677,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						}, 300);
 					}
 					//设置ios顶部状态栏颜色；
-					if ($.os.ios && $.options.statusBarBackground) {
+					if($.os.ios && $.options.statusBarBackground) {
 						plus.navigator.setStatusBarBackground($.options.statusBarBackground);
 					}
-					if ($.os.android && parseFloat($.os.version) < 4.4) {
+					if($.os.android && parseFloat($.os.version) < 4.4) {
 						//解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
-						if (plus.webview.currentWebview().parent() == null) {
+						if(plus.webview.currentWebview().parent() == null) {
 							document.addEventListener("resume", function() {
 								var body = document.body;
 								body.style.display = 'none';
@@ -2564,7 +2731,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	};
 	$.ready(function() {
 		//标识当前环境支持statusbar
-		if ($.supportStatusbarOffset()) {
+		if($.supportStatusbarOffset()) {
 			document.body.classList.add('mui-statusbar');
 		}
 	});
@@ -5895,13 +6062,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		isContinue: true
 	});
 
-	var fixedPopoverScroll = function(isPopoverScroll) {
-		//		if (isPopoverScroll) {
-		//			document.body.setAttribute('style', 'overflow:hidden;');
-		//		} else {
-		//			document.body.setAttribute('style', '');
-		//		}
-	};
 	var onPopoverShown = function(e) {
 		this.removeEventListener('webkitTransitionEnd', onPopoverShown);
 		this.addEventListener($.EVENT_MOVE, $.preventDefault);
@@ -5911,7 +6071,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		setStyle(this, 'none');
 		this.removeEventListener('webkitTransitionEnd', onPopoverHidden);
 		this.removeEventListener($.EVENT_MOVE, $.preventDefault);
-		fixedPopoverScroll(false);
 		$.trigger(this, 'hidden', this);
 	};
 
@@ -5925,7 +6084,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 				popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 				popover.classList.remove(CLASS_ACTIVE);
 				removeBackdrop(popover);
-				document.body.setAttribute('style', ''); //webkitTransitionEnd有时候不触发？
 			}
 		});
 
@@ -5975,7 +6133,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			_popover.addEventListener('webkitTransitionEnd', onPopoverHidden);
 			_popover.classList.remove(CLASS_ACTIVE);
 			//			_popover.removeEventListener('webkitTransitionEnd', onPopoverHidden);
-			//			fixedPopoverScroll(false);
 			//同一个弹出则直接返回，解决同一个popover的toggle
 			if (popover === _popover) {
 				removeBackdrop(_popover);
@@ -6006,7 +6163,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		popover.classList.add(CLASS_ACTIVE);
 		backdrop.setAttribute('style', '');
 		document.body.appendChild(backdrop);
-		fixedPopoverScroll(true);
 		calPosition(popover, anchor, isActionSheet); //position
 		backdrop.classList.add(CLASS_ACTIVE);
 		popover.addEventListener('webkitTransitionEnd', onPopoverShown);

@@ -28,12 +28,12 @@ proto._initParent = function() {
 	}
 };
 proto._initNativeView = function() {
-	this.nativeView = new plus.nativeObj.View('__W2A_TAB_NATIVE', {
-		'top': '83px',
-		'bottom': "0px",
+	this.nativeView = new plus.nativeObj.View('__MUI_TAB_NATIVE', {
+		'top': '83px',//这个需要根据顶部导航及顶部选项卡高度自动调整
+		'height': (window.screen.height - 83)+"px",
 		'left': '100%',
 		'width': '100%',
-		'backgroudColor': '#ffffff'
+		"backgroundColor":"#ffffff"
 	});
 	this.nativeView.show();
 };
@@ -45,11 +45,11 @@ proto._initWebviewContexts = function() {
 		var isLast = i === (len - 1);
 		var isCurrent = this.options.index === i;
 		var extras = webviewOptions.extras;
-		extras.__wap2app_url = webviewOptions.url;
-		extras.__wap2app_index = i;
+		extras.__mui_url = webviewOptions.url;
+		extras.__mui_index = i;
 
-		extras.__wap2app_left = isFirst ? '' : this.items[i - 1].id;
-		extras.__wap2app_right = isLast ? '' : this.items[i + 1].id;
+		extras.__mui_left = isFirst ? '' : this.items[i - 1].id;
+		extras.__mui_right = isLast ? '' : this.items[i + 1].id;
 
 		var styles = webviewOptions.styles || {};
 
@@ -74,7 +74,7 @@ proto._initWebviewContexts = function() {
 proto._onChange = function(webview) {
 	this.currentWebview = webview;
 	this.onChange({
-		index: webview.__wap2app_index
+		index: webview.__mui_index
 	});
 };
 proto._dragCallback = function(dir, fromWebview, view, viewId) {
@@ -97,11 +97,11 @@ proto._dragCallback = function(dir, fromWebview, view, viewId) {
 };
 
 proto._initDrag = function(webview, dir) {
-	var flag = ('__wap2app_drag_' + dir + '_flag');
+	var flag = ('__mui_drag_' + dir + '_flag');
 	if(webview[flag]) {
 		return;
 	}
-	var viewId = webview['__wap2app_' + (dir === 'left' ? 'right' : 'left')];
+	var viewId = webview['__mui_' + (dir === 'left' ? 'right' : 'left')];
 	if(viewId) {
 		var view = plus.webview.getWebviewById(viewId);
 		if(!view) { //如果目标webview不存在,使用nativeView替换
@@ -131,17 +131,17 @@ proto._initDrags = function(webview) {
 	this._initDrag(webview, 'right');
 };
 proto._checkDrags = function(webview) {
-	var left = webview.__wap2app_left;
-	var right = webview.__wap2app_right;
+	var left = webview.__mui_left;
+	var right = webview.__mui_right;
 	if(left) {
 		var leftWebview = plus.webview.getWebviewById(left);
-		if(leftWebview && !leftWebview.__wap2app_drag_left_flag) {
+		if(leftWebview && !leftWebview.__mui_drag_left_flag) {
 			this._initDrag(leftWebview, 'left');
 		}
 	}
 	if(right) {
 		var rightWebview = plus.webview.getWebviewById(right);
-		if(rightWebview && !rightWebview.__wap2app_drag_right_flag) {
+		if(rightWebview && !rightWebview.__mui_drag_right_flag) {
 			this._initDrag(rightWebview, 'right');
 		}
 	}
@@ -165,7 +165,7 @@ proto.switchTab = function(id) {
 	var toWebview = toWebviewContext.webview;
 	var fromToLeft = '100%';
 	var toFromLeft = '-100%';
-	if(toWebviewContext.options.extras.__wap2app_index > fromWebview.__wap2app_index) {
+	if(toWebviewContext.options.extras.__mui_index > fromWebview.__mui_index) {
 		fromToLeft = '-100%';
 		toFromLeft = '100%';
 	}
@@ -180,11 +180,9 @@ proto.switchTab = function(id) {
 		this._checkDrags(toWebview); //新建的时候均需校验
 	}
 	var self = this;
-	//				toWebview.show("none");
-	console.log("current:" + fromWebview.id + ",to:" + fromToLeft);
-	console.log("next:" + toWebview.id + ",from:" + toFromLeft);
+//	console.log("current:" + fromWebview.id + ",to:" + fromToLeft);
+//	console.log("next:" + toWebview.id + ",from:" + toFromLeft);
 
-	//				console.log("current_fromToLeft:"+fromToLeft+",nexttoFromLeft:"+toFromLeft);
 	plus.webview.startAnimation({
 			'view': fromWebview,
 			'styles': {
@@ -201,11 +199,12 @@ proto.switchTab = function(id) {
 			'action': 'show'
 		},
 		function(e) {
+			//console.log("startAnimation callback...");
 			if(e.id === toWebview.id) {
 				isNew && plus.nativeUI.showWaiting();
 				this.currentWebview = toWebview;
 				this.onChange({
-					index: toWebview.__wap2app_index
+					index: toWebview.__mui_index
 				});
 			}
 		}.bind(this)
