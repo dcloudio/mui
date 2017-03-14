@@ -3297,6 +3297,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						return new plus.net.XMLHttpRequest();
 					}
 				}
+				if ($.os.ios && window.webkit && window.webkit.messageHandlers) { //wkwebview下同样使用5+ xhr
+                    return new plus.net.XMLHttpRequest();
+                }
 				return new window.XMLHttpRequest();
 			}
 		});
