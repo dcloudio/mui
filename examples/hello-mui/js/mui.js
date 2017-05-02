@@ -2451,7 +2451,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 						if( _back.click && $.isFunction(_back.click)){
 							_back.click();
 						}else{
-							webview.evalJS("mui&&mui.back();");
+							webview.evalJS("window.mui&&mui.back();");
 						}
 					}
 				}, false);
