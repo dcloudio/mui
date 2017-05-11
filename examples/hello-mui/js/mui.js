@@ -2170,7 +2170,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			} else if(typeof data === 'boolean' || typeof data === 'number') {
 				webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "'," + data + ")");
 				return;
-			} else if($.isPlainObject(data)) {
+			} else if($.isPlainObject(data) || $.isArray(data)) {
 				data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
 			}
 			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
@@ -2736,6 +2736,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		}
 	});
 })(mui);
+
 /**
  * mui back
  * @param {type} $
