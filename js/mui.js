@@ -233,12 +233,12 @@ var mui = (function(document, undefined) {
 				(lastEnd >= lastStart && $.now() - lastEnd > ms) || // 上次运行成功后已经超过ms毫秒
 				(lastEnd < lastStart && $.now() - lastStart > ms * 8) // 上次运行或未完成，后8*ms毫秒
 			) {
-				run();
+				run.apply(this, arguments);
 			} else {
 				if (timer) {
 					timer.cancel();
 				}
-				timer = $.later(run, ms, null, arguments);
+				timer = $.later(run, ms, null, $.slice.call(arguments));
 			}
 		}, {
 			stop: function() {
