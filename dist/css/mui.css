@@ -2591,7 +2591,18 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
 {
     right: 35px;
 }
+.mui-table-view-cell > .mui-navigate-right > .mui-pull-right{
+    color: #999;
+    position: absolute;
+    top: 50%;
+    right: 35px;
 
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+}
+.mui-table-view-cell > span.mui-pull-right{
+    color: #999;
+}
 .mui-content > .mui-table-view:first-child
 {
     margin-top: 15px;
