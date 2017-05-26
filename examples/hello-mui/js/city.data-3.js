@@ -2,7 +2,7 @@ var cityData3 = [{
 	value: '110000',
 	text: '北京市',
 	children: [{
-		value: "110101",
+		value: "110100",
 		text: "北京市",
 		children: [{
 			value: "110101",
@@ -2746,7 +2746,7 @@ var cityData3 = [{
 	value: '310000',
 	text: '上海市',
 	children: [{
-		value: '310000',
+		value: '310100',
 		text: '上海市',
 		children: [{
 			value: "310101",
@@ -10200,16 +10200,7 @@ var cityData3 = [{
 	}, {
 		value: "620200",
 		text: "嘉峪关市",
-		children: [{
-			value: "620302",
-			text: "金川区"
-		}, {
-			value: "620321",
-			text: "永昌县"
-		}, {
-			value: "620322",
-			text: "其它区"
-		}]
+		children: []
 	}, {
 		value: "620300",
 		text: "金昌市",
