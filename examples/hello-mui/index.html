@@ -241,17 +241,22 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav.html">
-								div title
+								默认标题（div模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" data-title-type="native" href="examples/nav-nativeObj.html">
-								native title
+								默认标题（native模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav_transparent.html">
 								透明渐变(div模式)
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible">
+							<a class="mui-navigate-right" href="examples/nav_transparent_native.html">
+								透明渐变(native模式)
 							</a>
 						</li>
 					</ul>
@@ -738,6 +743,18 @@
 						extras.acceleration = "capture";
 					}
 					
+					if(~id.indexOf('nav_transparent_native.html')) {
+						webview_style.titleNView = {
+							'backgroundColor': '#f7f7f7',
+							'titleText': this.innerHTML,
+							'titleColor': '#000000',
+							type:'transparent',
+							autoBackButton: true,
+							splitLine:{
+								color:'#cccccc'
+							}
+						}
+					}
 					
 					var webview = plus.webview.create(this.href,id,webview_style,extras);
 					webview.addEventListener("titleUpdate",function () {
