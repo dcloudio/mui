@@ -125,12 +125,12 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/slider-default.html">
-								默认样式 - H5模式
+								默认样式（H5模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" data-title-type="native" href="examples/slider-native.html">
-								默认样式 - native模式
+								默认样式（native模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
@@ -670,6 +670,51 @@
 					popGesture: "close"
 				}
 				var extras = {};
+
+
+				//处理原生图片轮播
+				if(~id.indexOf("slider-native.html")) {
+					webview_style.titleNView = { //配置原生标题
+						'backgroundColor': '#f7f7f7',
+						'titleText': this.innerHTML,
+						'titleColor': '#000000',
+						autoBackButton: true,
+						splitLine: {
+							color: '#cccccc'
+						}
+					};
+
+					webview_style.subNViews = [{ //配置图片轮播
+						id: 'slider-native',
+						type: 'ImageSlider',
+						styles: {
+							left: 0,
+							right: 0,
+							top: 0,
+							height: '200px',
+							position: 'static',
+							loop: true,
+							images: [{
+								src: '_www/images/yuantiao.jpg',
+								width: '100%'
+							}, {
+								src: '_www/images/shuijiao.jpg',
+								width: '100%',
+							}, {
+								src: '_www/images/muwu.jpg',
+								width: '100%',
+							}, {
+								src: '_www/images/cbd.jpg',
+								width: '100%',
+							}]
+						}
+					}];
+					
+					var webview = plus.webview.create(this.href, id, webview_style, extras);
+					webview.show(aniShow,300);
+					return;
+				}
+
 				if(titleType == "native") {
 					//如下场景不适用下拉回弹：
 					//1、单webview下拉刷新；2、底部有fixed定位的div的页面
@@ -684,35 +729,6 @@
 						extras.acceleration = "none";
 					}
 
-					//处理原生图片轮播
-					if(~id.indexOf("slider-native.html")) {
-						webview_style.subNViews = [{
-							id: 'slider-native',
-							type: 'ImageSlider',
-							styles: {
-								left: 0,
-								right: 0,
-								top: 0,
-								height: '200px',
-								position: 'static',
-								loop:true,
-								images: [{
-									src: '_www/images/yuantiao.jpg',
-									width:'100%'
-								}, {
-									src: '_www/images/shuijiao.jpg',
-									width:'100%',
-								}, {
-									src: '_www/images/muwu.jpg',
-									width:'100%',
-								}, {
-									src: '_www/images/cbd.jpg',
-									width:'100%',
-								}]
-							}
-						}];
-					}
-					
 					mui.openWindowWithTitle({
 						url:href,
 						id:id,
