@@ -125,7 +125,12 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/slider-default.html">
-								默认样式
+								默认样式 - H5模式
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible">
+							<a class="mui-navigate-right" data-title-type="native" href="examples/slider-native.html">
+								默认样式 - native模式
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
@@ -672,6 +677,35 @@
 					}
 					if(~id.indexOf('im-chat.html')) {
 						extras.acceleration = "none";
+					}
+
+					//处理原生图片轮播
+					if(~id.indexOf("slider-native.html")) {
+						webview_style.subNViews = [{
+							id: 'slider-native',
+							type: 'ImageSlider',
+							styles: {
+								left: 0,
+								right: 0,
+								top: 0,
+								height: '200px',
+								position: 'static',
+								loop:true,
+								images: [{
+									src: '_www/images/yuantiao.jpg',
+									width:'100%'
+								}, {
+									src: '_www/images/shuijiao.jpg',
+									width:'100%',
+								}, {
+									src: '_www/images/muwu.jpg',
+									width:'100%',
+								}, {
+									src: '_www/images/cbd.jpg',
+									width:'100%',
+								}]
+							}
+						}];
 					}
 					
 					mui.openWindowWithTitle({
