@@ -676,7 +676,7 @@
 				if(~id.indexOf("slider-native.html")) {
 					webview_style.titleNView = { //配置原生标题
 						'backgroundColor': '#f7f7f7',
-						'titleText': this.innerHTML,
+						'titleText': this.innerHTML.trim(),
 						'titleColor': '#000000',
 						autoBackButton: true,
 						splitLine: {
@@ -762,7 +762,7 @@
 					if(~id.indexOf('nav_transparent_native.html')) {
 						webview_style.titleNView = {
 							'backgroundColor': '#f7f7f7',
-							'titleText': this.innerHTML,
+							'titleText': this.innerHTML.trim(),
 							'titleColor': '#000000',
 							type:'transparent',
 							autoBackButton: true,
