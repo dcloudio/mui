@@ -4,7 +4,7 @@
  * @returns {undefined}
  */
 (function($, document) {
-    if (!($.os.plus && $.os.android)) { //仅在5+android支持多webview的使用
+    if (!($.os.plus)) { //仅在5+android支持多webview的使用
         return;
     }
     $.plusReady(function() {
@@ -47,9 +47,22 @@
             },
             _initPulldownRefreshEvent: function() {
                 var self = this;
-                if (self.topPocket && self.options.webviewId) {
-                    $.plusReady(function() {
-                        var webview = plus.webview.getWebviewById(self.options.webviewId);
+                $.plusReady(function() {
+                		if(self.options.down.style == "circle"){
+	                		//单webview、原生转圈
+	                		self.options.webview = plus.webview.currentWebview();
+						self.options.webview.setPullToRefresh({
+							support: true,
+							color:self.options.down.color || '#2BD009',
+							height: self.options.down.height || '50px',
+							range: self.options.down.range || '100px',
+							style: 'circle',
+							offset: self.options.down.offset || '0px'
+						}, function() {
+							self.options.down.callback();
+						});
+	               }else if (self.topPocket && self.options.webviewId) {
+                        var webview = plus.webview.getWebviewById(self.options.webviewId);//子窗口
                         if (!webview) {
                             return;
                         }
@@ -75,13 +88,14 @@
                                     break;
                                 case "dragEndAfterChangeOffset": //正在刷新状态
                                     //执行下拉刷新所在webview的回调函数
-                                    webview.evalJS("mui&&mui.options.pullRefresh.down.callback()");
+                                    webview.evalJS("window.mui&&mui.options.pullRefresh.down.callback()");
                                     self._setCaption(downOptions.contentrefresh);
                                     break;
                                 default:
                                     break;
                             }
                         }, false);
+                        
                         webview.setBounce({
                             position: {
                                 top: height * 2 + 'px'
@@ -90,20 +104,18 @@
                                 top: height + 'px'
                             }
                         });
-                    });
-                }
+                    
+	                }
+                });
+                
+                
+                
             },
             handleEvent: function(e) {
                 var self = this;
                 if (self.stopped) {
                     return;
                 }
-                //5+的plusscrollbottom当页面内容较少时，不触发
-                //          if (e.type === 'plusscrollbottom') {
-                //              if (this.bottomPocket) {
-                //                  this.pullupLoading();
-                //              }
-                //          }
                 self.isScroll = false;
                 if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
                     self.isScroll = true;
@@ -141,36 +153,51 @@
                     });
                 }
             },
-            pulldownLoading: function() { //该方法是子页面调用的
+            beginPulldown:function() { 
                 $.plusReady(function() {
-                    plus.webview.currentWebview().setBounce({
-                        offset: {
-                            top: this.options.down.height + "px"
-                        }
-                    });
+                		var _wv = plus.webview.currentWebview();
+                		var self = this;
+                		//这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
+                		setTimeout(function () {
+                			if(self.options.down.style == "circle"){
+	                			_wv.beginPullToRefresh();
+	                		}else{
+	                			_wv.setBounce({
+		                        offset: {
+		                            top: this.options.down.height + "px"
+		                        }
+		                    });
+	                		}
+                		},15);
                 }.bind(this));
             },
+            pulldownLoading: this.beginPulldown,//该方法是子页面调用的，兼容老的历史API
             _pulldownLoading: function() { //该方法是父页面调用的
                 var self = this;
                 $.plusReady(function() {
                     var childWebview = plus.webview.getWebviewById(self.options.webviewId);
-                    childWebview.setBounce({
+                   	childWebview && childWebview.setBounce({
                         offset: {
                             top: self.options.down.height + "px"
                         }
                     });
                 });
             },
-            endPulldownToRefresh: function() { //该方法是子页面调用的
-                var webview = plus.webview.currentWebview();
-                webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
-                    webviewId: webview.id
-                }) + "')._endPulldownToRefresh()");
+            endPulldown:function(){
+            		var _wv = this.options.webview;
+                _wv.endPullToRefresh();
+                //双webview的下拉刷新，需要修改父窗口提示信息
+                if(_wv.parent() && this.options.down.style !== "circle"){
+	                	_wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
+	                    webviewId: _wv.id
+	                }) + "')._endPulldownToRefresh()");
+                }
             },
+            endPulldownToRefresh: this.endPulldown, //该方法是子页面调用的，兼容老的历史API
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
-                    self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
+                    //self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
                     self.loading = false;
                     self._setCaption(self.options.down.contentdown, true);
                     setTimeout(function() {
@@ -207,17 +234,12 @@
                         self.finished = true;
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
                         self.pullCaption.innerHTML = self.options.up.contentnomore;
-                        //                  self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  self.bottomPocket.classList.add(CLASS_HIDDEN);
                         //取消5+的plusscrollbottom事件
                         document.removeEventListener('plusscrollbottom', self);
                         window.removeEventListener('dragup', self);
                     } else { //初始化时隐藏，后续不再隐藏
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
                         self.pullCaption.innerHTML = self.options.up.contentdown;
-                        //                  setTimeout(function() {
-                        //                      self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  }, 350);
                     }
                 }
             },
@@ -249,7 +271,7 @@
         }, $.PullRefresh));
 
         //override h5 pullRefresh
-        $.fn.pullRefresh = function(options) {
+        $.fn.pullRefresh_native = function(options) {
             var self;
             if (this.length === 0) {
                 self = document.createElement('div');
@@ -280,7 +302,8 @@
                 pullRefreshApi = $.data[id];
             }
             if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-                pullRefreshApi._pulldownLoading(); //parent webview
+                //pullRefreshApi._pulldownLoading(); //parent webview
+                pullRefreshApi.beginPulldown();
             } else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
                 pullRefreshApi.pullupLoading();
             }

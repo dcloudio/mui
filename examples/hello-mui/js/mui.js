@@ -2940,40 +2940,58 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			var pullRefreshOptions = options.pullRefresh || {};
 			var hasPulldown = pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback');
 			var hasPullup = pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback');
-			if (hasPulldown || hasPullup) {
+			if(hasPulldown || hasPullup) {
 				var container = pullRefreshOptions.container;
-				if (container) {
+				if(container) {
 					var $container = $(container);
-					if ($container.length === 1) {
-						if ($.os.plus && $.os.android) { //android 5+
-							$.plusReady(function() {
-								var webview = plus.webview.currentWebview();
-								if (hasPullup) {
-									//当前页面初始化pullup
-									var upOptions = {};
-									upOptions.up = pullRefreshOptions.up;
-									upOptions.webviewId = webview.id || webview.getURL();
-									$container.pullRefresh(upOptions);
-								}
-								if (hasPulldown) {
-									var parent = webview.parent();
-									var id = webview.id || webview.getURL();
-									if (parent) {
-										if (!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
-											$container.pullRefresh({
-												webviewId: id
-											});
+					if($container.length === 1) {
+						if($.os.plus) { //5+环境
+							if(hasPulldown && pullRefreshOptions.down.style == "circle") { //原生转圈
+								$.plusReady(function() {
+									//这里改写$.fn.pullRefresh
+									$.fn.pullRefresh = $.fn.pullRefresh_native;
+									//var webview = plus.webview.currentWebview();
+									//downOptions.down.callback = '_CALLBACK';
+									$container.pullRefresh(pullRefreshOptions);
+								});
+
+							} else if($.os.android) { //非原生转圈，但是Android环境
+								$.plusReady(function() {
+									//这里改写$.fn.pullRefresh
+									$.fn.pullRefresh = $.fn.pullRefresh_native
+									if(window.__NWin_Enable__ === false) { //不支持多webview
+										$container.pullRefresh(pullRefreshOptions);
+									} else {
+										if(hasPullup) {
+											//当前页面初始化pullup
+											var upOptions = {};
+											upOptions.up = pullRefreshOptions.up;
+											upOptions.webviewId = webview.id || webview.getURL();
+											$container.pullRefresh(upOptions);
 										}
-										var downOptions = {
-											webviewId: id
-										};
-										downOptions.down = $.extend({}, pullRefreshOptions.down);
-										downOptions.down.callback = '_CALLBACK';
-										//父页面初始化pulldown
-										parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+										if(hasPulldown) {
+											var parent = webview.parent();
+											var id = webview.id || webview.getURL();
+											if(parent) {
+												if(!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
+													$container.pullRefresh({
+														webviewId: id
+													});
+												}
+												var downOptions = {
+													webviewId: id//子页面id
+												};
+												downOptions.down = $.extend({}, pullRefreshOptions.down);
+												downOptions.down.callback = '_CALLBACK';
+												//父页面初始化pulldown
+												parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+											}
+										}
 									}
-								}
-							});
+								});
+							} else { //非原生转圈，iOS环境
+								$container.pullRefresh(pullRefreshOptions);
+							}
 						} else {
 							$container.pullRefresh(pullRefreshOptions);
 						}
@@ -3408,184 +3426,188 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.Class = Class;
 })(mui);
 (function($, document, undefined) {
-	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
-	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
-	var CLASS_PULL = 'mui-pull';
-	var CLASS_PULL_LOADING = 'mui-pull-loading';
-	var CLASS_PULL_CAPTION = 'mui-pull-caption';
-	var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
-	var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
-	var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
+    var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
+    var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
+    var CLASS_PULL = 'mui-pull';
+    var CLASS_PULL_LOADING = 'mui-pull-loading';
+    var CLASS_PULL_CAPTION = 'mui-pull-caption';
+    var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
+    var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
+    var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
 
-	var CLASS_ICON = 'mui-icon';
-	var CLASS_SPINNER = 'mui-spinner';
-	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
+    var CLASS_ICON = 'mui-icon';
+    var CLASS_SPINNER = 'mui-spinner';
+    var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
 
-	var CLASS_BLOCK = 'mui-block';
-	var CLASS_HIDDEN = 'mui-hidden';
-	var CLASS_VISIBILITY = 'mui-visibility';
+    var CLASS_BLOCK = 'mui-block';
+    var CLASS_HIDDEN = 'mui-hidden';
+    var CLASS_VISIBILITY = 'mui-visibility';
 
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
+    var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+    var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+    var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
 
-	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
+    var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
 
-	var PullRefresh = {
-		init: function(element, options) {
-			this._super(element, $.extend(true, {
-				scrollY: true,
-				scrollX: false,
-				indicators: true,
-				deceleration: 0.003,
-				down: {
-					height: 50,
-					contentinit: '下拉可以刷新',
-					contentdown: '下拉可以刷新',
-					contentover: '释放立即刷新',
-					contentrefresh: '正在刷新...'
-				},
-				up: {
-					height: 50,
-					auto: false,
-					contentinit: '上拉显示更多',
-					contentdown: '上拉显示更多',
-					contentrefresh: '正在加载...',
-					contentnomore: '没有更多数据了',
-					duration: 300
-				}
-			}, options));
-		},
-		_init: function() {
-			this._super();
-			this._initPocket();
-		},
-		_initPulldownRefresh: function() {
-			this.pulldown = true;
-			this.pullPocket = this.topPocket;
-			this.pullPocket.classList.add(CLASS_BLOCK);
-			this.pullPocket.classList.add(CLASS_VISIBILITY);
-			this.pullCaption = this.topCaption;
-			this.pullLoading = this.topLoading;
-		},
-		_initPullupRefresh: function() {
-			this.pulldown = false;
-			this.pullPocket = this.bottomPocket;
-			this.pullPocket.classList.add(CLASS_BLOCK);
-			this.pullPocket.classList.add(CLASS_VISIBILITY);
-			this.pullCaption = this.bottomCaption;
-			this.pullLoading = this.bottomLoading;
-		},
-		_initPocket: function() {
-			var options = this.options;
-			if (options.down && options.down.hasOwnProperty('callback')) {
-				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
-				if (!this.topPocket) {
-					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down, CLASS_LOADING_DOWN);
-					this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
-				}
-				this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
-			}
-			if (options.up && options.up.hasOwnProperty('callback')) {
-				this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
-				if (!this.bottomPocket) {
-					this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up, CLASS_LOADING);
-					this.scroller.appendChild(this.bottomPocket);
-				}
-				this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
-				//TODO only for h5
-				this.wrapper.addEventListener('scrollbottom', this);
-			}
-		},
-		_createPocket: function(clazz, options, iconClass) {
-			var pocket = document.createElement('div');
-			pocket.className = clazz;
-			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
-			return pocket;
-		},
-		_resetPullDownLoading: function() {
-			var loading = this.pullLoading;
-			if (loading) {
-				this.pullCaption.innerHTML = this.options.down.contentdown;
-				loading.style.webkitTransition = "";
-				loading.style.webkitTransform = "";
-				loading.style.webkitAnimation = "";
-				loading.className = CLASS_LOADING_DOWN;
-			}
-		},
-		_setCaptionClass: function(isPulldown, caption, title) {
-			if (!isPulldown) {
-				switch (title) {
-					case this.options.up.contentdown:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
-						break;
-					case this.options.up.contentrefresh:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
-						break;
-					case this.options.up.contentnomore:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
-						break;
-				}
-			}
-		},
-		_setCaption: function(title, reset) {
-			if (this.loading) {
-				return;
-			}
-			var options = this.options;
-			var pocket = this.pullPocket;
-			var caption = this.pullCaption;
-			var loading = this.pullLoading;
-			var isPulldown = this.pulldown;
-			var self = this;
-			if (pocket) {
-				if (reset) {
-					setTimeout(function() {
-						caption.innerHTML = self.lastTitle = title;
-						if (isPulldown) {
-							loading.className = CLASS_LOADING_DOWN;
-						} else {
-							self._setCaptionClass(false, caption, title);
-							loading.className = CLASS_LOADING;
-						}
-						loading.style.webkitAnimation = "";
-						loading.style.webkitTransition = "";
-						loading.style.webkitTransform = "";
-					}, 100);
-				} else {
-					if (title !== this.lastTitle) {
-						caption.innerHTML = title;
-						if (isPulldown) {
-							if (title === options.down.contentrefresh) {
-								loading.className = CLASS_LOADING;
-								loading.style.webkitAnimation = "spinner-spin 1s step-end infinite";
-							} else if (title === options.down.contentover) {
-								loading.className = CLASS_LOADING_UP;
-								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
-								loading.style.webkitTransform = "rotate(180deg)";
-							} else if (title === options.down.contentdown) {
-								loading.className = CLASS_LOADING_DOWN;
-								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
-								loading.style.webkitTransform = "rotate(0deg)";
-							}
-						} else {
-							if (title === options.up.contentrefresh) {
-								loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
-							} else {
-								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
-							}
-							self._setCaptionClass(false, caption, title);
-						}
-						this.lastTitle = title;
-					}
-				}
+    var PullRefresh = {
+        init: function(element, options) {
+            this._super(element, $.extend(true, {
+                scrollY: true,
+                scrollX: false,
+                indicators: true,
+                deceleration: 0.003,
+                down: {
+                    height: 50,
+                    contentinit: '下拉可以刷新',
+                    contentdown: '下拉可以刷新',
+                    contentover: '释放立即刷新',
+                    contentrefresh: '正在刷新...'
+                },
+                up: {
+                    height: 50,
+                    auto: false,
+                    contentinit: '上拉显示更多',
+                    contentdown: '上拉显示更多',
+                    contentrefresh: '正在加载...',
+                    contentnomore: '没有更多数据了',
+                    duration: 300
+                }
+            }, options));
+        },
+        _init: function() {
+            this._super();
+            this._initPocket();
+        },
+        _initPulldownRefresh: function() {
+            this.pulldown = true;
+            if (this.topPocket) {
+                this.pullPocket = this.topPocket;
+                this.pullPocket.classList.add(CLASS_BLOCK);
+                this.pullPocket.classList.add(CLASS_VISIBILITY);
+                this.pullCaption = this.topCaption;
+                this.pullLoading = this.topLoading;
+            }
+        },
+        _initPullupRefresh: function() {
+            this.pulldown = false;
+            if (this.bottomPocket) {
+                this.pullPocket = this.bottomPocket;
+                this.pullPocket.classList.add(CLASS_BLOCK);
+                this.pullPocket.classList.add(CLASS_VISIBILITY);
+                this.pullCaption = this.bottomCaption;
+                this.pullLoading = this.bottomLoading;
+            }
+        },
+        _initPocket: function() {
+            var options = this.options;
+            if (options.down && options.down.hasOwnProperty('callback')) {
+                this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
+                if (!this.topPocket) {
+                    this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down, CLASS_LOADING_DOWN);
+                    this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
+                }
+                this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
+                this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+            }
+            if (options.up && options.up.hasOwnProperty('callback')) {
+                this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
+                if (!this.bottomPocket) {
+                    this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up, CLASS_LOADING);
+                    this.scroller.appendChild(this.bottomPocket);
+                }
+                this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+                this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
+                //TODO only for h5
+                this.wrapper.addEventListener('scrollbottom', this);
+            }
+        },
+        _createPocket: function(clazz, options, iconClass) {
+            var pocket = document.createElement('div');
+            pocket.className = clazz;
+            pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
+            return pocket;
+        },
+        _resetPullDownLoading: function() {
+            var loading = this.pullLoading;
+            if (loading) {
+                this.pullCaption.innerHTML = this.options.down.contentdown;
+                loading.style.webkitTransition = "";
+                loading.style.webkitTransform = "";
+                loading.style.webkitAnimation = "";
+                loading.className = CLASS_LOADING_DOWN;
+            }
+        },
+        _setCaptionClass: function(isPulldown, caption, title) {
+            if (!isPulldown) {
+                switch (title) {
+                    case this.options.up.contentdown:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+                        break;
+                    case this.options.up.contentrefresh:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
+                        break;
+                    case this.options.up.contentnomore:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
+                        break;
+                }
+            }
+        },
+        _setCaption: function(title, reset) {
+            if (this.loading) {
+                return;
+            }
+            var options = this.options;
+            var pocket = this.pullPocket;
+            var caption = this.pullCaption;
+            var loading = this.pullLoading;
+            var isPulldown = this.pulldown;
+            var self = this;
+            if (pocket) {
+                if (reset) {
+                    setTimeout(function() {
+                        caption.innerHTML = self.lastTitle = title;
+                        if (isPulldown) {
+                            loading.className = CLASS_LOADING_DOWN;
+                        } else {
+                            self._setCaptionClass(false, caption, title);
+                            loading.className = CLASS_LOADING;
+                        }
+                        loading.style.webkitAnimation = "";
+                        loading.style.webkitTransition = "";
+                        loading.style.webkitTransform = "";
+                    }, 100);
+                } else {
+                    if (title !== this.lastTitle) {
+                        caption.innerHTML = title;
+                        if (isPulldown) {
+                            if (title === options.down.contentrefresh) {
+                                loading.className = CLASS_LOADING;
+                                loading.style.webkitAnimation = "spinner-spin 1s step-end infinite";
+                            } else if (title === options.down.contentover) {
+                                loading.className = CLASS_LOADING_UP;
+                                loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+                                loading.style.webkitTransform = "rotate(180deg)";
+                            } else if (title === options.down.contentdown) {
+                                loading.className = CLASS_LOADING_DOWN;
+                                loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+                                loading.style.webkitTransform = "rotate(0deg)";
+                            }
+                        } else {
+                            if (title === options.up.contentrefresh) {
+                                loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
+                            } else {
+                                loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+                            }
+                            self._setCaptionClass(false, caption, title);
+                        }
+                        this.lastTitle = title;
+                    }
+                }
 
-			}
-		}
-	};
-	$.PullRefresh = PullRefresh;
+            }
+        }
+    };
+    $.PullRefresh = PullRefresh;
 })(mui, document);
 (function($, window, document, undefined) {
 	var CLASS_SCROLL = 'mui-scroll';
@@ -4666,8 +4688,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		if (this.length === 1) {
 			var self = this[0];
 			var pullRefreshApi = null;
-			options = options || {};
 			var id = self.getAttribute('data-pullrefresh');
+			if (!id && typeof options === 'undefined') {
+				return false;
+			}
+			options = options || {};
 			if (!id) {
 				id = ++$.uuid;
 				$.data[id] = pullRefreshApi = new PullRefresh(self, options);
@@ -5103,7 +5128,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  * @returns {undefined}
  */
 (function($, document) {
-    if (!($.os.plus && $.os.android)) { //仅在5+android支持多webview的使用
+    if (!($.os.plus)) { //仅在5+android支持多webview的使用
         return;
     }
     $.plusReady(function() {
@@ -5146,9 +5171,22 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             },
             _initPulldownRefreshEvent: function() {
                 var self = this;
-                if (self.topPocket && self.options.webviewId) {
-                    $.plusReady(function() {
-                        var webview = plus.webview.getWebviewById(self.options.webviewId);
+                $.plusReady(function() {
+                		if(self.options.down.style == "circle"){
+	                		//单webview、原生转圈
+	                		self.options.webview = plus.webview.currentWebview();
+						self.options.webview.setPullToRefresh({
+							support: true,
+							color:self.options.down.color || '#2BD009',
+							height: self.options.down.height || '50px',
+							range: self.options.down.range || '100px',
+							style: 'circle',
+							offset: self.options.down.offset || '0px'
+						}, function() {
+							self.options.down.callback();
+						});
+	               }else if (self.topPocket && self.options.webviewId) {
+                        var webview = plus.webview.getWebviewById(self.options.webviewId);//子窗口
                         if (!webview) {
                             return;
                         }
@@ -5174,13 +5212,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                     break;
                                 case "dragEndAfterChangeOffset": //正在刷新状态
                                     //执行下拉刷新所在webview的回调函数
-                                    webview.evalJS("mui&&mui.options.pullRefresh.down.callback()");
+                                    webview.evalJS("window.mui&&mui.options.pullRefresh.down.callback()");
                                     self._setCaption(downOptions.contentrefresh);
                                     break;
                                 default:
                                     break;
                             }
                         }, false);
+                        
                         webview.setBounce({
                             position: {
                                 top: height * 2 + 'px'
@@ -5189,20 +5228,18 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                 top: height + 'px'
                             }
                         });
-                    });
-                }
+                    
+	                }
+                });
+                
+                
+                
             },
             handleEvent: function(e) {
                 var self = this;
                 if (self.stopped) {
                     return;
                 }
-                //5+的plusscrollbottom当页面内容较少时，不触发
-                //          if (e.type === 'plusscrollbottom') {
-                //              if (this.bottomPocket) {
-                //                  this.pullupLoading();
-                //              }
-                //          }
                 self.isScroll = false;
                 if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
                     self.isScroll = true;
@@ -5240,36 +5277,51 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     });
                 }
             },
-            pulldownLoading: function() { //该方法是子页面调用的
+            beginPulldown:function() { 
                 $.plusReady(function() {
-                    plus.webview.currentWebview().setBounce({
-                        offset: {
-                            top: this.options.down.height + "px"
-                        }
-                    });
+                		var _wv = plus.webview.currentWebview();
+                		var self = this;
+                		//这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
+                		setTimeout(function () {
+                			if(self.options.down.style == "circle"){
+	                			_wv.beginPullToRefresh();
+	                		}else{
+	                			_wv.setBounce({
+		                        offset: {
+		                            top: this.options.down.height + "px"
+		                        }
+		                    });
+	                		}
+                		},15);
                 }.bind(this));
             },
+            pulldownLoading: this.beginPulldown,//该方法是子页面调用的，兼容老的历史API
             _pulldownLoading: function() { //该方法是父页面调用的
                 var self = this;
                 $.plusReady(function() {
                     var childWebview = plus.webview.getWebviewById(self.options.webviewId);
-                    childWebview.setBounce({
+                   	childWebview && childWebview.setBounce({
                         offset: {
                             top: self.options.down.height + "px"
                         }
                     });
                 });
             },
-            endPulldownToRefresh: function() { //该方法是子页面调用的
-                var webview = plus.webview.currentWebview();
-                webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
-                    webviewId: webview.id
-                }) + "')._endPulldownToRefresh()");
+            endPulldown:function(){
+            		var _wv = this.options.webview;
+                _wv.endPullToRefresh();
+                //双webview的下拉刷新，需要修改父窗口提示信息
+                if(_wv.parent() && this.options.down.style !== "circle"){
+	                	_wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
+	                    webviewId: _wv.id
+	                }) + "')._endPulldownToRefresh()");
+                }
             },
+            endPulldownToRefresh: this.endPulldown, //该方法是子页面调用的，兼容老的历史API
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
-                    self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
+                    //self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
                     self.loading = false;
                     self._setCaption(self.options.down.contentdown, true);
                     setTimeout(function() {
@@ -5306,17 +5358,12 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                         self.finished = true;
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
                         self.pullCaption.innerHTML = self.options.up.contentnomore;
-                        //                  self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  self.bottomPocket.classList.add(CLASS_HIDDEN);
                         //取消5+的plusscrollbottom事件
                         document.removeEventListener('plusscrollbottom', self);
                         window.removeEventListener('dragup', self);
                     } else { //初始化时隐藏，后续不再隐藏
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
                         self.pullCaption.innerHTML = self.options.up.contentdown;
-                        //                  setTimeout(function() {
-                        //                      self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  }, 350);
                     }
                 }
             },
@@ -5348,7 +5395,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         }, $.PullRefresh));
 
         //override h5 pullRefresh
-        $.fn.pullRefresh = function(options) {
+        $.fn.pullRefresh_native = function(options) {
             var self;
             if (this.length === 0) {
                 self = document.createElement('div');
@@ -5379,7 +5426,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 pullRefreshApi = $.data[id];
             }
             if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-                pullRefreshApi._pulldownLoading(); //parent webview
+                //pullRefreshApi._pulldownLoading(); //parent webview
+                pullRefreshApi.beginPulldown();
             } else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
                 pullRefreshApi.pullupLoading();
             }
@@ -7919,9 +7967,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         this.element = element;
         this.options = $.extend({
             top: 0, //距离顶部高度(到达该高度即触发)
-            offset: 150, //滚动透明距离档设定top值后offset也会随着top向下延伸
+            offset: 150, //滚动透明距离
             duration: 16, //过渡时间
-            scrollby: window
+            scrollby: window//监听滚动距离容器
         }, options || {});
 
         this.scrollByElem = this.options.scrollby || window;

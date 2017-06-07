@@ -139,8 +139,11 @@
 		if (this.length === 1) {
 			var self = this[0];
 			var pullRefreshApi = null;
-			options = options || {};
 			var id = self.getAttribute('data-pullrefresh');
+			if (!id && typeof options === 'undefined') {
+				return false;
+			}
+			options = options || {};
 			if (!id) {
 				id = ++$.uuid;
 				$.data[id] = pullRefreshApi = new PullRefresh(self, options);
