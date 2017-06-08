@@ -151,10 +151,22 @@
 				self.el.inner.classList.add('empty');
 			} else if (selectorBuffer.length > 0) {
 				self.el.inner.classList.remove('empty');
-				self.el.styleForSearch.innerText = selectorBuffer.join(', ') + "{display:none;}";
+				self.box.querySelectorAll(classSelector('indexed-list-inner li') + classSelector('hidden'))
+				    .forEach(function(el){
+					el.classList.remove($.className('hidden'))
+				    })
+						self.box.querySelectorAll(selectorBuffer.join(', '))
+				    .forEach(function(el){
+					el.classList.add($.className('hidden'))
+				    })
+				//self.el.styleForSearch.innerText = selectorBuffer.join(', ') + "{display:none;}";
 			} else {
 				self.el.inner.classList.remove('empty');
-				self.el.styleForSearch.innerText = "";
+				self.box.querySelectorAll(classSelector('indexed-list-inner li') + classSelector('hidden'))
+				    .forEach(function(el){
+					el.classList.remove($.className('hidden'))
+				    })
+				//self.el.styleForSearch.innerText = "";
 			}
 		},
 		bindSearchEvent: function() {
