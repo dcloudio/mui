@@ -48,7 +48,9 @@
 		//构造函数
 		init: function(options) {
 			var self = this;
+			//console.log(options&&options.onMyEndScroll)
 			self.options = options || {};
+			self.options.onMyEndScroll=self.options.onMyEndScroll||function(){};
 			self.options.buttons = self.options.buttons || ['取消', '确定'];
 			self.panel = $.dom(panelBuffer)[0];
 			document.body.appendChild(self.panel);
@@ -90,7 +92,10 @@
 				var pickerElement = $.dom(pickerBuffer)[0];
 				pickerElement.style.width = width;
 				self.body.appendChild(pickerElement);
-				var picker = $(pickerElement).picker();
+				var picker = $(pickerElement).picker({
+					onMyEndScroll:self.options.onMyEndScroll||function(){},
+					myCurrentLayer:i
+				});
 				self.pickers.push(picker);
 				pickerElement.addEventListener('change', function(event) {
 					var nextPickerElement = this.nextSibling;

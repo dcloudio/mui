@@ -33,7 +33,9 @@
 	var Picker = $.Picker = function(holder, options) {
 		var self = this;
 		self.holder = holder;
+		//console.log(options&&options.onMyEndScroll)
 		self.options = options || {};
+		self.options.onMyEndScroll=self.options.onMyEndScroll||function(){};
 		self.init();
 		self.initInertiaParams();
 		self.calcElementItemPostion(true);
@@ -256,6 +258,7 @@
 
 	Picker.prototype.endScroll = function() {
 		var self = this;
+
 		if (self.list.angle < self.beginAngle) {
 			self.list.style.webkitTransition = "150ms ease-out";
 			self.setAngle(self.beginAngle);
@@ -267,11 +270,14 @@
 			self.list.style.webkitTransition = "100ms ease-out";
 			self.setAngle(self.itemAngle * index);
 		}
+		//console.log(11,self.options.onMyEndScroll);
+		self.options.onMyEndScroll(self);
 		self.triggerChange();
 	};
 
 	Picker.prototype.triggerChange = function(force) {
 		var self = this;
+		//console.log(self)
 		setTimeout(function() {
 			var index = self.getSelectedIndex();
 			var item = self.items[index];
@@ -361,6 +367,11 @@
 				return;
 			}
 		}
+	};
+
+	Picker.prototype.getMyCurrentLayer = function() {
+		var self = this;
+		return self.options.myCurrentLayer;
 	};
 
 	if ($.fn) {

@@ -1,5 +1,6 @@
 .sass-cache
 node_modules
+.idea
 
 sass/.csscomb.json
 sass/.csslintrc
