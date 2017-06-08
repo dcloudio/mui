@@ -11,7 +11,7 @@
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<style type="text/css">
 			.mui-content>.mui-table-view:first-child {
-				margin-top: 1px;
+				margin-top: -1px;
 			}
 		</style>
 	</head>
@@ -20,33 +20,40 @@
 		<!--下拉刷新容器-->
 		<div id="pullrefresh" class="mui-content">
 			<!--数据列表-->
-			<ul class="mui-table-view mui-table-view-chevron">
-
-			</ul>
+			<ul class="mui-table-view mui-table-view-chevron"></ul>
 		</div>
+		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-			var _self;
-			if(window.plus) {
-				plusReady();
-			} else {
-				document.addEventListener("plusready", function() {
-					plusReady();
-				}, false);
-			}
-
-			function plusReady() {
-				_self = plus.webview.currentWebview();
-				_self.setPullToRefresh({
-					support: true,
-					height: '50px',
-					range: '100px',
-					style: 'circle',
-					offset: '1px'
-				}, pulldownRefresh);
-				
-				plus.key.addEventListener("backbutton",function () {
-					_self.close("auto");
-				},false);
+			
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						style:'circle',
+						callback: pulldownRefresh
+					},
+					up: {
+						auto:true,
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			
+			var count = 0;
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					var newCount = cells.length>0?5:20;//首次加载20条，满屏
+					for (var i = cells.length, len = i + newCount; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+						table.appendChild(li);
+					}
+				}, 1500);
 			}
 
 			function addData() {
@@ -66,18 +73,11 @@
 			function pulldownRefresh() {
 				setTimeout(function() {
 					addData();
-					_self.endPullToRefresh();
+					mui('#pullrefresh').pullRefresh().endPulldown();
+					mui.toast("为你推荐了5篇文章");
 				}, 1500);
 			}
 
-			addData();
-			addData();
-			
-			mui = {};
-			mui.back = function () {
-				_self.close("auto");
-			}
-			
 		</script>
 	</body>
 
