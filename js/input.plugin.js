@@ -191,6 +191,7 @@
 	Input.prototype.clearActionClick = function(event) {
 		var self = this;
 		self.element.value = '';
+		$.trigger(self.element, 'input');
 		$.focus(self.element);
 		self.clearAction.classList.add(CLASS_HIDDEN);
 		event.preventDefault();
