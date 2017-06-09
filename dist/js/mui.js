@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.6.1 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.7.0 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -5231,9 +5231,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     
 	                }
                 });
-                
-                
-                
             },
             handleEvent: function(e) {
                 var self = this;
@@ -5295,7 +5292,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 		},15);
                 }.bind(this));
             },
-            pulldownLoading: this.beginPulldown,//该方法是子页面调用的，兼容老的历史API
+            pulldownLoading: function () {//该方法是子页面调用的，兼容老的历史API
+            		this.beginPulldown();
+            },
             _pulldownLoading: function() { //该方法是父页面调用的
                 var self = this;
                 $.plusReady(function() {
@@ -5317,7 +5316,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	                }) + "')._endPulldownToRefresh()");
                 }
             },
-            endPulldownToRefresh: this.endPulldown, //该方法是子页面调用的，兼容老的历史API
+            endPulldownToRefresh: function () {//该方法是子页面调用的，兼容老的历史API
+           	 	this.endPulldown();
+            }, 
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
@@ -5329,7 +5330,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     }, 350);
                 }
             },
-            pullupLoading: function(callback) {
+            beginPullup:function(callback) {//开始上拉加载
                 var self = this;
                 if (self.isLoading) return;
                 self.isLoading = true;
@@ -5348,7 +5349,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     callback && callback.call(self);
                 }, 300);
             },
-            endPullupToRefresh: function(finished) {
+            pullupLoading:function (callback) {//兼容老的API
+            		this.beginPullup(callback);
+            },
+            endPullup:function(finished) {//上拉加载结束
                 var self = this;
                 if (self.pullLoading) {
                     self.pullLoading.classList.remove(CLASS_VISIBILITY);
@@ -5366,6 +5370,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                         self.pullCaption.innerHTML = self.options.up.contentdown;
                     }
                 }
+            },
+            endPullupToRefresh: function (finished) {//上拉加载结束，兼容老的API
+            		this.endPullup(finished);
             },
             disablePullupToRefresh: function() {
                 this._initPullupRefresh();
@@ -5429,7 +5436,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 //pullRefreshApi._pulldownLoading(); //parent webview
                 pullRefreshApi.beginPulldown();
             } else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
-                pullRefreshApi.pullupLoading();
+                pullRefreshApi.beginPullup();
             }
             return pullRefreshApi;
         };
