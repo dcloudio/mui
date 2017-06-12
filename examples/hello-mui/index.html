@@ -255,7 +255,7 @@
 							</a>
 						</li>
 						<li class="mui-table-view-cell mui-plus-visible">
-							<a class="mui-navigate-right" href="examples/nav_transparent_native.html">
+							<a class="mui-navigate-right" data-title-type="transparent_native" href="examples/nav_transparent_native.html">
 								透明渐变(native模式)
 							</a>
 						</li>
@@ -483,7 +483,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" data-title="transparent_native" href="examples/best-practices/list-to-detail/listview.html">
+					<a class="mui-navigate-right" data-title-type="native" href="examples/best-practices/list-to-detail/listview.html">
 						列表到详情最佳实践
 					</a>
 				</li>
@@ -631,7 +631,10 @@
 							url: "examples/info.html",
 							id: "info",
 							styles: {
-								popGesture: "close"
+								popGesture: "close",
+								statusbar: {
+									background: "#f7f7f7"
+								}
 							},
 							show: {
 								aniShow: aniShow,
@@ -734,6 +737,10 @@
 						extras.acceleration = "none";
 					}
 
+					webview_style.statusbar = {
+						background: "#f7f7f7"
+					}
+
 					mui.openWindowWithTitle({
 						url:href,
 						id:id,
@@ -741,6 +748,9 @@
 						show:{
 							event:"loaded",
 							extras:extras
+						},
+						waiting: {
+							autoShow: false
 						}
 					},{
 						title:{
@@ -764,7 +774,6 @@
 						extras.acceleration = "capture";
 					}
 					
-					var titleType = this.getAttribute("data-title");
 
 					if(titleType && titleType=="transparent_native") {
 						webview_style.titleNView = {
@@ -776,6 +785,10 @@
 							splitLine: {
 								color: '#cccccc'
 							}
+						}
+					}else {
+						webview_style.statusbar = {
+							background: "#f7f7f7"
 						}
 					}
 					

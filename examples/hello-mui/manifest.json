@@ -74,6 +74,10 @@
                "titlecolor": "#000000"
             }
         },
+        "statusbar": {
+            "immersed": "supportedDevice",
+            "style":"dark"
+        },
 		"popGesture": "close",/*设置应用默认侧滑返回关闭Webview窗口，none为无侧滑返回功能，hide为侧滑隐藏Webview窗口。参考ask.dcloud.net.cn/article/102*/
 		"splashscreen": {
 			"autoclose": false,/*如果为true，程序启动的图片可以自动关闭，如果为false，开发者需要手动关闭*/
