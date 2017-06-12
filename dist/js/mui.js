@@ -2950,8 +2950,6 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 								$.plusReady(function() {
 									//这里改写$.fn.pullRefresh
 									$.fn.pullRefresh = $.fn.pullRefresh_native;
-									//var webview = plus.webview.currentWebview();
-									//downOptions.down.callback = '_CALLBACK';
 									$container.pullRefresh(pullRefreshOptions);
 								});
 
@@ -2959,6 +2957,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 								$.plusReady(function() {
 									//这里改写$.fn.pullRefresh
 									$.fn.pullRefresh = $.fn.pullRefresh_native
+									var webview = plus.webview.currentWebview();
 									if(window.__NWin_Enable__ === false) { //不支持多webview
 										$container.pullRefresh(pullRefreshOptions);
 									} else {
@@ -2983,6 +2982,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 												};
 												downOptions.down = $.extend({}, pullRefreshOptions.down);
 												downOptions.down.callback = '_CALLBACK';
+												//改写父页面的$.fn.pullRefresh
+												parent.evalJS("mui.fn.pullRefresh=mui.fn.pullRefresh_native");
 												//父页面初始化pulldown
 												parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
 											}
@@ -5307,13 +5308,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 });
             },
             endPulldown:function(){
-            		var _wv = this.options.webview;
-                _wv.endPullToRefresh();
+            		var _wv = plus.webview.currentWebview();
                 //双webview的下拉刷新，需要修改父窗口提示信息
                 if(_wv.parent() && this.options.down.style !== "circle"){
 	                	_wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
 	                    webviewId: _wv.id
 	                }) + "')._endPulldownToRefresh()");
+                }else{
+                		_wv.endPullToRefresh();
                 }
             },
             endPulldownToRefresh: function () {//该方法是子页面调用的，兼容老的历史API
@@ -5322,7 +5324,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
-                    //self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
+                    self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
                     self.loading = false;
                     self._setCaption(self.options.down.contentdown, true);
                     setTimeout(function() {

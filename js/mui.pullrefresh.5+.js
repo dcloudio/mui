@@ -183,13 +183,14 @@
                 });
             },
             endPulldown:function(){
-            		var _wv = this.options.webview;
-                _wv.endPullToRefresh();
+            		var _wv = plus.webview.currentWebview();
                 //双webview的下拉刷新，需要修改父窗口提示信息
                 if(_wv.parent() && this.options.down.style !== "circle"){
 	                	_wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
 	                    webviewId: _wv.id
 	                }) + "')._endPulldownToRefresh()");
+                }else{
+                		_wv.endPullToRefresh();
                 }
             },
             endPulldownToRefresh: function () {//该方法是子页面调用的，兼容老的历史API
@@ -198,7 +199,7 @@
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
-                    //self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
+                    self.options.webview.endPullToRefresh(); //下拉刷新所在webview回弹
                     self.loading = false;
                     self._setCaption(self.options.down.contentdown, true);
                     setTimeout(function() {

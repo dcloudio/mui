@@ -22,8 +22,6 @@
 								$.plusReady(function() {
 									//这里改写$.fn.pullRefresh
 									$.fn.pullRefresh = $.fn.pullRefresh_native;
-									//var webview = plus.webview.currentWebview();
-									//downOptions.down.callback = '_CALLBACK';
 									$container.pullRefresh(pullRefreshOptions);
 								});
 
@@ -31,6 +29,7 @@
 								$.plusReady(function() {
 									//这里改写$.fn.pullRefresh
 									$.fn.pullRefresh = $.fn.pullRefresh_native
+									var webview = plus.webview.currentWebview();
 									if(window.__NWin_Enable__ === false) { //不支持多webview
 										$container.pullRefresh(pullRefreshOptions);
 									} else {
@@ -55,6 +54,8 @@
 												};
 												downOptions.down = $.extend({}, pullRefreshOptions.down);
 												downOptions.down.callback = '_CALLBACK';
+												//改写父页面的$.fn.pullRefresh
+												parent.evalJS("mui.fn.pullRefresh=mui.fn.pullRefresh_native");
 												//父页面初始化pulldown
 												parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
 											}
