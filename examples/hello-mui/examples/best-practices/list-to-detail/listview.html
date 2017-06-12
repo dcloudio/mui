@@ -125,7 +125,7 @@
 					container: '#list',
 					down: {
 						style: 'circle',
-						offset: '45px',
+						offset: '0px',
 						auto: true,
 						callback: function() {
 							if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
@@ -227,8 +227,9 @@
 				webview_detail.setStyle({
 					"titleNView": titleNView
 				});
-
-				webview_detail.show("slide-in-right", 300);
+				setTimeout(function () {
+					webview_detail.show("slide-in-right", 300);
+				},150);
 			}
 
 			/**

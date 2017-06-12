@@ -71,9 +71,6 @@
 				//向服务端请求文章详情内容
 				mui.ajax('http://spider.dcloud.net.cn/api/news/36kr/' + guid, {
 					type:'GET',
-					data:{
-						column:'content'//告知服务端只需要内容详情字段，可根据实际业务修正	
-					},
 					dataType: 'json', //服务器返回json格式数据
 					timeout: 15000, //15秒超时
 					success: function(rsp) {
