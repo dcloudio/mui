@@ -482,6 +482,11 @@
 						setting（设置）- div窗体切换示例
 					</a>
 				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" data-title="transparent_native" href="examples/best-practices/list-to-detail/listview.html">
+						列表到详情最佳实践
+					</a>
+				</li>
 
 			</ul>
 		</div>
@@ -759,15 +764,17 @@
 						extras.acceleration = "capture";
 					}
 					
-					if(~id.indexOf('nav_transparent_native.html')) {
+					var titleType = this.getAttribute("data-title");
+
+					if(titleType && titleType=="transparent_native") {
 						webview_style.titleNView = {
 							'backgroundColor': '#f7f7f7',
 							'titleText': this.innerHTML.trim(),
 							'titleColor': '#000000',
-							type:'transparent',
+							type: 'transparent',
 							autoBackButton: true,
-							splitLine:{
-								color:'#cccccc'
+							splitLine: {
+								color: '#cccccc'
 							}
 						}
 					}
