@@ -5276,19 +5276,21 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 }
             },
             beginPulldown:function() { 
+            		var self = this;
                 $.plusReady(function() {
-                		var _wv = plus.webview.currentWebview();
-                		var self = this;
                 		//这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
                 		setTimeout(function () {
-                			if(self.options.down.style == "circle"){
-	                			_wv.beginPullToRefresh();
-	                		}else{
-	                			_wv.setBounce({
-		                        offset: {
-		                            top: this.options.down.height + "px"
-		                        }
-		                    });
+                			if(self.options.down.style == "circle"){//单webview下拉刷新
+	                			plus.webview.currentWebview().beginPullToRefresh();
+	                		}else{//双webview模式
+	                			var webview = self.options.webview;
+	                			if(webview){
+	                				webview.setBounce({
+			                        offset: {
+			                            top: self.options.down.height + "px"
+			                        }
+			                    });
+	                			}
 	                		}
                 		},15);
                 }.bind(this));
