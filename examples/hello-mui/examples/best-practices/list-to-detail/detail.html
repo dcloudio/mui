@@ -63,6 +63,7 @@
 				if(!guid) {
 					return;
 				}
+				
 				//前页传入的数据，直接渲染，无需等待ajax请求详情后
 				vm.cover = event.detail.cover;
 				vm.title = event.detail.title;
@@ -92,6 +93,18 @@
 					vm.resetData();
 				}, 300);
 			}
+			
+			//侧滑返回后，重置页面数据
+			mui.plusReady(function () {
+				var self = plus.webview.currentWebview();
+				self.addEventListener("popGesture",function (e) {
+					if(e.type == "end" && e.result == true){
+						window.scrollTo(0, 0);
+						vm.resetData();
+					}
+				},false);
+			})
+			
 		</script>
 	</body>
 
