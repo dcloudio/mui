@@ -165,7 +165,8 @@
 					"xxhdpi": "" /*1080p 高分屏启动图片*/
 				}
 			}
-		}
+		},
+		"schemeWhitelist":["market"]
 	},
 	"dependencies" : {
 		"pages": {
