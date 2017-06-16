@@ -87,21 +87,14 @@
 			//重写返回逻辑
 			mui.back = function() {
 				plus.webview.currentWebview().hide("auto", 300);
-				//动画结束后，恢复默认值
-				setTimeout(function() {
-					window.scrollTo(0, 0);
-					vm.resetData();
-				}, 300);
 			}
 			
-			//侧滑返回后，重置页面数据
+			//窗口隐藏时，重置页面数据
 			mui.plusReady(function () {
 				var self = plus.webview.currentWebview();
-				self.addEventListener("popGesture",function (e) {
-					if(e.type == "end" && e.result == true){
-						window.scrollTo(0, 0);
-						vm.resetData();
-					}
+				self.addEventListener("hide",function (e) {
+					window.scrollTo(0, 0);
+					vm.resetData();
 				},false);
 			})
 			
