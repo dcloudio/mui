@@ -74,7 +74,7 @@
 		<div class="mui-content" id="news">
 			<!--顶部banner图 开始-->
 			<div class="banner">
-				<a href="javascript:;" :data-guid="banner.guid">
+				<a href="javascript:;" :data-guid="banner.guid" @tap="open_detail(banner)" >
 					<img :src="banner.cover" />
 					<h2 class="title mui-ellipsis-2">{{banner.title}}</h2>
 					<div style="display: none;">
@@ -88,7 +88,7 @@
 			<!--列表信息流 开始-->
 			<ul id="list" class="mui-table-view">
 				<li class="mui-table-view-cell mui-media" v-for="item in items">
-					<a href="javascript:;" :data-guid="item.guid">
+					<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)" >
 						<img class="mui-media-object mui-pull-left" :src="item.cover">
 						<div class="mui-media-body">
 							<div class="mui-ellipsis-2">{{item.title}}</div>
@@ -189,26 +189,14 @@
 					banner: {}, //顶部banner数据
 					items: [] //列表信息流数据
 				}
-			});
-
-			//点击列表，打开详情
-			//TODO 后续应该封装一个v-tap指令，实现tap监听
-			mui('.mui-content').on('tap', '[data-guid]', function() {
-				var guid = this.getAttribute('data-guid');
-				var title = this.querySelector(".mui-ellipsis-2").innerHTML.trim();
-				var author = this.querySelector(".author").innerHTML;
-				var time = this.querySelector(".time").innerHTML;
-				var cover = this.querySelector("img").getAttribute("src");
-				open_detail(guid, title,author,time,cover);
-			});
-
+			});			
+			
 			/**
 			 * 打开新闻详情
 			 * 
-			 * @param {String} guid 新闻ID
-			 * @param {String} title  新闻标题
+			 * @param {Object} item 当前点击的新闻对象
 			 */
-			function open_detail(guid, title,author,time,cover) {
+			function open_detail(item) {
 				//若详情页尚未预加载完成，则延时等待再执行
 				if(!webview_detail) {
 					setTimeout(function() {
@@ -217,15 +205,15 @@
 				}
 				//触发子窗口变更新闻详情
 				mui.fire(webview_detail, 'get_detail', {
-					guid: guid,
-					title:title,
-					author:author,
-					time:time,
-					cover:cover
+					guid: item.guid,
+					title:item.title,
+					author:item.author,
+					time:item.time,
+					cover:item.cover
 				});
 
 				//更改详情页原生导航条信息
-				titleNView.titleText = title;
+				titleNView.titleText = item.title;
 				webview_detail.setStyle({
 					"titleNView": titleNView
 				});
