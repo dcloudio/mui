@@ -68,7 +68,7 @@
 	},
 	"plus": {
 		"launchwebview": {
-            "navigationbar": {
+            "titleNView": {
                "backgroundcolor": "#f7f7f7",
                "titletext": "首页",
                "titlecolor": "#000000"
