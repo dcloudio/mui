@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="title">
+				<p>这是使用nativeObj 原生控件绘制的底部选项卡示例，当前为第一个子页面；</p>
+				<p>选项卡常用于App首页，为加快渲染，原生底部选项卡是在manifest.json中通过plus -> launchwebview -> subNViews 节点配置的；</p>
+				<p>选项卡图标使用字体绘制，点击可切换对应选项卡的高亮状态，开发者可自定义相应的点击事件；</p>
+				<p>本示例中，点击第二个选项卡打开一个支持下拉刷新的webview；点击第四个选项卡，打开一个新窗口。</p>
+				
+				<p>中间悬浮大球图标，因涉及屏幕分辨率动态计算，目前是在首页plusReady事件中实现绘制的。该悬浮大球支持点击事件，开发者可定制实现对应的点击逻辑。</P>
+					
+				<p>为提高性能，本示例选项卡图标全部使用字体文件绘制（推荐），实际使用中也可以使用图片绘制。</p>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+	</script>
+
+</html>
