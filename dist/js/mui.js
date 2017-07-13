@@ -7378,9 +7378,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         return '<div class="' + CLASS_POPUP_BUTTONS + '">' + btns.join('') + '</div>';
     };
 
-    var createPopup = function(html, callback) {
+    var createPopup = function(html, callback, type) {
         var popupElement = document.createElement('div');
-        popupElement.className = CLASS_POPUP;
+        popupElement.className = CLASS_POPUP+' mui-'+type;
         popupElement.innerHTML = html;
         var removePopupElement = function() {
             popupElement.parentNode && popupElement.parentNode.removeChild(popupElement);
@@ -7469,7 +7469,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             }
         }
         if (!$.os.plus || type === 'div') {
-            return createPopup(createInner(message, title || '提示') + createButtons([btnValue || '确定']), callback);
+            return createPopup(createInner(message, title || '提示') + createButtons([btnValue || '确定']), callback, 'alert');
         }
         return plus.nativeUI.alert(message, callback, title || '提示', btnValue || '确定');
     };
@@ -7489,7 +7489,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             }
         }
         if (!$.os.plus || type === 'div') {
-            return createPopup(createInner(message, title || '提示') + createButtons(btnArray || ['取消', '确认']), callback);
+            return createPopup(createInner(message, title || '提示') + createButtons(btnArray || ['取消', '确认']), callback, 'confirm');
         }
         return plus.nativeUI.confirm(message, callback, title, btnArray || ['取消', '确认']);
     };
@@ -7515,7 +7515,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             }
         }
         if (!$.os.plus || type === 'div') {
-            return createPopup(createInner(message, title || '提示', createInput(placeholder)) + createButtons(btnArray || ['取消', '确认']), callback);
+            return createPopup(createInner(message, title || '提示', createInput(placeholder)) + createButtons(btnArray || ['取消', '确认']), callback, 'prompt');
         }
         return plus.nativeUI.prompt(message, callback, title || '提示', placeholder, btnArray || ['取消', '确认']);
     };
