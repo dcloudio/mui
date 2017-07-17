@@ -316,14 +316,16 @@
 				this.progressBarStyle.webkitTransform = this._getTranslateStr((-x * (this.progressBarWidth / this.wrapperWidth)), 0);
 			}
 		},
-		resetPosition: function(time) {
+		resetPosition: function(time, byCurrentSelect) {
 			time = time || 0;
 			if (this.x > 0) {
 				this.x = 0;
 			} else if (this.x < this.maxScrollX) {
 				this.x = this.maxScrollX;
 			}
-			this.currentPage = this._nearestSnap(this.x);
+			if(!byCurrentSelect){
+				this.currentPage = this._nearestSnap(this.x);
+			}
 			this.scrollTo(this.currentPage.x, 0, time, this.options.scrollEasing);
 			return true;
 		},

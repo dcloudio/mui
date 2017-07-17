@@ -736,7 +736,7 @@
 			this._reInit();
 			this.reLayout();
 			$.trigger(this.scroller, 'refresh', this);
-			this.resetPosition();
+			this.resetPosition(0,true);
 		},
 		scrollTo: function(x, y, time, easing) {
 			var easing = easing || ease.circular;
