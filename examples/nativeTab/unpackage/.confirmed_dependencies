@@ -1,0 +1,73 @@
+{
+  "index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "html/tab-webview-subpage-about.html",
+      "fonts/mui.ttf",
+      "fonts/iconfont.ttf",
+      "js/util.js",
+      "html/tab-webview-subpage-chat.html"
+    ],
+    "refer": [
+      "html/tab-webview-subpage-setting.html",
+      "html/tab-webview-subpage-chat.html",
+      "html/tab-webview-subpage-contact.html",
+      "html/tab-webview-subpage-about.html",
+      "html/new-webview.html"
+    ]
+  },
+  "launch.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "html/tab-webview-subpage-about.html"
+    ],
+    "refer": [
+      "html/tab-webview-subpage-setting.html",
+      "html/tab-webview-subpage-chat.html",
+      "html/tab-webview-subpage-contact.html",
+      "html/tab-webview-subpage-about.html"
+    ]
+  },
+  "html/tab-webview-subpage-setting.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.min.js"
+    ],
+    "refer": []
+  },
+  "html/tab-webview-subpage-about.html": {
+    "resources": [
+      "css/mui.min.css",
+      "js/mui.min.js",
+      "js/util.js"
+    ],
+    "refer": []
+  },
+  "html/tab-webview-subpage-chat.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "html/tab-webview-subpage-contact.html": {
+    "resources": [
+      "images/60x60.gif",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "html/new-webview.html": {
+    "resources": [
+      "css/mui.min.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": []
+  }
+}
