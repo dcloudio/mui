@@ -13,19 +13,19 @@
 				box-shadow: 0px -5px 5px 0px rgba(150, 150, 150, .2);
 			}
 			
-			.message .icon {
-				width: 42px;
-				height: 42px;
-				float: left;
-				text-align: center;
-			}
-			
 			.message.bottom {
 				position: fixed;
 				padding: 15px;
 				bottom: 0;
 				left: 0px;
 				right: 0px;
+			}
+			
+			.message .icon {
+				width: 42px;
+				height: 42px;
+				float: left;
+				text-align: center;
 			}
 			
 			.message .content {
@@ -60,12 +60,10 @@
 		</div>
 
 		<div class="message bottom">
-			<div>
-				<div class="icon">
-					<span class="mui-icon mui-icon-info"></span>
-				</div>
-				<p class="content">应用当前版本过低，存在安全漏洞，请升级至最新版</p>
+			<div class="icon">
+				<span class="mui-icon mui-icon-info"></span>
 			</div>
+			<p class="content">应用当前版本过低，存在安全漏洞，请升级至最新版</p>
 			<div class="action">
 				<button type="button" class="mui-btn mui-btn-blue mui-btn-link">取消</button>
 				<button id="install" type="button" class="mui-btn mui-btn-blue">立即升级</button>
