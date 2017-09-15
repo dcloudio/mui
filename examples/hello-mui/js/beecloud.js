@@ -108,7 +108,11 @@ function doPay(payData, cbsuccess, cberror) {
 					plus.payment.request(payChannel, paySrc, cbsuccess, cberror);
 				} else if (payData.channel == 'UN_WEB') {
 					//银联在线支付
-					var web = plus.webview.create('', "beecloudPay");
+					var web = plus.webview.create('', "beecloudPay",{
+						statusbar:{
+							background: "#f7f7f7"
+						}
+					});
 					//注入JS，解决银联界面返回的问题
 					web.setJsFile('_www/js/95516.js');
 					web.addEventListener('loaded', function() {
