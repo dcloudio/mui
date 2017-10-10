@@ -134,11 +134,17 @@
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
-					var mainPage = $.preload({
-						"id": 'main',
-						"url": 'main.html'
-					});
+					var mainPage = plus.webview.getWebviewById("main");
 					var main_loaded_flag = false;
+					if(!mainPage){
+						mainPage = $.preload({
+							"id": 'main',
+							"url": 'main.html'
+						});
+					}else{
+						main_loaded_flag = true;
+					}
+					
 					mainPage.addEventListener("loaded",function () {
 						main_loaded_flag = true;
 					});
