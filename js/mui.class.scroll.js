@@ -31,6 +31,8 @@
 		init: function(element, options) {
 			this.wrapper = this.element = element;
 			this.scroller = this.wrapper.children[0];
+			//chrome 58版本后阻止原生touch的默认行为推荐使用方法
+			this.scroller && (this.scroller.style.touchAction ='none');
 			this.scrollerStyle = this.scroller && this.scroller.style;
 			this.stopped = false;
 
