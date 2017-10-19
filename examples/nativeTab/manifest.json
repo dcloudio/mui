@@ -113,23 +113,23 @@
 			"background": "#fff",
 			"subNViews": [
 				{
-					"id": "tabBar1",
+					"id": "tabBar",
 					"styles": {
 						"bottom": "0px",
 						"left": "0",
 						"height": "50px",
-						"width": "26%",
+						"width": "100%",
 						"backgroundColor": "#fff"
 					},
 					"tags": [
 						{
 							"tag": "font",
-							"id": "tabBar11",
+							"id": "indexIcon",
 							"text": "\ue500",
 							"position": {
 								"top": "4px",
 								"left": "0",
-								"width": "100%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
@@ -139,38 +139,26 @@
 							}
 						}, {
 							"tag": "font",
-							"id": "tabBar12",
+							"id": "indexText",
 							"text": "首页",
 							"position": {
 								"top": "23px",
 								"left": "0",
-								"width": "100%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
 								"align": "center",
 								"size": "10px"
 							}
-						}
-					]
-				}, {
-					"id": "tabBar2",
-					"styles": {
-						"bottom": "0px",
-						"left": "25%",
-						"height": "50px",
-						"width": "26%",
-						"backgroundColor": "#fff"
-					},
-					"tags": [
-						{
+						},{
 							"tag": "font",
-							"id": "tabBar21",
+							"id": "newsIcon",
 							"text": "\ue201",
 							"position": {
 								"top": "4px",
-								"left": "-20px",
-								"width": "100%",
+								"left": "20%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
@@ -180,38 +168,26 @@
 							}
 						}, {
 							"tag": "font",
-							"id": "tabBar22",
+							"id": "newsText",
 							"text": "消息",
 							"position": {
 								"top": "23px",
-								"left": "-20px",
-								"width": "100%",
+								"left": "20%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
 								"align": "center",
 								"size": "10px"
 							}
-						}
-					]
-				}, {
-					"id": "tabBar3",
-					"styles": {
-						"bottom": "0px",
-						"left": "50%",
-						"height": "50px",
-						"width": "26%",
-						"backgroundColor": "#fff"
-					},
-					"tags": [
-						{
+						},{
 							"tag": "font",
-							"id": "tabBar31",
+							"id": "contactIcon",
 							"text": "\ue100",
 							"position": {
 								"top": "4px",
-								"left": "20px",
-								"width": "100%",
+								"left": "55%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
@@ -221,38 +197,26 @@
 							}
 						}, {
 							"tag": "font",
-							"id": "tabBar32",
+							"id": "contactText",
 							"text": "通讯录",
 							"position": {
 								"top": "24px",
-								"left": "20px",
-								"width": "100%",
+								"left": "55%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
 								"align": "center",
 								"size": "10px"
 							}
-						}
-					]
-				}, {
-					"id": "tabBar4",
-					"styles": {
-						"bottom": "0px",
-						"left": "75%",
-						"height": "50px",
-						"width": "26%",
-						"backgroundColor": "#fff"
-					},
-					"tags": [
-						{
+						},{
 							"tag": "font",
-							"id": "tabBar41",
+							"id": "newwindowIcon",
 							"text": "\ue6c9",
 							"position": {
 								"top": "4px",
-								"left": "0",
-								"width": "100%",
+								"left": "75%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
@@ -262,30 +226,19 @@
 							}
 						}, {
 							"tag": "font",
-							"id": "tabBar42",
+							"id": "newwindowText",
 							"text": "新窗口",
 							"position": {
 								"top": "24px",
-								"left": "0",
-								"width": "100%",
+								"left": "75%",
+								"width": "25%",
 								"height": "24px"
 							},
 							"textStyles": {
 								"align": "center",
 								"size": "10px"
 							}
-						}
-					]
-				}, {
-					"id": "tabBar5",
-					"styles": {
-						"bottom": "50px",
-						"left": "0",
-						"height": "1px",
-						"width": "100%",
-						"backgroundColor": "#ccc"
-					},
-					"tags": [
+						},
 						{
 							"tag": "rect",
 							"id": "tabBorder",
