@@ -37,7 +37,14 @@
 			if (document.activeElement && document.activeElement !== targetElement) {
 				document.activeElement.blur();
 			}
-			touch = event.detail.gesture.changedTouches[0];
+
+			//兼容浏览器点击事件
+			if(event.detail.gesture.changedTouches){
+                touch = event.detail.gesture.changedTouches[0];
+			}else{
+                touch = event.detail.gesture.currentTarget;
+            }
+
 			// Synthesise a click event, with an extra attribute so it can be tracked
 			clickEvent = document.createEvent('MouseEvents');
 			clickEvent.initMouseEvent('click', true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
