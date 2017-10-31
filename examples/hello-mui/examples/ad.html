@@ -81,7 +81,10 @@
 					});
 				}else{
 					ad.addEventListener('loaded',function () {
-						ad.show('slide-in-bottom');
+						//延时的目的是为了等待主窗体动画结束后才显示，否则可能会闪烁
+						setTimeout(function () {
+							ad.show('slide-in-bottom');
+						},300);
 					});
 				}
 				
