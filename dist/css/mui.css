@@ -1460,7 +1460,7 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     width: 14px;
     height: 14px;
 
-    vertical-align: text-bottom;
+    vertical-align: middle;
 }
 
 .mui-btn-block .mui-spinner
