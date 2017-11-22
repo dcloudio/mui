@@ -661,144 +661,110 @@
 			});
 			//主列表点击事件
 			mui('#list').on('tap', 'a', function() {
-				var id = this.getAttribute("data-wid");
-				if(!id) {
-					id = this.getAttribute('href');
-				}
 				var href = this.getAttribute('href');
-
+				
 				//非plus环境，直接走href跳转
-				if(!mui.os.plus){
+				if(!mui.os.plus) {
 					location.href = href;
 					return;
 				}
-
-				var titleType = this.getAttribute("data-title-type");
-
-				var webview_style = {
-					popGesture: "close"
+				
+				var id = this.getAttribute("data-wid");
+				if(!id) {
+					id = href;
 				}
-				var extras = {};
 
-
-				//处理原生图片轮播
-				if(~id.indexOf("slider-native.html")) {
-					webview_style.titleNView = { //配置原生标题
-						'backgroundColor': '#f7f7f7',
-						'titleText': this.innerHTML.trim(),
-						'titleColor': '#000000',
-						autoBackButton: true,
-						splitLine: {
-							color: '#cccccc'
-						}
+				if(href && ~href.indexOf('.html')) {
+					//打开窗口的相关参数
+					var options = {
+						styles:{
+							popGesture: "close"
+						},
+						extras:{}
 					};
-
-					webview_style.subNViews = [{ //配置图片轮播
-						id: 'slider-native',
-						type: 'ImageSlider',
-						styles: {
-							left: 0,
-							right: 0,
-							top: 0,
-							height: '200px',
-							position: 'static',
-							loop: true,
-							images: [{
-								src: '_www/images/yuantiao.jpg',
-								width: '100%'
-							}, {
-								src: '_www/images/shuijiao.jpg',
-								width: '100%',
-							}, {
-								src: '_www/images/muwu.jpg',
-								width: '100%',
-							}, {
-								src: '_www/images/cbd.jpg',
-								width: '100%',
-							}]
-						}
-					}];
-					
-					var webview = plus.webview.create(this.href, id, webview_style, extras);
-					webview.show(aniShow,300);
-					return;
-				}
-
-				if(titleType == "native") {
 					//如下场景不适用下拉回弹：
 					//1、单webview下拉刷新；2、底部有fixed定位的div的页面
 					if(!~id.indexOf('pullrefresh.html') && !~href.indexOf("examples/tabbar.html") && !~href.indexOf("list-to-detail/listview.html")) {
-						webview_style.bounce = "vertical";
+						options.styles.bounce = "vertical";
 					}
 					//图标页面需要启动硬件加速
 					if(~id.indexOf('icons.html') || ~id.indexOf("echarts.html")) {
-						webview_style.hardwareAccelerated = true;
+						options.styles.hardwareAccelerated = true;
 					}
 					if(~id.indexOf('im-chat.html')) {
-						extras.acceleration = "none";
-					}
-
-					webview_style.statusbar = {
-						background: "#f7f7f7"
-					}
-
-					mui.openWindowWithTitle({
-						url:href,
-						id:id,
-						styles:webview_style,
-						show:{
-							event:"loaded",
-							extras:extras
-						},
-						waiting: {
-							autoShow: false
-						}
-					},{
-						title:{
-							text:this.innerText.trim()
-						},
-						back:{
-							image:{
-								base64Data:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAb1BMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAACubimgAAAAI3RSTlMAGfUTGfQTGPMSGPIYGhgaGBsXGxcbFxwXHBccFhwWHRYdHWufDPQAAAABYktHRACIBR1IAAAAB3RJTUUH4QETEBwooeTlkQAAAJVJREFUSMft1EkSgkAQRNFGUXFWHBDBibr/HTUwD5B/48Ig1y+io7u6MqUhf5hsNEY+j5hMgZ/FJ8Xc9ovos3T96utjbfqN/Nb0O/m96Uv5g+mP8ifTn+Ur01/ka9Nf5RvTt/I309/lH6Z/yr9Mn+Q71/MT8B34K/E58Enzv8R/K98HvnF8p3lr8F7izce7lbf3kJ/lDQp9HdBhgg3PAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTE5VDE2OjI4OjQwKzA4OjAwpTDFwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0xOVQxNjoyODo0MCswODowMNRtfX0AAAAASUVORK5CYII="
-							}
-						}
-					});
-				} else if(href && ~href.indexOf('.html')) {
-					//侧滑菜单需动态控制一下zindex值；
-					if(~id.indexOf('offcanvas-')) {
-						webview_style.zindex = 9998;
-						webview_style.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
+						options.extras.acceleration = "none";
 					}
 					
-					var extras = {};
-					if(id && id == "viewgroup"){//强制启用截屏
-						extras.acceleration = "capture";
-					}
-					
-
-					if(titleType && titleType=="transparent_native") {
-						webview_style.titleNView = {
-							'backgroundColor': '#f7f7f7',
-							'titleText': this.innerHTML.trim(),
-							'titleColor': '#000000',
-							type: 'transparent',
-							autoBackButton: true,
+					var titleType = this.getAttribute("data-title-type");
+					if(titleType && titleType.indexOf("native") > -1) {//原生导航
+						options.styles.titleNView = {
+							autoBackButton:true,
+							backgroundColor:'#f7f7f7',
+							titleText:this.innerHTML.trim(),
 							splitLine: {
 								color: '#cccccc'
 							}
+						};
+						
+						options.show = {
+							event:'loaded'
 						}
-					}else {
-						webview_style.statusbar = {
+						//有原生标题的情况下，就不需要waiting框了
+						options.waiting = {
+							autoShow:false
+						}
+						
+						//透明渐变导航,增加类型设置
+						if(titleType == "transparent_native") {
+							options.styles.titleNView.type = "transparent";
+						}
+						
+						//处理原生图片轮播
+						if(~id.indexOf("slider-native.html")) {
+							options.styles.subNViews = [{ //配置图片轮播
+								id: 'slider-native',
+								type: 'ImageSlider',
+								styles: {
+									left: 0,
+									right: 0,
+									top: 0,
+									height: '200px',
+									position: 'static',
+									loop: true,
+									images: [{
+										src: '_www/images/yuantiao.jpg',
+										width: '100%'
+									}, {
+										src: '_www/images/shuijiao.jpg',
+										width: '100%',
+									}, {
+										src: '_www/images/muwu.jpg',
+										width: '100%',
+									}, {
+										src: '_www/images/cbd.jpg',
+										width: '100%',
+									}]
+								}
+							}];
+						}
+					}else{
+						//非原生导航，需要设置顶部状态栏占位
+						options.styles.statusbar = {
 							background: "#f7f7f7"
 						}
 					}
 					
-					var webview = plus.webview.create(this.href,id,webview_style,extras);
-					webview.addEventListener("titleUpdate",function () {
-						setTimeout(function () {
-							webview.show(aniShow,300);
-						},100);
-					});
+					//侧滑菜单需动态控制一下zindex值；
+					if(~id.indexOf('offcanvas-')) {
+						options.styles.zindex = 9998;
+						options.styles.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
+					}
+					
+					if(id && id == "viewgroup") { //强制启用截屏
+						options.extras.acceleration = "capture";
+					}
+					//打开新窗口
+					mui.openWindow(href,id,options);
 				}
 			});
 			/**
