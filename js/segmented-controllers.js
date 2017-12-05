@@ -16,29 +16,29 @@
     var CLASS_TAB_ITEM = $.className('tab-item');
     var CLASS_SLIDER_ITEM = $.className('slider-item');
 
-    var handle = function(event, target) {
+   var handle = function(event, target) {
         if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
             if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains(CLASS_SEGMENTED_CONTROL_VERTICAL)) {
                 //vertical 如果preventDefault会导致无法滚动
             } else {
 
-        	// event.preventDefault(); 		
-        		if(target.tagName == 'A') {
-        			// fixed 底部选项卡href 无法跳转 && stop hash change
-        			var curr_href = location.hostname + location.pathname,
-        				target_href = target.hostname + target.pathname;
-	           
-	                if (curr_href == target_href && target.hash !== "") {
-	                    event.preventDefault(); 									
-	                }
-	                return false
-        		}
-            	return false			
-
+                    event.preventDefault();      
+                    // if(target.tagName == 'A') {
+                    //     // fixed 底部选项卡href 无法跳转 && stop hash change
+                    //     var curr_href = location.hostname + location.pathname,
+                    //         target_href = target.hostname + target.pathname;
+                   
+                    //     if (curr_href == target_href && target.hash !== "") {
+                    //         event.preventDefault();
+                    //         return target;
+                    //     }else{
+                    //             return false
+                    //     }
+                    // }
             }
-            //			if (target.hash) {
+            //          if (target.hash) {
             return target;
-            //			}
+            //          }
         }
         return false;
     };
