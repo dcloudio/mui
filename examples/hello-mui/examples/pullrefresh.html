@@ -18,9 +18,11 @@
 
 	<body>
 		<!--下拉刷新容器-->
-		<div id="pullrefresh" class="mui-content">
-			<!--数据列表-->
-			<ul class="mui-table-view mui-table-view-chevron"></ul>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron"></ul>
+			</div>
 		</div>
 		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
 		<script>
@@ -43,7 +45,7 @@
 			var count = 0;
 			function pullupRefresh() {
 				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().endPullup((++count > 2)); //参数为true代表没有更多数据了。
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
 					var table = document.body.querySelector('.mui-table-view');
 					var cells = document.body.querySelectorAll('.mui-table-view-cell');
 					var newCount = cells.length>0?5:20;//首次加载20条，满屏
@@ -73,7 +75,7 @@
 			function pulldownRefresh() {
 				setTimeout(function() {
 					addData();
-					mui('#pullrefresh').pullRefresh().endPulldown();
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
 					mui.toast("为你推荐了5篇文章");
 				}, 1500);
 			}

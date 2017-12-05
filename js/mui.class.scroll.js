@@ -649,7 +649,16 @@
 		},
 		//API
 		setStopped: function(stopped) {
-			this.stopped = !!stopped;
+			// this.stopped = !!stopped;
+
+			// fixed ios双webview模式下拉刷新
+			if(stopped) {
+				this.disablePullupToRefresh();
+				this.disablePulldownToRefresh();
+			} else {
+				this.enablePullupToRefresh();
+				this.enablePulldownToRefresh();
+			}
 		},
 		setTranslate: function(x, y) {
 			this.x = x;
