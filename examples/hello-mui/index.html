@@ -440,10 +440,16 @@
 						feedback（问题反馈）
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/imageviewer.html">
-						image viewer（图片预览）
-					</a>
+				<li class="mui-table-view-cell mui-collapse">
+					<a href="javascript:;" class="mui-navigate-right">image viewer（图片预览）</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/imageviewer.html">H5模式</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible" id="preview_image_native">
+							<a class="mui-navigate-right" data-title-type="native" href="examples/imageviewer-native.html">native模式</a>
+						</li>
+					</ul>
 				</li>
 				<li class="mui-table-view-cell mui-collapse">
 					<a class="mui-navigate-right" href="#">
@@ -657,6 +663,13 @@
 						//console.log(JSON.stringify(e));
 					});
 				}, 350);
+
+
+				// 原生图片预览仅新版本runtime支持，若引擎不支持，则隐藏；
+				if(!plus.nativeUI.previewImage) {
+					var previewImageNativeElem = document.getElementById('preview_image_native');
+					previewImageNativeElem.className = previewImageNativeElem.className.replace('mui-plus-visible', 'mui-hidden');
+				}
 				
 			});
 			//主列表点击事件

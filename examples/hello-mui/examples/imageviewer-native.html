@@ -1,0 +1,90 @@
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Hello MUI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../css/mui.min.css">
+    <!--App自定义的css-->
+    <style type="text/css">
+      p img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      .mui-content>.mui-table-view:first-child {
+        margin-top: 0;
+      }
+      
+      body,
+      .mui-content {
+        background-color: #FFFFFF;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="mui-content">
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell" id="loop_switch">
+          是否循环预览
+          <div class="mui-switch">
+            <div class="mui-switch-handle"></div>
+          </div>
+        </li>
+      </ul>
+      <div class="mui-content-padded">
+        <!--<div class="mui-input-row" id="loop_switch">
+          <label>是否循环预览</label>
+          <div class="mui-switch mui-active">
+            <div class="mui-switch-handle"></div>
+          </div>
+        </div>-->
+        <p>这是图片放大预览示例，点击如下图片体验全屏预览功能</p>
+        <p>
+          <img src="../images/yuantiao.jpg" />
+        </p>
+        <p>图片全屏后，双击或双指缩放均可对图片进行放大、缩小操作，左右滑动可查看其它图片，点击会关闭预览</p>
+        <p>
+          <img src="../images/muwu.jpg" />
+        </p>
+        <p>第三张图片，纯粹为了占位： </p>
+        <p>
+          <img src="../images/shuijiao.jpg" />
+        </p>
+      </div>
+    </div>
+  </body>
+  <script src="../js/mui.min.js"></script>
+  <script type="text/javascript">
+    mui.plusReady(function() {
+      var loopFlag = false; //默认不支持轮播
+      var loopSwitch = document.getElementById('loop_switch');
+      loopSwitch.addEventListener('toggle', function(event) {
+        if(event.detail.isActive) {
+          loopFlag = true;
+        } else {
+          loopFlag = false;
+        }
+      });
+      var images = [].slice.call(document.querySelectorAll('.mui-content-padded img'));
+      var urls = [];
+      images.forEach(function(item) {
+        urls.push(item.src);
+      });
+      mui('.mui-content-padded').on('tap', 'img', function() {
+        var index = images.indexOf(this);
+        plus.nativeUI.previewImage(urls, {
+          current: index,
+          loop: loopFlag,
+          indicator: 'number'
+        });
+      });
+    });
+  </script>
+
+</html>
