@@ -366,7 +366,21 @@
 					}
 				});
 				template.config('escape', false);
-				//$.plusReady=function(fn){fn();};
+				
+				if(mui.os.ios){
+					// 解决在ios上fixed元素focusin时位置出现错误的问题 
+					document.addEventListener('DOMContentLoaded',function(){
+						var footerDom = document.querySelector('footer');
+						
+						document.addEventListener('focusin', function() {
+							footerDom.style.position = 'absolute';
+						});
+						document.addEventListener('focusout', function() {
+							footerDom.style.position = 'fixed';
+						});
+					});
+				}
+
 				$.plusReady(function() {
 					plus.webview.currentWebview().setStyle({
 						softinputMode: "adjustResize"
