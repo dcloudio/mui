@@ -5196,21 +5196,21 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             _initPulldownRefreshEvent: function() {
                 var self = this;
                 $.plusReady(function() {
-                		if(self.options.down.style == "circle"){
-	                		//单webview、原生转圈
-	                		self.options.webview = plus.webview.currentWebview();
-						self.options.webview.setPullToRefresh({
-							support: true,
-							color:self.options.down.color || '#2BD009',
-							height: self.options.down.height || '50px',
-							range: self.options.down.range || '100px',
-							style: 'circle',
-							offset: self.options.down.offset || '0px'
-						}, function() {
-							self.options.down.callback();
-						});
-	               }else if (self.topPocket && self.options.webviewId) {
-                        var webview = plus.webview.getWebviewById(self.options.webviewId);//子窗口
+                    if (self.options.down.style == "circle") {
+                        //单webview、原生转圈
+                        self.options.webview = plus.webview.currentWebview();
+                        self.options.webview.setPullToRefresh({
+                            support: true,
+                            color: self.options.down.color || '#2BD009',
+                            height: self.options.down.height || '50px',
+                            range: self.options.down.range || '100px',
+                            style: 'circle',
+                            offset: self.options.down.offset || '0px'
+                        }, function() {
+                            self.options.down.callback();
+                        });
+                    } else if (self.topPocket && self.options.webviewId) {
+                        var webview = plus.webview.getWebviewById(self.options.webviewId); //子窗口
                         if (!webview) {
                             return;
                         }
@@ -5243,7 +5243,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                     break;
                             }
                         }, false);
-                        
+
                         webview.setBounce({
                             position: {
                                 top: height * 2 + 'px'
@@ -5252,8 +5252,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                 top: height + 'px'
                             }
                         });
-                    
-	                }
+
+                    }
                 });
             },
             handleEvent: function(e) {
@@ -5272,77 +5272,63 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         }).extend($.extend({
             setStopped: function(stopped) { //该方法是子页面调用的
                 this.stopped = !!stopped;
-                //TODO 此处需要设置当前webview的bounce为none,目前5+有BUG
-                var webview = plus.webview.currentWebview();
+                // TODO 此处需要设置当前webview的bounce为none,目前5+有BUG
                 if (this.stopped) {
-                    webview.setStyle({
-                        bounce: 'none'
-                    });
-                    webview.setBounce({
-                        position: {
-                            top: 'none'
-                        }
-                    });
+                    this.disablePullupToRefresh();
+                    this.disablePulldownToRefresh();
                 } else {
-                    var height = this.options.down.height;
-                    webview.setStyle({
-                        bounce: 'vertical'
-                    });
-                    webview.setBounce({
-                        position: {
-                            top: height * 2 + 'px'
-                        },
-                        changeoffset: {
-                            top: height + 'px'
-                        }
-                    });
+                    this.enablePullupToRefresh();
+                    this.enablePulldownToRefresh();
                 }
             },
-            beginPulldown:function() { 
-            		var self = this;
+            beginPulldown: function() {
+                var self = this;
                 $.plusReady(function() {
-                		//这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
-                		setTimeout(function () {
-                			if(self.options.down.style == "circle"){//单webview下拉刷新
-	                			plus.webview.currentWebview().beginPullToRefresh();
-	                		}else{//双webview模式
-                				plus.webview.currentWebview().setBounce({
-		                        offset: {
-		                            top: self.options.down.height + "px"
-		                        }
-		                    });
-	                		}
-                		},15);
+                    //这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
+                    setTimeout(function() {
+                        if (self.options.down.style == "circle") { //单webview下拉刷新
+                            plus.webview.currentWebview().beginPullToRefresh();
+                        } else { //双webview模式
+                            var webview = self.options.webview;
+                            if (webview) {
+                                webview.setBounce({
+                                    offset: {
+                                        top: self.options.down.height + "px"
+                                    }
+                                });
+                            }
+                        }
+                    }, 15);
                 }.bind(this));
             },
-            pulldownLoading: function () {//该方法是子页面调用的，兼容老的历史API
-            		this.beginPulldown();
+            pulldownLoading: function() { //该方法是子页面调用的，兼容老的历史API
+                this.beginPulldown();
             },
             _pulldownLoading: function() { //该方法是父页面调用的
                 var self = this;
                 $.plusReady(function() {
                     var childWebview = plus.webview.getWebviewById(self.options.webviewId);
-                   	childWebview && childWebview.setBounce({
+                    childWebview && childWebview.setBounce({
                         offset: {
                             top: self.options.down.height + "px"
                         }
                     });
                 });
             },
-            endPulldown:function(){
-            		var _wv = plus.webview.currentWebview();
+            endPulldown: function() {
+                var _wv = plus.webview.currentWebview();
                 //双webview的下拉刷新，需要修改父窗口提示信息
-                if(_wv.parent() && this.options.down.style !== "circle"){
-	                	_wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
-	                    webviewId: _wv.id
-	                }) + "')._endPulldownToRefresh()");
-                }else{
-                		_wv.endPullToRefresh();
+                if (_wv.parent() && this.options.down.style !== "circle") {
+                    _wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
+                        webviewId: _wv.id
+                    }) + "')._endPulldownToRefresh()");
+                } else {
+                    _wv.endPullToRefresh();
                 }
             },
-            endPulldownToRefresh: function () {//该方法是子页面调用的，兼容老的历史API
-           	 	this.endPulldown();
-            }, 
+            endPulldownToRefresh: function() { //该方法是子页面调用的，兼容老的历史API
+                this.endPulldown();
+            },
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
                 if (self.topPocket && self.options.webview) {
@@ -5354,7 +5340,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     }, 350);
                 }
             },
-            beginPullup:function(callback) {//开始上拉加载
+            beginPullup: function(callback) { //开始上拉加载
                 var self = this;
                 if (self.isLoading) return;
                 self.isLoading = true;
@@ -5373,10 +5359,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     callback && callback.call(self);
                 }, 300);
             },
-            pullupLoading:function (callback) {//兼容老的API
-            		this.beginPullup(callback);
+            pullupLoading: function(callback) { //兼容老的API
+                this.beginPullup(callback);
             },
-            endPullup:function(finished) {//上拉加载结束
+            endPullup: function(finished) { //上拉加载结束
                 var self = this;
                 if (self.pullLoading) {
                     self.pullLoading.classList.remove(CLASS_VISIBILITY);
@@ -5395,8 +5381,53 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     }
                 }
             },
-            endPullupToRefresh: function (finished) {//上拉加载结束，兼容老的API
-            		this.endPullup(finished);
+            endPullupToRefresh: function(finished) { //上拉加载结束，兼容老的API
+                this.endPullup(finished);
+            },
+            disablePulldownToRefresh: function() {
+                var webview = plus.webview.currentWebview();
+                if (this.options.down.style && this.options.down.style == 'circle') { // 单webview模式禁止原生下拉刷新
+                    this.options.webview.setPullToRefresh({
+                        support: false,
+                        style: 'circle'
+                    });
+                } else { // 双webview模式禁止下拉刷新
+                    webview.setStyle({
+                        bounce: 'none'
+                    });
+                    webview.setBounce({
+                        position: {
+                            top: 'none'
+                        }
+                    });
+                }
+            },
+            enablePulldownToRefresh: function() {
+                var self = this,
+                    webview = plus.webview.currentWebview(),
+                    height = this.options.down.height;
+                // 单webview模式禁止原生下拉刷新
+                if (this.options.down.style && this.options.down.style == 'circle') {
+                    webview.setPullToRefresh({
+                        support: true,
+                        height: height || '50px',
+                        range: self.options.down.range || '100px',
+                        style: 'circle',
+                        offset: self.options.down.offset || '0px'
+                    });
+                } else { // 重新初始化双webview模式下拉刷新
+                    webview.setStyle({
+                        bounce: 'vertical'
+                    });
+                    webview.setBounce({
+                        position: {
+                            top: height * 2 + 'px'
+                        },
+                        changeoffset: {
+                            top: height + 'px'
+                        }
+                    });
+                }
             },
             disablePullupToRefresh: function() {
                 this._initPullupRefresh();
