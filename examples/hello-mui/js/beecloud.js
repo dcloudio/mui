@@ -21,7 +21,10 @@ beecloud.genBillNo = function() {
 
 mui.plusReady(function() {
 	//配置业务支持的支付通道，支付需要服务端支持，在BeeCloud上支持支付宝支付和微信支付；
-	var support_channel = ['alipay', 'wxpay']; 
+	var support_channel = ['alipay'];
+	if(!mui.os.stream){//流应用下暂不支持微信SDK支付
+		support_channel.push('wxpay');
+	}
 	plus.payment.getChannels(function(s) {
 		var oauthArea = document.querySelector('.oauth-area');
 		for (var i = 0; i < s.length; i++) {
