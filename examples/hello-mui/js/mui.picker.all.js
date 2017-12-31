@@ -22,13 +22,6 @@
 
 	var platform = navigator.platform.toLowerCase();
 	var userAgent = navigator.userAgent.toLowerCase();
-	var isIos = (userAgent.indexOf('iphone') > -1 ||
-			userAgent.indexOf('ipad') > -1 ||
-			userAgent.indexOf('ipod') > -1) &&
-		(platform.indexOf('iphone') > -1 ||
-			platform.indexOf('ipad') > -1 ||
-			platform.indexOf('ipod') > -1);
-	//alert(isIos);
 
 	var Picker = $.Picker = function(holder, options) {
 		var self = this;
@@ -60,9 +53,6 @@
 		self.beginAngle = 0;
 		self.beginExceed = self.beginAngle - MAX_EXCEED;
 		self.list.angle = self.beginAngle;
-		if (isIos) {
-			self.list.style.webkitTransformOrigin = "center center " + self.r + "px";
-		}
 	};
 
 	Picker.prototype.calcElementItemPostion = function(andGenerateItms) {
@@ -74,8 +64,7 @@
 			var index = self.elementItems.indexOf(item);
 			self.endAngle = self.itemAngle * index;
 			item.angle = self.endAngle;
-			item.style.webkitTransformOrigin = "center center -" + self.r + "px";
-			item.style.webkitTransform = "translateZ(" + self.r + "px) rotateX(" + (-self.endAngle) + "deg)";
+			item.style.webkitTransform = "rotateX(" + (-self.endAngle) + "deg) translateZ(" + self.r + "px)";
 			if (andGenerateItms) {
 				var dataItem = {};
 				dataItem.text = item.innerHTML || '';
