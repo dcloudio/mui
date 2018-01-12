@@ -166,6 +166,22 @@
 	border: none;
 	float: left;
 }
+
+.mui-poppicker-result{
+	border-bottom: 1px solid #ded6d6;
+	color: black;
+	padding: 2px 8px;
+	/*background-color: #3d3c3c;*/
+	font-size: 25px;
+	font-weight: 500;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.mui-poppicker>.mui-poppicker-result {
+	display:none;
+}
+.mui-active>.mui-poppicker-result{
+	display:block;
+}
 .mui-dtpicker {
 	position: fixed;
 	left: 0px;

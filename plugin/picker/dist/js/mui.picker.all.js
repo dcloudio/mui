@@ -413,7 +413,9 @@
 		return [].slice.call($.__create_dom_div__.childNodes);
 	};
 
-	var panelBuffer = '<div class="mui-poppicker">\
+    var panelBuffer = '<div class="mui-poppicker">\
+        <div class="mui-poppicker-result">\
+        </div>\
 		<div class="mui-poppicker-header">\
 			<button class="mui-btn mui-poppicker-btn-cancel">取消</button>\
 			<button class="mui-btn mui-btn-blue mui-poppicker-btn-ok">确定</button>\
@@ -443,7 +445,8 @@
 			document.body.appendChild(self.panel);
 			self.ok = self.panel.querySelector('.mui-poppicker-btn-ok');
 			self.cancel = self.panel.querySelector('.mui-poppicker-btn-cancel');
-			self.body = self.panel.querySelector('.mui-poppicker-body');
+            self.result = self.panel.querySelector('.mui-poppicker-result');
+            self.body = self.panel.querySelector('.mui-poppicker-body');
 			self.mask = $.createMask();
 			self.cancel.innerText = self.options.buttons[0];
 			self.ok.innerText = self.options.buttons[1];
@@ -488,6 +491,10 @@
 						var preItem = eventData.item || {};
 						nextPickerElement.picker.setItems(preItem.children);
 					}
+                    var results = self.getSelectedItems().map(function (a) {
+                        return a.text;
+                    }).join(' ');
+                    self.result.innerText = results;
 				}, false);
 			}
 		},
