@@ -21,68 +21,26 @@
 		"url": "http://www.dcloud.io"
 	},
 	"permissions": {
-		"Accelerometer": {
-			"description": "访问加速度感应器"
-		},
-
 		"Cache": {
 			"description": "管理应用缓存"
 		},
-
 		"Console": {
 			"description": "跟踪调试输出日志"
 		},
 
-
-		"Downloader": {
-			"description": "文件下载管理"
-		},
 		"Events": {
 			"description": "应用扩展事件"
 		},
-		"File": {
-			"description": "访问本地文件系统"
-		},
-		"Gallery": {
-			"description": "访问系统相册"
-		},
-
-		"Invocation": {
-			"description": "使用Native.js能力"
-		},
-
-		"Orientation": {
-			"description": "访问方向感应器"
-		},
-		"Proximity": {
-			"description": "访问距离感应器"
-		},
-		"Storage": {
-			"description": "管理应用本地数据"
-		},
 		"UI": {},
-		"Uploader": {
-			"description": "管理文件上传任务"
-		},
-		"Runtime": {
-			"description": "访问运行期环境"
-		},
-		"XMLHttpRequest": {
-			"description": "跨域网络访问"
-		},
-		"Zip": {
-			"description": "文件压缩与解压缩"
-		},
-
-
-
-
-
-
-		"Webview": {},
-		"NativeUI": {},
-		"Navigator": {},
-		"NativeObj": {},"Share":{},"OAuth":{},"Device":{}
+		"Share": {},
+		"OAuth": {},
+		"Push": {},
+		"Maps": {},
+		"Speech": {},
+		"Payment": {},
+		"Contacts": {},
+		"Statistic": {},
+		"Messaging": {}
 	},
 	"plus": {
 		"splashscreen": {
@@ -105,7 +63,38 @@
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
-				"permissions": ["<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>"]
+				"permissions": [
+					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+					"<uses-permission  android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>",
+					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
+					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+					"<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+					"<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
+					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+					"<uses-feature android:name=\"android.hardware.camera\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+					"<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
+					"<uses-permission android:name=\"android.permission.READ_SMS\"/>"
+				]
 			},
 			"orientation": [
 				"portrait-primary",
@@ -177,116 +166,116 @@
 		}
 	},
 	"dependencies": {
-	  "pages": {
-	    "setting.html": {
-	      "href": "setting.html",
-	      "resources": [
-	        "js/mui.min.js",
-	        "js/mui.view.js",
-	        "libs/easymob-webim-sdk/jquery-1.11.1.js",
-	        "libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
-	        "libs/easymob-webim-sdk/json2.js",
-	        "libs/easymob-webim-sdk/easemob.im-1.0.5.js",
-	        "js/feedback.js",
-	        "js/feedback-page.js",
-	        "js/mui.locker.js",
-	        "js/app.js",
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "css/feedback-page.css",
-	        "images/iconfont-tianjia.png"
-	      ],
-	      "refer": [
-	        "login.html"
-	      ],
-	      "priority": 1
-	    },
-	    "main.html": {
-	      "href": "main.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js",
-	        "js/app.js"
-	      ],
-	      "refer": [
-	        "setting.html"
-	      ],
-	      "priority": 1
-	    },
-	    "unlock.html": {
-	      "href": "unlock.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "js/mui.min.js",
-	        "js/mui.locker.js",
-	        "js/app.js"
-	      ],
-	      "refer": [
-	        "login.html",
-	        "main.html"
-	      ],
-	      "priority": 0
-	    },
-	    "forget_password.html": {
-	      "href": "forget_password.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "css/style.css",
-	        "js/mui.min.js",
-	        "js/app.js"
-	      ],
-	      "priority": 1
-	    },
-	    "reg.html": {
-	      "href": "reg.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "css/style.css",
-	        "js/mui.min.js",
-	        "js/app.js"
-	      ],
-	      "refer": [
-	        "login.html"
-	      ],
-	      "priority": 3
-	    },
-	    "login.html": {
-	      "href": "login.html",
-	      "resources": [
-	        "css/mui.min.css",
-	        "fonts/mui.ttf",
-	        "css/style.css",
-	        "js/mui.min.js",
-	        "js/mui.enterfocus.js",
-	        "js/app.js",
-	        "images/qihoo.png",
-	        "images/qq.png",
-	        "images/sinaweibo.png",
-	        "images/weixin.png"
-	      ],
-	      "refer": [
-	        "unlock.html",
-	        "forget_password.html",
-	        "main.html",
-	        "reg.html"
-	      ],
-	      "priority": 0
-	    }
-	  },
-	  "idle": {
-	    "resources": [
-	      "js/service.js",
-	      "libs/easymob-webim-sdk/quickstart.md",
-	      "images/user-photo.png",
-	      "README.md"
-	    ]
-	  }
+		"pages": {
+			"setting.html": {
+				"href": "setting.html",
+				"resources": [
+					"js/mui.min.js",
+					"js/mui.view.js",
+					"libs/easymob-webim-sdk/jquery-1.11.1.js",
+					"libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+					"libs/easymob-webim-sdk/json2.js",
+					"libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+					"js/feedback.js",
+					"js/feedback-page.js",
+					"js/mui.locker.js",
+					"js/app.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"css/feedback-page.css",
+					"images/iconfont-tianjia.png"
+				],
+				"refer": [
+					"login.html"
+				],
+				"priority": 1
+			},
+			"main.html": {
+				"href": "main.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"js/app.js"
+				],
+				"refer": [
+					"setting.html"
+				],
+				"priority": 1
+			},
+			"unlock.html": {
+				"href": "unlock.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.min.js",
+					"js/mui.locker.js",
+					"js/app.js"
+				],
+				"refer": [
+					"login.html",
+					"main.html"
+				],
+				"priority": 0
+			},
+			"forget_password.html": {
+				"href": "forget_password.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"css/style.css",
+					"js/mui.min.js",
+					"js/app.js"
+				],
+				"priority": 1
+			},
+			"reg.html": {
+				"href": "reg.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"css/style.css",
+					"js/mui.min.js",
+					"js/app.js"
+				],
+				"refer": [
+					"login.html"
+				],
+				"priority": 3
+			},
+			"login.html": {
+				"href": "login.html",
+				"resources": [
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"css/style.css",
+					"js/mui.min.js",
+					"js/mui.enterfocus.js",
+					"js/app.js",
+					"images/qihoo.png",
+					"images/qq.png",
+					"images/sinaweibo.png",
+					"images/weixin.png"
+				],
+				"refer": [
+					"unlock.html",
+					"forget_password.html",
+					"main.html",
+					"reg.html"
+				],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"js/service.js",
+				"libs/easymob-webim-sdk/quickstart.md",
+				"images/user-photo.png",
+				"README.md"
+			]
+		}
 	},
-	"unpackage":[
-	  "README.md"
+	"unpackage": [
+		"README.md"
 	]
 }
