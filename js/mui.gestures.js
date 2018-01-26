@@ -47,7 +47,7 @@
 	 * @returns {Number}
 	 */
 	var getDistance = function(p1, p2, props) {
-		if (!props) {
+		if(!props) {
 			props = ['x', 'y'];
 		}
 		var x = p2[props[0]] - p1[props[0]];
@@ -60,7 +60,7 @@
 	 * @param {Object} moves
 	 */
 	var getScale = function(starts, moves) {
-		if (starts.length >= 2 && moves.length >= 2) {
+		if(starts.length >= 2 && moves.length >= 2) {
 			var props = ['pageX', 'pageY'];
 			return getDistance(moves[1], moves[0], props) / getDistance(starts[1], starts[0], props);
 		}
@@ -73,7 +73,7 @@
 	 * @returns {Number}
 	 */
 	var getAngle = function(p1, p2, props) {
-		if (!props) {
+		if(!props) {
 			props = ['x', 'y'];
 		}
 		var x = p2[props[0]] - p1[props[0]];
@@ -86,10 +86,10 @@
 	 * @param {Object} y
 	 */
 	var getDirection = function(x, y) {
-		if (x === y) {
+		if(x === y) {
 			return '';
 		}
-		if (abs(x) >= abs(y)) {
+		if(abs(x) >= abs(y)) {
 			return x > 0 ? 'left' : 'right';
 		}
 		return y > 0 ? 'up' : 'down';
@@ -122,12 +122,12 @@
 	 * @returns {undefined}
 	 */
 	var detect = function(event, touch) {
-		if ($.gestures.stoped) {
+		if($.gestures.stoped) {
 			return;
 		}
 		$.doAction('gestures', function(index, gesture) {
-			if (!$.gestures.stoped) {
-				if ($.options.gestureConfig[gesture.name] !== false) {
+			if(!$.gestures.stoped) {
+				if($.options.gestureConfig[gesture.name] !== false) {
 					gesture.handle(event, touch);
 				}
 			}
@@ -139,8 +139,8 @@
 	 * @param {Object} parent
 	 */
 	var hasParent = function(node, parent) {
-		while (node) {
-			if (node == parent) {
+		while(node) {
+			if(node == parent) {
 				return true;
 			}
 			node = node.parentNode;
@@ -153,17 +153,17 @@
 		var values = [];
 		var i = 0;
 
-		while (i < src.length) {
+		while(i < src.length) {
 			var val = key ? src[i][key] : src[i];
-			if (values.indexOf(val) < 0) {
+			if(values.indexOf(val) < 0) {
 				results.push(src[i]);
 			}
 			values[i] = val;
 			i++;
 		}
 
-		if (sort) {
-			if (!key) {
+		if(sort) {
+			if(!key) {
 				results = results.sort();
 			} else {
 				results = results.sort(function sortUniqueArray(a, b) {
@@ -176,7 +176,7 @@
 	};
 	var getMultiCenter = function(touches) {
 		var touchesLength = touches.length;
-		if (touchesLength === 1) {
+		if(touchesLength === 1) {
 			return {
 				x: round(touches[0].pageX),
 				y: round(touches[0].pageY)
@@ -186,7 +186,7 @@
 		var x = 0;
 		var y = 0;
 		var i = 0;
-		while (i < touchesLength) {
+		while(i < touchesLength) {
 			x += touches[i].pageX;
 			y += touches[i].pageY;
 			i++;
@@ -203,7 +203,7 @@
 	var copySimpleTouchData = function(touch) {
 		var touches = [];
 		var i = 0;
-		while (i < touch.touches.length) {
+		while(i < touch.touches.length) {
 			touches[i] = {
 				pageX: round(touch.touches[i].pageX),
 				pageY: round(touch.touches[i].pageY)
@@ -227,7 +227,7 @@
 		var prevDelta = session.prevDelta || {};
 		var prevTouch = session.prevTouch || {};
 
-		if (touch.gesture.type === $.EVENT_START || touch.gesture.type === $.EVENT_END) {
+		if(touch.gesture.type === $.EVENT_START || touch.gesture.type === $.EVENT_END) {
 			prevDelta = session.prevDelta = {
 				x: prevTouch.deltaX || 0,
 				y: prevTouch.deltaY || 0
@@ -246,13 +246,13 @@
 		var touches = touch.touches;
 		var touchesLength = touches.length;
 
-		if (!session.firstTouch) {
+		if(!session.firstTouch) {
 			session.firstTouch = copySimpleTouchData(touch);
 		}
 
-		if (multiTouch() && touchesLength > 1 && !session.firstMultiTouch) {
+		if(multiTouch() && touchesLength > 1 && !session.firstMultiTouch) {
 			session.firstMultiTouch = copySimpleTouchData(touch);
-		} else if (touchesLength === 1) {
+		} else if(touchesLength === 1) {
 			session.firstMultiTouch = false;
 		}
 
@@ -287,7 +287,7 @@
 		var velocityY;
 		var direction;
 
-		if (touch.gesture.type != $.EVENT_CANCEL && (deltaTime > CAL_INTERVAL || last.velocity === undefined)) {
+		if(touch.gesture.type != $.EVENT_CANCEL && (deltaTime > CAL_INTERVAL || last.velocity === undefined)) {
 			var deltaX = last.deltaX - touch.deltaX;
 			var deltaY = last.deltaY - touch.deltaY;
 
@@ -312,7 +312,7 @@
 	};
 	var targetIds = {};
 	var convertTouches = function(touches) {
-		for (var i = 0; i < touches.length; i++) {
+		for(var i = 0; i < touches.length; i++) {
 			!touches['identifier'] && (touches['identifier'] = 0);
 		}
 		return touches;
@@ -326,7 +326,7 @@
 		var changedTargetTouches = [];
 
 		//当touchstart或touchmove且touches长度为1，直接获得all和changed
-		if ((type === $.EVENT_START || type === $.EVENT_MOVE) && allTouches.length === 1) {
+		if((type === $.EVENT_START || type === $.EVENT_MOVE) && allTouches.length === 1) {
 			targetIds[allTouches[0].identifier] = true;
 			targetTouches = allTouches;
 			changedTargetTouches = allTouches;
@@ -343,33 +343,33 @@
 				return hasParent(touch.target, sessionTarget);
 			});
 
-			if (type === $.EVENT_START) {
+			if(type === $.EVENT_START) {
 				i = 0;
-				while (i < targetTouches.length) {
+				while(i < targetTouches.length) {
 					targetIds[targetTouches[i].identifier] = true;
 					i++;
 				}
 			}
 
 			i = 0;
-			while (i < changedTouches.length) {
-				if (targetIds[changedTouches[i].identifier]) {
+			while(i < changedTouches.length) {
+				if(targetIds[changedTouches[i].identifier]) {
 					changedTargetTouches.push(changedTouches[i]);
 				}
-				if (type === $.EVENT_END || type === $.EVENT_CANCEL) {
+				if(type === $.EVENT_END || type === $.EVENT_CANCEL) {
 					delete targetIds[changedTouches[i].identifier];
 				}
 				i++;
 			}
 
-			if (!changedTargetTouches.length) {
+			if(!changedTargetTouches.length) {
 				return false;
 			}
 		}
 		targetTouches = uniqueArray(targetTouches.concat(changedTargetTouches), 'identifier', true);
 		var touchesLength = targetTouches.length;
 		var changedTouchesLength = changedTargetTouches.length;
-		if (type === $.EVENT_START && touchesLength - changedTouchesLength === 0) { //first
+		if(type === $.EVENT_START && touchesLength - changedTouchesLength === 0) { //first
 			touch.isFirst = true;
 			$.gestures.touch = $.gestures.session = {
 				target: event.target
@@ -387,28 +387,44 @@
 			gesture: event
 		};
 		var touches = getTouches(event, touch);
-		if (!touches) {
+		if(!touches) {
 			return;
 		}
 		calTouchData(touch);
 		detect(event, touch);
 		$.gestures.session.prevTouch = touch;
-		if (event.type === $.EVENT_END && !$.isTouchable) {
+		if(event.type === $.EVENT_END && !$.isTouchable) {
 			$.gestures.touch = $.gestures.session = {};
 		}
 	};
+	var supportsPassive = (function checkPassiveListener() {
+		var supportsPassive = false;
+		try {
+			var opts = Object.defineProperty({}, 'passive', {
+				get: function get() {
+					supportsPassive = true;
+				},
+			});
+			window.addEventListener('testPassiveListener', null, opts);
+		} catch(e) {
+			// No support
+		}
+		return supportsPassive;
+	}())
 	window.addEventListener($.EVENT_START, handleTouchEvent);
-	window.addEventListener($.EVENT_MOVE, handleTouchEvent);
+	window.addEventListener($.EVENT_MOVE, handleTouchEvent, supportsPassive ? {
+		passive: false,
+		capture: false
+	} : false);
 	window.addEventListener($.EVENT_END, handleTouchEvent);
 	window.addEventListener($.EVENT_CANCEL, handleTouchEvent);
 	//fixed hashchange(android)
 	window.addEventListener($.EVENT_CLICK, function(e) {
 		//TODO 应该判断当前target是不是在targets.popover内部，而不是非要相等
-		if (($.os.android || $.os.ios) && (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal)) {
+		if(($.os.android || $.os.ios) && (($.targets.popover && e.target === $.targets.popover) || ($.targets.tab) || $.targets.offcanvas || $.targets.modal)) {
 			e.preventDefault();
 		}
 	}, true);
-
 
 	//增加原生滚动识别
 	$.isScrolling = false;
