@@ -5,6 +5,10 @@ mui
 
 mui框架有效的解决了这些问题，这是一个可以方便开发出高性能App的框架，也是目前最接近原生App效果的框架。
 
+赞助我们
+------
+一个手艺人需要3万个粉丝养活，希望你能成为其中之一，[前往赞助](https://dev.dcloud.net.cn/sponsor/?channel=mui)
+
 参考文档
 ------
 [mui官网](http://dev.dcloud.net.cn/mui/)文档使用[Jekyll](http://jekyllrb.com) 构建，[立即查看](http://dev.dcloud.net.cn/mui/)。

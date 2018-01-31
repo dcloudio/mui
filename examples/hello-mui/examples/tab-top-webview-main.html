@@ -121,9 +121,6 @@
 						<a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">
 							娱乐
 						</a>
-						<!--<a class="mui-control-item" href="#item6mobile" data-wid="tab-top-subpage-6.html">
-							科技
-						</a>-->
 					</div>
 				</div>
 
@@ -135,7 +132,8 @@
 			mui.init();
 			
 			mui.plusReady(function() {
-				var group = new webviewGroup("viewgroup", {
+				var _self = plus.webview.currentWebview();
+				var group = new webviewGroup(_self.id, {
 					items: [{
 						id: "tab-top-subpage-1.html",
 						url: "tab-top-subpage-1.html",
@@ -162,7 +160,11 @@
 						if(c) {
 							c.classList.remove("mui-active");
 						}
-						document.querySelector(".mui-scroll .mui-control-item:nth-child(" + (parseInt(obj.index) + 1) + ")").classList.add("mui-active");
+						var target = document.querySelector(".mui-scroll .mui-control-item:nth-child(" + (parseInt(obj.index) + 1) + ")");
+						target.classList.add("mui-active");
+						if(target.scrollIntoView) {
+							target.scrollIntoView();
+						}
 					}
 				});
 				mui(".mui-scroll").on("tap", ".mui-control-item", function(e) {

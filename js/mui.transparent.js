@@ -17,9 +17,9 @@
         this.element = element;
         this.options = $.extend({
             top: 0, //距离顶部高度(到达该高度即触发)
-            offset: 150, //滚动透明距离档设定top值后offset也会随着top向下延伸
+            offset: 150, //滚动透明距离
             duration: 16, //过渡时间
-            scrollby: window
+            scrollby: window//监听滚动距离容器
         }, options || {});
 
         this.scrollByElem = this.options.scrollby || window;

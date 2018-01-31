@@ -165,6 +165,11 @@
 			#feedback .mui-table-view:first-child {
 			    margin-top: 0px;
 			}
+			
+			.mui-plus.mui-plus-stream .mui-stream-hidden{
+				display: none !important;
+			}
+			
 			/*问题反馈在setting页面单独的css==end*/
 			
 		</style>
@@ -225,7 +230,7 @@
 						</ul>
 						<ul class="mui-table-view mui-table-view-chevron">
 							<li class="mui-table-view-cell">
-								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V3.6.0</i></a>
+								<a href="#about" class="mui-navigate-right">关于MUI <i class="mui-pull-right update">V3.1.0</i></a>
 							</li>
 						</ul>
 						<ul class="mui-table-view">
@@ -473,7 +478,7 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-plus-visible">
+							<li class="mui-table-view-cell mui-plus-visible mui-stream-hidden">
 								<a id="rate" class="mui-navigate-right">评分鼓励</a>
 							</li>
 							<li class="mui-table-view-cell mui-plus-visible">
@@ -661,7 +666,7 @@
 		//去评分
 		document.getElementById("rate").addEventListener('tap', function() {
 			if (mui.os.ios) {
-				location.href = 'https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=682211190&pageNumber=0&sortOrdering=2&type=&mt=8';
+				location.href = 'https://itunes.apple.com/cn/app/hello-mui/id907931805?l=en&mt=8';
 			} else if (mui.os.android) {
 				plus.runtime.openURL("market://details?id=io.dcloud.HelloMUI", function(e) {
 					plus.runtime.openURL("market://details?id=io.dcloud.HelloMUI", function(e) {
@@ -679,11 +684,6 @@
 			}
 			
 		});
-		//		//意见反馈
-		//		document.getElementById("quest").addEventListener('tap', function() {
-		//			
-		//		});
-		//		
 		//检查更新
 		document.getElementById("update").addEventListener('tap', function() {
 			var server = "http://www.dcloud.io/check/update"; //获取升级描述文件服务器地址

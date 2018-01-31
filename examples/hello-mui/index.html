@@ -125,7 +125,12 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/slider-default.html">
-								默认样式
+								默认样式（H5模式）
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible">
+							<a class="mui-navigate-right" data-title-type="native" href="examples/slider-native.html">
+								默认样式（native模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
@@ -236,17 +241,22 @@
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav.html">
-								div title
+								默认标题（div模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell mui-plus-visible">
 							<a class="mui-navigate-right" data-title-type="native" href="examples/nav-nativeObj.html">
-								native title
+								默认标题（native模式）
 							</a>
 						</li>
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right" href="examples/nav_transparent.html">
 								透明渐变(div模式)
+							</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible">
+							<a class="mui-navigate-right" data-title-type="transparent_native" href="examples/nav_transparent_native.html">
+								透明渐变(native模式)
 							</a>
 						</li>
 					</ul>
@@ -399,11 +409,11 @@
 					</a>
 				</li>
 				<li class="mui-table-view-divider">模板</li>
-				<li class="mui-table-view-cell mui-plus-visible">
+				<!-- <li class="mui-table-view-cell mui-plus-visible">
 					<a class="mui-navigate-right" href="examples/ad.html">
 						advertisement（广告模板）
 					</a>
-				</li>
+				</li> -->
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" href="examples/echarts.html">
 						chart（EChart图表）
@@ -430,10 +440,16 @@
 						feedback（问题反馈）
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" href="examples/imageviewer.html">
-						image viewer（图片预览）
-					</a>
+				<li class="mui-table-view-cell mui-collapse">
+					<a href="javascript:;" class="mui-navigate-right">image viewer（图片预览）</a>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right" href="examples/imageviewer.html">H5模式</a>
+						</li>
+						<li class="mui-table-view-cell mui-plus-visible" id="preview_image_native">
+							<a class="mui-navigate-right" data-title-type="native" href="examples/imageviewer-native.html">native模式</a>
+						</li>
+					</ul>
 				</li>
 				<li class="mui-table-view-cell mui-collapse">
 					<a class="mui-navigate-right" href="#">
@@ -470,6 +486,11 @@
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right" open-type="common" href="examples/setting.html">
 						setting（设置）- div窗体切换示例
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" data-title-type="native" href="examples/best-practices/list-to-detail/listview.html">
+						列表到详情最佳实践
 					</a>
 				</li>
 
@@ -577,7 +598,8 @@
 				//开启回弹
 				_self.setStyle({
 					bounce: "vertical",
-					bounceBackground:"#efeff4"
+					bounceBackground:"#efeff4",
+					popGesture:'none'//首页有侧滑菜单，因此屏蔽首页的侧滑关闭功能
 				});
 
 				//绘制左上角menu图标
@@ -616,7 +638,10 @@
 							url: "examples/info.html",
 							id: "info",
 							styles: {
-								popGesture: "close"
+								popGesture: "close",
+								statusbar: {
+									background: "#f7f7f7"
+								}
 							},
 							show: {
 								aniShow: aniShow,
@@ -638,79 +663,121 @@
 						//console.log(JSON.stringify(e));
 					});
 				}, 350);
+
+
+				// 原生图片预览仅新版本runtime支持，若引擎不支持，则隐藏；
+				if(!plus.nativeUI.previewImage) {
+					var previewImageNativeElem = document.getElementById('preview_image_native');
+					previewImageNativeElem.className = previewImageNativeElem.className.replace('mui-plus-visible', 'mui-hidden');
+				}
 				
 			});
 			//主列表点击事件
 			mui('#list').on('tap', 'a', function() {
-				var id = this.getAttribute("data-wid");
-				if(!id) {
-					id = this.getAttribute('href');
-				}
 				var href = this.getAttribute('href');
-
+				
 				//非plus环境，直接走href跳转
-				if(!mui.os.plus){
+				if(!mui.os.plus) {
 					location.href = href;
 					return;
 				}
-
-				var titleType = this.getAttribute("data-title-type");
-
-				var webview_style = {
-					popGesture: "close"
+				
+				var id = this.getAttribute("data-wid");
+				if(!id) {
+					id = href;
 				}
-				var extras = {};
-				if(titleType == "native") {
+
+				if(href && ~href.indexOf('.html')) {
+					//打开窗口的相关参数
+					var options = {
+						styles:{
+							popGesture: "close"
+						},
+						extras:{}
+					};
 					//如下场景不适用下拉回弹：
 					//1、单webview下拉刷新；2、底部有fixed定位的div的页面
-					if(!~id.indexOf('pullrefresh.html') && !~href.indexOf("examples/tabbar.html")) {
-						webview_style.bounce = "vertical";
+					if(!~id.indexOf('pullrefresh.html') && !~href.indexOf("examples/tabbar.html") && !~href.indexOf("list-to-detail/listview.html")) {
+						options.styles.bounce = "vertical";
 					}
 					//图标页面需要启动硬件加速
 					if(~id.indexOf('icons.html') || ~id.indexOf("echarts.html")) {
-						webview_style.hardwareAccelerated = true;
+						options.styles.hardwareAccelerated = true;
 					}
 					if(~id.indexOf('im-chat.html')) {
-						extras.acceleration = "none";
+						options.extras.acceleration = "none";
 					}
 					
-					mui.openWindowWithTitle({
-						url:href,
-						id:id,
-						styles:webview_style,
-						show:{
-							event:"loaded",
-							extras:extras
-						}
-					},{
-						title:{
-							text:this.innerText.trim()
-						},
-						back:{
-							image:{
-								base64Data:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAb1BMVEUAAAAAev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8Aev8AAACubimgAAAAI3RSTlMAGfUTGfQTGPMSGPIYGhgaGBsXGxcbFxwXHBccFhwWHRYdHWufDPQAAAABYktHRACIBR1IAAAAB3RJTUUH4QETEBwooeTlkQAAAJVJREFUSMft1EkSgkAQRNFGUXFWHBDBibr/HTUwD5B/48Ig1y+io7u6MqUhf5hsNEY+j5hMgZ/FJ8Xc9ovos3T96utjbfqN/Nb0O/m96Uv5g+mP8ifTn+Ur01/ka9Nf5RvTt/I309/lH6Z/yr9Mn+Q71/MT8B34K/E58Enzv8R/K98HvnF8p3lr8F7izce7lbf3kJ/lDQp9HdBhgg3PAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTAxLTE5VDE2OjI4OjQwKzA4OjAwpTDFwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wMS0xOVQxNjoyODo0MCswODowMNRtfX0AAAAASUVORK5CYII="
+					var titleType = this.getAttribute("data-title-type");
+					if(titleType && titleType.indexOf("native") > -1) {//原生导航
+						options.styles.titleNView = {
+							autoBackButton:true,
+							backgroundColor:'#f7f7f7',
+							titleText:this.innerHTML.trim(),
+							splitLine: {
+								color: '#cccccc'
 							}
+						};
+						
+						options.show = {
+							event:'loaded'
 						}
-					});
-				} else if(href && ~href.indexOf('.html')) {
+						//有原生标题的情况下，就不需要waiting框了
+						options.waiting = {
+							autoShow:false
+						}
+						
+						//透明渐变导航,增加类型设置
+						if(titleType == "transparent_native") {
+							options.styles.titleNView.type = "transparent";
+						}
+						
+						//处理原生图片轮播
+						if(~id.indexOf("slider-native.html")) {
+							options.styles.subNViews = [{ //配置图片轮播
+								id: 'slider-native',
+								type: 'ImageSlider',
+								styles: {
+									left: 0,
+									right: 0,
+									top: 0,
+									height: '200px',
+									position: 'static',
+									loop: true,
+									images: [{
+										src: '_www/images/yuantiao.jpg',
+										width: '100%'
+									}, {
+										src: '_www/images/shuijiao.jpg',
+										width: '100%',
+									}, {
+										src: '_www/images/muwu.jpg',
+										width: '100%',
+									}, {
+										src: '_www/images/cbd.jpg',
+										width: '100%',
+									}]
+								}
+							}];
+						}
+					}else{
+						//非原生导航，需要设置顶部状态栏占位
+						options.styles.statusbar = {
+							background: "#f7f7f7"
+						}
+					}
+					
 					//侧滑菜单需动态控制一下zindex值；
 					if(~id.indexOf('offcanvas-')) {
-						webview_style.zindex = 9998;
-						webview_style.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
+						options.styles.zindex = 9998;
+						options.styles.popGesture = ~id.indexOf('offcanvas-with-right') ? "close" : "none";
 					}
 					
-					var extras = {};
-					if(id && id == "viewgroup"){//强制启用截屏
-						extras.acceleration = "capture";
+					if(id && id == "viewgroup") { //强制启用截屏
+						options.extras.acceleration = "capture";
 					}
-					
-					
-					var webview = plus.webview.create(this.href,id,webview_style,extras);
-					webview.addEventListener("titleUpdate",function () {
-						setTimeout(function () {
-							webview.show(aniShow,300);
-						},100);
-					});
+					//打开新窗口
+					mui.openWindow(href,id,options);
 				}
 			});
 			/**

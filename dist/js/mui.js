@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.6.0 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.7.2 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 /**
@@ -238,12 +238,12 @@ var mui = (function(document, undefined) {
 				(lastEnd >= lastStart && $.now() - lastEnd > ms) || // 上次运行成功后已经超过ms毫秒
 				(lastEnd < lastStart && $.now() - lastStart > ms * 8) // 上次运行或未完成，后8*ms毫秒
 			) {
-				run();
+				run.apply(this, arguments);
 			} else {
 				if (timer) {
 					timer.cancel();
 				}
-				timer = $.later(run, ms, null, arguments);
+				timer = $.later(run, ms, null, $.slice.call(arguments));
 			}
 		}, {
 			stop: function() {
@@ -2170,7 +2170,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			} else if(typeof data === 'boolean' || typeof data === 'number') {
 				webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "'," + data + ")");
 				return;
-			} else if($.isPlainObject(data)) {
+			} else if($.isPlainObject(data) || $.isArray(data)) {
 				data = JSON.stringify(data || {}).replace(/\'/g, "\\u0027").replace(/\\/g, "\\u005c");
 			}
 			webview.evalJS("typeof mui!=='undefined'&&mui.receive('" + eventType + "','" + data + "')");
@@ -2736,6 +2736,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		}
 	});
 })(mui);
+
 /**
  * mui back
  * @param {type} $
@@ -2939,40 +2940,59 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			var pullRefreshOptions = options.pullRefresh || {};
 			var hasPulldown = pullRefreshOptions.down && pullRefreshOptions.down.hasOwnProperty('callback');
 			var hasPullup = pullRefreshOptions.up && pullRefreshOptions.up.hasOwnProperty('callback');
-			if (hasPulldown || hasPullup) {
+			if(hasPulldown || hasPullup) {
 				var container = pullRefreshOptions.container;
-				if (container) {
+				if(container) {
 					var $container = $(container);
-					if ($container.length === 1) {
-						if ($.os.plus && $.os.android) { //android 5+
-							$.plusReady(function() {
-								var webview = plus.webview.currentWebview();
-								if (hasPullup) {
-									//当前页面初始化pullup
-									var upOptions = {};
-									upOptions.up = pullRefreshOptions.up;
-									upOptions.webviewId = webview.id || webview.getURL();
-									$container.pullRefresh(upOptions);
-								}
-								if (hasPulldown) {
-									var parent = webview.parent();
-									var id = webview.id || webview.getURL();
-									if (parent) {
-										if (!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
-											$container.pullRefresh({
-												webviewId: id
-											});
+					if($container.length === 1) {
+						if($.os.plus) { //5+环境
+							if(hasPulldown && pullRefreshOptions.down.style == "circle") { //原生转圈
+								$.plusReady(function() {
+									//这里改写$.fn.pullRefresh
+									$.fn.pullRefresh = $.fn.pullRefresh_native;
+									$container.pullRefresh(pullRefreshOptions);
+								});
+
+							} else if($.os.android) { //非原生转圈，但是Android环境
+								$.plusReady(function() {
+									//这里改写$.fn.pullRefresh
+									$.fn.pullRefresh = $.fn.pullRefresh_native
+									var webview = plus.webview.currentWebview();
+									if(window.__NWin_Enable__ === false) { //不支持多webview
+										$container.pullRefresh(pullRefreshOptions);
+									} else {
+										if(hasPullup) {
+											//当前页面初始化pullup
+											var upOptions = {};
+											upOptions.up = pullRefreshOptions.up;
+											upOptions.webviewId = webview.id || webview.getURL();
+											$container.pullRefresh(upOptions);
 										}
-										var downOptions = {
-											webviewId: id
-										};
-										downOptions.down = $.extend({}, pullRefreshOptions.down);
-										downOptions.down.callback = '_CALLBACK';
-										//父页面初始化pulldown
-										parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+										if(hasPulldown) {
+											var parent = webview.parent();
+											var id = webview.id || webview.getURL();
+											if(parent) {
+												if(!hasPullup) { //如果没有上拉加载，需要手动初始化一个默认的pullRefresh，以便当前页面容器可以调用endPulldownToRefresh等方法
+													$container.pullRefresh({
+														webviewId: id
+													});
+												}
+												var downOptions = {
+													webviewId: id//子页面id
+												};
+												downOptions.down = $.extend({}, pullRefreshOptions.down);
+												downOptions.down.callback = '_CALLBACK';
+												//改写父页面的$.fn.pullRefresh
+												parent.evalJS("mui.fn.pullRefresh=mui.fn.pullRefresh_native");
+												//父页面初始化pulldown
+												parent.evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify(downOptions) + "')");
+											}
+										}
 									}
-								}
-							});
+								});
+							} else { //非原生转圈，iOS环境
+								$container.pullRefresh(pullRefreshOptions);
+							}
 						} else {
 							$container.pullRefresh(pullRefreshOptions);
 						}
@@ -3407,184 +3427,188 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 	$.Class = Class;
 })(mui);
 (function($, document, undefined) {
-	var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
-	var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
-	var CLASS_PULL = 'mui-pull';
-	var CLASS_PULL_LOADING = 'mui-pull-loading';
-	var CLASS_PULL_CAPTION = 'mui-pull-caption';
-	var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
-	var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
-	var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
+    var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
+    var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
+    var CLASS_PULL = 'mui-pull';
+    var CLASS_PULL_LOADING = 'mui-pull-loading';
+    var CLASS_PULL_CAPTION = 'mui-pull-caption';
+    var CLASS_PULL_CAPTION_DOWN = 'mui-pull-caption-down';
+    var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
+    var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
 
-	var CLASS_ICON = 'mui-icon';
-	var CLASS_SPINNER = 'mui-spinner';
-	var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
+    var CLASS_ICON = 'mui-icon';
+    var CLASS_SPINNER = 'mui-spinner';
+    var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
 
-	var CLASS_BLOCK = 'mui-block';
-	var CLASS_HIDDEN = 'mui-hidden';
-	var CLASS_VISIBILITY = 'mui-visibility';
+    var CLASS_BLOCK = 'mui-block';
+    var CLASS_HIDDEN = 'mui-hidden';
+    var CLASS_VISIBILITY = 'mui-visibility';
 
-	var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
-	var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
+    var CLASS_LOADING_UP = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+    var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
+    var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
 
-	var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
+    var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
 
-	var PullRefresh = {
-		init: function(element, options) {
-			this._super(element, $.extend(true, {
-				scrollY: true,
-				scrollX: false,
-				indicators: true,
-				deceleration: 0.003,
-				down: {
-					height: 50,
-					contentinit: '下拉可以刷新',
-					contentdown: '下拉可以刷新',
-					contentover: '释放立即刷新',
-					contentrefresh: '正在刷新...'
-				},
-				up: {
-					height: 50,
-					auto: false,
-					contentinit: '上拉显示更多',
-					contentdown: '上拉显示更多',
-					contentrefresh: '正在加载...',
-					contentnomore: '没有更多数据了',
-					duration: 300
-				}
-			}, options));
-		},
-		_init: function() {
-			this._super();
-			this._initPocket();
-		},
-		_initPulldownRefresh: function() {
-			this.pulldown = true;
-			this.pullPocket = this.topPocket;
-			this.pullPocket.classList.add(CLASS_BLOCK);
-			this.pullPocket.classList.add(CLASS_VISIBILITY);
-			this.pullCaption = this.topCaption;
-			this.pullLoading = this.topLoading;
-		},
-		_initPullupRefresh: function() {
-			this.pulldown = false;
-			this.pullPocket = this.bottomPocket;
-			this.pullPocket.classList.add(CLASS_BLOCK);
-			this.pullPocket.classList.add(CLASS_VISIBILITY);
-			this.pullCaption = this.bottomCaption;
-			this.pullLoading = this.bottomLoading;
-		},
-		_initPocket: function() {
-			var options = this.options;
-			if (options.down && options.down.hasOwnProperty('callback')) {
-				this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
-				if (!this.topPocket) {
-					this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down, CLASS_LOADING_DOWN);
-					this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
-				}
-				this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
-			}
-			if (options.up && options.up.hasOwnProperty('callback')) {
-				this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
-				if (!this.bottomPocket) {
-					this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up, CLASS_LOADING);
-					this.scroller.appendChild(this.bottomPocket);
-				}
-				this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
-				this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
-				//TODO only for h5
-				this.wrapper.addEventListener('scrollbottom', this);
-			}
-		},
-		_createPocket: function(clazz, options, iconClass) {
-			var pocket = document.createElement('div');
-			pocket.className = clazz;
-			pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
-			return pocket;
-		},
-		_resetPullDownLoading: function() {
-			var loading = this.pullLoading;
-			if (loading) {
-				this.pullCaption.innerHTML = this.options.down.contentdown;
-				loading.style.webkitTransition = "";
-				loading.style.webkitTransform = "";
-				loading.style.webkitAnimation = "";
-				loading.className = CLASS_LOADING_DOWN;
-			}
-		},
-		_setCaptionClass: function(isPulldown, caption, title) {
-			if (!isPulldown) {
-				switch (title) {
-					case this.options.up.contentdown:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
-						break;
-					case this.options.up.contentrefresh:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
-						break;
-					case this.options.up.contentnomore:
-						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
-						break;
-				}
-			}
-		},
-		_setCaption: function(title, reset) {
-			if (this.loading) {
-				return;
-			}
-			var options = this.options;
-			var pocket = this.pullPocket;
-			var caption = this.pullCaption;
-			var loading = this.pullLoading;
-			var isPulldown = this.pulldown;
-			var self = this;
-			if (pocket) {
-				if (reset) {
-					setTimeout(function() {
-						caption.innerHTML = self.lastTitle = title;
-						if (isPulldown) {
-							loading.className = CLASS_LOADING_DOWN;
-						} else {
-							self._setCaptionClass(false, caption, title);
-							loading.className = CLASS_LOADING;
-						}
-						loading.style.webkitAnimation = "";
-						loading.style.webkitTransition = "";
-						loading.style.webkitTransform = "";
-					}, 100);
-				} else {
-					if (title !== this.lastTitle) {
-						caption.innerHTML = title;
-						if (isPulldown) {
-							if (title === options.down.contentrefresh) {
-								loading.className = CLASS_LOADING;
-								loading.style.webkitAnimation = "spinner-spin 1s step-end infinite";
-							} else if (title === options.down.contentover) {
-								loading.className = CLASS_LOADING_UP;
-								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
-								loading.style.webkitTransform = "rotate(180deg)";
-							} else if (title === options.down.contentdown) {
-								loading.className = CLASS_LOADING_DOWN;
-								loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
-								loading.style.webkitTransform = "rotate(0deg)";
-							}
-						} else {
-							if (title === options.up.contentrefresh) {
-								loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
-							} else {
-								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
-							}
-							self._setCaptionClass(false, caption, title);
-						}
-						this.lastTitle = title;
-					}
-				}
+    var PullRefresh = {
+        init: function(element, options) {
+            this._super(element, $.extend(true, {
+                scrollY: true,
+                scrollX: false,
+                indicators: true,
+                deceleration: 0.003,
+                down: {
+                    height: 50,
+                    contentinit: '下拉可以刷新',
+                    contentdown: '下拉可以刷新',
+                    contentover: '释放立即刷新',
+                    contentrefresh: '正在刷新...'
+                },
+                up: {
+                    height: 50,
+                    auto: false,
+                    contentinit: '上拉显示更多',
+                    contentdown: '上拉显示更多',
+                    contentrefresh: '正在加载...',
+                    contentnomore: '没有更多数据了',
+                    duration: 300
+                }
+            }, options));
+        },
+        _init: function() {
+            this._super();
+            this._initPocket();
+        },
+        _initPulldownRefresh: function() {
+            this.pulldown = true;
+            if (this.topPocket) {
+                this.pullPocket = this.topPocket;
+                this.pullPocket.classList.add(CLASS_BLOCK);
+                this.pullPocket.classList.add(CLASS_VISIBILITY);
+                this.pullCaption = this.topCaption;
+                this.pullLoading = this.topLoading;
+            }
+        },
+        _initPullupRefresh: function() {
+            this.pulldown = false;
+            if (this.bottomPocket) {
+                this.pullPocket = this.bottomPocket;
+                this.pullPocket.classList.add(CLASS_BLOCK);
+                this.pullPocket.classList.add(CLASS_VISIBILITY);
+                this.pullCaption = this.bottomCaption;
+                this.pullLoading = this.bottomLoading;
+            }
+        },
+        _initPocket: function() {
+            var options = this.options;
+            if (options.down && options.down.hasOwnProperty('callback')) {
+                this.topPocket = this.scroller.querySelector('.' + CLASS_PULL_TOP_POCKET);
+                if (!this.topPocket) {
+                    this.topPocket = this._createPocket(CLASS_PULL_TOP_POCKET, options.down, CLASS_LOADING_DOWN);
+                    this.wrapper.insertBefore(this.topPocket, this.wrapper.firstChild);
+                }
+                this.topLoading = this.topPocket.querySelector('.' + CLASS_PULL_LOADING);
+                this.topCaption = this.topPocket.querySelector('.' + CLASS_PULL_CAPTION);
+            }
+            if (options.up && options.up.hasOwnProperty('callback')) {
+                this.bottomPocket = this.scroller.querySelector('.' + CLASS_PULL_BOTTOM_POCKET);
+                if (!this.bottomPocket) {
+                    this.bottomPocket = this._createPocket(CLASS_PULL_BOTTOM_POCKET, options.up, CLASS_LOADING);
+                    this.scroller.appendChild(this.bottomPocket);
+                }
+                this.bottomLoading = this.bottomPocket.querySelector('.' + CLASS_PULL_LOADING);
+                this.bottomCaption = this.bottomPocket.querySelector('.' + CLASS_PULL_CAPTION);
+                //TODO only for h5
+                this.wrapper.addEventListener('scrollbottom', this);
+            }
+        },
+        _createPocket: function(clazz, options, iconClass) {
+            var pocket = document.createElement('div');
+            pocket.className = clazz;
+            pocket.innerHTML = pocketHtml.replace('{contentrefresh}', options.contentinit).replace('{icon}', iconClass);
+            return pocket;
+        },
+        _resetPullDownLoading: function() {
+            var loading = this.pullLoading;
+            if (loading) {
+                this.pullCaption.innerHTML = this.options.down.contentdown;
+                loading.style.webkitTransition = "";
+                loading.style.webkitTransform = "";
+                loading.style.webkitAnimation = "";
+                loading.className = CLASS_LOADING_DOWN;
+            }
+        },
+        _setCaptionClass: function(isPulldown, caption, title) {
+            if (!isPulldown) {
+                switch (title) {
+                    case this.options.up.contentdown:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
+                        break;
+                    case this.options.up.contentrefresh:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_REFRESH
+                        break;
+                    case this.options.up.contentnomore:
+                        caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
+                        break;
+                }
+            }
+        },
+        _setCaption: function(title, reset) {
+            if (this.loading) {
+                return;
+            }
+            var options = this.options;
+            var pocket = this.pullPocket;
+            var caption = this.pullCaption;
+            var loading = this.pullLoading;
+            var isPulldown = this.pulldown;
+            var self = this;
+            if (pocket) {
+                if (reset) {
+                    setTimeout(function() {
+                        caption.innerHTML = self.lastTitle = title;
+                        if (isPulldown) {
+                            loading.className = CLASS_LOADING_DOWN;
+                        } else {
+                            self._setCaptionClass(false, caption, title);
+                            loading.className = CLASS_LOADING;
+                        }
+                        loading.style.webkitAnimation = "";
+                        loading.style.webkitTransition = "";
+                        loading.style.webkitTransform = "";
+                    }, 100);
+                } else {
+                    if (title !== this.lastTitle) {
+                        caption.innerHTML = title;
+                        if (isPulldown) {
+                            if (title === options.down.contentrefresh) {
+                                loading.className = CLASS_LOADING;
+                                loading.style.webkitAnimation = "spinner-spin 1s step-end infinite";
+                            } else if (title === options.down.contentover) {
+                                loading.className = CLASS_LOADING_UP;
+                                loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+                                loading.style.webkitTransform = "rotate(180deg)";
+                            } else if (title === options.down.contentdown) {
+                                loading.className = CLASS_LOADING_DOWN;
+                                loading.style.webkitTransition = "-webkit-transform 0.3s ease-in";
+                                loading.style.webkitTransform = "rotate(0deg)";
+                            }
+                        } else {
+                            if (title === options.up.contentrefresh) {
+                                loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
+                            } else {
+                                loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+                            }
+                            self._setCaptionClass(false, caption, title);
+                        }
+                        this.lastTitle = title;
+                    }
+                }
 
-			}
-		}
-	};
-	$.PullRefresh = PullRefresh;
+            }
+        }
+    };
+    $.PullRefresh = PullRefresh;
 })(mui, document);
 (function($, window, document, undefined) {
 	var CLASS_SCROLL = 'mui-scroll';
@@ -4237,7 +4261,16 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 		},
 		//API
 		setStopped: function(stopped) {
-			this.stopped = !!stopped;
+			// this.stopped = !!stopped;
+
+			// fixed ios双webview模式下拉刷新
+			if(stopped) {
+				this.disablePullupToRefresh();
+				this.disablePulldownToRefresh();
+			} else {
+				this.enablePullupToRefresh();
+				this.enablePulldownToRefresh();
+			}
 		},
 		setTranslate: function(x, y) {
 			this.x = x;
@@ -4526,169 +4559,186 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 })(mui, window, document);
 (function($, window, document, undefined) {
 
-	var CLASS_VISIBILITY = 'mui-visibility';
-	var CLASS_HIDDEN = 'mui-hidden';
+    var CLASS_VISIBILITY = 'mui-visibility';
+    var CLASS_HIDDEN = 'mui-hidden';
 
-	var PullRefresh = $.Scroll.extend($.extend({
-		handleEvent: function(e) {
-			this._super(e);
-			if (e.type === 'scrollbottom') {
-				if (e.target === this.scroller) {
-					this._scrollbottom();
-				}
-			}
-		},
-		_scrollbottom: function() {
-			if (!this.pulldown && !this.loading) {
-				this.pulldown = false;
-				this._initPullupRefresh();
-				this.pullupLoading();
-			}
-		},
-		_start: function(e) {
-			//仅下拉刷新在start阻止默认事件
-			if (e.touches && e.touches.length && e.touches[0].clientX > 30) {
-				e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
-			}
-			if (!this.loading) {
-				this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
-			}
-			this._super(e);
-		},
-		_drag: function(e) {
-			this._super(e);
-			if (!this.pulldown && !this.loading && this.topPocket && e.detail.direction === 'down' && this.y >= 0) {
-				this._initPulldownRefresh();
-			}
-			if (this.pulldown) {
-				this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
-			}
-		},
+    var PullRefresh = $.Scroll.extend($.extend({
+        handleEvent: function(e) {
+            this._super(e);
+            if (e.type === 'scrollbottom') {
+                if (e.target === this.scroller) {
+                    this._scrollbottom();
+                }
+            }
+        },
+        _scrollbottom: function() {
+            if (!this.pulldown && !this.loading) {
+                this.pulldown = false;
+                this._initPullupRefresh();
+                this.pullupLoading();
+            }
+        },
+        _start: function(e) {
+            //仅下拉刷新在start阻止默认事件
+            if (e.touches && e.touches.length && e.touches[0].clientX > 30) {
+                e.target && !this._preventDefaultException(e.target, this.options.preventDefaultException) && e.preventDefault();
+            }
+            if (!this.loading) {
+                this.pulldown = this.pullPocket = this.pullCaption = this.pullLoading = false
+            }
+            this._super(e);
+        },
+        _drag: function(e) {
+            if (this.y >= 0 && this.disablePulldown && e.detail.direction === 'down') { //禁用下拉刷新
+                return;
+            }
+            this._super(e);
+            if (!this.pulldown && !this.loading && this.topPocket && e.detail.direction === 'down' && this.y >= 0) {
+                this._initPulldownRefresh();
+            }
+            if (this.pulldown) {
+                this._setCaption(this.y > this.options.down.height ? this.options.down.contentover : this.options.down.contentdown);
+            }
+        },
 
-		_reLayout: function() {
-			this.hasVerticalScroll = true;
-			this._super();
-		},
-		//API
-		resetPosition: function(time) {
-			if (this.pulldown) {
-				if (this.y >= this.options.down.height) {
-					this.pulldownLoading(undefined, time || 0);
-					return true;
-				} else {
-					!this.loading && this.topPocket.classList.remove(CLASS_VISIBILITY);
-				}
-			}
-			return this._super(time);
-		},
-		pulldownLoading: function(y, time) {
-			typeof y === 'undefined' && (y = this.options.down.height); //默认高度
-			this.scrollTo(0, y, time, this.options.bounceEasing);
-			if (this.loading) {
-				return;
-			}
-			//			if (!this.pulldown) {
-			this._initPulldownRefresh();
-			//			}
-			this._setCaption(this.options.down.contentrefresh);
-			this.loading = true;
-			this.indicators.map(function(indicator) {
-				indicator.fade(0);
-			});
-			var callback = this.options.down.callback;
-			callback && callback.call(this);
-		},
-		endPulldownToRefresh: function() {
-			var self = this;
-			if (self.topPocket && self.loading && this.pulldown) {
-				self.scrollTo(0, 0, self.options.bounceTime, self.options.bounceEasing);
-				self.loading = false;
-				self._setCaption(self.options.down.contentdown, true);
-				setTimeout(function() {
-					self.loading || self.topPocket.classList.remove(CLASS_VISIBILITY);
-				}, 350);
-			}
-		},
-		pullupLoading: function(callback, x, time) {
-			x = x || 0;
-			this.scrollTo(x, this.maxScrollY, time, this.options.bounceEasing);
-			if (this.loading) {
-				return;
-			}
-			this._initPullupRefresh();
-			this._setCaption(this.options.up.contentrefresh);
-			this.indicators.map(function(indicator) {
-				indicator.fade(0);
-			});
-			this.loading = true;
-			callback = callback || this.options.up.callback;
-			callback && callback.call(this);
-		},
-		endPullupToRefresh: function(finished) {
-			var self = this;
-			if (self.bottomPocket) { // && self.loading && !this.pulldown
-				self.loading = false;
-				if (finished) {
-					this.finished = true;
-					self._setCaption(self.options.up.contentnomore);
-					//					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					//					self.bottomPocket.classList.add(CLASS_HIDDEN);
-					self.wrapper.removeEventListener('scrollbottom', self);
-				} else {
-					self._setCaption(self.options.up.contentdown);
-					//					setTimeout(function() {
-					self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
-					//					}, 300);
-				}
-			}
-		},
-		disablePullupToRefresh: function() {
-			this._initPullupRefresh();
-			this.bottomPocket.className = 'mui-pull-bottom-pocket' + ' ' + CLASS_HIDDEN;
-			this.wrapper.removeEventListener('scrollbottom', this);
-		},
-		enablePullupToRefresh: function() {
-			this._initPullupRefresh();
-			this.bottomPocket.classList.remove(CLASS_HIDDEN);
-			this._setCaption(this.options.up.contentdown);
-			this.wrapper.addEventListener('scrollbottom', this);
-		},
-		refresh: function(isReset) {
-			if (isReset && this.finished) {
-				this.enablePullupToRefresh();
-				this.finished = false;
-			}
-			this._super();
-		},
-	}, $.PullRefresh));
-	$.fn.pullRefresh = function(options) {
-		if (this.length === 1) {
-			var self = this[0];
-			var pullRefreshApi = null;
-			options = options || {};
-			var id = self.getAttribute('data-pullrefresh');
-			if (!id) {
-				id = ++$.uuid;
-				$.data[id] = pullRefreshApi = new PullRefresh(self, options);
-				self.setAttribute('data-pullrefresh', id);
-			} else {
-				pullRefreshApi = $.data[id];
-			}
-			if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-				pullRefreshApi.pulldownLoading(options.down.autoY);
-			} else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
-				pullRefreshApi.pullupLoading();
-			}
-			//暂不提供这种调用方式吧			
-			//			if (typeof options === 'string') {
-			//				var methodValue = pullRefreshApi[options].apply(pullRefreshApi, $.slice.call(arguments, 1));
-			//				if (methodValue !== undefined) {
-			//					return methodValue;
-			//				}
-			//			}
-			return pullRefreshApi;
-		}
-	};
+        _reLayout: function() {
+            this.hasVerticalScroll = true;
+            this._super();
+        },
+        //API
+        resetPosition: function(time) {
+            if (this.pulldown && !this.disablePulldown) {
+                if (this.y >= this.options.down.height) {
+                    this.pulldownLoading(undefined, time || 0);
+                    return true;
+                } else {
+                    !this.loading && this.topPocket.classList.remove(CLASS_VISIBILITY);
+                }
+            }
+            return this._super(time);
+        },
+        pulldownLoading: function(y, time) {
+            typeof y === 'undefined' && (y = this.options.down.height); //默认高度
+            this.scrollTo(0, y, time, this.options.bounceEasing);
+            if (this.loading) {
+                return;
+            }
+            //			if (!this.pulldown) {
+            this._initPulldownRefresh();
+            //			}
+            this._setCaption(this.options.down.contentrefresh);
+            this.loading = true;
+            this.indicators.map(function(indicator) {
+                indicator.fade(0);
+            });
+            var callback = this.options.down.callback;
+            callback && callback.call(this);
+        },
+        endPulldownToRefresh: function() {
+            var self = this;
+            if (self.topPocket && self.loading && this.pulldown) {
+                self.scrollTo(0, 0, self.options.bounceTime, self.options.bounceEasing);
+                self.loading = false;
+                self._setCaption(self.options.down.contentdown, true);
+                setTimeout(function() {
+                    self.loading || self.topPocket.classList.remove(CLASS_VISIBILITY);
+                }, 350);
+            }
+        },
+        pullupLoading: function(callback, x, time) {
+            x = x || 0;
+            this.scrollTo(x, this.maxScrollY, time, this.options.bounceEasing);
+            if (this.loading) {
+                return;
+            }
+            this._initPullupRefresh();
+            this._setCaption(this.options.up.contentrefresh);
+            this.indicators.map(function(indicator) {
+                indicator.fade(0);
+            });
+            this.loading = true;
+            callback = callback || this.options.up.callback;
+            callback && callback.call(this);
+        },
+        endPullupToRefresh: function(finished) {
+            var self = this;
+            if (self.bottomPocket) { // && self.loading && !this.pulldown
+                self.loading = false;
+                if (finished) {
+                    this.finished = true;
+                    self._setCaption(self.options.up.contentnomore);
+                    //					self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+                    //					self.bottomPocket.classList.add(CLASS_HIDDEN);
+                    self.wrapper.removeEventListener('scrollbottom', self);
+                } else {
+                    self._setCaption(self.options.up.contentdown);
+                    //					setTimeout(function() {
+                    self.loading || self.bottomPocket.classList.remove(CLASS_VISIBILITY);
+                    //					}, 300);
+                }
+            }
+        },
+        disablePullupToRefresh: function() {
+            this._initPullupRefresh();
+            this.bottomPocket.className = 'mui-pull-bottom-pocket' + ' ' + CLASS_HIDDEN;
+            this.wrapper.removeEventListener('scrollbottom', this);
+        },
+        disablePulldownToRefresh: function() {
+            this._initPulldownRefresh();
+            this.topPocket.className = 'mui-pull-top-pocket' + ' ' + CLASS_HIDDEN;
+            this.disablePulldown = true;
+        },
+        enablePulldownToRefresh: function() {
+            this._initPulldownRefresh();
+            this.topPocket.classList.remove(CLASS_HIDDEN);
+            this._setCaption(this.options.down.contentdown);
+            this.disablePulldown = false;
+        },
+        enablePullupToRefresh: function() {
+            this._initPullupRefresh();
+            this.bottomPocket.classList.remove(CLASS_HIDDEN);
+            this._setCaption(this.options.up.contentdown);
+            this.wrapper.addEventListener('scrollbottom', this);
+        },
+        refresh: function(isReset) {
+            if (isReset && this.finished) {
+                this.enablePullupToRefresh();
+                this.finished = false;
+            }
+            this._super();
+        },
+    }, $.PullRefresh));
+    $.fn.pullRefresh = function(options) {
+        if (this.length === 1) {
+            var self = this[0];
+            var pullRefreshApi = null;
+            var id = self.getAttribute('data-pullrefresh');
+            if (!id && typeof options === 'undefined') {
+                return false;
+            }
+            options = options || {};
+            if (!id) {
+                id = ++$.uuid;
+                $.data[id] = pullRefreshApi = new PullRefresh(self, options);
+                self.setAttribute('data-pullrefresh', id);
+            } else {
+                pullRefreshApi = $.data[id];
+            }
+            if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
+                pullRefreshApi.pulldownLoading(options.down.autoY);
+            } else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
+                pullRefreshApi.pullupLoading();
+            }
+            //暂不提供这种调用方式吧			
+            //			if (typeof options === 'string') {
+            //				var methodValue = pullRefreshApi[options].apply(pullRefreshApi, $.slice.call(arguments, 1));
+            //				if (methodValue !== undefined) {
+            //					return methodValue;
+            //				}
+            //			}
+            return pullRefreshApi;
+        }
+    };
 })(mui, window, document);
 /**
  * snap 重构
@@ -5102,7 +5152,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  * @returns {undefined}
  */
 (function($, document) {
-    if (!($.os.plus && $.os.android)) { //仅在5+android支持多webview的使用
+    if (!($.os.plus)) { //仅在5+android支持多webview的使用
         return;
     }
     $.plusReady(function() {
@@ -5145,9 +5195,22 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             },
             _initPulldownRefreshEvent: function() {
                 var self = this;
-                if (self.topPocket && self.options.webviewId) {
-                    $.plusReady(function() {
-                        var webview = plus.webview.getWebviewById(self.options.webviewId);
+                $.plusReady(function() {
+                    if (self.options.down.style == "circle") {
+                        //单webview、原生转圈
+                        self.options.webview = plus.webview.currentWebview();
+                        self.options.webview.setPullToRefresh({
+                            support: true,
+                            color: self.options.down.color || '#2BD009',
+                            height: self.options.down.height || '50px',
+                            range: self.options.down.range || '100px',
+                            style: 'circle',
+                            offset: self.options.down.offset || '0px'
+                        }, function() {
+                            self.options.down.callback();
+                        });
+                    } else if (self.topPocket && self.options.webviewId) {
+                        var webview = plus.webview.getWebviewById(self.options.webviewId); //子窗口
                         if (!webview) {
                             return;
                         }
@@ -5173,13 +5236,14 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                     break;
                                 case "dragEndAfterChangeOffset": //正在刷新状态
                                     //执行下拉刷新所在webview的回调函数
-                                    webview.evalJS("mui&&mui.options.pullRefresh.down.callback()");
+                                    webview.evalJS("window.mui&&mui.options.pullRefresh.down.callback()");
                                     self._setCaption(downOptions.contentrefresh);
                                     break;
                                 default:
                                     break;
                             }
                         }, false);
+
                         webview.setBounce({
                             position: {
                                 top: height * 2 + 'px'
@@ -5188,20 +5252,15 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                                 top: height + 'px'
                             }
                         });
-                    });
-                }
+
+                    }
+                });
             },
             handleEvent: function(e) {
                 var self = this;
                 if (self.stopped) {
                     return;
                 }
-                //5+的plusscrollbottom当页面内容较少时，不触发
-                //          if (e.type === 'plusscrollbottom') {
-                //              if (this.bottomPocket) {
-                //                  this.pullupLoading();
-                //              }
-                //          }
                 self.isScroll = false;
                 if (e.type === 'dragup' || e.type === 'plusscrollbottom') {
                     self.isScroll = true;
@@ -5213,57 +5272,62 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         }).extend($.extend({
             setStopped: function(stopped) { //该方法是子页面调用的
                 this.stopped = !!stopped;
-                //TODO 此处需要设置当前webview的bounce为none,目前5+有BUG
-                var webview = plus.webview.currentWebview();
+                // TODO 此处需要设置当前webview的bounce为none,目前5+有BUG
                 if (this.stopped) {
-                    webview.setStyle({
-                        bounce: 'none'
-                    });
-                    webview.setBounce({
-                        position: {
-                            top: 'none'
-                        }
-                    });
+                    this.disablePullupToRefresh();
+                    this.disablePulldownToRefresh();
                 } else {
-                    var height = this.options.down.height;
-                    webview.setStyle({
-                        bounce: 'vertical'
-                    });
-                    webview.setBounce({
-                        position: {
-                            top: height * 2 + 'px'
-                        },
-                        changeoffset: {
-                            top: height + 'px'
-                        }
-                    });
+                    this.enablePullupToRefresh();
+                    this.enablePulldownToRefresh();
                 }
             },
-            pulldownLoading: function() { //该方法是子页面调用的
+            beginPulldown: function() {
+                var self = this;
                 $.plusReady(function() {
-                    plus.webview.currentWebview().setBounce({
-                        offset: {
-                            top: this.options.down.height + "px"
+                    //这里延时的目的是为了保证下拉刷新组件初始化完成，后续应该做成有状态的
+                    setTimeout(function() {
+                        if (self.options.down.style == "circle") { //单webview下拉刷新
+                            plus.webview.currentWebview().beginPullToRefresh();
+                        } else { //双webview模式
+                            var webview = self.options.webview;
+                            if (webview) {
+                                webview.setBounce({
+                                    offset: {
+                                        top: self.options.down.height + "px"
+                                    }
+                                });
+                            }
                         }
-                    });
+                    }, 15);
                 }.bind(this));
+            },
+            pulldownLoading: function() { //该方法是子页面调用的，兼容老的历史API
+                this.beginPulldown();
             },
             _pulldownLoading: function() { //该方法是父页面调用的
                 var self = this;
                 $.plusReady(function() {
                     var childWebview = plus.webview.getWebviewById(self.options.webviewId);
-                    childWebview.setBounce({
+                    childWebview && childWebview.setBounce({
                         offset: {
                             top: self.options.down.height + "px"
                         }
                     });
                 });
             },
-            endPulldownToRefresh: function() { //该方法是子页面调用的
-                var webview = plus.webview.currentWebview();
-                webview.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
-                    webviewId: webview.id
-                }) + "')._endPulldownToRefresh()");
+            endPulldown: function() {
+                var _wv = plus.webview.currentWebview();
+                //双webview的下拉刷新，需要修改父窗口提示信息
+                if (_wv.parent() && this.options.down.style !== "circle") {
+                    _wv.parent().evalJS("mui&&mui(document.querySelector('.mui-content')).pullRefresh('" + JSON.stringify({
+                        webviewId: _wv.id
+                    }) + "')._endPulldownToRefresh()");
+                } else {
+                    _wv.endPullToRefresh();
+                }
+            },
+            endPulldownToRefresh: function() { //该方法是子页面调用的，兼容老的历史API
+                this.endPulldown();
             },
             _endPulldownToRefresh: function() { //该方法是父页面调用的
                 var self = this;
@@ -5276,7 +5340,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     }, 350);
                 }
             },
-            pullupLoading: function(callback) {
+            beginPullup: function(callback) { //开始上拉加载
                 var self = this;
                 if (self.isLoading) return;
                 self.isLoading = true;
@@ -5295,7 +5359,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                     callback && callback.call(self);
                 }, 300);
             },
-            endPullupToRefresh: function(finished) {
+            pullupLoading: function(callback) { //兼容老的API
+                this.beginPullup(callback);
+            },
+            endPullup: function(finished) { //上拉加载结束
                 var self = this;
                 if (self.pullLoading) {
                     self.pullLoading.classList.remove(CLASS_VISIBILITY);
@@ -5305,18 +5372,61 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                         self.finished = true;
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_NOMORE;
                         self.pullCaption.innerHTML = self.options.up.contentnomore;
-                        //                  self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  self.bottomPocket.classList.add(CLASS_HIDDEN);
                         //取消5+的plusscrollbottom事件
                         document.removeEventListener('plusscrollbottom', self);
                         window.removeEventListener('dragup', self);
                     } else { //初始化时隐藏，后续不再隐藏
                         self.pullCaption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;
                         self.pullCaption.innerHTML = self.options.up.contentdown;
-                        //                  setTimeout(function() {
-                        //                      self.loading || self.bottomPocket.classList.remove(CLASS_BLOCK);
-                        //                  }, 350);
                     }
+                }
+            },
+            endPullupToRefresh: function(finished) { //上拉加载结束，兼容老的API
+                this.endPullup(finished);
+            },
+            disablePulldownToRefresh: function() {
+                var webview = plus.webview.currentWebview();
+                if (this.options.down.style && this.options.down.style == 'circle') { // 单webview模式禁止原生下拉刷新
+                    this.options.webview.setPullToRefresh({
+                        support: false,
+                        style: 'circle'
+                    });
+                } else { // 双webview模式禁止下拉刷新
+                    webview.setStyle({
+                        bounce: 'none'
+                    });
+                    webview.setBounce({
+                        position: {
+                            top: 'none'
+                        }
+                    });
+                }
+            },
+            enablePulldownToRefresh: function() {
+                var self = this,
+                    webview = plus.webview.currentWebview(),
+                    height = this.options.down.height;
+                // 单webview模式禁止原生下拉刷新
+                if (this.options.down.style && this.options.down.style == 'circle') {
+                    webview.setPullToRefresh({
+                        support: true,
+                        height: height || '50px',
+                        range: self.options.down.range || '100px',
+                        style: 'circle',
+                        offset: self.options.down.offset || '0px'
+                    });
+                } else { // 重新初始化双webview模式下拉刷新
+                    webview.setStyle({
+                        bounce: 'vertical'
+                    });
+                    webview.setBounce({
+                        position: {
+                            top: height * 2 + 'px'
+                        },
+                        changeoffset: {
+                            top: height + 'px'
+                        }
+                    });
                 }
             },
             disablePullupToRefresh: function() {
@@ -5347,7 +5457,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         }, $.PullRefresh));
 
         //override h5 pullRefresh
-        $.fn.pullRefresh = function(options) {
+        $.fn.pullRefresh_native = function(options) {
             var self;
             if (this.length === 0) {
                 self = document.createElement('div');
@@ -5378,9 +5488,10 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
                 pullRefreshApi = $.data[id];
             }
             if (options.down && options.down.auto) { //如果设置了auto，则自动下拉一次
-                pullRefreshApi._pulldownLoading(); //parent webview
+                //pullRefreshApi._pulldownLoading(); //parent webview
+                pullRefreshApi.beginPulldown();
             } else if (options.up && options.up.auto) { //如果设置了auto，则自动上拉一次
-                pullRefreshApi.pullupLoading();
+                pullRefreshApi.beginPullup();
             }
             return pullRefreshApi;
         };
@@ -6307,100 +6418,113 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  */
 (function($, window, document, name, undefined) {
 
-	var CLASS_CONTROL_ITEM = 'mui-control-item';
-	var CLASS_SEGMENTED_CONTROL = 'mui-segmented-control';
-	var CLASS_SEGMENTED_CONTROL_VERTICAL = 'mui-segmented-control-vertical';
-	var CLASS_CONTROL_CONTENT = 'mui-control-content';
-	var CLASS_TAB_BAR = 'mui-bar-tab';
-	var CLASS_TAB_ITEM = 'mui-tab-item';
-	var CLASS_SLIDER_ITEM = 'mui-slider-item';
+    var CLASS_CONTROL_ITEM = 'mui-control-item';
+    var CLASS_SEGMENTED_CONTROL = 'mui-segmented-control';
+    var CLASS_SEGMENTED_CONTROL_VERTICAL = 'mui-segmented-control-vertical';
+    var CLASS_CONTROL_CONTENT = 'mui-control-content';
+    var CLASS_TAB_BAR = 'mui-bar-tab';
+    var CLASS_TAB_ITEM = 'mui-tab-item';
+    var CLASS_SLIDER_ITEM = 'mui-slider-item';
 
-	var handle = function(event, target) {
-		if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
-			if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains(CLASS_SEGMENTED_CONTROL_VERTICAL)) {
-				//vertical 如果preventDefault会导致无法滚动
-			} else {
-				event.preventDefault(); //stop hash change				
-			}
-			//			if (target.hash) {
-			return target;
-			//			}
-		}
-		return false;
-	};
+   var handle = function(event, target) {
+        if (target.classList && (target.classList.contains(CLASS_CONTROL_ITEM) || target.classList.contains(CLASS_TAB_ITEM))) {
+            if (target.parentNode && target.parentNode.classList && target.parentNode.classList.contains(CLASS_SEGMENTED_CONTROL_VERTICAL)) {
+                //vertical 如果preventDefault会导致无法滚动
+            } else {
 
-	$.registerTarget({
-		name: name,
-		index: 80,
-		handle: handle,
-		target: false
-	});
+                    event.preventDefault();      
+                    // if(target.tagName == 'A') {
+                    //     // fixed 底部选项卡href 无法跳转 && stop hash change
+                    //     var curr_href = location.hostname + location.pathname,
+                    //         target_href = target.hostname + target.pathname;
+                   
+                    //     if (curr_href == target_href && target.hash !== "") {
+                    //         event.preventDefault();
+                    //         return target;
+                    //     }else{
+                    //             return false
+                    //     }
+                    // }
+            }
+            //          if (target.hash) {
+            return target;
+            //          }
+        }
+        return false;
+    };
 
-	window.addEventListener('tap', function(e) {
+    $.registerTarget({
+        name: name,
+        index: 80,
+        handle: handle,
+        target: false
+    });
 
-		var targetTab = $.targets.tab;
-		if (!targetTab) {
-			return;
-		}
-		var activeTab;
-		var activeBodies;
-		var targetBody;
-		var className = 'mui-active';
-		var classSelector = '.' + className;
-		var segmentedControl = targetTab.parentNode;
+    window.addEventListener('tap', function(e) {
 
-		for (; segmentedControl && segmentedControl !== document; segmentedControl = segmentedControl.parentNode) {
-			if (segmentedControl.classList.contains(CLASS_SEGMENTED_CONTROL)) {
-				activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_CONTROL_ITEM);
-				break;
-			} else if (segmentedControl.classList.contains(CLASS_TAB_BAR)) {
-				activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_TAB_ITEM);
-			}
-		}
+        var targetTab = $.targets.tab;
+        if (!targetTab) {
+            return;
+        }
+        var activeTab;
+        var activeBodies;
+        var targetBody;
+        var className = 'mui-active';
+        var classSelector = '.' + className;
+        var segmentedControl = targetTab.parentNode;
 
-		if (activeTab) {
-			activeTab.classList.remove(className);
-		}
+        for (; segmentedControl && segmentedControl !== document; segmentedControl = segmentedControl.parentNode) {
+            if (segmentedControl.classList.contains(CLASS_SEGMENTED_CONTROL)) {
+                activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_CONTROL_ITEM);
+                break;
+            } else if (segmentedControl.classList.contains(CLASS_TAB_BAR)) {
+                activeTab = segmentedControl.querySelector(classSelector + '.' + CLASS_TAB_ITEM);
+            }
+        }
 
-		var isLastActive = targetTab === activeTab;
-		if (targetTab) {
-			targetTab.classList.add(className);
-		}
+        if (activeTab) {
+            activeTab.classList.remove(className);
+        }
 
-		if (!targetTab.hash) {
-			return;
-		}
-		targetBody = document.getElementById(targetTab.hash.replace('#', ''));
+        var isLastActive = targetTab === activeTab;
+        if (targetTab) {
+            targetTab.classList.add(className);
+        }
 
-		if (!targetBody) {
-			return;
-		}
-		if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) { //tab bar popover
-			targetTab.classList[isLastActive ? 'remove' : 'add'](className);
-			return;
-		}
-		if (isLastActive) { //same
-			return;
-		}
-		var parentNode = targetBody.parentNode;
-		activeBodies = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT + classSelector);
-		for (var i = 0; i < activeBodies.length; i++) {
-			var activeBody = activeBodies[i];
-			activeBody.parentNode === parentNode && activeBody.classList.remove(className);
-		}
+        if (!targetTab.hash) {
+            return;
+        }
+        targetBody = document.getElementById(targetTab.hash.replace('#', ''));
 
-		targetBody.classList.add(className);
+        if (!targetBody) {
+            return;
+        }
+        if (!targetBody.classList.contains(CLASS_CONTROL_CONTENT)) { //tab bar popover
+            targetTab.classList[isLastActive ? 'remove' : 'add'](className);
+            return;
+        }
+        if (isLastActive) { //same
+            return;
+        }
+        var parentNode = targetBody.parentNode;
+        activeBodies = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT + classSelector);
+        for (var i = 0; i < activeBodies.length; i++) {
+            var activeBody = activeBodies[i];
+            activeBody.parentNode === parentNode && activeBody.classList.remove(className);
+        }
 
-		var contents = [];
-		var _contents = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
-		for (var i = 0; i < _contents.length; i++) { //查找直属子节点
-			_contents[i].parentNode === parentNode && (contents.push(_contents[i]));
-		}
-		$.trigger(targetBody, $.eventName('shown', name), {
-			tabNumber: Array.prototype.indexOf.call(contents, targetBody)
-		});
-		e.detail && e.detail.gesture.preventDefault(); //fixed hashchange
-	});
+        targetBody.classList.add(className);
+
+        var contents = [];
+        var _contents = parentNode.querySelectorAll('.' + CLASS_CONTROL_CONTENT);
+        for (var i = 0; i < _contents.length; i++) { //查找直属子节点
+            _contents[i].parentNode === parentNode && (contents.push(_contents[i]));
+        }
+        $.trigger(targetBody, $.eventName('shown', name), {
+            tabNumber: Array.prototype.indexOf.call(contents, targetBody)
+        });
+        e.detail && e.detail.gesture.preventDefault(); //fixed hashchange
+    });
 
 })(mui, window, document, 'tab');
 /**
@@ -7918,9 +8042,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
         this.element = element;
         this.options = $.extend({
             top: 0, //距离顶部高度(到达该高度即触发)
-            offset: 150, //滚动透明距离档设定top值后offset也会随着top向下延伸
+            offset: 150, //滚动透明距离
             duration: 16, //过渡时间
-            scrollby: window
+            scrollby: window//监听滚动距离容器
         }, options || {});
 
         this.scrollByElem = this.options.scrollby || window;

@@ -21,7 +21,10 @@ beecloud.genBillNo = function() {
 
 mui.plusReady(function() {
 	//配置业务支持的支付通道，支付需要服务端支持，在BeeCloud上支持支付宝支付和微信支付；
-	var support_channel = ['alipay', 'wxpay']; 
+	var support_channel = ['alipay'];
+	if(!mui.os.stream){//流应用下暂不支持微信SDK支付
+		support_channel.push('wxpay');
+	}
 	plus.payment.getChannels(function(s) {
 		var oauthArea = document.querySelector('.oauth-area');
 		for (var i = 0; i < s.length; i++) {
@@ -108,7 +111,11 @@ function doPay(payData, cbsuccess, cberror) {
 					plus.payment.request(payChannel, paySrc, cbsuccess, cberror);
 				} else if (payData.channel == 'UN_WEB') {
 					//银联在线支付
-					var web = plus.webview.create('', "beecloudPay");
+					var web = plus.webview.create('', "beecloudPay",{
+						statusbar:{
+							background: "#f7f7f7"
+						}
+					});
 					//注入JS，解决银联界面返回的问题
 					web.setJsFile('_www/js/95516.js');
 					web.addEventListener('loaded', function() {

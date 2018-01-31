@@ -1,0 +1,326 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>列表到详情最佳实践</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.mui-media {
+				font-size: 14px;
+			}
+			
+			.mui-table-view .mui-media-object {
+				max-width: initial;
+				width: 90px;
+				height: 70px;
+			}
+			
+			.meta-info {
+				position: absolute;
+				left: 115px;
+				right: 15px;
+				bottom: 8px;
+				color: #8f8f94;
+			}
+			
+			.meta-info .author,
+			.meta-info .time {
+				display: inline-block;
+			}
+			
+			.meta-info .time {
+				float: right;
+			}
+			
+			.mui-table-view:before,
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-content>.mui-table-view:first-child {
+				margin-top: 1px;
+			}
+			
+			.banner {
+				height: 180px;
+				overflow: hidden;
+				position: relative;
+				background-position: center;
+				background-color: #ccc;
+			}
+			
+			.banner img {
+				width: 100%;
+				height: auto;
+			}
+			
+			.banner .title {
+				position: absolute;
+				left: 15px;
+				bottom: 15px;
+				width: 90%;
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 21px;
+				color: white;
+				z-index: 11;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="mui-content" id="news">
+			<!--顶部banner图 开始-->
+			<div class="banner">
+				<a href="javascript:;" :data-guid="banner.guid" @tap="open_detail(banner)">
+					<img :src="banner.cover" />
+					<h2 class="title mui-ellipsis-2">{{banner.title}}</h2>
+					<div style="display: none;">
+						<div class="author">{{banner.author}}</div>
+						<div class="time">{{banner.time}}</div>
+					</div>
+				</a>
+			</div>
+			<!--顶部banner图 结束-->
+
+			<!--列表信息流 开始-->
+			<div id="list" class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell mui-media" v-for="item in items">
+							<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+								<img class="mui-media-object mui-pull-left" :src="item.cover">
+								<div class="mui-media-body">
+									<div class="mui-ellipsis-2">{{item.title}}</div>
+								</div>
+								<div class="meta-info">
+									<div class="author">{{item.author}}</div>
+									<div class="time">{{item.time}}</div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--列表信息流 结束-->
+		</div>
+
+		<script src="../../../js/mui.min.js"></script>
+		<script src="vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var lastId = '',
+				minId = ''; //最新新闻的id 
+			var webview_detail = null; //详情页webview
+			var titleNView = { //详情页原生导航配置
+				backgroundColor: '#f7f7f7', //导航栏背景色
+				titleText: '', //导航栏标题
+				titleColor: '#000000', //文字颜色
+				type: 'transparent', //透明渐变样式
+				autoBackButton: true, //自动绘制返回箭头
+				splitLine: { //底部分割线
+					color: '#cccccc'
+				}
+			}
+
+			//mui初始化，配置下拉刷新
+			mui.init({
+				pullRefresh: {
+					container: '#list',
+					down: {
+						style: 'circle',
+						offset: '0px',
+						auto: true,
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+
+			/**
+			 *  下拉刷新获取最新列表 
+			 */
+			function pulldownRefresh() {
+
+				if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
+					plus.nativeUI.toast('似乎已断开与互联网的连接', {
+						verticalAlign: 'top'
+					});
+					return;
+				}
+
+				var data = {
+					column: "id,post_id,title,author_name,cover,published_at" //需要的字段名
+				}
+
+				if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
+					data.lastId = lastId;
+					data.time = new Date().getTime() + "";
+				}
+
+				//请求顶部banner信息
+				mui.getJSON("http://spider.dcloud.net.cn/api/banner/36kr", data, function(rsp) {
+					news.banner = {
+						guid: rsp.post_id,
+						title: rsp.title,
+						cover: rsp.cover,
+						author: rsp.author_name,
+						time: dateUtils.format(rsp.published_at)
+					};
+				});
+
+				//请求最新列表信息流
+				mui.getJSON("http://spider.dcloud.net.cn/api/news", data, function(rsp) {
+					mui('#list').pullRefresh().endPulldownToRefresh();
+					if(rsp && rsp.length > 0) {
+						lastId = rsp[0].id; //保存最新消息的id，方便下拉刷新时使用
+						
+						if(!minId) {//首次拉取列表时保存最后一条消息的id，方便上拉加载时使用
+							minId = rsp[rsp.length - 1].id; 										
+						}
+						news.items = convert(rsp).concat(news.items);
+					}
+				});
+
+			}
+
+			/**
+			 * 上拉加载拉取历史列表 
+			 */
+			function pullupRefresh() {
+				var data = {
+					column: "id,post_id,title,author_name,cover,published_at" //需要的字段名
+				};
+
+				if(minId) { //说明已有数据，目前处于上拉加载，传递当前minId 返回历史数据
+					data.minId = minId;
+					data.time = new Date().getTime() + "";
+					data.pageSize = 10;
+				}
+				//请求历史列表信息流
+				mui.getJSON("http://spider.dcloud.net.cn/api/news", data, function(rsp) {
+					mui('#list').pullRefresh().endPullupToRefresh();
+					if(rsp && rsp.length > 0) {
+						minId = rsp[rsp.length - 1].id; //保存最后一条消息的id，上拉加载时使用
+						news.items = news.items.concat(convert(rsp));
+					}
+				});
+			}
+
+			mui.plusReady(function() {
+				//预加载详情页
+				webview_detail = mui.preload({
+					url: 'detail.html',
+					id: 'news_detail',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4",
+						"titleNView": titleNView
+					}
+				});
+			});
+
+			var news = new Vue({
+				el: '#news',
+				data: {
+					banner: {}, //顶部banner数据
+					items: [] //列表信息流数据
+				}
+			});
+
+			/**
+			 * 打开新闻详情
+			 * 
+			 * @param {Object} item 当前点击的新闻对象
+			 */
+			function open_detail(item) {
+				//触发子窗口变更新闻详情
+				mui.fire(webview_detail, 'get_detail', {
+					guid: item.guid,
+					title: item.title,
+					author: item.author,
+					time: item.time,
+					cover: item.cover
+				});
+
+				//更改详情页原生导航条信息
+				titleNView.titleText = item.title;
+				webview_detail.setStyle({
+					"titleNView": titleNView
+				});
+				setTimeout(function() {
+					webview_detail.show("slide-in-right", 300);
+				}, 150);
+			}
+
+			/**
+			 * 1、将服务端返回数据，转换成前端需要的格式
+			 * 2、若服务端返回格式和前端所需格式相同，则不需要改功能
+			 * 
+			 * @param {Array} items 
+			 */
+			function convert(items) {
+				var newItems = [];
+				items.forEach(function(item) {
+					newItems.push({
+						guid: item.post_id,
+						title: item.title,
+						author: item.author_name,
+						cover: item.cover,
+						time: dateUtils.format(item.published_at)
+					});
+				});
+				return newItems;
+			}
+
+			/**
+			 * 格式化时间的辅助类，将一个时间转换成x小时前、y天前等
+			 */
+			var dateUtils = {
+				UNITS: {
+					'年': 31557600000,
+					'月': 2629800000,
+					'天': 86400000,
+					'小时': 3600000,
+					'分钟': 60000,
+					'秒': 1000
+				},
+				humanize: function(milliseconds) {
+					var humanize = '';
+					mui.each(this.UNITS, function(unit, value) {
+						if(milliseconds >= value) {
+							humanize = Math.floor(milliseconds / value) + unit + '前';
+							return false;
+						}
+						return true;
+					});
+					return humanize || '刚刚';
+				},
+				format: function(dateStr) {
+					var date = this.parse(dateStr)
+					var diff = Date.now() - date.getTime();
+					if(diff < this.UNITS['天']) {
+						return this.humanize(diff);
+					}
+
+					var _format = function(number) {
+						return(number < 10 ? ('0' + number) : number);
+					};
+					return date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date.getDay()) + '-' + _format(date.getHours()) + ':' + _format(date.getMinutes());
+				},
+				parse: function(str) { //将"yyyy-mm-dd HH:MM:ss"格式的字符串，转化为一个Date对象
+					var a = str.split(/[^0-9]/);
+					return new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+				}
+			};
+		</script>
+	</body>
+
+</html>

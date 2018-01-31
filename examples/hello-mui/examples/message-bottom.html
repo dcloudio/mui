@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			.message {
+				background-color: #fff;
+				z-index: 99;
+				box-shadow: 0px -5px 5px 0px rgba(150, 150, 150, .2);
+			}
+			
+			.message.bottom {
+				position: fixed;
+				padding: 15px;
+				bottom: 0;
+				left: 0px;
+				right: 0px;
+			}
+			
+			.message .icon {
+				width: 42px;
+				height: 42px;
+				float: left;
+				text-align: center;
+			}
+			
+			.message .content {
+				padding-left: 55px;
+				font-size: 13px;
+			}
+			
+			.icon .mui-icon {
+				font-weight: 28px;
+				font-weight: 700;
+				line-height: 42px;
+				color: #007AFF;
+			}
+			
+			.action {
+				text-align: right;
+				padding-right: 2px;
+				margin-top: 18px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">底部提醒消息控件</h1>
+		</header>
+		
+		<div class="mui-content">
+		    <div class="mui-content-padded">
+		    		<p style="text-indent: 22px;">这是底部提醒消息示例，可放置图标、提示信息、用户操作按钮等</p>
+		    </div>
+		</div>
+
+		<div class="message bottom">
+			<div class="icon">
+				<span class="mui-icon mui-icon-info"></span>
+			</div>
+			<p class="content">应用当前版本过低，存在安全漏洞，请升级至最新版</p>
+			<div class="action">
+				<button type="button" class="mui-btn mui-btn-blue mui-btn-link">取消</button>
+				<button id="install" type="button" class="mui-btn mui-btn-blue">立即升级</button>
+			</div>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui(".action").on("tap",".mui-btn",function () {
+				//关闭消息框
+				document.querySelector(".message").classList.add("mui-hidden");
+				var id = this.getAttribute("id");
+				if(id && id=="install"){
+					console.log("click install button,begin install app...");
+				}
+			});
+		</script>
+	</body>
+
+</html>

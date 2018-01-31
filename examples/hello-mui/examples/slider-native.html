@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
+		<style type="text/css">
+			p {
+				text-indent: 22px;
+			}
+			.mui-content{
+				padding-top: 215px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>
+					这是通过webview的subNViews属性配置的原生图片轮播示例，目前支持自动轮播、循环播放、点击预览、双指放大功能；
+					将ImageSliderStyles的position属性值设置为"static"后，轮播控件在页面中正常定位，如果页面存在滚动条，轮播控件随窗口内容一起滚动。
+				</p>
+				<p>原生版本的图片轮播，适合类似商品详情的场景，用户需要点击图片放大预览，而不是点击跳转新页面。</p>
+				<p style="margin-top: 100px;margin-bottom: 300px;">这是为了演示页面滚动，而增加的额外文字段落。</p>
+			</div>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+	</body>
+
+</html>

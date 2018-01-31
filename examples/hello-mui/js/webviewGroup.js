@@ -28,8 +28,10 @@ proto._initParent = function() {
 	}
 };
 proto._initNativeView = function() {
+	// fixed by wmy 因为沉浸式应用，需要额外加上状态栏高度
+	var statusbar_H = plus.navigator.getStatusbarHeight(); 
 	this.nativeView = new plus.nativeObj.View('__MUI_TAB_NATIVE', {
-		'top': '83px',//这个需要根据顶部导航及顶部选项卡高度自动调整
+		'top': (83 + statusbar_H) +'px', //这个需要根据顶部导航及顶部选项卡高度自动调整
 		'height': (window.screen.height - 83)+"px",
 		'left': '100%',
 		'width': '100%',
