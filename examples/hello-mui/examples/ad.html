@@ -4,93 +4,29 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title></title>
-		<script src="../js/mui.min.js"></script>
+		<title>advertisement（广告演示）</title>
 		<link href="../css/mui.min.css" rel="stylesheet" />
-		<script type="text/javascript" charset="utf-8">
-			mui.init();
-		</script>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">advertisement（广告模板）</h1>
+			<h1 class="mui-title">advertisement（广告演示）</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<p>本页为广告模板示例，集成了百度联盟的网站广告，目前支持广告固定在底部显示。</p>
-				<p>集成教程参考：<a href="http://ask.dcloud.net.cn/article/712">文档中心</a></p>
+				<p>DCloud广告联盟，可以给DCloud的开发者提供更好的变现方式，更优质的广告体验。点击如下链接前往体验：<a href="http://m3w.cn/helload">广告演示</a></p>
+				<p>目前已支持悬浮红包、推送广告，更多广告陆续接通中，包括开屏广告、信息流广告。</p>
+				<p>了解更多DCloud广告联盟的优势及加入广告联盟的方式，请点击<a href="http://dcloud.io/dad">http://dcloud.io/dad</a></p>
 			</div>
 		</div>
 	</body>
+	<script src="../js/mui.min.js"></script>
 	<script type="text/javascript">
+		mui.init();
 		mui.plusReady(function () {
 			if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE){
-				mui.toast("当前网络不给力，无法加载广告");
-			}else{
-				
-				//百度广告集成教程参考：http://ask.dcloud.net.cn/article/712
-				
-				//屏幕真实宽度
-				var width = window.innerWidth;
-				var height = window.innerHeight;
-				
-				/*---需要开发者修改的内容---begin*/
-				//百度联盟申请的广告位id
-				var cpro_id = "u2206321";
-				//广告投放域名地址
-				var ltu = encodeURIComponent('http://www.dcloud.io/ad/');
-				//投放广告的服务端页面标题
-				var title = encodeURIComponent('DCloud HBuilder-做最好的HTML5开发工具||MUI-最接近原生体验的高性能前端框架');
-				//根据投放广告的比例，计算广告高度，Hello MUI选择的广告位是20:3尺寸
-				var adHeight = parseInt(width)*3/20;
-				/*---需要开发者修改的内容---end*/
-				
-				//百度广告地址
-				var p = ["acom","icxm","tcmm","icfm","mcum"];
-				var t = new Date().getTime();
-				var url = "http://pos.baidu.com/"+p[parseInt(5*Math.random())]+"?dc=2&dri=0&dis=0&dai=1&ps=0x0&dcb=BAIDU_SSP_define&dtm=HTML_POST&dvi=0.0&dci=-1&dpt=none&tsr=0&tpr="+t+"&ari=1&dbv=2&drs=1&cfv=0&cpl=0&chi=4&cce=true&cec=UTF-8&tlm=1437985083&ecd=1&pis=-1x-1&ccd=24&cja=false&cmi=0&col=en-US&cdo=0&tcn=1467173621&qn=d5d5b72998fc778b&tt=1467173620584.25.60.68";
-				url += "&sz="+width+"x"+adHeight;
-				url += "&conwid="+width+"&conhei="+adHeight;
-				url +="&rdid="+cpro_id.substring(1);
-				url +="&di="+cpro_id;
-				url +="&ti="+title;
-				url +="&ltu="+ltu;
-				url +="&psr="+window.screen.availWidth+"x"+window.screen.availHeight+"&par="+window.screen.availWidth+"x"+window.screen.availHeight;
-				url +="&pcs="+window.outerWidth+"x"+window.outerHeight+"&pss="+window.outerWidth+"x0";
-				url +="&rw="+Math.max(320, Math.min(window.innerWidth, window.innerHeight));
-				
-				var adBottom = mui.os.ios?('-'+adHeight+'px'):'0';
-				
-				var ad = plus.webview.create(url,'ad',{height:adHeight+'px',bottom:adBottom,position:"absolute"});
-
-				ad.appendJsFile('_www/js/ad.js');
-
-				//目前Android平台不支持子webview的setStyle动画，因此分平台处理；
-				if(mui.os.ios){
-					//为了支持iOS平台左侧边缘滑动关闭页面，需要append进去；
-					plus.webview.currentWebview().append(ad);
-					ad.addEventListener('loaded',function () {
-						ad.setStyle({
-							bottom:'0',
-							transition: {
-								duration: 150
-							}
-						});
-					});
-				}else{
-					ad.addEventListener('loaded',function () {
-						//延时的目的是为了等待主窗体动画结束后才显示，否则可能会闪烁
-						setTimeout(function () {
-							ad.show('slide-in-bottom');
-						},300);
-					});
-				}
-				
-				
-				//设置主页面的底部留白，否则会被遮住；
-				document.querySelector('.mui-content').style.paddingBottom = adHeight + 'px';
+				mui.toast("当前网络不给力");
 			}
 		});		
 
