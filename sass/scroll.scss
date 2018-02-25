@@ -14,8 +14,8 @@
     position: absolute;
     z-index: z("default");
     width: 100%;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    // -webkit-transform: translateZ(0);
+    // transform: translateZ(0);
 }
 
 .#{$namespace}scrollbar{
@@ -74,7 +74,7 @@
              .#{$namespace}scroll {
                 position: absolute;
                 width: 100%;
-            }  
+            }
         }
     }
     .#{$namespace}scroll-wrapper,.#{$namespace}slider-group {
@@ -91,5 +91,5 @@
     .#{$namespace}scroll {
         position: static;
         width: auto;
-    }   
+    }
 }
