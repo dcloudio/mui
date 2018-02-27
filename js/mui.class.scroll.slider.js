@@ -189,8 +189,8 @@
 					if (!slider) {
 						return;
 					}
-					//仅slider显示状态进行自动轮播
-					if (!!(slider.offsetWidth || slider.offsetHeight)) {
+					//仅slider显示状态、并且在可视区内部时进行自动轮播
+					if (!!(slider.offsetWidth || slider.offsetHeight) && $.isInViewableArea(slider)) {
 						self.nextItem(true);
 						//下一个
 					}

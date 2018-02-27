@@ -426,6 +426,15 @@ var mui = (function(document, undefined) {
 	$.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
 		class2type["[object " + name + "]"] = name.toLowerCase();
 	});
+	$.isInViewableArea = function(el) {
+		var rect = el.getBoundingClientRect();
+		return (
+			rect.top <= (window.innerHeight || document.documentElement.clientHeight) 
+			&&rect.bottom >0
+			&&rect.right >0
+			&&rect.left<= (window.innerWidth || document.documentElement.clientWidth)
+		);
+	};
 	if (window.JSON) {
 		$.parseJSON = JSON.parse;
 	}
