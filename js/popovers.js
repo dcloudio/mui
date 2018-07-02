@@ -197,7 +197,12 @@
 			pTop = offset.top - pHeight - arrowSize;
 		} else if ((pHeight + arrowSize) < (wHeight - (offset.top - window.pageYOffset) - aHeight)) { //bottom
 			position = 'bottom';
-			pTop = offset.top + aHeight + arrowSize;
+			var pop_style = document.defaultView.getComputedStyle(popover, null);
+			if( pop_style.position === "fixed" ){
+				pTop = aHeight + arrowSize;
+			}else{
+				pTop = offset.top + aHeight + arrowSize;
+			}
 		} else { //middle
 			position = 'middle';
 			pTop = Math.max((wHeight - pHeight) / 2 + window.pageYOffset, 0);
