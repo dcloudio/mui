@@ -127,7 +127,9 @@
 			self._create(options);
 			//防止滚动穿透
 			self.ui.picker.addEventListener($.EVENT_START, function(event) {
-				event.preventDefault();
+				if(event.srcElement.getAttribute('class').indexOf('mui-btn') == -1){
+					event.preventDefault();
+				}
 			}, false);
 			self.ui.picker.addEventListener($.EVENT_MOVE, function(event) {
 				event.preventDefault();
