@@ -37,6 +37,10 @@
 			if (document.activeElement && document.activeElement !== targetElement) {
 				document.activeElement.blur();
 			}
+			//在微信开发者工具中event.detail.gesture.changedTouches会是undefined，临时使用event.detail.touches替换
+			if(event.detail.gesture.changedTouches == undefined){
+				event.detail.gesture.changedTouches = event.detail.touches;
+			}
 			touch = event.detail.gesture.changedTouches[0];
 			// Synthesise a click event, with an extra attribute so it can be tracked
 			clickEvent = document.createEvent('MouseEvents');
