@@ -143,8 +143,12 @@
 		var setHeader = function(name, value) {
 			headers[name.toLowerCase()] = [name, value];
 		};
-		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+		var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;        
 		var xhr = settings.xhr(settings);
+        
+        if(location.protocol === 'file:' && $.os.ios && window.webkit && window.webkit.messageHandlers && !(xhr instanceof plus.net.XMLHttpRequest)){
+            console.error("当前运行环境为WKWebview，需在plusReady事件触发后再调用mui.ajax，否则可能会执行失败或报Script error的错误")
+        }
 		var nativeSetHeader = xhr.setRequestHeader;
 		var abortTimeout;
 

@@ -1,6 +1,6 @@
 /*!
  * =====================================================
- * Mui v3.7.2 (http://dev.dcloud.net.cn/mui)
+ * Mui v3.7.3 (http://dev.dcloud.net.cn/mui)
  * =====================================================
  */
 
@@ -17,6 +17,43 @@ body
     margin: 0;
 }
 
+body::after
+{
+    position: fixed;
+    top: -1000px;
+    left: -1000px;
+
+    content: '';
+    -webkit-animation: shadow-preload .1s;
+            animation: shadow-preload .1s;
+    -webkit-animation-delay: 3s;
+            animation-delay: 3s;
+}
+
+@-webkit-keyframes shadow-preload
+{
+    0%
+    {
+        background-image: url(https://cdn.dcloud.net.cn/img/mui-shadow-grey.png);
+    }
+
+    100%
+    {
+        background-image: url(https://cdn.dcloud.net.cn/img/mui-shadow-grey.png);
+    }
+}
+@keyframes shadow-preload
+{
+    0%
+    {
+        background-image: url(https://cdn.dcloud.net.cn/img/mui-shadow-grey.png);
+    }
+
+    100%
+    {
+        background-image: url(https://cdn.dcloud.net.cn/img/mui-shadow-grey.png);
+    }
+}
 article,
 aside,
 details,
