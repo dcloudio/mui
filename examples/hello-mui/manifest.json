@@ -7,8 +7,8 @@
 	"id": "hellomui",/*必选，应用的标识*/
 	"name": "hellomui",/*必选，应用名称*/
 	"version": {
-		"name": "1.0",/*必选，版本名称*/
-		"code": ""
+		"name": "1.0.0",/*必选，版本名称*/
+		"code": "100"
 	},
 	"description": "",/*可选，应用描述信息*/
 	"icons": {
