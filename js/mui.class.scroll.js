@@ -709,7 +709,8 @@
 		},
 		resetPosition: function(time) {
 			var x = this.x,
-				y = this.y;
+				y = this.y,
+				dy = this.wrapper.scrollTop;
 
 			time = time || 0;
 			if (!this.hasHorizontalScroll || this.x > 0) {
@@ -724,6 +725,10 @@
 				y = this.maxScrollY;
 			}
 
+			if(dy > 0){
+				this.wrapper.scrollTop = 0;
+				y -= dy;
+			}
 			if (x == this.x && y == this.y) {
 				return false;
 			}
