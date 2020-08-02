@@ -43,7 +43,11 @@
 		<script src="../js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			 //mui初始化
-			mui.init();
+			mui.init({
+				gestureConfig:{
+					hold: true// 建议监听hold按下动作，这样会使得底部选项卡切换更顺滑
+				}
+			});
 			var subpages = ['tab-webview-subpage-about.html', 'tab-webview-subpage-chat.html', 'tab-webview-subpage-contact.html', 'tab-webview-subpage-setting.html'];
 			var subpage_style = {
 				top: '45px',
@@ -93,6 +97,36 @@
 				plus.webview.hide(activeTab);
 				//更改当前活跃的选项卡
 				activeTab = targetTab;
+			});
+			//选项卡按下事件  
+			mui('.mui-bar-tab').on('hold', 'a', function(e) {
+				var targetTab = this.getAttribute('href');
+				if (targetTab == activeTab) {
+					return;
+				}
+				//更换标题
+				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+				//显示目标选项卡
+				//若为iOS平台或非首次显示，则直接显示
+				if(mui.os.ios||aniShow[targetTab]){
+					plus.webview.show(targetTab);
+				}else{
+					//否则，使用fade-in动画，且保存变量
+					var temp = {};
+					temp[targetTab] = "true";
+					mui.extend(aniShow,temp);
+					plus.webview.show(targetTab,"fade-in",300);
+				}
+				//隐藏当前;
+				plus.webview.hide(activeTab);
+				//更改当前活跃的选项卡
+				activeTab = targetTab;
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if (targetTab !== current) {
+					current.classList.remove('mui-active');
+					this.classList.add('mui-active');
+				}
 			});
 			 //自定义事件，模拟点击“首页选项卡”
 			document.addEventListener('gohome', function() {
